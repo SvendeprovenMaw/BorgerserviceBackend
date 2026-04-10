@@ -27,10 +27,38 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
 
     public async Task<string> GenerateStrictJsonAsync(StrictJsonResponseRequest request, CancellationToken cancellationToken = default)
     {
-        ValidateRequest(request);
+        ValidateStrictJsonRequest(request);
 
-        var normalizedPersonFiles = NormalizeFilePaths(request.PersonFiles);
-        var normalizedJobApplication = Path.GetFullPath(request.JobApplication);
+        var structuredRequest = new StructuredJsonResponseRequest
+        {
+            Prompt = request.Prompt,
+            OutputSchema = request.OutputSchema,
+            Model = request.Model,
+            SchemaName = request.SchemaName,
+            SchemaDescription = request.SchemaDescription,
+            InputFiles =
+            [
+                .. request.PersonFiles.Select(path => new StructuredFileInput
+                {
+                    Label = "Person file",
+                    FilePath = path
+                }),
+                new StructuredFileInput
+                {
+                    Label = "Job application file",
+                    FilePath = request.JobApplication
+                }
+            ]
+        };
+
+        return await GenerateStructuredJsonAsync(structuredRequest, cancellationToken);
+    }
+
+    public async Task<string> GenerateStructuredJsonAsync(StructuredJsonResponseRequest request, CancellationToken cancellationToken = default)
+    {
+        ValidateStructuredRequest(request);
+
+        var normalizedInputFiles = NormalizeFileInputs(request.InputFiles);
         var selectedModel = string.IsNullOrWhiteSpace(request.Model) ? _options.Model : request.Model.Trim();
         var schemaName = SanitizeSchemaName(request.SchemaName);
         var schemaJson = request.OutputSchema.GetRawText();
@@ -40,14 +68,17 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
             ResponseContentPart.CreateInputTextPart(BuildInstructionText(request.Prompt))
         };
 
-        foreach (var personFile in normalizedPersonFiles)
+        foreach (var inputText in request.InputTexts.Where(text => !string.IsNullOrWhiteSpace(text.Content)))
         {
-            contentParts.Add(ResponseContentPart.CreateInputTextPart($"Person file: {Path.GetFileName(personFile)}"));
-            contentParts.Add(await CreateFilePartAsync(personFile, cancellationToken));
+            var label = string.IsNullOrWhiteSpace(inputText.Label) ? "Input text" : inputText.Label.Trim();
+            contentParts.Add(ResponseContentPart.CreateInputTextPart($"{label}:\n{inputText.Content.Trim()}"));
         }
 
-        contentParts.Add(ResponseContentPart.CreateInputTextPart($"Job application file: {Path.GetFileName(normalizedJobApplication)}"));
-        contentParts.Add(await CreateFilePartAsync(normalizedJobApplication, cancellationToken));
+        foreach (var inputFile in normalizedInputFiles)
+        {
+            contentParts.Add(ResponseContentPart.CreateInputTextPart($"{inputFile.Label}: {Path.GetFileName(inputFile.FilePath)}"));
+            contentParts.Add(await CreateFilePartAsync(inputFile.FilePath, cancellationToken));
+        }
 
         var options = new CreateResponseOptions(selectedModel, [ResponseItem.CreateUserMessageItem(contentParts)])
         {
@@ -85,14 +116,12 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
     private static string BuildInstructionText(string prompt)
     {
         var builder = new StringBuilder();
-        builder.AppendLine("You will receive person files followed by one job application file.");
-        builder.AppendLine("Use the file contents as the only source material.");
+        builder.AppendLine("You will receive input text documents and/or files.");
+        builder.AppendLine("Use the provided inputs as the only source material.");
         builder.AppendLine("Return only JSON that matches the provided schema exactly.");
         builder.AppendLine();
         builder.AppendLine("Task:");
         builder.AppendLine(prompt.Trim());
-        builder.AppendLine();
-        builder.AppendLine("The following file parts are grouped by category.");
         return builder.ToString();
     }
 
@@ -110,13 +139,32 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
         return ResponseContentPart.CreateInputFilePart(binaryData, mediaType, Path.GetFileName(filePath));
     }
 
-    private static IReadOnlyList<string> NormalizeFilePaths(IEnumerable<string> filePaths)
+    private static IReadOnlyList<StructuredFileInput> NormalizeFileInputs(IEnumerable<StructuredFileInput> inputFiles)
     {
-        return filePaths
-            .Where(path => !string.IsNullOrWhiteSpace(path))
-            .Select(Path.GetFullPath)
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToArray();
+        var normalizedFiles = new List<StructuredFileInput>();
+        var seenPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var inputFile in inputFiles)
+        {
+            if (string.IsNullOrWhiteSpace(inputFile.FilePath))
+            {
+                continue;
+            }
+
+            var fullPath = Path.GetFullPath(inputFile.FilePath);
+            if (!seenPaths.Add(fullPath))
+            {
+                continue;
+            }
+
+            normalizedFiles.Add(new StructuredFileInput
+            {
+                Label = string.IsNullOrWhiteSpace(inputFile.Label) ? "Input file" : inputFile.Label.Trim(),
+                FilePath = fullPath
+            });
+        }
+
+        return normalizedFiles;
     }
 
     private static string SanitizeSchemaName(string? schemaName)
@@ -140,7 +188,7 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
         return sanitized.Length <= 64 ? sanitized : sanitized[..64];
     }
 
-    private static void ValidateRequest(StrictJsonResponseRequest request)
+    private static void ValidateStrictJsonRequest(StrictJsonResponseRequest request)
     {
         if (request.PersonFiles is null || request.PersonFiles.Count == 0)
         {
@@ -165,6 +213,40 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
         if (request.OutputSchema.ValueKind != JsonValueKind.Object)
         {
             throw new ArgumentException("The output schema must be a JSON object.", nameof(request.OutputSchema));
+        }
+    }
+
+    private static void ValidateStructuredRequest(StructuredJsonResponseRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Prompt))
+        {
+            throw new ArgumentException("A prompt is required.", nameof(request.Prompt));
+        }
+
+        if (request.OutputSchema.ValueKind is JsonValueKind.Undefined or JsonValueKind.Null)
+        {
+            throw new ArgumentException("A JSON schema is required.", nameof(request.OutputSchema));
+        }
+
+        if (request.OutputSchema.ValueKind != JsonValueKind.Object)
+        {
+            throw new ArgumentException("The output schema must be a JSON object.", nameof(request.OutputSchema));
+        }
+
+        if (request.InputTexts.All(text => string.IsNullOrWhiteSpace(text.Content))
+            && request.InputFiles.All(file => string.IsNullOrWhiteSpace(file.FilePath)))
+        {
+            throw new ArgumentException("At least one input text or file is required.", nameof(request));
+        }
+
+        if (request.InputTexts.Any(text => string.IsNullOrWhiteSpace(text.Content)))
+        {
+            throw new ArgumentException("Input text content cannot be empty.", nameof(request.InputTexts));
+        }
+
+        if (request.InputFiles.Any(file => string.IsNullOrWhiteSpace(file.FilePath)))
+        {
+            throw new ArgumentException("Input file paths cannot be empty.", nameof(request.InputFiles));
         }
     }
 }

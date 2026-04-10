@@ -1,9 +1,9 @@
 {
   "personFiles": [
-    "/home/martin/Code/School/svendeprøve/BorgerserviceBackend/TestData/Borgere/Borger1/emma_sorensen_cv_da.pdf",
-    "/home/martin/Code/School/svendeprøve/BorgerserviceBackend/TestData/Borgere/Borger1/profile.pdf"
+    "../../TestData/Borgere/Borger1/emma_sorensen_cv_da.pdf",
+    "../../TestData/Borgere/Borger1/profile.pdf"
   ],
-  "jobApplication": "/home/martin/Code/School/svendeprøve/BorgerserviceBackend/TestData/Opslag/DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+  "jobApplication": "../../TestData/Opslag/DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
   "schemaName": "candidate_job_match",
   "schemaDescription": "Structured candidate match output",
   "outputSchema": {

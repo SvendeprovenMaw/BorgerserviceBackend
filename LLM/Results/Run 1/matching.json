@@ -1,0 +1,141 @@
+{
+  "matches": [
+    {
+      "requirement_id": "req_1",
+      "verdict": "matched",
+      "matched_evidence_ids": [
+        "ev_1",
+        "ev_2"
+      ],
+      "rationale_da": "Kravet er tydeligt underst\u00F8ttet af dokumenteret erfaring i en softwareudviklerrolle samt konkrete udviklingsopgaver med .NET, API\u0027er og integrationer.",
+      "gap_da": null,
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_2",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for applikationsudvikling i den finansielle sektor eller andre regulerede sektorer.",
+      "gap_da": "Der mangler konkret evidens for arbejde med applikationsudvikling i en finansiel eller anden reguleret sektor.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_3",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_2",
+        "ev_3"
+      ],
+      "rationale_da": "Evidensen viser udvikling, vedligeholdelse, integration, fejlretning og kodegennemgang, som d\u00E6kker dele af udviklingsprocessen. Der mangler dog tydelig dokumentation for hele forl\u00F8bet, herunder eksempelvis test og deploy som samlet ansvar.",
+      "gap_da": "Der mangler mere direkte evidens for erfaring med hele udviklingsprocessen end-to-end.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_4",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_4"
+      ],
+      "rationale_da": "Kandidaten dokumenterer flere sprog og teknologier, hvilket underst\u00F8tter kravet delvist. Det fremg\u00E5r dog ikke klart, at kandidaten har erfaring med b\u00E5de kompilerede og fortolkede sprog som kr\u00E6vet.",
+      "gap_da": "Der mangler tydelig evidens for erfaring med b\u00E5de kompilerede og fortolkede programmeringssprog.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_5",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for kendskab til eller lyst til at l\u00E6re IBM Z System og COBOL.",
+      "gap_da": "Der mangler konkret evidens for IBM Z System, COBOL eller udtrykt l\u00E6ringsinteresse p\u00E5 dette omr\u00E5de.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_6",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_5"
+      ],
+      "rationale_da": "Kandidaten beskriver fokus p\u00E5 moderne webudvikling og API-design, hvilket giver indirekte st\u00F8tte til developer experience. Der er dog ikke direkte evidens for interesse for DevOps.",
+      "gap_da": "Der mangler direkte evidens for interesse for DevOps og mere tydelig kobling til developer experience.",
+      "confidence": "medium",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_7",
+      "verdict": "matched",
+      "matched_evidence_ids": [
+        "ev_6",
+        "ev_7"
+      ],
+      "rationale_da": "Kandidaten beskriver samarbejde med b\u00E5de teknikere, forretning, brugere og udviklere samt brugerrettet support, hvilket tydeligt underst\u00F8tter gode samarbejdsevner.",
+      "gap_da": null,
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_8",
+      "verdict": "matched",
+      "matched_evidence_ids": [
+        "ev_6",
+        "ev_7"
+      ],
+      "rationale_da": "Evidensen viser, at kandidaten er vant til dialog med brugere og udviklere og har arbejdet med teknisk support til brugere, hvilket underst\u00F8tter interesse i t\u00E6t samarbejde med kolleger og kunder/brugere.",
+      "gap_da": null,
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_9",
+      "verdict": "matched",
+      "matched_evidence_ids": [
+        "ev_8"
+      ],
+      "rationale_da": "Kandidaten angiver dansk som modersm\u00E5l og engelsk p\u00E5 professionelt niveau, hvilket direkte underst\u00F8tter sproggkravet.",
+      "gap_da": null,
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_10",
+      "verdict": "unclear",
+      "matched_evidence_ids": [
+        "ev_9"
+      ],
+      "rationale_da": "Kandidaten beskriver sig som nysgerrig og l\u00F8sningsorienteret, men der er ikke direkte evidens for, at hun f\u00F8lger markedstrends i udviklingsparadigmer og tool-underst\u00F8ttelse.",
+      "gap_da": "Der mangler konkret evidens for aktivt at f\u00F8lge markedstrends inden for udviklingsparadigmer og v\u00E6rkt\u00F8jer.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_11",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_9",
+        "ev_10"
+      ],
+      "rationale_da": "Kandidaten fremst\u00E5r nysgerrig og har bidraget til mindre automatiseringer, hvilket giver delvis st\u00F8tte til kravet. Der er dog ingen direkte evidens for AI.",
+      "gap_da": "Der mangler direkte evidens for nysgerrighed p\u00E5 eller arbejde med AI.",
+      "confidence": "medium",
+      "needs_human_review": true
+    }
+  ],
+  "overall_assessment": {
+    "overall_match_level": "moderate",
+    "summary_da": "Kandidaten matcher tydeligt krav om udviklererfaring, samarbejde, t\u00E6t bruger- og kollegadialog samt dansk og engelsk. Der er delvis st\u00F8tte til hele udviklingsprocessen, flere programmeringssprog, DevOps/developer experience samt automatisering. De st\u00F8rste mangler er manglende evidens for reguleret sektor, IBM Z/COBOL og direkte dokumentation for at f\u00F8lge markedstrends og arbejde med AI.",
+    "major_strength_evidence_ids": [
+      "ev_1",
+      "ev_2",
+      "ev_6",
+      "ev_8"
+    ],
+    "major_gap_requirement_ids": [
+      "req_2",
+      "req_5",
+      "req_10"
+    ]
+  }
+}

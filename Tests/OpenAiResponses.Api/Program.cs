@@ -1,6 +1,5 @@
 using System.ClientModel;
 using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
 using OpenAI.Responses;
@@ -45,6 +44,7 @@ builder.Services.AddSingleton<ResponsesClient>(serviceProvider =>
 });
 
 builder.Services.AddSingleton<IOpenAiResponsesService, OpenAiResponsesService>();
+builder.Services.AddSingleton<ISampleLlmFlowService, SampleLlmFlowService>();
 
 var app = builder.Build();
 
@@ -63,16 +63,22 @@ app.UseHttpsRedirection();
 
 app.MapGet("/api/responses/sample-request", (IHostEnvironment environment) =>
 {
-    var workspaceRoot = Path.GetFullPath(Path.Combine(environment.ContentRootPath, "..", ".."));
-    var personDirectory = Path.Combine(workspaceRoot, "BorgerserviceBackend", "TestData", "Borgere", "Borger1");
-    var jobDirectory = Path.Combine(workspaceRoot, "BorgerserviceBackend", "TestData", "Opslag");
+    var repositoryRoot = Path.GetFullPath(Path.Combine(environment.ContentRootPath, "..", ".."));
+    var personDirectory = Path.Combine(repositoryRoot, "TestData", "Borgere", "Borger1");
+    var jobDirectory = Path.Combine(repositoryRoot, "TestData", "Opslag");
 
     var personFiles = Directory.Exists(personDirectory)
-        ? Directory.GetFiles(personDirectory).OrderBy(path => path).ToArray()
+        ? Directory.GetFiles(personDirectory)
+            .OrderBy(path => path)
+            .Select(path => Path.GetRelativePath(environment.ContentRootPath, path))
+            .ToArray()
         : [];
 
     var jobApplication = Directory.Exists(jobDirectory)
-        ? Directory.GetFiles(jobDirectory).OrderBy(path => path).FirstOrDefault()
+        ? Directory.GetFiles(jobDirectory)
+            .OrderBy(path => path)
+            .Select(path => Path.GetRelativePath(environment.ContentRootPath, path))
+            .FirstOrDefault()
         : null;
 
     var sampleSchema = JsonSerializer.SerializeToElement(new
@@ -117,9 +123,96 @@ app.MapPost("/api/responses/strict-json", async (
     ILogger<Program> logger,
     CancellationToken cancellationToken) =>
 {
+    return await ExecuteJsonResponseAsync(
+        token => openAiResponsesService.GenerateStrictJsonAsync(request, token),
+        logger,
+        cancellationToken);
+})
+.WithName("GenerateStrictJsonResponse")
+.Accepts<StrictJsonResponseRequest>("application/json")
+.Produces(StatusCodes.Status200OK, contentType: "application/json")
+.ProducesProblem(StatusCodes.Status400BadRequest)
+.ProducesProblem(StatusCodes.Status404NotFound)
+.ProducesProblem(StatusCodes.Status500InternalServerError)
+.ProducesProblem(StatusCodes.Status502BadGateway);
+
+app.MapPost("/api/responses/sample/requirements", async (
+    ISampleLlmFlowService sampleLlmFlowService,
+    ILogger<Program> logger,
+    CancellationToken cancellationToken) =>
+{
+    return await ExecuteJsonResponseAsync(
+        sampleLlmFlowService.RunRequirementsParsingAsync,
+        logger,
+        cancellationToken);
+})
+.WithName("RunSampleRequirementsParsing")
+.Produces(StatusCodes.Status200OK, contentType: "application/json")
+.ProducesProblem(StatusCodes.Status404NotFound)
+.ProducesProblem(StatusCodes.Status500InternalServerError)
+.ProducesProblem(StatusCodes.Status502BadGateway);
+
+app.MapPost("/api/responses/sample/candidate-evidence", async (
+    ISampleLlmFlowService sampleLlmFlowService,
+    ILogger<Program> logger,
+    CancellationToken cancellationToken) =>
+{
+    return await ExecuteJsonResponseAsync(
+        sampleLlmFlowService.RunCandidateEvidenceAsync,
+        logger,
+        cancellationToken);
+})
+.WithName("RunSampleCandidateEvidence")
+.Produces(StatusCodes.Status200OK, contentType: "application/json")
+.ProducesProblem(StatusCodes.Status404NotFound)
+.ProducesProblem(StatusCodes.Status500InternalServerError)
+.ProducesProblem(StatusCodes.Status502BadGateway);
+
+app.MapPost("/api/responses/sample/matching", async (
+    ISampleLlmFlowService sampleLlmFlowService,
+    ILogger<Program> logger,
+    CancellationToken cancellationToken) =>
+{
+    return await ExecuteJsonResponseAsync(
+        sampleLlmFlowService.RunMatchingAsync,
+        logger,
+        cancellationToken);
+})
+.WithName("RunSampleMatching")
+.Produces(StatusCodes.Status200OK, contentType: "application/json")
+.ProducesProblem(StatusCodes.Status404NotFound)
+.ProducesProblem(StatusCodes.Status500InternalServerError)
+.ProducesProblem(StatusCodes.Status502BadGateway);
+
+app.MapPost("/api/responses/sample/pipeline", async (
+    ISampleLlmFlowService sampleLlmFlowService,
+    ILogger<Program> logger,
+    CancellationToken cancellationToken) =>
+{
+    return await ExecuteJsonResponseAsync(
+        sampleLlmFlowService.RunPipelineAsync,
+        logger,
+        cancellationToken);
+})
+.WithName("RunSamplePipeline")
+.Produces(StatusCodes.Status200OK, contentType: "application/json")
+.ProducesProblem(StatusCodes.Status404NotFound)
+.ProducesProblem(StatusCodes.Status500InternalServerError)
+.ProducesProblem(StatusCodes.Status502BadGateway);
+
+app.MapGet("/swagger", () => Results.Redirect("/swagger/index.html"));
+app.MapGet("/", () => Results.Redirect("/swagger/index.html"));
+
+app.Run();
+
+static async Task<IResult> ExecuteJsonResponseAsync(
+    Func<CancellationToken, Task<string>> operation,
+    ILogger logger,
+    CancellationToken cancellationToken)
+{
     try
     {
-        var json = await openAiResponsesService.GenerateStrictJsonAsync(request, cancellationToken);
+        var json = await operation(cancellationToken);
         return Results.Content(json, "application/json");
     }
     catch (FileNotFoundException exception)
@@ -152,16 +245,4 @@ app.MapPost("/api/responses/strict-json", async (
             detail: exception.Message,
             statusCode: StatusCodes.Status500InternalServerError);
     }
-})
-.WithName("GenerateStrictJsonResponse")
-.Accepts<StrictJsonResponseRequest>("application/json")
-.Produces(StatusCodes.Status200OK, contentType: "application/json")
-.ProducesProblem(StatusCodes.Status400BadRequest)
-.ProducesProblem(StatusCodes.Status404NotFound)
-.ProducesProblem(StatusCodes.Status500InternalServerError)
-.ProducesProblem(StatusCodes.Status502BadGateway);
-
-app.MapGet("/swagger", () => Results.Redirect("/swagger/index.html"));
-app.MapGet("/", () => Results.Redirect("/swagger/index.html"));
-
-app.Run();
+}
