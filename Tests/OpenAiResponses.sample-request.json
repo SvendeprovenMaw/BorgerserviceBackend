@@ -1,0 +1,28 @@
+{
+  "personFiles": [
+    "/home/martin/Code/School/svendeprøve/BorgerserviceBackend/TestData/Borgere/Borger1/emma_sorensen_cv_da.pdf",
+    "/home/martin/Code/School/svendeprøve/BorgerserviceBackend/TestData/Borgere/Borger1/profile.pdf"
+  ],
+  "jobApplication": "/home/martin/Code/School/svendeprøve/BorgerserviceBackend/TestData/Opslag/DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+  "schemaName": "candidate_job_match",
+  "schemaDescription": "Structured candidate match output",
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "candidateName": { "type": "string" },
+      "overallMatchScore": { "type": "number" },
+      "summary": { "type": "string" },
+      "strengths": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "concerns": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "required": ["candidateName", "overallMatchScore", "summary", "strengths", "concerns"],
+    "additionalProperties": false
+  },
+  "prompt": "Compare the person files to the job application and explain the candidate fit."
+}
