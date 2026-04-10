@@ -1,0 +1,85 @@
+@startuml
+!theme plain
+skinparam PackageStyle rectangle
+
+package "Models/entities" {
+    enum UserRole {
+        StandardUser
+        Admin
+    }
+
+    class User <<Entity>> {
+        + Guid Id
+        + String Email
+        + UserRole Role
+    }
+
+    class S3File <<Entity>> {
+        + Guid Id
+        + String S3Key
+        + String ChecksumHash
+    }
+
+    class AIProcessingJob <<Entity>> {
+        + Guid Id
+        + JobStatus Status
+        + Guid? ResultFileId
+    }
+}
+
+package "Services" {
+    package "Interfaces"{
+      interface IS3StorageService {
+          + Task<S3File> UploadFileAsync(Stream s, string name, Guid userId)
+      }
+
+      interface IAIService {
+          + Task<string> RunInferenceAsync(List<S3File> inputs)
+      }
+    }
+
+    class OpenAiService {
+        - IS3StorageService _s3
+        - IAIService _ai
+        - IRepository _db
+        + Task<Guid> StartProcess(Guid userId, List<Guid> files)
+    }
+
+    class S3StorageService {
+        + // Implements IS3StorageService
+    }
+}
+
+package "Controllers"{
+  class UserController(){
+    + CreateUser(createuser dto) return created or a 40x message
+    + GetUser(Guid id) return UserDto or a 40x message
+    + UpdateUser(UserDto dto) return nocontent or a 40x message
+    + DeleteUser(Guid id) return nocontent or a 40x message
+  }
+
+  class FileController{
+#file edit not supported
+    + UploadFile(UploadFileDto dto) return 201 or 40x
+    + DeleteFile(Guid fileId) return nocontent or 40x
+    + DownloadFile(Guid fileId) return ok or 40x
+  }
+
+  class ConstentController{
+#deletes the user
+    + RetractUserConsent() return nocontent or a 40x
+#Deletes all links to the file, the file and backups
+    + RetractFileConsent() return nocontent or a 40x
+  }
+}
+
+package "Data" {
+    class AppDbContext {
+        + DbSet<User> Users
+        + DbSet<S3File> Files
+        --
+        # OnModelCreating(ModelBuilder)
+    }
+}
+
+@enduml
