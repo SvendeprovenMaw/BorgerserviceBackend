@@ -1,0 +1,101 @@
+@startuml
+!theme plain
+hide empty methods
+
+entity "User" as user {
+  * Id : binary(16) <<PK>>
+  --
+  Email : string
+  Username : string
+  Password : string <<hashed and seeded>>
+  Role : tiny
+  * AcceptedTermsId : binary(16) <<FK>>
+}
+
+entity "GDPRConsent" as consent {
+  * Id : binary(16) <<PK>>
+  --
+  ConsentType : string
+  IsGranted : bool
+  Timestamp : DateTime
+  ThirdPartyName : string
+  --
+  * UserId : binary(16) <<FK>>
+}
+
+entity "FileConsent" as fileConsent {
+  * ConsentId : binary(16) <<PK, FK>>
+  * FileId : binary(16) <<PK, FK>>
+  --
+  SharedAt : DateTime
+}
+
+entity "S3File" as file {
+  * Id : binary(16) <<PK>>
+  --
+  FileName : string
+  S3Key : string (e.g., "users/uuid/applications/app1.pdf")
+  FileType : string
+  ChecksumHash : string
+  ByteSize : long
+  CreatedAt : DateTime
+  --
+  * OwnerId : binary(16) <<FK>>
+}
+
+entity "AIProcessingJob" as job {
+  * Id : binary(16) <<PK>>
+  * UserId : binary(16) <<FK>>
+  --
+  ExternalJobId : string (OpenAI Thread/Run ID)
+  RawResponseJson : string (JSONB)
+  Status : string (Pending, Completed, Failed)
+  CreatedAt : DateTime
+  ResultFileId : binary(16)?
+}
+
+entity "JobInputFile" as input {
+  * JobId : binary(16) <<FK>>
+  * FileId : binary(16) <<FK>>
+}
+
+entity "TermsVersion" as terms {
+  * Id : binary(16) <<PK>>
+  --
+  VersionLabel : string (e.g. "2026-Q2")
+  S3Key : string <<unique>>
+  FileHash : string (SHA-256)
+  IsActive : bool
+}
+
+entity "TermsAcceptanceLog" as log {
+  * Id : binary(16) <<PK>>
+  --
+  AcceptedAt : DateTime
+  IpAddress : string
+  UserAgent : string
+  --
+  * UserId : binary(16) <<FK>>
+  * TermsId : binary(16) <<FK>>
+}
+
+entity "DeletionLog" as del{
+    * Id: int <<PK>>
+    * TargetId : binary(16) <<Indexed>>
+    * TargetType : int (User=1, File=2)
+    * DeletedAt : DateTime
+}
+
+user ||--o{ log
+terms ||--o{ log
+
+file ||--o{ input
+job ||--o{ input
+job |o--|| file : "generates"
+user ||--o{ job
+
+user ||--o{ consent
+user ||--o{ file
+consent ||--o{ fileConsent
+file ||--o{ fileConsent
+@enduml
