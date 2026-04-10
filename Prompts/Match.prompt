@@ -1,0 +1,50 @@
+Din opgave i dette run er at vurdere match mellem et krav-dokument og et kandidat-evidens-dokument.
+Du får:
+Et krav-dokument med requirement_id'er og udtrukne jobkrav.
+Et kandidat-evidens-dokument med evidence_id'er og dokumenteret kandidat-evidens.
+Mål:  Vurder for hvert requirement_id, om den tilgængelige evidens understøtter, at kravet er matched, partially_matched, not_matched eller unclear, og returnér resultatet i det udleverede matching-schema.
+Vigtige afgrænsninger:
+Du må kun bruge krav-dokumentet og kandidat-evidens-dokumentet.
+Du må ikke læse nye kildedokumenter i dette run.
+Du må ikke opfinde nye requirement_id'er eller evidence_id'er.
+Du må ikke opfinde ny evidens eller nye krav.
+Du må ikke referere til evidence_id'er, som ikke findes i kandidat-evidens-dokumentet.
+Din vurdering skal være konservativ og sporbar.
+Instruktioner for matching:
+Vurder hvert requirement_id individuelt.
+Brug kun evidence_id'er, som faktisk understøtter det pågældende krav.
+matched betyder:
+kravet er tydeligt understøttet af relevant evidens
+evidensen dækker kravet tilstrækkeligt
+der er ikke væsentlige, uafklarede mangler i forhold til kravet
+partially_matched betyder:
+der er relevant evidens
+men dækningen er ufuldstændig, indirekte eller kun delvis
+not_matched betyder:
+der mangler reel evidens for kravet
+eller den tilgængelige evidens er ikke tilstrækkelig relevant til at understøtte kravet
+unclear betyder:
+der findes noget relevant materiale
+men det er for uklart, for svagt eller for tvetydigt til en sikker vurdering
+rationale_da skal forklare vurderingen kort og konkret på dansk.
+gap_da skal beskrive, hvad der mangler, når kravet ikke er fuldt matchet. Hvis der ikke er et relevant gap, brug null hvis schemaet tillader det.
+confidence skal afspejle, hvor sikker vurderingen er på baggrund af evidensens kvalitet og tydelighed:
+high: klar og direkte støtte
+medium: rimelig støtte, men med visse begrænsninger
+low: svag, indirekte eller tvetydig støtte
+needs_human_review skal sættes til true ved tvivl, svag evidens, konflikt mellem fund eller grænsetilfælde.
+matched_evidence_ids skal være tom, hvis ingen evidens reelt understøtter kravet.
+matched_evidence_ids må ikke indeholde irrelevante eller kun løst relaterede evidensposter.
+Et krav må gerne baseres på flere evidence_id'er, hvis de tilsammen dækker kravet bedre.
+Instruktioner for overall_assessment:
+overall_match_level skal være en konservativ samlet vurdering.
+summary_da skal være en kort dansk opsummering af de væsentligste styrker og mangler.
+major_strength_evidence_ids må kun indeholde evidence_id'er, som faktisk er centrale styrker.
+major_gap_requirement_ids må kun indeholde requirement_id'er, som faktisk er centrale mangler.
+Den samlede vurdering må ikke være mere positiv end de individuelle match-vurderinger kan bære.
+Kvalitetskrav:
+Ingen nye facts.
+Ingen nye IDs.
+Ingen overfortolkning.
+Konservativ og sporbar vurdering.
+Returnér kun JSON i det udleverede schema.

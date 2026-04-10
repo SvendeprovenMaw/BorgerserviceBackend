@@ -1,0 +1,88 @@
+{
+  "name": "job_requirements_extraction_v1",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["_meta", "requirements"],
+    "properties": {
+      "_meta": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["job_posting_title", "parsed_files", "errors"],
+        "properties": {
+          "job_posting_title": { "type": ["string", "null"] },
+          "parsed_files": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "errors": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "requirements": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "requirement_id",
+            "requirement_text_da",
+            "normalized_label",
+            "category",
+            "importance",
+            "source_citations"
+          ],
+          "properties": {
+            "requirement_id": { "type": "string" },
+            "requirement_text_da": { "type": "string" },
+            "normalized_label": { "type": "string" },
+            "category": {
+              "type": "string",
+              "enum": [
+                "technical_skill",
+                "tool_experience",
+                "role_experience",
+                "industry_experience",
+                "leadership",
+                "communication",
+                "collaboration",
+                "customer_focus",
+                "analytical_skill",
+                "achievement",
+                "education",
+                "certification",
+                "language",
+                "logistics",
+                "personal_trait",
+                "other"
+              ]
+            },
+            "importance": {
+              "type": "string",
+              "enum": ["must_have", "should_have", "nice_to_have", "unknown"]
+            },
+            "source_citations": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/source_citation" }
+            }
+          }
+        }
+      }
+    },
+    "$defs": {
+      "source_citation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["filename", "excerpt", "section_hint"],
+        "properties": {
+          "filename": { "type": "string" },
+          "excerpt": { "type": "string" },
+          "section_hint": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}
