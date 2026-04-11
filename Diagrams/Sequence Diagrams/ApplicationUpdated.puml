@@ -1,0 +1,42 @@
+@startuml "update_application_audit"
+autonumber
+skinparam Style strictuml
+
+actor "User" as User
+participant "JobService" as Job <<Service>>
+participant "ConsentService" as Consent <<Service>>
+participant "S3Storage" as S3 <<Infrastructure>>
+database "Database" as DB
+
+User -> Job : Save Edited Template (ApplicationId, Content)
+
+group Phase 1: Consent & Status Check
+    Job -> Consent : VerifyActiveConsent(userId)
+    Consent -> DB : Check User.IsActive && RetractedAt IS NULL
+    DB -->> Consent : Status Valid
+end
+
+group Phase 2: Dual-File Persistence
+    ' We keep the OriginalDraftKey untouched in the DB
+    Job -> DB : Get Current File Metadata
+    DB -->> Job : { OriginalDraftKey, CurrentVersionKey }
+
+    ' Update the "Live" version in S3
+    Job -> S3 : UploadAsync(Content, Path: "users/{id}/apps/current_{appId}.pdf")
+    note right: This overwrites the "Current" version\nbut never touches the "Original" file.
+    S3 -->> Job : NewS3Key
+end
+
+group Phase 3: Audit Alignment
+    Job -> DB : Begin Transaction
+    
+    ' Ensure the record points to the new S3 key
+    ' while maintaining the link to the original draft ID
+    Job -> DB : Update JobApplication Set \nLastModified = Now, \nUserEditedFileId = NewFileId
+    
+    Job -> DB : Commit Transaction
+    DB -->> Job : Success
+end
+
+Job -->> User : 200 OK (Saved)
+@enduml

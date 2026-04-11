@@ -1,0 +1,38 @@
+@startuml "create_job_application_with_audit"
+autonumber
+skinparam Style strictuml
+
+actor "User" as User
+participant "AppService" as App <<Service>>
+participant "S3Storage" as S3 <<Infrastructure>>
+participant "AIService" as AI <<Intelligence>>
+database "Database" as DB
+
+User -> App : Submit Application Form
+
+group Phase 1: AI Generation
+    App -> AI : GenerateDraft(Inputs)
+    AI -->> App : Draft Content (e.g., PDF/JSON)
+end
+
+group Phase 2: The Audit Snapshot
+    ' Save the AI output as the "Master" copy
+    App -> S3 : UploadAsync(Draft, Path: "users/{id}/drafts/{ai-process-id}.pdf")
+    S3 -->> App : OriginalS3Key
+end
+
+group Phase 3: Atomic Finalization
+    App -> DB : Begin Transaction
+    
+    ' Create the S3 record for the AI's work
+    App -> DB : Insert S3File (S3Key: OriginalS3Key, Type: AuditSnapshot)
+    
+    ' Link both pointers to the SAME file initially
+    App -> DB : Insert JobApplication (\n  OriginalDraftFileId = NewId,\n  CurrentVersionFileId = NewId\n)
+    
+    App -> DB : Commit Transaction
+    DB -->> App : Success
+end
+
+App -->> User : 201 Created + AI Draft
+@enduml

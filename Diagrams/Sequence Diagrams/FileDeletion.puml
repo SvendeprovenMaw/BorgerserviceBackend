@@ -1,0 +1,37 @@
+@startuml "file_retraction_logical"
+autonumber
+
+actor "User" as User
+participant "ConsentService" as App << (S, #Yellow) >>
+participant "S3StorageService" as S3 << (I, #Orange) >>
+database "AppDbContext (SQL)" as DB
+
+User -> App : Request File Deletion / Consent Retraction
+
+group Lineage Discovery
+    App -> DB : Get S3Key for FileId
+    App -> DB : Get S3Keys for all AI Results linked to FileId
+    DB -->> App : List of Keys [Original + Derivatives]
+end
+
+group Physical Destruction [Immediate]
+    App -> S3 : DeleteBatch(List of Keys)
+    note over S3 : Physical bytes are removed from S3.\nThis is irreversible.
+    S3 -->> App : Success
+end
+
+group Audit State Preservation [SQL Transaction]
+    App -> DB : Begin Transaction
+    
+    ' The "Scrub" Update
+    App -> DB : Update S3File record:\nSet RetractedAt = Now\nSet S3Key = NULL
+    
+    ' Cleanup metadata
+    App -> DB : Delete AI Job records for this FileId
+    
+    App -> DB : Commit Transaction
+    DB -->> App : Success
+end
+
+App -->> User : Confirmation (File scrubbed, metadata preserved for audit)
+@enduml

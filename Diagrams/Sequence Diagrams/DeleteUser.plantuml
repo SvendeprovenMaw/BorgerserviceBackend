@@ -1,0 +1,33 @@
+@startuml "prototype_immediate_delete"
+autonumber
+
+actor "User" as User
+participant "ConsentController" as API << (C, #ADD1B2) >>
+participant "ConsentService" as App << (S, #Yellow) >>
+participant "S3StorageService" as S3 << (I, #Orange) >>
+database "AppDbContext (SQL)" as DB
+
+User -> API : DELETE /api/consent/account
+API -> App : PermanentWipe(userId)
+
+group Atomic Transaction [Persistence Layer]
+    App -> DB : Begin Transaction
+    
+    ' Phase 1: Cleanup Data
+    App -> DB : Get S3Keys for User
+    DB -->> App : ["users/1/cv.pdf", "users/1/results/1.pdf"]
+    
+    ' Phase 2: Infrastructure Wipe
+    App -> S3 : DeleteObjects(S3Keys)
+    S3 -->> App : S3 Success
+    
+    ' Phase 3: Final Records
+    App -> DB : Insert DeletionLog(userId)
+    App -> DB : Delete User (where Id = userId)
+    
+    App -> DB : Commit Transaction
+end
+
+App -->> API : 204 No Content
+API -->> User : Account Deleted
+@enduml

@@ -1,0 +1,35 @@
+@startuml "file_download_logic"
+autonumber
+skinparam Style strictuml
+
+actor "User / Frontend" as User
+participant "FileService" as App <<Service>>
+database "Database" as DB
+participant "S3Storage" as S3 <<Infrastructure>>
+
+User -> App : Request Download (FileId)
+
+group Phase 1: Authorization & Consent Check
+    App -> DB : Fetch File Metadata (S3Key, OwnerId, RetractedAt)
+    DB -->> App : Metadata Result
+    
+    App -> App : Verify Ownership\n(Token UserId == OwnerId)
+    
+    alt File Retracted or Wrong Owner
+        App -->> User : Access Denied / 404
+    end
+end
+
+group Phase 2: Presigned URL Generation
+    App -> S3 : GeneratePresignedUrl(S3Key, Expiry: 5m)
+    note right: The API never touches the file bytes.\nIt only signs a temporary access token.
+    S3 -->> App : signed url
+end
+
+group Phase 3: Direct Retrieval
+    App -->> User : 200 OK (DownloadUrl)
+    User -> S3 : GET DownloadUrl (Direct)
+    S3 -->> User : File Stream (Binary Data)
+end
+
+@enduml
