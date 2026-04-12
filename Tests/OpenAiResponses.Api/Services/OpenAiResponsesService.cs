@@ -9,6 +9,9 @@ using OpenAiResponses.Api.Options;
 
 namespace OpenAiResponses.Api.Services;
 
+/// <summary>
+/// Converts local prompt/file inputs into Responses API requests and validates that the reply is strict JSON.
+/// </summary>
 public sealed class OpenAiResponsesService : IOpenAiResponsesService
 {
     private readonly ResponsesClient _responsesClient;
@@ -25,6 +28,9 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
         _logger = logger;
     }
 
+    /// <summary>
+    /// Preserves the original strict-json endpoint shape by translating it into the generic request model.
+    /// </summary>
     public async Task<string> GenerateStrictJsonAsync(StrictJsonResponseRequest request, CancellationToken cancellationToken = default)
     {
         ValidateStrictJsonRequest(request);
@@ -54,6 +60,9 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
         return await GenerateStructuredJsonAsync(structuredRequest, cancellationToken);
     }
 
+    /// <summary>
+    /// Builds the final Responses API payload from normalized text and file inputs.
+    /// </summary>
     public async Task<string> GenerateStructuredJsonAsync(StructuredJsonResponseRequest request, CancellationToken cancellationToken = default)
     {
         ValidateStructuredRequest(request);
@@ -68,18 +77,21 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
             ResponseContentPart.CreateInputTextPart(BuildInstructionText(request.Prompt))
         };
 
+        // Text inputs are promoted into labeled prompt context so the model can refer to them explicitly.
         foreach (var inputText in request.InputTexts.Where(text => !string.IsNullOrWhiteSpace(text.Content)))
         {
             var label = string.IsNullOrWhiteSpace(inputText.Label) ? "Input text" : inputText.Label.Trim();
             contentParts.Add(ResponseContentPart.CreateInputTextPart($"{label}:\n{inputText.Content.Trim()}"));
         }
 
+        // File inputs are sent twice: once as a readable label and once as the actual binary/file part.
         foreach (var inputFile in normalizedInputFiles)
         {
             contentParts.Add(ResponseContentPart.CreateInputTextPart($"{inputFile.Label}: {Path.GetFileName(inputFile.FilePath)}"));
             contentParts.Add(await CreateFilePartAsync(inputFile.FilePath, cancellationToken));
         }
 
+        // The schema format forces the model to emit a single JSON object that matches the supplied contract.
         var options = new CreateResponseOptions(selectedModel, [ResponseItem.CreateUserMessageItem(contentParts)])
         {
             TextOptions = new ResponseTextOptions
@@ -113,6 +125,9 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
         return outputJson;
     }
 
+    /// <summary>
+    /// Wraps the task prompt with fixed operating rules shared by all structured calls.
+    /// </summary>
     private static string BuildInstructionText(string prompt)
     {
         var builder = new StringBuilder();
@@ -125,6 +140,9 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
         return builder.ToString();
     }
 
+    /// <summary>
+    /// Reads the file into a MIME-typed content part accepted by the Responses API.
+    /// </summary>
     private static async Task<ResponseContentPart> CreateFilePartAsync(string filePath, CancellationToken cancellationToken)
     {
         if (!File.Exists(filePath))
@@ -144,6 +162,7 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
         var normalizedFiles = new List<StructuredFileInput>();
         var seenPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
+        // Normalize to absolute paths and collapse duplicates so the same file is never uploaded twice.
         foreach (var inputFile in inputFiles)
         {
             if (string.IsNullOrWhiteSpace(inputFile.FilePath))
@@ -167,6 +186,9 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
         return normalizedFiles;
     }
 
+    /// <summary>
+    /// Keeps schema names compatible with the API's length and character constraints.
+    /// </summary>
     private static string SanitizeSchemaName(string? schemaName)
     {
         var fallbackName = "strict_response";
@@ -216,6 +238,9 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
         }
     }
 
+    /// <summary>
+    /// Ensures the generic request has a prompt, a schema, and at least one non-empty input.
+    /// </summary>
     private static void ValidateStructuredRequest(StructuredJsonResponseRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Prompt))

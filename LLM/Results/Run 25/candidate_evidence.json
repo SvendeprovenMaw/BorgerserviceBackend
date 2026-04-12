@@ -1,0 +1,95 @@
+{
+  "_meta": {
+    "requirements_document_id": "requirements_produktionsleder_bilka_greve",
+    "parsed_files": [
+      "Produktionsleder - Bilka - Greve.pdf",
+      "emma_sorensen_cv_da.pdf",
+      "profile.pdf"
+    ],
+    "errors": []
+  },
+  "evidence_items": [
+    {
+      "evidence_id": "e1",
+      "fact_da": "Kandidaten beskriver, at hun arbejder struktureret med opgaver.",
+      "normalized_label": "structured_working_style",
+      "category": "analytical_skill",
+      "support_type": "explicit",
+      "strength": "strong",
+      "relevant_requirement_ids": [
+        "req_4"
+      ],
+      "requirement_relevance_reason_da": "Dette er relevant for kravet om at kunne planl\u00E6gge og strukturere arbejdsdagen.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "arbejder struktureret med opgaver",
+          "section_hint": "Profiltekst"
+        },
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Struktureret opgavel\u00F8sning, dokumentation og ansvarlig opf\u00F8lgning.",
+          "section_hint": "Kompetencer \u003E Arbejdsform"
+        }
+      ]
+    },
+    {
+      "evidence_id": "e2",
+      "fact_da": "Kandidaten har erfaring med teknisk support til brugere.",
+      "normalized_label": "user_technical_support_experience",
+      "category": "customer_focus",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_7"
+      ],
+      "requirement_relevance_reason_da": "Erfaring med at yde support til brugere er relevant for kravet om at betjene kunder og yde kundeservice, men kilden beskriver teknisk support og ikke eksplicit diskbetjening.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Ydede teknisk support til brugere og dokumenterede l\u00F8sninger p\u00E5 tilbagevendende problemer.",
+          "section_hint": "Erhvervserfaring \u003E IT-support og webassistent"
+        }
+      ]
+    },
+    {
+      "evidence_id": "e3",
+      "fact_da": "Kandidaten oplyser, at hun trives i samarbejde med b\u00E5de teknikere og forretning.",
+      "normalized_label": "cross_functional_collaboration",
+      "category": "collaboration",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_6"
+      ],
+      "requirement_relevance_reason_da": "Dette er relevant for kravet om at st\u00F8tte kolleger gennem samarbejde, fordi kandidaten direkte beskriver trivsel i samarbejde p\u00E5 tv\u00E6rs af funktioner.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Trives i samarbejde med b\u00E5de teknikere og forretning",
+          "section_hint": "Profiltekst"
+        }
+      ]
+    },
+    {
+      "evidence_id": "e4",
+      "fact_da": "Kandidaten er vant til hybridt samarbejde og dialog med b\u00E5de brugere og udviklere.",
+      "normalized_label": "hybrid_collaboration_with_users_and_developers",
+      "category": "collaboration",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_6",
+        "req_7"
+      ],
+      "requirement_relevance_reason_da": "Dette er relevant for samarbejdskravet og for kundeservicekravet, fordi kandidaten beskriver dialog med b\u00E5de brugere og udviklere, hvilket dokumenterer samarbejds- og brugerrettet kontakt.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Er vant til hybridt samarbejde og dialog med b\u00E5de brugere og udviklere.",
+          "section_hint": "Kompetencer \u003E Arbejdsform"
+        }
+      ]
+    }
+  ]
+}

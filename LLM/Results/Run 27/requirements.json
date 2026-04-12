@@ -1,0 +1,193 @@
+{
+  "_meta": {
+    "job_posting_title": "Erfaren Penetrationtester",
+    "parsed_files": [
+      "Erfaren Penetrationtester - JN Data - Roskilde.pdf"
+    ],
+    "errors": []
+  },
+  "requirements": [
+    {
+      "requirement_id": "req_1",
+      "requirement_text_da": "Kandidaten skal kunne gennemf\u00F8re alle faser af en penetrationstest selvst\u00E6ndigt, fra scoping og udf\u00F8relse til rapportaflevering og pr\u00E6sentation af resultatet.",
+      "normalized_label": "end_to_end_penetration_testing",
+      "category": "role_experience",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Erfaren Penetrationtester - JN Data - Roskilde.pdf",
+          "excerpt": "Du kan p\u00E5 egen h\u00E5nd gennemf\u00F8re alle faser af en penetrationstest, fra scoping af opgaven, udf\u00F8relse af testen og frem til aflevering af rapport og pr\u00E6sentation af resultatet.",
+          "section_hint": "Dig"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_2",
+      "requirement_text_da": "Kandidaten forventes at have flere \u00E5rs praktisk erfaring med applikations- og platformspenetrationstest.",
+      "normalized_label": "application_and_platform_pentest_experience",
+      "category": "role_experience",
+      "importance": "should_have",
+      "source_citations": [
+        {
+          "filename": "Erfaren Penetrationtester - JN Data - Roskilde.pdf",
+          "excerpt": "Flere \u00E5rs praktisk erfaring med udf\u00F8relse af applikations- og platformspenetrationstest",
+          "section_hint": "Dig"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_3",
+      "requirement_text_da": "Kandidaten forventes at have erfaring med relevante v\u00E6rkt\u00F8jer som Burp Suite og Nessus.",
+      "normalized_label": "burp_suite_nessus",
+      "category": "tool_experience",
+      "importance": "should_have",
+      "source_citations": [
+        {
+          "filename": "Erfaren Penetrationtester - JN Data - Roskilde.pdf",
+          "excerpt": "brug af relevante v\u00E6rkt\u00F8jer som Burp Suite og Nessus",
+          "section_hint": "Dig"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_4",
+      "requirement_text_da": "Kandidaten forventes at have viden om kildekodegennemgang af typiske programmeringssprog til webudvikling eller et \u00F8nske om at tilegne sig denne viden.",
+      "normalized_label": "source_code_review_knowledge",
+      "category": "technical_skill",
+      "importance": "should_have",
+      "source_citations": [
+        {
+          "filename": "Erfaren Penetrationtester - JN Data - Roskilde.pdf",
+          "excerpt": "Viden om kildekodegennemgang af typiske programmeringssprog til webudvikling eller \u00F8nsket om at tilegne dig den viden.",
+          "section_hint": "Dig"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_5",
+      "requirement_text_da": "Kandidaten forventes at have kendskab til rammev\u00E6rk og standarder som OWASP WSTG, PTES, NIST 800-115 og PCI DSS.",
+      "normalized_label": "security_testing_frameworks_and_standards",
+      "category": "technical_skill",
+      "importance": "should_have",
+      "source_citations": [
+        {
+          "filename": "Erfaren Penetrationtester - JN Data - Roskilde.pdf",
+          "excerpt": "Kendskab til rammev\u00E6rk og standarder som f.eks. OWASP WSTG, PTES, NIST 800-115 og PCI DSS.",
+          "section_hint": "Dig"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_6",
+      "requirement_text_da": "Kandidaten forventes at have solid forst\u00E5else for netv\u00E6rk, operativsystemer og cloud.",
+      "normalized_label": "network_os_cloud_understanding",
+      "category": "technical_skill",
+      "importance": "should_have",
+      "source_citations": [
+        {
+          "filename": "Erfaren Penetrationtester - JN Data - Roskilde.pdf",
+          "excerpt": "Solid forst\u00E5else for netv\u00E6rk, operativsystemer og cloud.",
+          "section_hint": "Dig"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_7",
+      "requirement_text_da": "Kandidaten forventes at have viden om typiske web-, applikations- og platformss\u00E5rbarheder.",
+      "normalized_label": "common_web_application_platform_vulnerabilities",
+      "category": "technical_skill",
+      "importance": "should_have",
+      "source_citations": [
+        {
+          "filename": "Erfaren Penetrationtester - JN Data - Roskilde.pdf",
+          "excerpt": "Viden om typiske web-, applikations- og platformss\u00E5rbarheder.",
+          "section_hint": "Dig"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_8",
+      "requirement_text_da": "Relevante certificeringer som OSCP, GPEN, OSWA, GWAPT eller PNPT er \u00F8nskede.",
+      "normalized_label": "relevant_security_certifications",
+      "category": "certification",
+      "importance": "should_have",
+      "source_citations": [
+        {
+          "filename": "Erfaren Penetrationtester - JN Data - Roskilde.pdf",
+          "excerpt": "Relevante certificeringer som OSCP, GPEN, OSWA, GWAPT eller PNPT.",
+          "section_hint": "Dig"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_9",
+      "requirement_text_da": "Kandidaten skal kunne oms\u00E6tte sv\u00E6rt teknisk materiale til noget, forretningen kan forst\u00E5 og drage nytte af.",
+      "normalized_label": "translate_technical_material_for_business",
+      "category": "communication",
+      "importance": "should_have",
+      "source_citations": [
+        {
+          "filename": "Erfaren Penetrationtester - JN Data - Roskilde.pdf",
+          "excerpt": "Evnen til at oms\u00E6tte sv\u00E6rt teknisk materiale til noget forretningen kan forst\u00E5 og drage nytte af.",
+          "section_hint": "Dig"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_10",
+      "requirement_text_da": "Tidligere erfaring med test af kritisk infrastruktur, cloudmilj\u00F8er eller PCI DSS er en fordel.",
+      "normalized_label": "critical_infrastructure_cloud_pci_experience",
+      "category": "industry_experience",
+      "importance": "nice_to_have",
+      "source_citations": [
+        {
+          "filename": "Erfaren Penetrationtester - JN Data - Roskilde.pdf",
+          "excerpt": "Har du tidligere erfaring med test af kritisk infrastruktur, cloudmilj\u00F8er eller PCI DSS s\u00E5 er det en fordel.",
+          "section_hint": "Dig"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_11",
+      "requirement_text_da": "Kandidaten skal kunne skrive detaljerede testrapporter p\u00E5 dansk eller engelsk med identificerede s\u00E5rbarheder og anbefalinger.",
+      "normalized_label": "report_writing_danish_or_english",
+      "category": "language",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Erfaren Penetrationtester - JN Data - Roskilde.pdf",
+          "excerpt": "Skrive detaljerede rapporter for testene p\u00E5 enten dansk eller engelsk, der indeholder identificerede s\u00E5rbarheder og anbefalinger.",
+          "section_hint": "Dine arbejdsopgaver"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_12",
+      "requirement_text_da": "Kandidaten skal kunne udarbejde testplaner for en struktureret og systematisk afvikling af penetrationstests.",
+      "normalized_label": "test_planning",
+      "category": "technical_skill",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Erfaren Penetrationtester - JN Data - Roskilde.pdf",
+          "excerpt": "Udarbejdelse af testplaner for at sikre en struktureret og systematisk afvikling af penetrationstests.",
+          "section_hint": "Dine arbejdsopgaver"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_13",
+      "requirement_text_da": "Kandidaten skal kunne udf\u00F8re systemspecifikke penetrationstest og threat modeling samt eventuelt kildekodegennemgang.",
+      "normalized_label": "systemspecific_pentesting_threat_modeling_code_review",
+      "category": "technical_skill",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Erfaren Penetrationtester - JN Data - Roskilde.pdf",
+          "excerpt": "Udf\u00F8re systemspecifikke penetrationstest, threat modeling og eventuelt kildekodegennemgang",
+          "section_hint": "Dine arbejdsopgaver"
+        }
+      ]
+    }
+  ]
+}

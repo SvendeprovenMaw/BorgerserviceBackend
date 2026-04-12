@@ -1,0 +1,23 @@
+{
+  "Stage": "requirements",
+  "DocumentId": "requirements_graver_f\u00F8llenslev_kirkeg\u00E5rd",
+  "VerificationMode": "mechanical_only",
+  "Status": "pass",
+  "ApprovedForDownstream": true,
+  "WarningCount": 0,
+  "ErrorCount": 0,
+  "ArtifactPath": "",
+  "GateArtifactPath": "",
+  "Gate": {
+    "Stage": "",
+    "Decision": "continue",
+    "ApprovedForDownstream": false,
+    "HardInvalidCount": 0,
+    "SoftQualityCount": 0,
+    "SummaryDa": "",
+    "BlockingReasons": [],
+    "AdvisoryReasons": [],
+    "Metrics": []
+  },
+  "Findings": []
+}

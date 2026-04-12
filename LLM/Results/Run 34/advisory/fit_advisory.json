@@ -1,0 +1,5 @@
+{
+  "GuidanceMode": "optimistic",
+  "SummaryDa": "Denne advisory er sat til optimistic. Matchniveauet ser weak ud med 0 matched, 4 delvist matched, 9 not_matched og 3 unclear krav. Systemet har fors\u00F8gt at skrive den st\u00E6rkest mulige sandf\u00E6rdige ans\u00F8gning og fremh\u00E6ve overf\u00F8rbare styrker frem for at agere gatekeeper. Ans\u00F8gningen fokuserer p\u00E5 de bedst dokumenterede og mest overf\u00F8rbare styrker.",
+  "ArtifactPath": ""
+}

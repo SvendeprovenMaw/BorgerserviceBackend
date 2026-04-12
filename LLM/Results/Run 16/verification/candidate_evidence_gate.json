@@ -1,0 +1,48 @@
+{
+  "Stage": "candidate_evidence",
+  "Decision": "repair_or_regenerate",
+  "ApprovedForDownstream": false,
+  "HardInvalidCount": 0,
+  "SoftQualityCount": 0,
+  "SummaryDa": "Candidate evidence skal have mindst 4 godkendte evidensobjekter. For stor andel af candidate evidence blev afvist. Maksimal discard ratio er 0,4. Candidate evidence skal d\u00E6kke mindst 3 krav efter filtering. Candidate evidence skal have mindst 2 medium eller strong evidensobjekter.",
+  "BlockingReasons": [
+    "Candidate evidence skal have mindst 4 godkendte evidensobjekter.",
+    "For stor andel af candidate evidence blev afvist. Maksimal discard ratio er 0,4.",
+    "Candidate evidence skal d\u00E6kke mindst 3 krav efter filtering.",
+    "Candidate evidence skal have mindst 2 medium eller strong evidensobjekter."
+  ],
+  "Metrics": [
+    {
+      "MetricKey": "candidate_evidence.approved_items",
+      "Operator": "\u003E=",
+      "Actual": "0",
+      "Expected": "4",
+      "Passed": false,
+      "MessageDa": "Candidate evidence skal have mindst 4 godkendte evidensobjekter."
+    },
+    {
+      "MetricKey": "candidate_evidence.discard_ratio",
+      "Operator": "\u003C=",
+      "Actual": "1",
+      "Expected": "0.4",
+      "Passed": false,
+      "MessageDa": "For stor andel af candidate evidence blev afvist. Maksimal discard ratio er 0,4."
+    },
+    {
+      "MetricKey": "candidate_evidence.covered_requirements",
+      "Operator": "\u003E=",
+      "Actual": "0",
+      "Expected": "3",
+      "Passed": false,
+      "MessageDa": "Candidate evidence skal d\u00E6kke mindst 3 krav efter filtering."
+    },
+    {
+      "MetricKey": "candidate_evidence.strong_or_medium_items",
+      "Operator": "\u003E=",
+      "Actual": "0",
+      "Expected": "2",
+      "Passed": false,
+      "MessageDa": "Candidate evidence skal have mindst 2 medium eller strong evidensobjekter."
+    }
+  ]
+}

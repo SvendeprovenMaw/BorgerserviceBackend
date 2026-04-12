@@ -1,0 +1,188 @@
+{
+  "matches": [
+    {
+      "requirement_id": "req_1",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for gartneruddannelse eller solid erfaring fra det gr\u00F8nne omr\u00E5de i kandidatmaterialet.",
+      "gap_da": "Manglende dokumentation for gartneruddannelse eller praktisk erfaring fra det gr\u00F8nne omr\u00E5de.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_2",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_1"
+      ],
+      "rationale_da": "K\u00F8rekort B er direkte dokumenteret, men der er ingen evidens for villighed til at bruge egen bil i tjenesten.",
+      "gap_da": "Manglende dokumentation for villighed til at bruge egen bil i tjenesten.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_3",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_4",
+        "ev_7"
+      ],
+      "rationale_da": "Kandidaten dokumenterer en struktureret og ansvarlig arbejdsform samt erfaring med selvst\u00E6ndige sm\u00E5projekter. Det underst\u00F8tter selvst\u00E6ndighed og ansvar, men ikke direkte ansvar for daglig drift inden for \u00F8konomiske rammer.",
+      "gap_da": "Manglende direkte evidens for ansvar for daglig drift og arbejde inden for givne \u00F8konomiske rammer.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_4",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for kendskab til kirkens IT-systemer eller udtrykt villighed til at l\u00E6re dem.",
+      "gap_da": "Manglende dokumentation for kendskab til kirkens IT-systemer eller villighed til at l\u00E6re dem.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_5",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Kandidatmaterialet indeholder ingen direkte dokumentation for en engageret, fleksibel og im\u00F8dekommende tilgang til arbejdet.",
+      "gap_da": "Manglende evidens for engagement, fleksibilitet og im\u00F8dekommenhed i arbejdet.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_6",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for interesse for kirken eller sognets liv.",
+      "gap_da": "Manglende dokumentation for interesse for kirken og sognets liv.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_7",
+      "verdict": "unclear",
+      "matched_evidence_ids": [
+        "ev_3"
+      ],
+      "rationale_da": "Kandidaten beskriver trivsel i samarbejde med teknikere og forretning, hvilket er svagt relevant for arbejdsmilj\u00F8. Der er dog ingen direkte evidens for aktivt bidrag til et godt fysisk og psykisk arbejdsmilj\u00F8.",
+      "gap_da": "Manglende direkte dokumentation for aktivt bidrag til et godt fysisk og psykisk arbejdsmilj\u00F8.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_8",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_2",
+        "ev_3",
+        "ev_6"
+      ],
+      "rationale_da": "Der er dokumenteret erfaring med brugerrettet support, dialog med brugere og udviklere samt trivsel i tv\u00E6rfagligt samarbejde. Det underst\u00F8tter generelle samarbejdsevner, men ikke direkte samarbejde med kolleger, menighedsr\u00E5d, frivillige og samarbejdspartnere i en kirkelig kontekst.",
+      "gap_da": "Manglende direkte evidens for samarbejde med menighedsr\u00E5d, frivillige og samarbejdspartnere som n\u00E6vnt i kravet.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_9",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for ansvar for drift, vedligeholdelse og udvikling af kirkeg\u00E5rd eller pr\u00E6steg\u00E5rd.",
+      "gap_da": "Manglende dokumentation for drift, vedligeholdelse og udvikling af kirkeg\u00E5rd og pr\u00E6steg\u00E5rd.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_10",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for kirketjeneste ved kirkelige handlinger.",
+      "gap_da": "Manglende dokumentation for erfaring med eller mulighed for kirketjeneste ved kirkelige handlinger.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_11",
+      "verdict": "unclear",
+      "matched_evidence_ids": [
+        "ev_8"
+      ],
+      "rationale_da": "Flyttevillighed kan v\u00E6re svagt relevant for praktisk tilg\u00E6ngelighed, men dokumenterer ikke, at kandidaten kan udf\u00F8re kirketjeneste hver 2. s\u00F8ndag.",
+      "gap_da": "Manglende direkte dokumentation for mulighed for eller villighed til kirketjeneste hver 2. s\u00F8ndag.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_12",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for reng\u00F8ring eller andet forefaldende praktisk arbejde.",
+      "gap_da": "Manglende dokumentation for reng\u00F8ring og praktisk driftsarbejde.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_13",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_2",
+        "ev_5",
+        "ev_6"
+      ],
+      "rationale_da": "Kandidaten har dokumenteret brugerrettet support, dialog med brugere samt erfaring med registrering og rapportering. Det underst\u00F8tter brugerkontakt og administrative arbejdsgange, men ikke direkte udskrivning af regninger.",
+      "gap_da": "Manglende direkte evidens for udskrivning af regninger.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_14",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for arbejde med kirkeg\u00E5rdsvedligeholdelse eller medvirken til en smuk og velholdt kirkeg\u00E5rd.",
+      "gap_da": "Manglende dokumentation for praktisk vedligeholdelse af kirkeg\u00E5rd eller tilsvarende opgaver.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_15",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for, at kandidaten er indstillet p\u00E5 eller kan gennemf\u00F8re den obligatoriske graveruddannelse inden for 2 \u00E5r.",
+      "gap_da": "Manglende dokumentation for villighed eller mulighed for at gennemf\u00F8re den obligatoriske 5 ugers graveruddannelse inden for 2 \u00E5r.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_16",
+      "verdict": "unclear",
+      "matched_evidence_ids": [
+        "ev_8"
+      ],
+      "rationale_da": "Flyttevillighed kan v\u00E6re svagt relevant for praktisk tilg\u00E6ngelighed, men dokumenterer ikke accept af r\u00E5dighedsforpligtelse.",
+      "gap_da": "Manglende direkte dokumentation for, at kandidaten kan eller vil indg\u00E5 i r\u00E5dighedsforpligtelse.",
+      "confidence": "low",
+      "needs_human_review": true
+    }
+  ],
+  "overall_assessment": {
+    "overall_match_level": "weak",
+    "summary_da": "Der er enkelte dokumenterede styrker i forhold til k\u00F8rekort, generelle samarbejdsevner, brugerrettet kontakt og en vis selvst\u00E6ndig arbejdsform. De fleste centrale krav til stillingen som graver er dog ikke dokumenteret, s\u00E6rligt gr\u00F8n faglighed, kirkeg\u00E5rdsdrift, kirketjeneste, praktiske opgaver, kirkelig interesse og flere specifikke logistiske krav.",
+    "major_strength_evidence_ids": [
+      "ev_1",
+      "ev_2",
+      "ev_4",
+      "ev_6",
+      "ev_7"
+    ],
+    "major_gap_requirement_ids": [
+      "req_1",
+      "req_4",
+      "req_6",
+      "req_9",
+      "req_10",
+      "req_12",
+      "req_14",
+      "req_15"
+    ]
+  }
+}

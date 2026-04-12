@@ -1,0 +1,176 @@
+{
+  "matches": [
+    {
+      "requirement_id": "req_1",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for gartneruddannelse eller solid erfaring fra det gr\u00F8nne omr\u00E5de i kandidat-evidensen.",
+      "gap_da": "Der mangler direkte evidens for gartneruddannelse eller praktisk erfaring fra gr\u00F8n drift, have, anl\u00E6g eller lignende.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_2",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evidence_1"
+      ],
+      "rationale_da": "Kandidaten har dokumenteret k\u00F8rekort kategori B, men der er ingen evidens for villighed til at bruge egen bil i tjenesten.",
+      "gap_da": "Der mangler direkte evidens for, at kandidaten vil bruge egen bil i tjenesten.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_3",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evidence_3",
+        "evidence_5",
+        "evidence_7"
+      ],
+      "rationale_da": "Der er relevant evidens for struktureret og ansvarlig arbejdsform samt selvst\u00E6ndige sm\u00E5projekter. Evidensen peger p\u00E5 selvst\u00E6ndighed og ansvar, men dokumenterer ikke klart ansvar for daglig drift inden for \u00F8konomiske rammer.",
+      "gap_da": "Der mangler direkte evidens for ansvar for daglig drift og arbejde inden for givne \u00F8konomiske rammer.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_4",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for kendskab til kirkens IT-systemer eller udtrykkelig villighed til at l\u00E6re dem.",
+      "gap_da": "Der mangler direkte evidens for erfaring med kirkens IT-systemer eller en udtrykt villighed til at l\u00E6re dem.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_5",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Kandidat-evidensen dokumenterer ikke direkte en engageret, fleksibel og im\u00F8dekommende tilgang til arbejdet.",
+      "gap_da": "Der mangler direkte evidens for engagement, fleksibilitet og im\u00F8dekommenhed.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_6",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen evidens for interesse for kirken eller sognets liv.",
+      "gap_da": "Der mangler direkte evidens for relation til kirken, kirkeligt arbejde eller interesse for sognets liv.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_7",
+      "verdict": "unclear",
+      "matched_evidence_ids": [
+        "evidence_4"
+      ],
+      "rationale_da": "Der er noget relevant evidens for samarbejde og dialog med forskellige parter, men det dokumenterer kun indirekte et aktivt bidrag til et godt fysisk og psykisk arbejdsmilj\u00F8.",
+      "gap_da": "Der mangler mere direkte evidens for konkret bidrag til arbejdsmilj\u00F8, trivsel eller fysisk og psykisk arbejdsmilj\u00F8arbejde.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_8",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evidence_2",
+        "evidence_4"
+      ],
+      "rationale_da": "Kandidaten har dokumenteret erfaring med brugersupport, dialog og samarbejde p\u00E5 tv\u00E6rs. Det underst\u00F8tter samarbejdsevner, men ikke specifikt samarbejde med menighedsr\u00E5d, frivillige eller tilsvarende kirkelige samarbejdspartnere.",
+      "gap_da": "Der mangler mere direkte evidens for samarbejde i kontekster, der ligner kolleger, menighedsr\u00E5d, frivillige og eksterne samarbejdspartnere i kirkelig drift.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_9",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen evidens for, at kandidaten vil eller kan gennemf\u00F8re den obligatoriske graveruddannelse inden for 2 \u00E5r.",
+      "gap_da": "Der mangler direkte evidens for accept af eller villighed til at gennemf\u00F8re den obligatoriske 5 ugers uddannelse for gravere.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_10",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for erfaring med eller evne til kirketjeneste ved kirkelige handlinger.",
+      "gap_da": "Der mangler direkte evidens for kirketjeneste, kirkelige handlinger eller tilsvarende opgaver.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_11",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Flyttevillighed er ikke tilstr\u00E6kkelig evidens for, at kandidaten kan varetage kirketjeneste hver 2. s\u00F8ndag.",
+      "gap_da": "Der mangler direkte evidens for tilg\u00E6ngelighed eller villighed til fast tjeneste hver 2. s\u00F8ndag.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_12",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evidence_7"
+      ],
+      "rationale_da": "Der er indirekte evidens for en systematisk tilgang til at s\u00E6tte sig ind i eksisterende l\u00F8sninger og forbedre dem. Det peger svagt mod drift og vedligeholdelse, men ikke konkret i relation til kirkeg\u00E5rd eller pr\u00E6steg\u00E5rd.",
+      "gap_da": "Der mangler direkte evidens for ansvar for drift, vedligeholdelse og udvikling af fysiske omr\u00E5der som kirkeg\u00E5rd eller pr\u00E6steg\u00E5rd.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_13",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evidence_2",
+        "evidence_5",
+        "evidence_6"
+      ],
+      "rationale_da": "Kandidaten har relevant evidens for brugerkontakt, kundedialog samt registrering og rapportering. Det underst\u00F8tter kontakt til kirkens brugere, men der er ikke direkte evidens for udskrivning af regninger.",
+      "gap_da": "Der mangler direkte evidens for fakturering eller udskrivning af regninger.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_14",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen evidens for arbejde med kirkeg\u00E5rd, gr\u00F8n vedligeholdelse eller lignende opgaver, der underst\u00F8tter en smuk, v\u00E6rdig og velholdt kirkeg\u00E5rd.",
+      "gap_da": "Der mangler direkte evidens for vedligeholdelse af gr\u00F8nne eller v\u00E6rdige fysiske omgivelser, is\u00E6r kirkeg\u00E5rd.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_15",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Flyttevillighed er ikke tilstr\u00E6kkelig evidens for accept af r\u00E5dighedsforpligtelse i stillingen.",
+      "gap_da": "Der mangler direkte evidens for, at kandidaten accepterer eller kan indg\u00E5 i r\u00E5dighedsforpligtelse.",
+      "confidence": "high",
+      "needs_human_review": false
+    }
+  ],
+  "overall_assessment": {
+    "overall_match_level": "weak",
+    "summary_da": "Kandidaten har enkelte relevante styrker inden for k\u00F8rekort, samarbejde, brugerkontakt og en struktureret arbejdsform. Der mangler dog central og direkte evidens for gr\u00F8n erfaring, kirkelig interesse, kirketjeneste, r\u00E5dighedsforpligtelse, obligatorisk graveruddannelse samt flere af de konkrete driftsopgaver i stillingen.",
+    "major_strength_evidence_ids": [
+      "evidence_1",
+      "evidence_2",
+      "evidence_3",
+      "evidence_4",
+      "evidence_5"
+    ],
+    "major_gap_requirement_ids": [
+      "req_1",
+      "req_4",
+      "req_6",
+      "req_9",
+      "req_10",
+      "req_14",
+      "req_15"
+    ]
+  }
+}

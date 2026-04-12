@@ -1,0 +1,342 @@
+{
+  "_meta": {
+    "application_document_id": "application_borger1_fullstack_developer_returna_aps_nordjylland",
+    "requirements_document_id": "requirements_fullstack_developer_returna_aps_nordjylland",
+    "candidate_evidence_document_id": "candidate_evidence_borger1",
+    "matching_document_id": "matching_borger1_fullstack_developer_returna_aps_nordjylland",
+    "target_language": "da",
+    "position_title": "Fullstack Developer",
+    "company_name": "Returna ApS",
+    "applicant_display_name": null
+  },
+  "application_strategy": {
+    "tone": "warm_professional",
+    "length_target": "medium",
+    "subject_line_da": "Ans\u00F8gning til stillingen som Fullstack Developer",
+    "core_message_da": "Ans\u00F8gningen fokuserer p\u00E5 kandidatens dokumenterede erfaring med React-baseret frontend, brugerorienteret udvikling, API- og integrationsarbejde samt en struktureret og ansvarlig arbejdsform. Krav uden verificeret st\u00F8tte udelades, og rollefit formuleres moderat med v\u00E6gt p\u00E5 overf\u00F8rbare styrker og interesse for en remote fuldtidsstilling.",
+    "selected_requirement_ids": [
+      "req_2",
+      "req_3",
+      "req_4",
+      "req_7",
+      "req_12"
+    ],
+    "selected_evidence_ids": [
+      "ev_1",
+      "ev_2",
+      "ev_3",
+      "ev_4",
+      "ev_5",
+      "ev_6",
+      "ev_7",
+      "ev_8"
+    ],
+    "omitted_requirement_ids": [
+      "req_1",
+      "req_5",
+      "req_6",
+      "req_8",
+      "req_9",
+      "req_10",
+      "req_11"
+    ],
+    "omission_strategy_da": "Krav uden tilstr\u00E6kkelig verificeret evidens omtales ikke direkte. Ans\u00F8gningen l\u00E6gger i stedet v\u00E6gt p\u00E5 dokumenterede, overf\u00F8rbare erfaringer og delvise matches, formuleret n\u00F8gternt og uden at overdrive rollefit."
+  },
+  "sections": [
+    {
+      "section_id": "salutation",
+      "section_kind": "salutation",
+      "text_da": "K\u00E6re Returna ApS",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "opening",
+      "section_kind": "opening",
+      "text_da": "Jeg \u00F8nsker at s\u00F8ge stillingen som Fullstack Developer hos jer. Rollen tiltaler mig, fordi den kombinerer moderne webudvikling med ansvar t\u00E6t p\u00E5 den konkrete l\u00F8sning, og fordi den er fuldt remote.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "cl_1"
+      ],
+      "supported_requirement_ids": [
+        "req_12"
+      ],
+      "supported_evidence_ids": [
+        "ev_8"
+      ]
+    },
+    {
+      "section_id": "motivation",
+      "section_kind": "motivation",
+      "text_da": "I min profil har jeg is\u00E6r arbejdet med moderne webudvikling, API-design og brugervenlige gr\u00E6nseflader. Det g\u00F8r stillingen relevant for mig, fordi jeg gerne vil bidrage i en rolle, hvor frontend, samarbejde og praktisk udvikling h\u00E6nger t\u00E6t sammen.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "cl_2",
+        "cl_3"
+      ],
+      "supported_requirement_ids": [
+        "req_3",
+        "req_4",
+        "req_7"
+      ],
+      "supported_evidence_ids": [
+        "ev_3",
+        "ev_5"
+      ]
+    },
+    {
+      "section_id": "experience",
+      "section_kind": "experience",
+      "text_da": "Jeg har erfaring med React-baserede brugerflader gennem fejlretning, kodegennemgang og mindre forbedringer, og jeg arbejder ogs\u00E5 med React, HTML og CSS i min tekniske profil. Derudover har jeg bygget REST API-endpoints og deltaget i integrationer mellem front-end, database og tredjepartssystemer. Samlet giver det mig et godt udgangspunkt for at bidrage til b\u00E5de brugerflade og sammenh\u00E6ngen bag l\u00F8sningen.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "cl_4",
+        "cl_5",
+        "cl_6"
+      ],
+      "supported_requirement_ids": [
+        "req_2",
+        "req_3",
+        "req_7"
+      ],
+      "supported_evidence_ids": [
+        "ev_1",
+        "ev_2",
+        "ev_5"
+      ]
+    },
+    {
+      "section_id": "fit",
+      "section_kind": "fit",
+      "text_da": "Jeg l\u00E6gger v\u00E6gt p\u00E5 at oms\u00E6tte behov til enkle og overskuelige l\u00F8sninger og p\u00E5 at arbejde struktureret med dokumentation og ansvarlig opf\u00F8lgning. Jeg er ogs\u00E5 vant til dialog med b\u00E5de brugere og udviklere, hvilket jeg ser som vigtigt i et mindre team, hvor samarbejde og ejerskab af opgaver har stor betydning.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "cl_7",
+        "cl_8",
+        "cl_9"
+      ],
+      "supported_requirement_ids": [
+        "req_4",
+        "req_7"
+      ],
+      "supported_evidence_ids": [
+        "ev_4",
+        "ev_6",
+        "ev_7"
+      ]
+    },
+    {
+      "section_id": "closing",
+      "section_kind": "closing",
+      "text_da": "Jeg ser derfor stillingen som en god mulighed for at bringe min erfaring med React, brugerorienterede l\u00F8sninger og struktureret udviklingsarbejde i spil i en fuldtidsrolle p\u00E5 \u0434\u0438\u0441\u0442\u0430\u043Dcen. Jeg vil meget gerne uddybe min baggrund og min motivation i en samtale. Tak for jeres tid og overvejelse.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "cl_10",
+        "cl_11"
+      ],
+      "supported_requirement_ids": [
+        "req_2",
+        "req_4",
+        "req_7",
+        "req_12"
+      ],
+      "supported_evidence_ids": [
+        "ev_2",
+        "ev_4",
+        "ev_6",
+        "ev_8"
+      ]
+    },
+    {
+      "section_id": "signature",
+      "section_kind": "signature",
+      "text_da": "Med venlig hilsen",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    }
+  ],
+  "claim_register": [
+    {
+      "claim_id": "cl_1",
+      "claim_text_da": "Kandidaten s\u00F8ger en fuldtidsrolle og foretr\u00E6kker fjernarbejde i Danmark, hvilket g\u00F8r den fuldt remote stilling relevant.",
+      "claim_kind": "role_alignment",
+      "evidence_ids": [
+        "ev_8"
+      ],
+      "requirement_ids": [
+        "req_12"
+      ],
+      "section_ids": [
+        "opening"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "cl_2",
+      "claim_text_da": "Kandidaten har arbejdet med moderne webudvikling, API-design og brugervenlige gr\u00E6nseflader i sin profil.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "ev_3",
+        "ev_5"
+      ],
+      "requirement_ids": [
+        "req_3",
+        "req_4",
+        "req_7"
+      ],
+      "section_ids": [
+        "motivation"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "cl_3",
+      "claim_text_da": "Stillingen er relevant for kandidaten, fordi den forbinder frontend, samarbejde og praktisk udvikling.",
+      "claim_kind": "motivation_grounded",
+      "evidence_ids": [
+        "ev_3",
+        "ev_5",
+        "ev_7"
+      ],
+      "requirement_ids": [
+        "req_3",
+        "req_4",
+        "req_7"
+      ],
+      "section_ids": [
+        "motivation"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "cl_4",
+      "claim_text_da": "Kandidaten har erfaring med React-baserede brugerflader gennem fejlretning, kodegennemgang og mindre forbedringer.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "ev_1"
+      ],
+      "requirement_ids": [
+        "req_2"
+      ],
+      "section_ids": [
+        "experience"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "cl_5",
+      "claim_text_da": "Kandidaten arbejder med React, HTML og CSS som del af sin tekniske profil.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "ev_2"
+      ],
+      "requirement_ids": [
+        "req_2",
+        "req_3"
+      ],
+      "section_ids": [
+        "experience"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "cl_6",
+      "claim_text_da": "Kandidaten har bygget REST API-endpoints og deltaget i integrationer mellem front-end, database og tredjepartssystemer.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "ev_5"
+      ],
+      "requirement_ids": [
+        "req_7"
+      ],
+      "section_ids": [
+        "experience"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "cl_7",
+      "claim_text_da": "Kandidaten l\u00E6gger v\u00E6gt p\u00E5 at oms\u00E6tte behov til enkle og overskuelige l\u00F8sninger.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "ev_4"
+      ],
+      "requirement_ids": [
+        "req_4"
+      ],
+      "section_ids": [
+        "fit"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "cl_8",
+      "claim_text_da": "Kandidaten arbejder struktureret med dokumentation og ansvarlig opf\u00F8lgning.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "ev_6"
+      ],
+      "requirement_ids": [
+        "req_7"
+      ],
+      "section_ids": [
+        "fit"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "cl_9",
+      "claim_text_da": "Kandidaten er vant til dialog med b\u00E5de brugere og udviklere, hvilket er relevant i et mindre team med samarbejde om opgaver.",
+      "claim_kind": "role_alignment",
+      "evidence_ids": [
+        "ev_7"
+      ],
+      "requirement_ids": [
+        "req_7"
+      ],
+      "section_ids": [
+        "fit"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "cl_10",
+      "claim_text_da": "Kandidaten kan bringe erfaring med React, brugerorienterede l\u00F8sninger og struktureret udviklingsarbejde i spil i rollen.",
+      "claim_kind": "role_alignment",
+      "evidence_ids": [
+        "ev_2",
+        "ev_4",
+        "ev_6"
+      ],
+      "requirement_ids": [
+        "req_2",
+        "req_4",
+        "req_7"
+      ],
+      "section_ids": [
+        "closing"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "cl_11",
+      "claim_text_da": "Den fuldtidsbaserede remote rolle passer til kandidatens jobpr\u00E6ferencer.",
+      "claim_kind": "role_alignment",
+      "evidence_ids": [
+        "ev_8"
+      ],
+      "requirement_ids": [
+        "req_12"
+      ],
+      "section_ids": [
+        "closing"
+      ],
+      "support_strength": "strong"
+    }
+  ],
+  "assembled_application_da": "K\u00E6re Returna ApS\n\nJeg \u00F8nsker at s\u00F8ge stillingen som Fullstack Developer hos jer. Rollen tiltaler mig, fordi den kombinerer moderne webudvikling med ansvar t\u00E6t p\u00E5 den konkrete l\u00F8sning, og fordi den er fuldt remote.\n\nI min profil har jeg is\u00E6r arbejdet med moderne webudvikling, API-design og brugervenlige gr\u00E6nseflader. Det g\u00F8r stillingen relevant for mig, fordi jeg gerne vil bidrage i en rolle, hvor frontend, samarbejde og praktisk udvikling h\u00E6nger t\u00E6t sammen.\n\nJeg har erfaring med React-baserede brugerflader gennem fejlretning, kodegennemgang og mindre forbedringer, og jeg arbejder ogs\u00E5 med React, HTML og CSS i min tekniske profil. Derudover har jeg bygget REST API-endpoints og deltaget i integrationer mellem front-end, database og tredjepartssystemer. Samlet giver det mig et godt udgangspunkt for at bidrage til b\u00E5de brugerflade og sammenh\u00E6ngen bag l\u00F8sningen.\n\nJeg l\u00E6gger v\u00E6gt p\u00E5 at oms\u00E6tte behov til enkle og overskuelige l\u00F8sninger og p\u00E5 at arbejde struktureret med dokumentation og ansvarlig opf\u00F8lgning. Jeg er ogs\u00E5 vant til dialog med b\u00E5de brugere og udviklere, hvilket jeg ser som vigtigt i et mindre team, hvor samarbejde og ejerskab af opgaver har stor betydning.\n\nJeg ser derfor stillingen som en god mulighed for at bringe min erfaring med React, brugerorienterede l\u00F8sninger og struktureret udviklingsarbejde i spil i en fuldtidsrolle p\u00E5 \u0434\u0438\u0441\u0442\u0430\u043Dcen. Jeg vil meget gerne uddybe min baggrund og min motivation i en samtale. Tak for jeres tid og overvejelse.\n\nMed venlig hilsen"
+}

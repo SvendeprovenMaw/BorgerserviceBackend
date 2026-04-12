@@ -1,0 +1,226 @@
+{
+  "_meta": {
+    "job_posting_title": "Graver s\u00F8ges til F\u00F8llenslev Kirkeg\u00E5rd (Genopslag)",
+    "parsed_files": [
+      "Graver - F\u00F8llenslev Kirkeg\u00E5rd.pdf"
+    ],
+    "errors": []
+  },
+  "requirements": [
+    {
+      "requirement_id": "req_1",
+      "requirement_text_da": "Du skal v\u00E6re gartneruddannet eller have solid erfaring fra det gr\u00F8nne omr\u00E5de.",
+      "normalized_label": "gardener_education_or_green_area_experience",
+      "category": "education",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Graver - F\u00F8llenslev Kirkeg\u00E5rd.pdf",
+          "excerpt": "Gartneruddannet eller solid erfaring fra det gr\u00F8nne omr\u00E5de",
+          "section_hint": "Kvalifikationer"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_2",
+      "requirement_text_da": "Du skal have k\u00F8rekort og v\u00E6re villig til at bruge egen bil i tjenesten.",
+      "normalized_label": "drivers_license_and_use_of_own_car",
+      "category": "logistics",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Graver - F\u00F8llenslev Kirkeg\u00E5rd.pdf",
+          "excerpt": "K\u00F8rekort og villighed til at bruge egen bil i tjenesten",
+          "section_hint": "Kvalifikationer"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_3",
+      "requirement_text_da": "Du skal kunne arbejde selvst\u00E6ndigt og tage ansvar for den daglige drift inden for de givne \u00F8konomiske rammer.",
+      "normalized_label": "independent_operation_with_budget_responsibility",
+      "category": "leadership",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Graver - F\u00F8llenslev Kirkeg\u00E5rd.pdf",
+          "excerpt": "Evne til at arbejde selvst\u00E6ndigt og tage ansvar for den daglige drift inden for de givne \u00F8konomiske rammer",
+          "section_hint": "Kvalifikationer"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_4",
+      "requirement_text_da": "Du skal have kendskab til eller v\u00E6re villig til at l\u00E6re kirkens IT-systemer.",
+      "normalized_label": "church_it_systems",
+      "category": "tool_experience",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Graver - F\u00F8llenslev Kirkeg\u00E5rd.pdf",
+          "excerpt": "Kendskab til eller villighed til at l\u00E6re kirkens IT-systemer",
+          "section_hint": "Kvalifikationer"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_5",
+      "requirement_text_da": "Du skal have en engageret, fleksibel og im\u00F8dekommende tilgang til arbejdet.",
+      "normalized_label": "engaged_flexible_approachable",
+      "category": "personal_trait",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Graver - F\u00F8llenslev Kirkeg\u00E5rd.pdf",
+          "excerpt": "Engageret, fleksibel og im\u00F8dekommende tilgang til arbejdet",
+          "section_hint": "Kvalifikationer"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_6",
+      "requirement_text_da": "Du skal have interesse for kirken og sognets liv.",
+      "normalized_label": "interest_in_church_and_parish_life",
+      "category": "personal_trait",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Graver - F\u00F8llenslev Kirkeg\u00E5rd.pdf",
+          "excerpt": "Interesse for kirken og sognets liv",
+          "section_hint": "Kvalifikationer"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_7",
+      "requirement_text_da": "Du skal bidrage aktivt til et godt arbejdsmilj\u00F8 b\u00E5de fysisk og psykisk.",
+      "normalized_label": "contribute_to_good_work_environment",
+      "category": "collaboration",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Graver - F\u00F8llenslev Kirkeg\u00E5rd.pdf",
+          "excerpt": "Bidrager aktivt til et godt arbejdsmilj\u00F8 \u2013 b\u00E5de fysisk og psykisk",
+          "section_hint": "Kvalifikationer"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_8",
+      "requirement_text_da": "Du skal have gode samarbejdsevner i forhold til kolleger, menighedsr\u00E5d, frivillige og samarbejdspartnere.",
+      "normalized_label": "collaboration_skills_with_stakeholders",
+      "category": "collaboration",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Graver - F\u00F8llenslev Kirkeg\u00E5rd.pdf",
+          "excerpt": "Gode samarbejdsevner i forhold til kolleger, menighedsr\u00E5d, frivillige og samarbejdspartnere",
+          "section_hint": "Kvalifikationer"
+        },
+        {
+          "filename": "Graver - F\u00F8llenslev Kirkeg\u00E5rd.pdf",
+          "excerpt": "der l\u00E6gges v\u00E6gt p\u00E5 samarbejde, ordentlighed og arbejdsgl\u00E6de",
+          "section_hint": "Indledning"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_9",
+      "requirement_text_da": "Du skal gennemf\u00F8re den obligatoriske 5 ugers uddannelse for gravere inden for 2 \u00E5r efter ans\u00E6ttelsens start.",
+      "normalized_label": "mandatory_gravedigger_training",
+      "category": "education",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Graver - F\u00F8llenslev Kirkeg\u00E5rd.pdf",
+          "excerpt": "Det er en betingelse, at den obligatoriske 5 ugers uddannelse for gravere gennemf\u00F8res indenfor 2 \u00E5r efter ans\u00E6ttelsens start.",
+          "section_hint": "Ans\u00E6ttelsesvilk\u00E5r"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_10",
+      "requirement_text_da": "Du skal kunne varetage kirketjeneste ved kirkelige handlinger.",
+      "normalized_label": "church_service_at_ceremonies",
+      "category": "role_experience",
+      "importance": "unknown",
+      "source_citations": [
+        {
+          "filename": "Graver - F\u00F8llenslev Kirkeg\u00E5rd.pdf",
+          "excerpt": "Kirketjeneste ved kirkelige handlinger",
+          "section_hint": "Arbejdsopgaver"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_11",
+      "requirement_text_da": "Du skal kunne have kirketjeneste hver 2. s\u00F8ndag.",
+      "normalized_label": "church_service_every_second_sunday",
+      "category": "logistics",
+      "importance": "unknown",
+      "source_citations": [
+        {
+          "filename": "Graver - F\u00F8llenslev Kirkeg\u00E5rd.pdf",
+          "excerpt": "Kirketjeneste hver 2. s\u00F8ndag.",
+          "section_hint": "Arbejdsopgaver"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_12",
+      "requirement_text_da": "Du skal kunne have ansvar for drift, vedligeholdelse og udvikling af kirkeg\u00E5rden og pr\u00E6steg\u00E5rden.",
+      "normalized_label": "cemetery_and_parsonage_operations",
+      "category": "role_experience",
+      "importance": "unknown",
+      "source_citations": [
+        {
+          "filename": "Graver - F\u00F8llenslev Kirkeg\u00E5rd.pdf",
+          "excerpt": "Ansvar for drift, vedligeholdelse og udvikling af kirkeg\u00E5rden og pr\u00E6steg\u00E5rden",
+          "section_hint": "Arbejdsopgaver"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_13",
+      "requirement_text_da": "Du skal kunne varetage kontakt til kirkens brugere og udskrivning af regninger.",
+      "normalized_label": "user_contact_and_billing",
+      "category": "customer_focus",
+      "importance": "unknown",
+      "source_citations": [
+        {
+          "filename": "Graver - F\u00F8llenslev Kirkeg\u00E5rd.pdf",
+          "excerpt": "Kontakt til kirkens brugere og udskrivning af regninger",
+          "section_hint": "Arbejdsopgaver"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_14",
+      "requirement_text_da": "Du skal kunne medvirke til en smuk, v\u00E6rdig og velholdt kirkeg\u00E5rd.",
+      "normalized_label": "maintain_beautiful_dignified_cemetery",
+      "category": "customer_focus",
+      "importance": "unknown",
+      "source_citations": [
+        {
+          "filename": "Graver - F\u00F8llenslev Kirkeg\u00E5rd.pdf",
+          "excerpt": "Medvirken til en smuk, v\u00E6rdig og velholdt kirkeg\u00E5rd",
+          "section_hint": "Arbejdsopgaver"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_15",
+      "requirement_text_da": "Du skal acceptere r\u00E5dighedsforpligtelse i stillingen.",
+      "normalized_label": "availability_obligation",
+      "category": "logistics",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Graver - F\u00F8llenslev Kirkeg\u00E5rd.pdf",
+          "excerpt": "Der er r\u00E5dighedsforpligtelse til stillingen.",
+          "section_hint": "Ans\u00E6ttelsesvilk\u00E5r"
+        }
+      ]
+    }
+  ]
+}

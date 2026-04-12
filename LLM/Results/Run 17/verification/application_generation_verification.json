@@ -1,0 +1,40 @@
+{
+  "Stage": "application_generation",
+  "DocumentId": "application_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+  "VerificationMode": "mechanical_only",
+  "Status": "fail",
+  "ApprovedForDownstream": false,
+  "WarningCount": 0,
+  "ErrorCount": 2,
+  "ArtifactPath": "",
+  "GateArtifactPath": "",
+  "Gate": {
+    "Stage": "",
+    "Decision": "continue",
+    "ApprovedForDownstream": false,
+    "HardInvalidCount": 0,
+    "SoftQualityCount": 0,
+    "SummaryDa": "",
+    "BlockingReasons": [],
+    "AdvisoryReasons": [],
+    "Metrics": []
+  },
+  "Findings": [
+    {
+      "RuleId": "application.claim_section_reciprocal",
+      "Severity": "error",
+      "SubjectType": "claim",
+      "SubjectId": "cl_5",
+      "MessageDa": "Relationen mellem claim \u0027cl_5\u0027 og section \u0027motivation\u0027 er ikke gensidigt konsistent.",
+      "BlockingForDownstream": true
+    },
+    {
+      "RuleId": "application.claim_section_reciprocal",
+      "Severity": "error",
+      "SubjectType": "claim",
+      "SubjectId": "cl_6",
+      "MessageDa": "Relationen mellem claim \u0027cl_6\u0027 og section \u0027motivation\u0027 er ikke gensidigt konsistent.",
+      "BlockingForDownstream": true
+    }
+  ]
+}

@@ -1,0 +1,278 @@
+{
+  "_meta": {
+    "application_document_id": "application_borger1_fullstack_developer_returna_aps_nordjylland",
+    "requirements_document_id": "requirements_fullstack_developer_returna_aps_nordjylland",
+    "candidate_evidence_document_id": "candidate_evidence_borger1",
+    "matching_document_id": "matching_borger1_fullstack_developer_returna_aps_nordjylland",
+    "target_language": "da",
+    "position_title": "Fullstack Developer",
+    "company_name": "Returna ApS",
+    "applicant_display_name": "Emma S\u00F8rensen"
+  },
+  "application_strategy": {
+    "tone": "warm_professional",
+    "length_target": "medium",
+    "subject_line_da": "Ans\u00F8gning til stillingen som Fullstack Developer",
+    "core_message_da": "Ans\u00F8gningen fremh\u00E6ver kandidatens dokumenterede erfaring med React-baserede brugerflader, brugerorienterede webl\u00F8sninger, API- og integrationsarbejde samt en struktureret og ansvarlig arbejdsform. Formuleringerne holdes bevidst moderate, fordi flere centrale krav kun er delvist matchet eller ikke dokumenteret. Fokus er derfor p\u00E5 de bedst underst\u00F8ttede og mest relevante forhold samt en neutral, professionel interesse for stillingen.",
+    "selected_requirement_ids": [
+      "req_2",
+      "req_3",
+      "req_4",
+      "req_8",
+      "req_12"
+    ],
+    "selected_evidence_ids": [
+      "ev_2",
+      "ev_3",
+      "ev_4",
+      "ev_5",
+      "ev_6",
+      "ev_7",
+      "ev_8"
+    ],
+    "omitted_requirement_ids": [
+      "req_1",
+      "req_5",
+      "req_6",
+      "req_7",
+      "req_9",
+      "req_10",
+      "req_11"
+    ],
+    "omission_strategy_da": "Krav uden tilstr\u00E6kkelig dokumenteret st\u00F8tte er udeladt fra ans\u00F8gningens substans. Der n\u00E6vnes ikke manglende match direkte. Ans\u00F8gningen fokuserer i stedet p\u00E5 de omr\u00E5der, hvor der findes verificerbar og relevant evidens, og bruger forsigtige formuleringer ved delvise match."
+  },
+  "sections": [
+    {
+      "section_id": "sec_salutation",
+      "section_kind": "salutation",
+      "text_da": "K\u00E6re Returna ApS",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "sec_opening",
+      "section_kind": "opening",
+      "text_da": "Jeg \u00F8nsker at s\u00F8ge stillingen som Fullstack Developer hos jer. Rollen tiltaler mig, fordi den l\u00E6gger v\u00E6gt p\u00E5 moderne webudvikling, brugerrettede l\u00F8sninger og et arbejdsmilj\u00F8 med ansvar for egne opgaver.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "cl_1"
+      ],
+      "supported_requirement_ids": [
+        "req_8"
+      ],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "sec_experience",
+      "section_kind": "experience",
+      "text_da": "I min erfaring med softwareudvikling har jeg arbejdet med React-baserede brugerflader, herunder fejlretning, kodegennemgang og mindre forbedringer. Jeg har ogs\u00E5 arbejdet med REST API-endpoints og deltaget i integrationer mellem front-end, database og tredjepartssystemer. Det har givet mig praktisk erfaring med b\u00E5de brugerflader og sammenh\u00E6ngen mellem flere dele af en l\u00F8sning.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "cl_2",
+        "cl_3",
+        "cl_4"
+      ],
+      "supported_requirement_ids": [
+        "req_2",
+        "req_8"
+      ],
+      "supported_evidence_ids": [
+        "ev_2",
+        "ev_5"
+      ]
+    },
+    {
+      "section_id": "sec_fit",
+      "section_kind": "fit",
+      "text_da": "Jeg l\u00E6gger v\u00E6gt p\u00E5 brugervenlige gr\u00E6nseflader og har i freelanceopgaver omsat behov til enkle l\u00F8sninger med fokus p\u00E5 overskuelig struktur og driftssikkerhed. Samtidig arbejder jeg struktureret og f\u00F8lger ansvarligt op p\u00E5 opgaver, og jeg trives med at s\u00E6tte mig ind i eksisterende kode og forbedre l\u00F8sninger trin for trin. Det ser jeg som et relevant udgangspunkt for at bidrage i en rolle, hvor der er kort vej fra id\u00E9 til udvikling.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "cl_5",
+        "cl_6",
+        "cl_7"
+      ],
+      "supported_requirement_ids": [
+        "req_3",
+        "req_4",
+        "req_8"
+      ],
+      "supported_evidence_ids": [
+        "ev_3",
+        "ev_4",
+        "ev_6",
+        "ev_7"
+      ]
+    },
+    {
+      "section_id": "sec_motivation",
+      "section_kind": "motivation",
+      "text_da": "Jeg er interesseret i en fuldtidsstilling, hvor jeg kan bidrage i et remote setup og fortsat udvikle mig gennem praktisk arbejde med moderne webl\u00F8sninger. Jeg s\u00F8ger en rolle, hvor jeg kan bidrage med en nysgerrig og l\u00F8sningsorienteret tilgang og v\u00E6re med til at udvikle stabile og brugbare l\u00F8sninger.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "cl_8",
+        "cl_9"
+      ],
+      "supported_requirement_ids": [
+        "req_12"
+      ],
+      "supported_evidence_ids": [
+        "ev_8"
+      ]
+    },
+    {
+      "section_id": "sec_closing",
+      "section_kind": "closing",
+      "text_da": "Hvis min profil har interesse, vil jeg meget gerne uddybe min baggrund og motivation i en samtale. Tak fordi I tager jer tid til at l\u00E6se min ans\u00F8gning.",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "sec_signature",
+      "section_kind": "signature",
+      "text_da": "Med venlig hilsen\nEmma S\u00F8rensen",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    }
+  ],
+  "claim_register": [
+    {
+      "claim_id": "cl_1",
+      "claim_text_da": "Kandidaten s\u00F8ger stillingen som Fullstack Developer og finder en rolle med ansvar for egne opgaver relevant.",
+      "claim_kind": "role_alignment",
+      "evidence_ids": [],
+      "requirement_ids": [
+        "req_8"
+      ],
+      "section_ids": [
+        "sec_opening"
+      ],
+      "support_strength": "weak"
+    },
+    {
+      "claim_id": "cl_2",
+      "claim_text_da": "Kandidaten har arbejdet med React-baserede brugerflader, herunder fejlretning, kodegennemgang og mindre forbedringer.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "ev_2"
+      ],
+      "requirement_ids": [
+        "req_2"
+      ],
+      "section_ids": [
+        "sec_experience"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "cl_3",
+      "claim_text_da": "Kandidaten har arbejdet med REST API-endpoints.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "ev_5"
+      ],
+      "requirement_ids": [
+        "req_8"
+      ],
+      "section_ids": [
+        "sec_experience"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "cl_4",
+      "claim_text_da": "Kandidaten har deltaget i integrationer mellem front-end, database og tredjepartssystemer.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "ev_5"
+      ],
+      "requirement_ids": [
+        "req_8"
+      ],
+      "section_ids": [
+        "sec_experience"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "cl_5",
+      "claim_text_da": "Kandidaten l\u00E6gger v\u00E6gt p\u00E5 brugervenlige gr\u00E6nseflader.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "ev_3"
+      ],
+      "requirement_ids": [
+        "req_3"
+      ],
+      "section_ids": [
+        "sec_fit"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "cl_6",
+      "claim_text_da": "Kandidaten har i freelanceopgaver omsat behov til enkle l\u00F8sninger med fokus p\u00E5 overskuelig struktur og driftssikkerhed.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "ev_4"
+      ],
+      "requirement_ids": [
+        "req_4"
+      ],
+      "section_ids": [
+        "sec_fit"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "cl_7",
+      "claim_text_da": "Kandidaten arbejder struktureret, f\u00F8lger ansvarligt op p\u00E5 opgaver og er god til at s\u00E6tte sig ind i eksisterende kode og forbedre l\u00F8sninger trin for trin.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "ev_6",
+        "ev_7"
+      ],
+      "requirement_ids": [
+        "req_8"
+      ],
+      "section_ids": [
+        "sec_fit"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "cl_8",
+      "claim_text_da": "Kandidaten er interesseret i en fuldtidsstilling og remote arbejde i Danmark.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "ev_8"
+      ],
+      "requirement_ids": [
+        "req_12"
+      ],
+      "section_ids": [
+        "sec_motivation"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "cl_9",
+      "claim_text_da": "Kandidaten s\u00F8ger en rolle, hvor hun kan udvikle sig gennem praktisk arbejde med moderne webl\u00F8sninger.",
+      "claim_kind": "motivation_grounded",
+      "evidence_ids": [
+        "ev_3"
+      ],
+      "requirement_ids": [],
+      "section_ids": [
+        "sec_motivation"
+      ],
+      "support_strength": "weak"
+    }
+  ],
+  "assembled_application_da": "K\u00E6re Returna ApS\n\nJeg \u00F8nsker at s\u00F8ge stillingen som Fullstack Developer hos jer. Rollen tiltaler mig, fordi den l\u00E6gger v\u00E6gt p\u00E5 moderne webudvikling, brugerrettede l\u00F8sninger og et arbejdsmilj\u00F8 med ansvar for egne opgaver.\n\nI min erfaring med softwareudvikling har jeg arbejdet med React-baserede brugerflader, herunder fejlretning, kodegennemgang og mindre forbedringer. Jeg har ogs\u00E5 arbejdet med REST API-endpoints og deltaget i integrationer mellem front-end, database og tredjepartssystemer. Det har givet mig praktisk erfaring med b\u00E5de brugerflader og sammenh\u00E6ngen mellem flere dele af en l\u00F8sning.\n\nJeg l\u00E6gger v\u00E6gt p\u00E5 brugervenlige gr\u00E6nseflader og har i freelanceopgaver omsat behov til enkle l\u00F8sninger med fokus p\u00E5 overskuelig struktur og driftssikkerhed. Samtidig arbejder jeg struktureret og f\u00F8lger ansvarligt op p\u00E5 opgaver, og jeg trives med at s\u00E6tte mig ind i eksisterende kode og forbedre l\u00F8sninger trin for trin. Det ser jeg som et relevant udgangspunkt for at bidrage i en rolle, hvor der er kort vej fra id\u00E9 til udvikling.\n\nJeg er interesseret i en fuldtidsstilling, hvor jeg kan bidrage i et remote setup og fortsat udvikle mig gennem praktisk arbejde med moderne webl\u00F8sninger. Jeg s\u00F8ger en rolle, hvor jeg kan bidrage med en nysgerrig og l\u00F8sningsorienteret tilgang og v\u00E6re med til at udvikle stabile og brugbare l\u00F8sninger.\n\nHvis min profil har interesse, vil jeg meget gerne uddybe min baggrund og motivation i en samtale. Tak fordi I tager jer tid til at l\u00E6se min ans\u00F8gning.\n\nMed venlig hilsen\nEmma S\u00F8rensen"
+}

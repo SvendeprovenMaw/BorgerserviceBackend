@@ -1,0 +1,80 @@
+{
+  "Stage": "matching",
+  "DocumentId": "matching_borger1_fullstack_developer_returna_aps_nordjylland",
+  "VerificationMode": "mechanical_only",
+  "Status": "pass_with_warnings",
+  "ApprovedForDownstream": true,
+  "WarningCount": 7,
+  "ErrorCount": 0,
+  "ArtifactPath": "",
+  "GateArtifactPath": "",
+  "Gate": {
+    "Stage": "",
+    "Decision": "continue",
+    "ApprovedForDownstream": false,
+    "HardInvalidCount": 0,
+    "SoftQualityCount": 0,
+    "SummaryDa": "",
+    "BlockingReasons": [],
+    "AdvisoryReasons": [],
+    "Metrics": []
+  },
+  "Findings": [
+    {
+      "RuleId": "matching.high_confidence_without_evidence",
+      "Severity": "warning",
+      "SubjectType": "match",
+      "SubjectId": "req_1",
+      "MessageDa": "confidence er high, men matched_evidence_ids er tom.",
+      "BlockingForDownstream": false
+    },
+    {
+      "RuleId": "matching.high_confidence_without_evidence",
+      "Severity": "warning",
+      "SubjectType": "match",
+      "SubjectId": "req_2",
+      "MessageDa": "confidence er high, men matched_evidence_ids er tom.",
+      "BlockingForDownstream": false
+    },
+    {
+      "RuleId": "matching.high_confidence_without_evidence",
+      "Severity": "warning",
+      "SubjectType": "match",
+      "SubjectId": "req_6",
+      "MessageDa": "confidence er high, men matched_evidence_ids er tom.",
+      "BlockingForDownstream": false
+    },
+    {
+      "RuleId": "matching.high_confidence_without_evidence",
+      "Severity": "warning",
+      "SubjectType": "match",
+      "SubjectId": "req_7",
+      "MessageDa": "confidence er high, men matched_evidence_ids er tom.",
+      "BlockingForDownstream": false
+    },
+    {
+      "RuleId": "matching.high_confidence_without_evidence",
+      "Severity": "warning",
+      "SubjectType": "match",
+      "SubjectId": "req_8",
+      "MessageDa": "confidence er high, men matched_evidence_ids er tom.",
+      "BlockingForDownstream": false
+    },
+    {
+      "RuleId": "matching.high_confidence_without_evidence",
+      "Severity": "warning",
+      "SubjectType": "match",
+      "SubjectId": "req_9",
+      "MessageDa": "confidence er high, men matched_evidence_ids er tom.",
+      "BlockingForDownstream": false
+    },
+    {
+      "RuleId": "matching.high_confidence_without_evidence",
+      "Severity": "warning",
+      "SubjectType": "match",
+      "SubjectId": "req_12",
+      "MessageDa": "confidence er high, men matched_evidence_ids er tom.",
+      "BlockingForDownstream": false
+    }
+  ]
+}

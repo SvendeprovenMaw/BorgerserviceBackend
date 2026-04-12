@@ -1,0 +1,39 @@
+{
+  "Stage": "application_generation",
+  "Decision": "repair_or_regenerate",
+  "ApprovedForDownstream": false,
+  "HardInvalidCount": 2,
+  "SoftQualityCount": 0,
+  "SummaryDa": "Fasen har 2 blokkerende findings og m\u00E5 ikke g\u00E5 downstream endnu. Ans\u00F8gningen har unsupported claims over den tilladte gr\u00E6nse.",
+  "BlockingReasons": [
+    "Fasen har 2 blokkerende findings og m\u00E5 ikke g\u00E5 downstream endnu.",
+    "Ans\u00F8gningen har unsupported claims over den tilladte gr\u00E6nse."
+  ],
+  "AdvisoryReasons": [],
+  "Metrics": [
+    {
+      "MetricKey": "application_generation.unsupported_claims",
+      "Operator": "\u003C=",
+      "Actual": "1",
+      "Expected": "0",
+      "Passed": false,
+      "MessageDa": "Ans\u00F8gningen har unsupported claims over den tilladte gr\u00E6nse."
+    },
+    {
+      "MetricKey": "application_generation.dangling_relations",
+      "Operator": "\u003C=",
+      "Actual": "0",
+      "Expected": "0",
+      "Passed": true,
+      "MessageDa": "OK"
+    },
+    {
+      "MetricKey": "application_generation.unsupported_sections",
+      "Operator": "\u003C=",
+      "Actual": "0",
+      "Expected": "0",
+      "Passed": true,
+      "MessageDa": "OK"
+    }
+  ]
+}

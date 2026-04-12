@@ -9,6 +9,7 @@ using OpenAiResponses.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Enable basic API discovery so the sample endpoints are easy to inspect manually.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -21,6 +22,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.AddProblemDetails();
 
+// Allow OpenAI settings to come from configuration while still supporting env-var secrets locally.
 builder.Services
     .AddOptions<OpenAIOptions>()
     .Bind(builder.Configuration.GetSection(OpenAIOptions.SectionName))
@@ -37,13 +39,25 @@ builder.Services
     .Validate(options => !string.IsNullOrWhiteSpace(options.Model), $"{OpenAIOptions.SectionName}:Model must be configured.")
     .ValidateOnStart();
 
+builder.Services
+    .AddOptions<VerificationOptions>()
+    .Bind(builder.Configuration.GetSection(VerificationOptions.SectionName))
+    .ValidateOnStart();
+
+// The responses client is shared so all routes use the same configured API key.
 builder.Services.AddSingleton<ResponsesClient>(serviceProvider =>
 {
     var options = serviceProvider.GetRequiredService<IOptions<OpenAIOptions>>().Value;
     return new ResponsesClient(options.ApiKey);
 });
 
+// Register the services that power the staged sample pipeline and its repair/gate flow.
 builder.Services.AddSingleton<IOpenAiResponsesService, OpenAiResponsesService>();
+builder.Services.AddSingleton<IVerificationOrchestrator, VerificationOrchestrator>();
+builder.Services.AddSingleton<IDownstreamGateEvaluator, DownstreamGateEvaluator>();
+builder.Services.AddSingleton<IRequirementsDeterministicRepairService, RequirementsDeterministicRepairService>();
+builder.Services.AddSingleton<IMatchingDeterministicRepairService, MatchingDeterministicRepairService>();
+builder.Services.AddSingleton<IApplicationGenerationDeterministicRepairService, ApplicationGenerationDeterministicRepairService>();
 builder.Services.AddSingleton<ISampleLlmFlowService, SampleLlmFlowService>();
 
 var app = builder.Build();
@@ -61,6 +75,7 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
+// Return a ready-to-run request body so the strict-json endpoint can be tested quickly.
 app.MapGet("/api/responses/sample-request", (IHostEnvironment environment) =>
 {
     var repositoryRoot = Path.GetFullPath(Path.Combine(environment.ContentRootPath, "..", ".."));
@@ -117,6 +132,7 @@ app.MapGet("/api/responses/sample-request", (IHostEnvironment environment) =>
 .WithName("GetSampleStrictJsonRequest")
 .Produces<StrictJsonResponseRequest>(StatusCodes.Status200OK);
 
+// Expose the generic strict-json route used by the more specialized sample flows.
 app.MapPost("/api/responses/strict-json", async (
     StrictJsonResponseRequest request,
     IOpenAiResponsesService openAiResponsesService,
@@ -136,6 +152,7 @@ app.MapPost("/api/responses/strict-json", async (
 .ProducesProblem(StatusCodes.Status500InternalServerError)
 .ProducesProblem(StatusCodes.Status502BadGateway);
 
+// Keep each pipeline stage callable on its own so prompts and schemas can be debugged in isolation.
 app.MapPost("/api/responses/sample/requirements", async (
     ISampleLlmFlowService sampleLlmFlowService,
     ILogger<Program> logger,
@@ -200,11 +217,48 @@ app.MapPost("/api/responses/sample/pipeline", async (
 .ProducesProblem(StatusCodes.Status500InternalServerError)
 .ProducesProblem(StatusCodes.Status502BadGateway);
 
+app.MapPost("/api/responses/sample/pipeline-with-verification", async (
+    ISampleLlmFlowService sampleLlmFlowService,
+    ILogger<Program> logger,
+    CancellationToken cancellationToken) =>
+{
+    return await ExecuteJsonResponseAsync(
+        sampleLlmFlowService.RunPipelineWithVerificationAsync,
+        logger,
+        cancellationToken);
+})
+.WithName("RunSamplePipelineWithVerification")
+.WithSummary("Runs the sample pipeline with verification, matching repair, and downstream gates.")
+.WithDescription("Returns PipelineStatus, StoppedAfterStage, Verification.RecommendedAction, per-stage Gate decisions, and GateArtifactPath values. If a stage fails its downstream gate, the run stops early and ApplicationDocument is null.")
+.Produces<PipelineWithVerificationResponse>(StatusCodes.Status200OK, contentType: "application/json")
+.ProducesProblem(StatusCodes.Status404NotFound)
+.ProducesProblem(StatusCodes.Status500InternalServerError)
+.ProducesProblem(StatusCodes.Status502BadGateway);
+
+app.MapPost("/api/responses/sample/pipeline-with-verification/all-jobs", async (
+    ISampleLlmFlowService sampleLlmFlowService,
+    ILogger<Program> logger,
+    CancellationToken cancellationToken) =>
+{
+    return await ExecuteJsonResponseAsync(
+        sampleLlmFlowService.RunPipelineWithVerificationForAllJobListingsAsync,
+        logger,
+        cancellationToken);
+})
+.WithName("RunSamplePipelineWithVerificationForAllJobs")
+.WithSummary("Runs the verified sample pipeline for every job listing in TestData/Opslag.")
+.WithDescription("Returns one compact summary per job listing, including pipeline status, overall match level, verdict counts, and whether an application was still generated.")
+.Produces<MultiJobPipelineWithVerificationResponse>(StatusCodes.Status200OK, contentType: "application/json")
+.ProducesProblem(StatusCodes.Status404NotFound)
+.ProducesProblem(StatusCodes.Status500InternalServerError)
+.ProducesProblem(StatusCodes.Status502BadGateway);
+
 app.MapGet("/swagger", () => Results.Redirect("/swagger/index.html"));
 app.MapGet("/", () => Results.Redirect("/swagger/index.html"));
 
 app.Run();
 
+// Centralize exception-to-problem-details mapping so the route handlers stay focused on orchestration.
 static async Task<IResult> ExecuteJsonResponseAsync(
     Func<CancellationToken, Task<string>> operation,
     ILogger logger,

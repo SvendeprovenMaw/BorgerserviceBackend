@@ -1,0 +1,22 @@
+{
+  "Stage": "requirements",
+  "Decision": "repair_or_regenerate",
+  "ApprovedForDownstream": false,
+  "HardInvalidCount": 10,
+  "SoftQualityCount": 0,
+  "SummaryDa": "Fasen har 10 blokkerende findings og m\u00E5 ikke g\u00E5 downstream endnu.",
+  "BlockingReasons": [
+    "Fasen har 10 blokkerende findings og m\u00E5 ikke g\u00E5 downstream endnu."
+  ],
+  "AdvisoryReasons": [],
+  "Metrics": [
+    {
+      "MetricKey": "requirements.count",
+      "Operator": "\u003E=",
+      "Actual": "11",
+      "Expected": "1",
+      "Passed": true,
+      "MessageDa": "OK"
+    }
+  ]
+}

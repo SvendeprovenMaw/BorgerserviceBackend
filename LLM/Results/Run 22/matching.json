@@ -1,0 +1,152 @@
+{
+  "matches": [
+    {
+      "requirement_id": "req_1",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for, at kandidaten selvst\u00E6ndigt har gennemf\u00F8rt alle faser af en penetrationstest fra scoping til rapport og pr\u00E6sentation.",
+      "gap_da": "Der mangler konkret evidens for selvst\u00E6ndig end-to-end penetrationstest-erfaring, herunder scoping, udf\u00F8relse, rapportaflevering og pr\u00E6sentation af resultater.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_2",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Det tilg\u00E6ngelige materiale dokumenterer softwareudvikling og webrelateret erfaring, men ikke flere \u00E5rs praktisk erfaring med applikations- og platformspenetrationstest.",
+      "gap_da": "Der mangler direkte evidens for praktisk penetrationstest af applikationer og platforme samt varighed over flere \u00E5r.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_3",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der findes ingen dokumenteret evidens for erfaring med Burp Suite, Nessus eller tilsvarende n\u00E6vnte v\u00E6rkt\u00F8jer.",
+      "gap_da": "Der mangler konkret v\u00E6rkt\u00F8jsevidens for Burp Suite, Nessus eller andre relevante penetrationstestv\u00E6rkt\u00F8jer.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_4",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evidence_1",
+        "evidence_3"
+      ],
+      "rationale_da": "Kandidaten har erfaring med kodegennemgang og webudviklingsteknologier som React, HTML og CSS, hvilket er relevant for kildekodegennemgang af webrelaterede teknologier. Evidensen dokumenterer dog ikke sikkerhedsfokuseret kildekodegennemgang eller bredde i typiske webprogrammeringssprog.",
+      "gap_da": "Der mangler direkte evidens for sikkerhedsorienteret kildekodegennemgang og/eller tydelig dokumentation for bredere erfaring med typiske webprogrammeringssprog i denne kontekst.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_5",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for kendskab til OWASP WSTG, PTES, NIST 800-115, PCI DSS eller lignende standarder og rammev\u00E6rk.",
+      "gap_da": "Der mangler konkret evidens for kendskab til de n\u00E6vnte sikkerhedsrammev\u00E6rk og standarder.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_6",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Det tilg\u00E6ngelige materiale viser webudviklings- og API-erfaring, men dokumenterer ikke solid forst\u00E5else for netv\u00E6rk, operativsystemer og cloud som samlet krav.",
+      "gap_da": "Der mangler direkte evidens for netv\u00E6rk, operativsystemer og cloud-forst\u00E5else.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_7",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evidence_2",
+        "evidence_3"
+      ],
+      "rationale_da": "Kandidaten har erfaring med web-API\u0027er, React, HTML og CSS, hvilket underst\u00F8tter teknisk forst\u00E5else af web- og applikationsomr\u00E5det. Evidensen dokumenterer dog ikke direkte viden om typiske web-, applikations- og platformss\u00E5rbarheder.",
+      "gap_da": "Der mangler direkte evidens for kendskab til eller arbejde med konkrete s\u00E5rbarheder i web-, applikations- og platformskontekst.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_8",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for certificeringer som OSCP, GPEN, OSWA, GWAPT eller PNPT.",
+      "gap_da": "Der mangler dokumentation for relevante offensive security-certificeringer.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_9",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evidence_4",
+        "evidence_5"
+      ],
+      "rationale_da": "Kandidaten beskriver samarbejde med b\u00E5de teknikere og forretning samt erfaring med dokumentation og rapportering. Det er relevant for formidling, men dokumenterer ikke direkte evnen til at oms\u00E6tte sv\u00E6rt teknisk materiale til forretningsnytte.",
+      "gap_da": "Der mangler direkte evidens for formidling af komplekst teknisk eller sikkerhedsfagligt indhold til forretningsmodtagere.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_10",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for erfaring med test af kritisk infrastruktur.",
+      "gap_da": "Der mangler konkret evidens for test eller arbejde med kritisk infrastruktur.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_11",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for erfaring med test af cloudmilj\u00F8er.",
+      "gap_da": "Der mangler konkret evidens for test af cloudmilj\u00F8er.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_12",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for tidligere erfaring med PCI DSS.",
+      "gap_da": "Der mangler konkret evidens for arbejde med eller kendskab til PCI DSS i praksis.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_13",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evidence_5",
+        "evidence_6"
+      ],
+      "rationale_da": "Kandidaten har dokumenteret erfaring med dokumentation og rapportering samt dansk som modersm\u00E5l og engelsk p\u00E5 professionelt niveau. Det underst\u00F8tter evnen til at skrive p\u00E5 dansk eller engelsk, men der er ikke direkte evidens for detaljerede testrapporter med identificerede s\u00E5rbarheder og anbefalinger.",
+      "gap_da": "Der mangler direkte evidens for udarbejdelse af detaljerede sikkerheds- eller testrapporter med s\u00E5rbarheder og anbefalinger.",
+      "confidence": "medium",
+      "needs_human_review": false
+    }
+  ],
+  "overall_assessment": {
+    "overall_match_level": "weak",
+    "summary_da": "Der er delvis relevant evidens inden for kodegennemgang, webudvikling, dokumentation, rapportering og sprog, men n\u00E6sten ingen direkte dokumentation for penetrationstest, sikkerhedsv\u00E6rkt\u00F8jer, standarder, s\u00E5rbarhedskendskab eller dom\u00E6nespecifik erfaring. Samlet set er matchen svag i forhold til de centrale krav til en erfaren penetrationtester.",
+    "major_strength_evidence_ids": [
+      "evidence_1",
+      "evidence_3",
+      "evidence_5",
+      "evidence_6"
+    ],
+    "major_gap_requirement_ids": [
+      "req_1",
+      "req_2",
+      "req_3",
+      "req_5",
+      "req_6",
+      "req_8",
+      "req_13"
+    ]
+  }
+}

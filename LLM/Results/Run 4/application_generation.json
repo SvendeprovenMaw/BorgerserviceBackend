@@ -1,0 +1,285 @@
+{
+  "_meta": {
+    "application_document_id": "application_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "requirements_document_id": "requirements_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "candidate_evidence_document_id": "candidate_evidence_borger1",
+    "matching_document_id": "matching_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "target_language": "da",
+    "position_title": "Udvikler med fokus p\u00E5 DevOps",
+    "company_name": "JN Data",
+    "applicant_display_name": null
+  },
+  "application_strategy": {
+    "tone": "warm_professional",
+    "length_target": "medium",
+    "subject_line_da": "Ans\u00F8gning til stillingen som Udvikler med fokus p\u00E5 DevOps",
+    "core_message_da": "Ans\u00F8gningen fokuserer p\u00E5 kandidatens dokumenterede erfaring som junior softwareudvikler, konkrete udviklingsopgaver i .NET og API/integrationer, samarbejde med brugere og udviklere samt solide sprogkundskaber. Delvist matchede krav om udviklingsproces, flere teknologier, DevOps/developer experience og automatisering omtales forsigtigt og uden at overdrive. Krav uden st\u00F8tte udelades.",
+    "selected_requirement_ids": [
+      "req_1",
+      "req_3",
+      "req_6",
+      "req_7",
+      "req_8",
+      "req_9",
+      "req_11"
+    ],
+    "selected_evidence_ids": [
+      "ev_1",
+      "ev_2",
+      "ev_3",
+      "ev_7",
+      "ev_8",
+      "ev_9",
+      "ev_10",
+      "ev_11",
+      "ev_12",
+      "ev_13",
+      "ev_14"
+    ],
+    "omitted_requirement_ids": [
+      "req_2",
+      "req_4",
+      "req_5",
+      "req_10"
+    ],
+    "omission_strategy_da": "Krav uden dokumenteret eller tilstr\u00E6kkelig st\u00E6rk st\u00F8tte er udeladt fra ans\u00F8gningens hovedbudskab. Krav om reguleret sektor, IBM Z/COBOL og markedstrends n\u00E6vnes ikke. Kravet om flere programmeringssprog nedtones, fordi st\u00F8tten kun er delvis og b\u00F8r behandles konservativt."
+  },
+  "sections": [
+    {
+      "section_id": "salutation",
+      "section_kind": "salutation",
+      "text_da": "K\u00E6re JN Data",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "opening",
+      "section_kind": "opening",
+      "text_da": "Jeg s\u00F8ger stillingen som Udvikler med fokus p\u00E5 DevOps hos JN Data. Med erfaring fra en studentermedhj\u00E6lperrolle i softwareudvikling og en faglig profil inden for moderne webudvikling ser jeg stillingen som en oplagt mulighed for at bidrage i et udviklingsmilj\u00F8, hvor kvalitet, samarbejde og l\u00F8bende forbedringer er vigtige.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "cl_1",
+        "cl_2"
+      ],
+      "supported_requirement_ids": [
+        "req_1",
+        "req_6"
+      ],
+      "supported_evidence_ids": [
+        "ev_1",
+        "ev_8"
+      ]
+    },
+    {
+      "section_id": "experience",
+      "section_kind": "experience",
+      "text_da": "I min nuv\u00E6rende erfaring har jeg arbejdet med udvikling og vedligeholdelse af interne .NET-baserede webmoduler, bygget REST API-endpoints og deltaget i integrationer mellem front-end, database og tredjepartssystemer. Jeg har desuden arbejdet med Git, test og versionsstyring, og jeg har derfor et godt praktisk grundlag i flere centrale dele af udviklingsarbejdet.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "cl_3",
+        "cl_4"
+      ],
+      "supported_requirement_ids": [
+        "req_1",
+        "req_3",
+        "req_6"
+      ],
+      "supported_evidence_ids": [
+        "ev_2",
+        "ev_3",
+        "ev_7"
+      ]
+    },
+    {
+      "section_id": "fit",
+      "section_kind": "fit",
+      "text_da": "Jeg kan is\u00E6r se et godt match i den del af rollen, der kr\u00E6ver t\u00E6t samarbejde. Jeg trives i samarbejdet mellem teknik og forretning, er vant til dialog med b\u00E5de brugere og udviklere og har ogs\u00E5 erfaring med teknisk support og dokumentation af l\u00F8sninger. Det har givet mig en arbejdsform, hvor jeg l\u00E6gger v\u00E6gt p\u00E5 tydelig kommunikation og p\u00E5 at f\u00E5 l\u00F8sninger til at fungere i praksis for dem, der bruger dem.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "cl_5",
+        "cl_6"
+      ],
+      "supported_requirement_ids": [
+        "req_7",
+        "req_8"
+      ],
+      "supported_evidence_ids": [
+        "ev_9",
+        "ev_10",
+        "ev_11"
+      ]
+    },
+    {
+      "section_id": "motivation",
+      "section_kind": "motivation",
+      "text_da": "Jeg er motiveret for en rolle, hvor udvikling kombineres med samarbejde, v\u00E6rkt\u00F8jer og forbedring af arbejdsgange. Min profil er nysgerrig og l\u00F8sningsorienteret, og jeg har ogs\u00E5 bidraget til mindre automatiseringer i administrative workflows. Derfor ser jeg stillingen som en god mulighed for at udvikle mig videre i krydsfeltet mellem udvikling, drift og effektivisering.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "cl_7",
+        "cl_8"
+      ],
+      "supported_requirement_ids": [
+        "req_6",
+        "req_11"
+      ],
+      "supported_evidence_ids": [
+        "ev_12",
+        "ev_13",
+        "ev_8"
+      ]
+    },
+    {
+      "section_id": "closing",
+      "section_kind": "closing",
+      "text_da": "Jeg h\u00E5ber, at I vil se min profil som relevant for stillingen, og jeg uddyber gerne min erfaring og motivation ved en samtale. Tak for jeres tid og overvejelse.",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "signature",
+      "section_kind": "signature",
+      "text_da": "Med venlig hilsen",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    }
+  ],
+  "claim_register": [
+    {
+      "claim_id": "cl_1",
+      "claim_text_da": "Kandidaten har erfaring fra en studentermedhj\u00E6lperrolle i softwareudvikling.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "ev_1"
+      ],
+      "requirement_ids": [
+        "req_1"
+      ],
+      "section_ids": [
+        "opening"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "cl_2",
+      "claim_text_da": "Kandidaten har en faglig profil inden for moderne webudvikling.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "ev_8"
+      ],
+      "requirement_ids": [
+        "req_6"
+      ],
+      "section_ids": [
+        "opening",
+        "motivation"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "cl_3",
+      "claim_text_da": "Kandidaten har arbejdet med udvikling og vedligeholdelse af .NET-baserede webmoduler samt REST API\u0027er og integrationer.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "ev_2",
+        "ev_3"
+      ],
+      "requirement_ids": [
+        "req_1",
+        "req_3"
+      ],
+      "section_ids": [
+        "experience"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "cl_4",
+      "claim_text_da": "Kandidaten har praktisk grundlag i flere centrale dele af udviklingsarbejdet gennem Git, test og versionsstyring.",
+      "claim_kind": "role_alignment",
+      "evidence_ids": [
+        "ev_7"
+      ],
+      "requirement_ids": [
+        "req_3",
+        "req_6"
+      ],
+      "section_ids": [
+        "experience"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "cl_5",
+      "claim_text_da": "Kandidaten trives i samarbejdet mellem teknik og forretning og er vant til dialog med b\u00E5de brugere og udviklere.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "ev_9",
+        "ev_10"
+      ],
+      "requirement_ids": [
+        "req_7",
+        "req_8"
+      ],
+      "section_ids": [
+        "fit"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "cl_6",
+      "claim_text_da": "Kandidaten har erfaring med teknisk support og dokumentation af l\u00F8sninger til brugere.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "ev_11"
+      ],
+      "requirement_ids": [
+        "req_8"
+      ],
+      "section_ids": [
+        "fit"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "cl_7",
+      "claim_text_da": "Kandidaten er nysgerrig og l\u00F8sningsorienteret og har bidraget til mindre automatiseringer i administrative workflows.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "ev_12",
+        "ev_13"
+      ],
+      "requirement_ids": [
+        "req_11"
+      ],
+      "section_ids": [
+        "motivation"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "cl_8",
+      "claim_text_da": "Stillingen fremst\u00E5r som en god mulighed for kandidatens videre udvikling i krydsfeltet mellem udvikling, drift og effektivisering.",
+      "claim_kind": "motivation_grounded",
+      "evidence_ids": [
+        "ev_8",
+        "ev_12",
+        "ev_13"
+      ],
+      "requirement_ids": [
+        "req_6",
+        "req_11"
+      ],
+      "section_ids": [
+        "motivation"
+      ],
+      "support_strength": "weak"
+    }
+  ],
+  "assembled_application_da": "K\u00E6re JN Data\n\nJeg s\u00F8ger stillingen som Udvikler med fokus p\u00E5 DevOps hos JN Data. Med erfaring fra en studentermedhj\u00E6lperrolle i softwareudvikling og en faglig profil inden for moderne webudvikling ser jeg stillingen som en oplagt mulighed for at bidrage i et udviklingsmilj\u00F8, hvor kvalitet, samarbejde og l\u00F8bende forbedringer er vigtige.\n\nI min nuv\u00E6rende erfaring har jeg arbejdet med udvikling og vedligeholdelse af interne .NET-baserede webmoduler, bygget REST API-endpoints og deltaget i integrationer mellem front-end, database og tredjepartssystemer. Jeg har desuden arbejdet med Git, test og versionsstyring, og jeg har derfor et godt praktisk grundlag i flere centrale dele af udviklingsarbejdet.\n\nJeg kan is\u00E6r se et godt match i den del af rollen, der kr\u00E6ver t\u00E6t samarbejde. Jeg trives i samarbejdet mellem teknik og forretning, er vant til dialog med b\u00E5de brugere og udviklere og har ogs\u00E5 erfaring med teknisk support og dokumentation af l\u00F8sninger. Det har givet mig en arbejdsform, hvor jeg l\u00E6gger v\u00E6gt p\u00E5 tydelig kommunikation og p\u00E5 at f\u00E5 l\u00F8sninger til at fungere i praksis for dem, der bruger dem.\n\nJeg er motiveret for en rolle, hvor udvikling kombineres med samarbejde, v\u00E6rkt\u00F8jer og forbedring af arbejdsgange. Min profil er nysgerrig og l\u00F8sningsorienteret, og jeg har ogs\u00E5 bidraget til mindre automatiseringer i administrative workflows. Derfor ser jeg stillingen som en god mulighed for at udvikle mig videre i krydsfeltet mellem udvikling, drift og effektivisering.\n\nJeg h\u00E5ber, at I vil se min profil som relevant for stillingen, og jeg uddyber gerne min erfaring og motivation ved en samtale. Tak for jeres tid og overvejelse.\n\nMed venlig hilsen"
+}

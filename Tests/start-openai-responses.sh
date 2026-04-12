@@ -4,6 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$SCRIPT_DIR/OpenAiResponses.Api"
 
+# Common install roots that cover regular package installs plus snap/flatpak exports.
 COMMON_BINARY_DIRS=(
   "/snap/bin"
   "/var/lib/snapd/snap/bin"
@@ -20,6 +21,7 @@ COMMON_BINARY_DIRS=(
   "/bin"
 )
 
+# Resolve a binary without assuming PATH is complete or correctly configured.
 resolve_binary() {
   local binary_name="$1"
   local resolved_path=""
@@ -67,6 +69,7 @@ resolve_binary() {
   return 1
 }
 
+# Fail early if the script is run from an unexpected layout.
 if [[ ! -d "$PROJECT_DIR" ]]; then
   echo "Project directory not found: $PROJECT_DIR" >&2
   exit 1
@@ -74,6 +77,7 @@ fi
 
 export ASPNETCORE_ENVIRONMENT="${ASPNETCORE_ENVIRONMENT:-Development}"
 
+# Resolve dotnet once up front so the final exec uses a concrete binary path.
 if ! DOTNET_BIN="$(resolve_binary dotnet)"; then
   echo "Required binary 'dotnet' was not found in PATH or common install locations." >&2
   echo "Checked PATH, snap exports, flatpak exports, and standard binary directories." >&2

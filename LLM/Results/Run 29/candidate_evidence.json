@@ -1,0 +1,164 @@
+{
+  "_meta": {
+    "requirements_document_id": "requirements_graver_f\u00F8llenslev_kirkeg\u00E5rd",
+    "parsed_files": [
+      "emma_sorensen_cv_da.pdf",
+      "profile.pdf"
+    ],
+    "errors": []
+  },
+  "evidence_items": [
+    {
+      "evidence_id": "ev_1",
+      "fact_da": "Kandidaten har k\u00F8rekort kategori B.",
+      "normalized_label": "drivers_license_b",
+      "category": "logistics",
+      "support_type": "explicit",
+      "strength": "strong",
+      "relevant_requirement_ids": [
+        "req_2"
+      ],
+      "requirement_relevance_reason_da": "Relevant for kravet om k\u00F8rekort.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "K\u00F8rekort B",
+          "section_hint": "Praktisk"
+        },
+        {
+          "filename": "profile.pdf",
+          "excerpt": "K\u00F8rekort\nB",
+          "section_hint": "Praktiske oplysninger"
+        }
+      ]
+    },
+    {
+      "evidence_id": "ev_2",
+      "fact_da": "Kandidaten har erfaring med teknisk support til brugere og dokumentation af l\u00F8sninger p\u00E5 tilbagevendende problemer.",
+      "normalized_label": "technical_user_support_and_documentation",
+      "category": "customer_focus",
+      "support_type": "explicit",
+      "strength": "strong",
+      "relevant_requirement_ids": [
+        "req_13",
+        "req_8"
+      ],
+      "requirement_relevance_reason_da": "Relevant for kontakt til brugere og for samarbejde, fordi kandidaten dokumenteret har ydet support til brugere og arbejdet med l\u00F8sning af deres problemer.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Ydede teknisk support til brugere og dokumenterede l\u00F8sninger p\u00E5 tilbagevendende problemer.",
+          "section_hint": "Erhvervserfaring - IT-support og webassistent"
+        }
+      ]
+    },
+    {
+      "evidence_id": "ev_3",
+      "fact_da": "Kandidaten beskriver sin arbejdsform som struktureret opgavel\u00F8sning med dokumentation og ansvarlig opf\u00F8lgning.",
+      "normalized_label": "structured_work_with_follow_up",
+      "category": "leadership",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_3"
+      ],
+      "requirement_relevance_reason_da": "Relevant for kravet om at kunne arbejde selvst\u00E6ndigt og tage ansvar for daglig drift, fordi det dokumenterer en struktureret og ansvarlig arbejdsform.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Struktureret opgavel\u00F8sning, dokumentation og ansvarlig opf\u00F8lgning.",
+          "section_hint": "Kompetencer - Arbejdsform"
+        }
+      ]
+    },
+    {
+      "evidence_id": "ev_4",
+      "fact_da": "Kandidaten er vant til hybridt samarbejde og dialog med b\u00E5de brugere og udviklere.",
+      "normalized_label": "hybrid_collaboration_with_users_and_developers",
+      "category": "collaboration",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_8",
+        "req_7"
+      ],
+      "requirement_relevance_reason_da": "Relevant for samarbejdsevner og bidrag til arbejdsmilj\u00F8, fordi kandidaten direkte beskriver erfaring med samarbejde og dialog p\u00E5 tv\u00E6rs af roller.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Er vant til hybridt samarbejde og dialog med b\u00E5de brugere og udviklere.",
+          "section_hint": "Kompetencer - Arbejdsform"
+        },
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Trives i samarbejde med b\u00E5de teknikere og forretning",
+          "section_hint": "Profil"
+        }
+      ]
+    },
+    {
+      "evidence_id": "ev_5",
+      "fact_da": "Kandidaten har erfaring med registrering og rapportering gennem udvikling og vedligeholdelse af interne webmoduler.",
+      "normalized_label": "registration_and_reporting_systems_experience",
+      "category": "tool_experience",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_13",
+        "req_4"
+      ],
+      "requirement_relevance_reason_da": "Relevant for opgaver med udskrivning af regninger og brug af IT-systemer, fordi kandidaten har dokumenteret erfaring med systemer til registrering og rapportering.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Udviklede og vedligeholdt interne .NET-baserede webmoduler til registrering og rapportering.",
+          "section_hint": "Erhvervserfaring - Studentermedhj\u00E6lper, softwareudvikling"
+        }
+      ]
+    },
+    {
+      "evidence_id": "ev_6",
+      "fact_da": "Kandidaten beskriver sig som nysgerrig og l\u00F8sningsorienteret og har et st\u00E6rkt \u00F8nske om at oms\u00E6tte teori til stabile l\u00F8sninger i produktion.",
+      "normalized_label": "curious_and_solution_oriented",
+      "category": "personal_trait",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_5"
+      ],
+      "requirement_relevance_reason_da": "Relevant for kravet om en engageret tilgang til arbejdet, fordi kandidaten direkte beskriver motivation og l\u00F8sningsorientering.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Nysgerrig og l\u00F8sningsorienteret junior softwareudvikler",
+          "section_hint": "Profil"
+        },
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "har et st\u00E6rkt \u00F8nske om at oms\u00E6tte teori til stabile l\u00F8sninger i produktion",
+          "section_hint": "Profil"
+        }
+      ]
+    },
+    {
+      "evidence_id": "ev_7",
+      "fact_da": "Kandidaten har erfaring med at oms\u00E6tte behov til enkle l\u00F8sninger med fokus p\u00E5 overskuelig struktur og driftssikkerhed i freelance webprojekter.",
+      "normalized_label": "translate_needs_into_reliable_solutions",
+      "category": "analytical_skill",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_3",
+        "req_13"
+      ],
+      "requirement_relevance_reason_da": "Relevant for selvst\u00E6ndig opgavel\u00F8sning og kontakt med brugere, fordi kandidaten dokumenterer arbejde med at forst\u00E5 behov og oms\u00E6tte dem til l\u00F8sninger.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Omsatte behov til enkle l\u00F8sninger med fokus p\u00E5 overskuelig struktur og driftssikkerhed.",
+          "section_hint": "Erhvervserfaring - Freelance webprojekter"
+        }
+      ]
+    }
+  ]
+}

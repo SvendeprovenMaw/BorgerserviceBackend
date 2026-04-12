@@ -1,0 +1,36 @@
+{
+  "Stage": "application_generation",
+  "Decision": "continue",
+  "ApprovedForDownstream": true,
+  "HardInvalidCount": 0,
+  "SoftQualityCount": 0,
+  "SummaryDa": "Stage-gaten bestod.",
+  "BlockingReasons": [],
+  "AdvisoryReasons": [],
+  "Metrics": [
+    {
+      "MetricKey": "application_generation.unsupported_claims",
+      "Operator": "\u003C=",
+      "Actual": "0",
+      "Expected": "0",
+      "Passed": true,
+      "MessageDa": "OK"
+    },
+    {
+      "MetricKey": "application_generation.dangling_relations",
+      "Operator": "\u003C=",
+      "Actual": "0",
+      "Expected": "0",
+      "Passed": true,
+      "MessageDa": "OK"
+    },
+    {
+      "MetricKey": "application_generation.unsupported_sections",
+      "Operator": "\u003C=",
+      "Actual": "0",
+      "Expected": "0",
+      "Passed": true,
+      "MessageDa": "OK"
+    }
+  ]
+}

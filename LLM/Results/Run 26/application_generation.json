@@ -1,0 +1,328 @@
+{
+  "_meta": {
+    "application_document_id": "application_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "requirements_document_id": "requirements_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "candidate_evidence_document_id": "candidate_evidence_borger1",
+    "matching_document_id": "matching_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "target_language": "da",
+    "position_title": "Udvikler med fokus p\u00E5 DevOps",
+    "company_name": "JN Data",
+    "applicant_display_name": null
+  },
+  "application_strategy": {
+    "tone": "warm_professional",
+    "length_target": "medium",
+    "subject_line_da": "Ans\u00F8gning til stillingen som Udvikler med fokus p\u00E5 DevOps",
+    "core_message_da": "Ans\u00F8gningen fokuserer p\u00E5 dokumenteret udviklererfaring, praktisk arbejde med webmoduler, API\u2019er og integrationer, samarbejde p\u00E5 tv\u00E6rs af teknik og forretning samt sproglige kvalifikationer. Krav med svag eller ingen dokumentation udelades, mens delvise matches formuleres n\u00F8gternt og positivt med v\u00E6gt p\u00E5 overf\u00F8rbare styrker og interesse for at arbejde med stabile l\u00F8sninger i produktion.",
+    "selected_requirement_ids": [
+      "req_1",
+      "req_3",
+      "req_4",
+      "req_6",
+      "req_7",
+      "req_8",
+      "req_10"
+    ],
+    "selected_evidence_ids": [
+      "evidence_1",
+      "evidence_2",
+      "evidence_3",
+      "evidence_4",
+      "evidence_5",
+      "evidence_6",
+      "evidence_7",
+      "evidence_8",
+      "evidence_9"
+    ],
+    "omitted_requirement_ids": [
+      "req_2",
+      "req_5",
+      "req_9"
+    ],
+    "omission_strategy_da": "Krav uden reel dokumenteret st\u00F8tte er udeladt fra ans\u00F8gningens indhold. Delvise matches er kun medtaget i moderat og evidensn\u00E6r form uden at overdrive direkte erfaring."
+  },
+  "sections": [
+    {
+      "section_id": "salutation",
+      "section_kind": "salutation",
+      "text_da": "K\u00E6re JN Data",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "opening",
+      "section_kind": "opening",
+      "text_da": "Jeg s\u00F8ger stillingen som Udvikler med fokus p\u00E5 DevOps hos JN Data. Jeg har erfaring fra en udviklerrolle, hvor jeg har arbejdet med .NET-baserede webmoduler, API\u2019er og integrationer, og jeg ser derfor stillingen som en relevant mulighed for at bidrage med praktisk udviklingserfaring i et milj\u00F8 med fokus p\u00E5 stabile l\u00F8sninger.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "claim_1",
+        "claim_2",
+        "claim_3"
+      ],
+      "supported_requirement_ids": [
+        "req_1",
+        "req_3",
+        "req_6"
+      ],
+      "supported_evidence_ids": [
+        "evidence_1",
+        "evidence_2",
+        "evidence_5"
+      ]
+    },
+    {
+      "section_id": "experience",
+      "section_kind": "experience",
+      "text_da": "I min nuv\u00E6rende erfaring som junior softwareudvikler har jeg arbejdet med udvikling og vedligeholdelse af interne webmoduler i .NET, bygget REST API-endpoints og deltaget i integrationer mellem front-end, database og tredjepartssystemer. Jeg har ogs\u00E5 arbejdet med fejlretning, kodegennemgang samt test og versionsstyring, hvilket har givet mig en bred praktisk forst\u00E5else af udviklingsarbejdet omkring en l\u00F8sning.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "claim_1",
+        "claim_2",
+        "claim_4",
+        "claim_5"
+      ],
+      "supported_requirement_ids": [
+        "req_1",
+        "req_3",
+        "req_4"
+      ],
+      "supported_evidence_ids": [
+        "evidence_1",
+        "evidence_2",
+        "evidence_3",
+        "evidence_4"
+      ]
+    },
+    {
+      "section_id": "fit",
+      "section_kind": "fit",
+      "text_da": "Jeg kan se et godt fagligt match i en rolle, hvor udvikling kombineres med samarbejde og fokus p\u00E5 l\u00F8sninger i drift. Jeg trives i samarbejdet mellem teknik og forretning og er vant til dialog med b\u00E5de brugere og udviklere. Derudover har jeg arbejdet med teknisk support og dokumentation af tilbagevendende problemer, og jeg har ogs\u00E5 bidraget til mindre automatiseringer i administrative workflows. Samlet set giver det mig et godt udgangspunkt for at indg\u00E5 i et team, hvor kvalitet, samarbejde og l\u00F8bende forbedringer er vigtige.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "claim_3",
+        "claim_6",
+        "claim_7",
+        "claim_8"
+      ],
+      "supported_requirement_ids": [
+        "req_6",
+        "req_7",
+        "req_10"
+      ],
+      "supported_evidence_ids": [
+        "evidence_5",
+        "evidence_6",
+        "evidence_7",
+        "evidence_9"
+      ]
+    },
+    {
+      "section_id": "motivation",
+      "section_kind": "motivation",
+      "text_da": "Det motiverer mig s\u00E6rligt at s\u00F8ge en stilling, hvor der arbejdes med hele udviklingsforl\u00F8bet og med stabile l\u00F8sninger i produktion. Jeg har fokus p\u00E5 moderne webudvikling, API-design og brugervenlige gr\u00E6nseflader, og jeg er interesseret i at forts\u00E6tte min udvikling i en rolle, hvor disse erfaringer kan bringes i spil i t\u00E6t samarbejde med erfarne kolleger.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "claim_3",
+        "claim_9",
+        "claim_6"
+      ],
+      "supported_requirement_ids": [
+        "req_3",
+        "req_6",
+        "req_7"
+      ],
+      "supported_evidence_ids": [
+        "evidence_5",
+        "evidence_6"
+      ]
+    },
+    {
+      "section_id": "closing",
+      "section_kind": "closing",
+      "text_da": "Jeg behersker b\u00E5de dansk og engelsk i skrift og tale og ser frem til muligheden for at uddybe min motivation og mine erfaringer n\u00E6rmere ved en samtale. Tak for jeres tid og overvejelse.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "claim_10"
+      ],
+      "supported_requirement_ids": [
+        "req_8"
+      ],
+      "supported_evidence_ids": [
+        "evidence_8"
+      ]
+    },
+    {
+      "section_id": "signature",
+      "section_kind": "signature",
+      "text_da": "Med venlig hilsen",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    }
+  ],
+  "claim_register": [
+    {
+      "claim_id": "claim_1",
+      "claim_text_da": "Kandidaten har erfaring fra en udviklerrolle som junior softwareudvikler.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "evidence_1"
+      ],
+      "requirement_ids": [
+        "req_1"
+      ],
+      "section_ids": [
+        "opening",
+        "experience"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "claim_2",
+      "claim_text_da": "Kandidaten har arbejdet med .NET-baserede webmoduler, REST API-endpoints og integrationer mellem front-end, database og tredjepartssystemer.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "evidence_2"
+      ],
+      "requirement_ids": [
+        "req_1",
+        "req_3"
+      ],
+      "section_ids": [
+        "opening",
+        "experience"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "claim_3",
+      "claim_text_da": "Kandidaten har fokus p\u00E5 moderne webudvikling og stabile l\u00F8sninger i produktion, hvilket er relevant for rollen.",
+      "claim_kind": "role_alignment",
+      "evidence_ids": [
+        "evidence_5"
+      ],
+      "requirement_ids": [
+        "req_6"
+      ],
+      "section_ids": [
+        "opening",
+        "fit",
+        "motivation"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_4",
+      "claim_text_da": "Kandidaten har arbejdet med fejlretning og kodegennemgang i React-baserede brugerflader.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "evidence_3"
+      ],
+      "requirement_ids": [
+        "req_3",
+        "req_4"
+      ],
+      "section_ids": [
+        "experience"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_5",
+      "claim_text_da": "Kandidaten har tekniske kompetencer inden for blandt andet C#, .NET, ASP.NET Core, web-API\u2019er, React, HTML, CSS, SQL, Git, test og versionsstyring, hvilket viser en bred praktisk teknisk profil.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "evidence_4"
+      ],
+      "requirement_ids": [
+        "req_3",
+        "req_4"
+      ],
+      "section_ids": [
+        "experience"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "claim_6",
+      "claim_text_da": "Kandidaten trives i samarbejde mellem teknik og forretning og er vant til dialog med brugere og udviklere.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "evidence_6"
+      ],
+      "requirement_ids": [
+        "req_7"
+      ],
+      "section_ids": [
+        "fit",
+        "motivation"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "claim_7",
+      "claim_text_da": "Kandidaten har erfaring med teknisk support til brugere og dokumentation af l\u00F8sninger p\u00E5 tilbagevendende problemer.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "evidence_7"
+      ],
+      "requirement_ids": [
+        "req_7"
+      ],
+      "section_ids": [
+        "fit"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_8",
+      "claim_text_da": "Kandidaten har bidraget til mindre automatiseringer i administrative workflows, hvilket er relevant for rolle med fokus p\u00E5 automatisering.",
+      "claim_kind": "role_alignment",
+      "evidence_ids": [
+        "evidence_9"
+      ],
+      "requirement_ids": [
+        "req_10"
+      ],
+      "section_ids": [
+        "fit"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_9",
+      "claim_text_da": "Kandidaten er motiveret af roller, hvor erfaring med moderne webudvikling, API-design og stabile l\u00F8sninger i produktion kan bringes i spil.",
+      "claim_kind": "motivation_grounded",
+      "evidence_ids": [
+        "evidence_5"
+      ],
+      "requirement_ids": [
+        "req_3",
+        "req_6"
+      ],
+      "section_ids": [
+        "motivation"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_10",
+      "claim_text_da": "Kandidaten behersker dansk og engelsk i b\u00E5de skrift og tale.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "evidence_8"
+      ],
+      "requirement_ids": [
+        "req_8"
+      ],
+      "section_ids": [
+        "closing"
+      ],
+      "support_strength": "strong"
+    }
+  ],
+  "assembled_application_da": "K\u00E6re JN Data\n\nJeg s\u00F8ger stillingen som Udvikler med fokus p\u00E5 DevOps hos JN Data. Jeg har erfaring fra en udviklerrolle, hvor jeg har arbejdet med .NET-baserede webmoduler, API\u2019er og integrationer, og jeg ser derfor stillingen som en relevant mulighed for at bidrage med praktisk udviklingserfaring i et milj\u00F8 med fokus p\u00E5 stabile l\u00F8sninger.\n\nI min nuv\u00E6rende erfaring som junior softwareudvikler har jeg arbejdet med udvikling og vedligeholdelse af interne webmoduler i .NET, bygget REST API-endpoints og deltaget i integrationer mellem front-end, database og tredjepartssystemer. Jeg har ogs\u00E5 arbejdet med fejlretning, kodegennemgang samt test og versionsstyring, hvilket har givet mig en bred praktisk forst\u00E5else af udviklingsarbejdet omkring en l\u00F8sning.\n\nJeg kan se et godt fagligt match i en rolle, hvor udvikling kombineres med samarbejde og fokus p\u00E5 l\u00F8sninger i drift. Jeg trives i samarbejdet mellem teknik og forretning og er vant til dialog med b\u00E5de brugere og udviklere. Derudover har jeg arbejdet med teknisk support og dokumentation af tilbagevendende problemer, og jeg har ogs\u00E5 bidraget til mindre automatiseringer i administrative workflows. Samlet set giver det mig et godt udgangspunkt for at indg\u00E5 i et team, hvor kvalitet, samarbejde og l\u00F8bende forbedringer er vigtige.\n\nDet motiverer mig s\u00E6rligt at s\u00F8ge en stilling, hvor der arbejdes med hele udviklingsforl\u00F8bet og med stabile l\u00F8sninger i produktion. Jeg har fokus p\u00E5 moderne webudvikling, API-design og brugervenlige gr\u00E6nseflader, og jeg er interesseret i at forts\u00E6tte min udvikling i en rolle, hvor disse erfaringer kan bringes i spil i t\u00E6t samarbejde med erfarne kolleger.\n\nJeg behersker b\u00E5de dansk og engelsk i skrift og tale og ser frem til muligheden for at uddybe min motivation og mine erfaringer n\u00E6rmere ved en samtale. Tak for jeres tid og overvejelse.\n\nMed venlig hilsen"
+}

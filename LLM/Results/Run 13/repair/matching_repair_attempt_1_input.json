@@ -1,0 +1,174 @@
+{
+  "matches": [
+    {
+      "requirement_id": "req_1",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for, at kandidaten selvst\u00E6ndigt har gennemf\u00F8rt alle faser af en penetrationstest fra scoping til rapport og pr\u00E6sentation.",
+      "gap_da": "Der mangler direkte evidens for selvst\u00E6ndig end-to-end erfaring med penetrationstest, herunder scoping, udf\u00F8relse, rapportering og pr\u00E6sentation.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_2",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for flere \u00E5rs praktisk erfaring med applikations- og platformspenetrationstest.",
+      "gap_da": "Der mangler direkte evidens for praktisk penetrationstest-erfaring p\u00E5 applikationer og platforme over flere \u00E5r.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_3",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen evidens for erfaring med v\u00E6rkt\u00F8jer som Burp Suite eller Nessus.",
+      "gap_da": "Der mangler direkte dokumentation for brug af Burp Suite, Nessus eller tilsvarende relevante penetrationstestv\u00E6rkt\u00F8jer.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_4",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_1"
+      ],
+      "rationale_da": "Kandidaten har dokumenteret erfaring med kodegennemgang, men evidensen vedr\u00F8rer almindelig softwareudvikling og ikke specifikt sikkerhedsfokuseret kildekodegennemgang.",
+      "gap_da": "Der mangler direkte evidens for sikkerhedsrelateret kildekodegennemgang af typiske webudviklingssprog eller et udtrykt \u00F8nske om at tilegne sig denne viden.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_5",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for kendskab til OWASP WSTG, PTES, NIST 800-115 eller PCI DSS.",
+      "gap_da": "Der mangler direkte evidens for kendskab til de n\u00E6vnte rammev\u00E6rk og standarder.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_6",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_8"
+      ],
+      "rationale_da": "Kandidaten har erfaring med databaser, systemintegration og webudvikling, hvilket giver noget teknisk grundlag, men det dokumenterer ikke i sig selv solid forst\u00E5else for netv\u00E6rk, operativsystemer og cloud.",
+      "gap_da": "Der mangler direkte evidens for solid forst\u00E5else for netv\u00E6rk, operativsystemer og cloud.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_7",
+      "verdict": "unclear",
+      "matched_evidence_ids": [
+        "ev_2"
+      ],
+      "rationale_da": "Kandidaten har erfaring med web-API\u2019er og REST-endpoints, som er relevant for web- og applikationsomr\u00E5det, men evidensen dokumenterer ikke tydeligt viden om typiske s\u00E5rbarheder.",
+      "gap_da": "Der mangler direkte evidens for viden om typiske web-, applikations- og platformss\u00E5rbarheder.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_8",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for certificeringer som OSCP, GPEN, OSWA, GWAPT eller PNPT.",
+      "gap_da": "Der mangler direkte evidens for relevante offensive security-certificeringer.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_9",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_4",
+        "ev_5",
+        "ev_6"
+      ],
+      "rationale_da": "Der er relevant evidens for skriftlig dokumentation, samarbejde med b\u00E5de teknik og forretning samt oms\u00E6tning af behov til enkle l\u00F8sninger. Det underst\u00F8tter kommunikationsevne, men ikke direkte formidling af sv\u00E6rt teknisk sikkerhedsmateriale til forretningen.",
+      "gap_da": "Der mangler direkte evidens for at oms\u00E6tte komplekst teknisk eller sikkerhedsfagligt materiale til forretningsforst\u00E5elige budskaber.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_10",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for erfaring med test af kritisk infrastruktur.",
+      "gap_da": "Der mangler direkte evidens for test af kritisk infrastruktur.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_11",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for erfaring med test af cloudmilj\u00F8er.",
+      "gap_da": "Der mangler direkte evidens for test af cloudmilj\u00F8er.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_12",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for erfaring med PCI DSS.",
+      "gap_da": "Der mangler direkte evidens for tidligere arbejde med PCI DSS.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_13",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_3",
+        "ev_4",
+        "ev_7",
+        "ev_9"
+      ],
+      "rationale_da": "Der er evidens for arbejde med registrering og rapportering, dokumentation af tekniske l\u00F8sninger, struktureret arbejdsform samt sprogkompetencer p\u00E5 dansk og engelsk. Det underst\u00F8tter delvist kravet, men ikke direkte erfaring med detaljerede penetrationstestrapporter med s\u00E5rbarheder og anbefalinger.",
+      "gap_da": "Der mangler direkte evidens for at skrive detaljerede rapporter om penetrationstest med identificerede s\u00E5rbarheder og anbefalinger.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_14",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_7"
+      ],
+      "rationale_da": "Kandidaten beskrives som struktureret og dokumentationsorienteret, hvilket er relevant for planl\u00E6gning, men der er ingen direkte evidens for udarbejdelse af testplaner til penetrationstest.",
+      "gap_da": "Der mangler direkte evidens for udarbejdelse af testplaner for penetrationstests.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_15",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for, at kandidaten holder sig ajour med s\u00E5rbarheder og angrebstekniker.",
+      "gap_da": "Der mangler direkte evidens for l\u00F8bende opdatering p\u00E5 relevante s\u00E5rbarheder og angrebstekniker.",
+      "confidence": "high",
+      "needs_human_review": false
+    }
+  ],
+  "overall_assessment": {
+    "overall_match_level": "weak",
+    "summary_da": "Den dokumenterede evidens underst\u00F8tter prim\u00E6rt generelle softwareudviklings-, dokumentations- og kommunikationsevner. Der mangler gennemg\u00E5ende direkte evidens for central penetrationstest-erfaring, relevante v\u00E6rkt\u00F8jer, sikkerhedsrammev\u00E6rk, s\u00E5rbarhedsviden samt test i cloud, kritisk infrastruktur og PCI DSS. Match er derfor samlet set svagt.",
+    "major_strength_evidence_ids": [
+      "ev_1",
+      "ev_4",
+      "ev_6",
+      "ev_7",
+      "ev_9"
+    ],
+    "major_gap_requirement_ids": [
+      "req_1",
+      "req_2",
+      "req_3",
+      "req_5",
+      "req_15"
+    ]
+  }
+}

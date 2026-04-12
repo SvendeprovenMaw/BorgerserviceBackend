@@ -1,0 +1,227 @@
+{
+  "_meta": {
+    "job_posting_title": "Fullstack Developer \u2013 Fuldtid, Remote | AI-f\u00F8rst startup s\u00F8ger f\u00F8rste udvikler uden for founder-teamet",
+    "parsed_files": [
+      "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf"
+    ],
+    "errors": []
+  },
+  "requirements": [
+    {
+      "requirement_id": "req_1",
+      "requirement_text_da": "Kandidaten skal have 4-5\u002B \u00E5rs erfaring med softwareudvikling.",
+      "normalized_label": "softwareudvikling_4_5_aars_erfaring",
+      "category": "role_experience",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf",
+          "excerpt": "4-5\u002B \u00E5rs erfaring med softwareudvikling - du kan kode, men du er ikke fastl\u00E5st i \u0022s\u00E5dan har jeg altid gjort det\u0022",
+          "section_hint": "Dig vi leder efter"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_2",
+      "requirement_text_da": "Kandidaten skal v\u00E6re st\u00E6rk i TypeScript.",
+      "normalized_label": "typescript",
+      "category": "technical_skill",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf",
+          "excerpt": "St\u00E6rk i TypeScript og mindst \u00E9t moderne framework",
+          "section_hint": "Dig vi leder efter"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_3",
+      "requirement_text_da": "Kandidaten skal have erfaring med mindst \u00E9t moderne framework som React, Angular, Next.js eller lignende.",
+      "normalized_label": "moderne_frontend_framework",
+      "category": "technical_skill",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf",
+          "excerpt": "St\u00E6rk i TypeScript og mindst \u00E9t moderne framework (React, Angular, Next.js eller lignende)",
+          "section_hint": "Dig vi leder efter"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_4",
+      "requirement_text_da": "Kandidaten skal have et st\u00E6rkt \u00F8je for UI og en \u00E6gte interesse for UX.",
+      "normalized_label": "ui_ux_fokus",
+      "category": "technical_skill",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf",
+          "excerpt": "Et st\u00E6rkt \u00F8je for UI og en \u00E6gte interesse for UX",
+          "section_hint": "Dig vi leder efter"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_5",
+      "requirement_text_da": "Kandidaten skal have erfaring med at t\u00E6nke brugeroplevelse ind fra start.",
+      "normalized_label": "ux_fra_start",
+      "category": "technical_skill",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf",
+          "excerpt": "Erfaring med at t\u00E6nke brugeroplevelse ind fra start, ikke som et lag ovenp\u00E5 bagefter",
+          "section_hint": "Dig vi leder efter"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_6",
+      "requirement_text_da": "Kandidaten skal have reel interesse for AI-assisteret udvikling og aktivt eksperimentere med nye v\u00E6rkt\u00F8jer.",
+      "normalized_label": "ai_assisteret_udvikling_interesse",
+      "category": "technical_skill",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf",
+          "excerpt": "Reel interesse for AI-assisteret udvikling - du eksperimenterer aktivt med nye v\u00E6rkt\u00F8jer",
+          "section_hint": "Dig vi leder efter"
+        },
+        {
+          "filename": "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf",
+          "excerpt": "Vi s\u00F8ger en person, der er klar til det skift, eller allerede er i gang med det.",
+          "section_hint": "Om rollen"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_7",
+      "requirement_text_da": "Kandidaten skal v\u00E6re omstillingsparat og se AI som en mulighed for at l\u00F8fte fokus mod arkitektur og kvalitet.",
+      "normalized_label": "omstilling_til_ai",
+      "category": "personal_trait",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf",
+          "excerpt": "Omstillingsparat: du ser AI ikke som en trussel mod dit fag, men som en mulighed for at l\u00F8fte dit fokus",
+          "section_hint": "Dig vi leder efter"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_8",
+      "requirement_text_da": "Kandidaten skal v\u00E6re komfortabel i terminalen p\u00E5 macOS eller Linux.",
+      "normalized_label": "terminal_macos_linux",
+      "category": "technical_skill",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf",
+          "excerpt": "Komfortabel i terminalen p\u00E5 macOS eller Linux",
+          "section_hint": "Dig vi leder efter"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_9",
+      "requirement_text_da": "Erfaring med Node.js er en fordel.",
+      "normalized_label": "nodejs",
+      "category": "technical_skill",
+      "importance": "nice_to_have",
+      "source_citations": [
+        {
+          "filename": "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf",
+          "excerpt": "Erfaring med Node.js er et plus",
+          "section_hint": "Dig vi leder efter"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_10",
+      "requirement_text_da": "Erfaring med MongoDB er en fordel.",
+      "normalized_label": "mongodb",
+      "category": "tool_experience",
+      "importance": "nice_to_have",
+      "source_citations": [
+        {
+          "filename": "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf",
+          "excerpt": "MongoDB og Azure DevOps liges\u00E5 - men det er ikke et krav",
+          "section_hint": "Dig vi leder efter"
+        },
+        {
+          "filename": "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf",
+          "excerpt": "Vores stack er TypeScript hele vejen: React (Next.js) frontend, NestJS backend, MongoDB.",
+          "section_hint": "Om rollen"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_11",
+      "requirement_text_da": "Erfaring med Azure DevOps er en fordel.",
+      "normalized_label": "azure_devops",
+      "category": "tool_experience",
+      "importance": "nice_to_have",
+      "source_citations": [
+        {
+          "filename": "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf",
+          "excerpt": "MongoDB og Azure DevOps liges\u00E5 - men det er ikke et krav",
+          "section_hint": "Dig vi leder efter"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_12",
+      "requirement_text_da": "Kandidaten skal kunne drive sine egne opgaver.",
+      "normalized_label": "selvstaendig_opgavedrift",
+      "category": "collaboration",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf",
+          "excerpt": "du skal kunne drive dine egne opgaver",
+          "section_hint": "Om rollen"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_13",
+      "requirement_text_da": "Stillingen er en fuldtidsstilling.",
+      "normalized_label": "fuldtid",
+      "category": "logistics",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf",
+          "excerpt": "100% remote fuldtidsstilling med fleksibilitet i hverdagen",
+          "section_hint": "Hvad du f\u00E5r"
+        },
+        {
+          "filename": "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf",
+          "excerpt": "Ugentlig arbejdstid: Fuldtid",
+          "section_hint": "Virksomheden tilbyder"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_14",
+      "requirement_text_da": "Stillingen er 100 % remote / hjemmearbejde.",
+      "normalized_label": "remote_arbejde",
+      "category": "logistics",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf",
+          "excerpt": "Stillingen er 100% remote.",
+          "section_hint": "Indledning"
+        },
+        {
+          "filename": "Fullstack Developer \u2013 Returna ApS - Nordjylland.pdf",
+          "excerpt": "Hjemmearbejde: 100 % hjemmearbejde",
+          "section_hint": "Virksomheden tilbyder"
+        }
+      ]
+    }
+  ]
+}

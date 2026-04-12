@@ -1,5 +1,8 @@
 namespace OpenAiResponses.Api.Options;
 
+/// <summary>
+/// Configuration used when creating Responses API calls.
+/// </summary>
 public sealed class OpenAIOptions
 {
     public const string SectionName = "OpenAI";

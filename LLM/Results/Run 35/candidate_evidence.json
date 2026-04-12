@@ -1,0 +1,108 @@
+{
+  "_meta": {
+    "requirements_document_id": "requirements_produktionsleder_bilka_greve",
+    "parsed_files": [
+      "Produktionsleder - Bilka - Greve.pdf",
+      "emma_sorensen_cv_da.pdf",
+      "profile.pdf"
+    ],
+    "errors": []
+  },
+  "evidence_items": [
+    {
+      "evidence_id": "199687",
+      "fact_da": "Kandidaten har erhvervserfaring som studentermedhj\u00E6lper i softwareudvikling fra 2024 til 2026.",
+      "normalized_label": "software_development_role_experience",
+      "category": "role_experience",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "199687"
+      ],
+      "requirement_relevance_reason_da": "Dokumenteret erhvervserfaring fra en navngiven stilling er relevant for kravet om erfaring fra en lignende stilling, uden at fastsl\u00E5 at stillingerne er ens.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Studentermedhj\u00E6lper, softwareudvikling\nNordic Digital Solutions, Roskilde | 2024 - 2026",
+          "section_hint": "Erhvervserfaring"
+        }
+      ]
+    },
+    {
+      "evidence_id": "req_4",
+      "fact_da": "Kandidaten beskriver sin arbejdsform som struktureret opgavel\u00F8sning med dokumentation og ansvarlig opf\u00F8lgning.",
+      "normalized_label": "structured_work_approach",
+      "category": "analytical_skill",
+      "support_type": "explicit",
+      "strength": "strong",
+      "relevant_requirement_ids": [
+        "req_4"
+      ],
+      "requirement_relevance_reason_da": "Det er relevant for kravet om at kunne planl\u00E6gge og strukturere arbejdsdagen, fordi kandidaten direkte beskriver en struktureret arbejdsform.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Struktureret opgavel\u00F8sning, dokumentation og ansvarlig opf\u00F8lgning.",
+          "section_hint": "Kompetencer \u003E Arbejdsform"
+        }
+      ]
+    },
+    {
+      "evidence_id": "req_10",
+      "fact_da": "Kandidaten oplyser, at hun trives i samarbejde med b\u00E5de teknikere og forretning.",
+      "normalized_label": "cross_functional_collaboration",
+      "category": "collaboration",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_10"
+      ],
+      "requirement_relevance_reason_da": "Det er relevant for kravet om at st\u00F8tte kolleger gennem samarbejde, fordi kandidaten direkte beskriver trivsel i samarbejde p\u00E5 tv\u00E6rs af faglige grupper.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Trives i samarbejde med b\u00E5de teknikere og forretning",
+          "section_hint": "Profiltekst"
+        }
+      ]
+    },
+    {
+      "evidence_id": "req_6",
+      "fact_da": "Kandidaten har erfaring med at yde teknisk support til brugere og dokumentere l\u00F8sninger p\u00E5 tilbagevendende problemer.",
+      "normalized_label": "user_support_experience",
+      "category": "customer_focus",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_6"
+      ],
+      "requirement_relevance_reason_da": "Det er relevant for kravet om kundeservice, fordi det dokumenterer direkte erfaring med brugerrettet support, uden at sidestille det med kundebetjening ved en disk.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Ydede teknisk support til brugere og dokumenterede l\u00F8sninger p\u00E5 tilbagevendende problemer.",
+          "section_hint": "Erhvervserfaring \u003E IT-support og webassistent"
+        }
+      ]
+    },
+    {
+      "evidence_id": "req_2",
+      "fact_da": "Kandidaten skriver, at hun har et st\u00E6rkt \u00F8nske om at oms\u00E6tte teori til stabile l\u00F8sninger i produktion.",
+      "normalized_label": "focus_on_stable_production_solutions",
+      "category": "personal_trait",
+      "support_type": "explicit",
+      "strength": "weak",
+      "relevant_requirement_ids": [
+        "req_2"
+      ],
+      "requirement_relevance_reason_da": "Det er svagt relevant for kravet om at trives i et travlt milj\u00F8, fordi udsagnet peger p\u00E5 orientering mod drift og produktion, men ikke direkte omtaler tempo, deadlines eller uforudsigelighed.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "har et st\u00E6rkt \u00F8nske om at oms\u00E6tte teori til stabile l\u00F8sninger i produktion",
+          "section_hint": "Profiltekst"
+        }
+      ]
+    }
+  ]
+}

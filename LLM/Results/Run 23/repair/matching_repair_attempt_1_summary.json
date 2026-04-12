@@ -1,0 +1,77 @@
+{
+  "WasModified": true,
+  "SummaryDa": "Deterministisk matching-repair anvendte 14 konservative \u00E6ndringer.",
+  "RepairedJson": "{\n  \u0022matches\u0022: [\n    {\n      \u0022requirement_id\u0022: \u0022req_1\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [\n        \u0022ev_3\u0022,\n        \u0022ev_4\u0022\n      ],\n      \u0022rationale_da\u0022: \u0022Der er dokumenteret softwareudviklingserfaring gennem udvikling af webmoduler samt API- og integrationsarbejde, men inputtet dokumenterer ikke 4-5\\u002B \\u00E5rs erfaring.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler dokumenteret evidens for varighed p\\u00E5 4-5\\u002B \\u00E5rs softwareudviklingserfaring.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022,\n      \u0022needs_human_review\u0022: false\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_2\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [],\n      \u0022rationale_da\u0022: \u0022Der er ingen dokumenteret evidens i kandidatmaterialet for styrke i TypeScript.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler direkte evidens for erfaring med eller styrke i TypeScript.\u0022,\n      \u0022confidence\u0022: \u0022low\u0022,\n      \u0022needs_human_review\u0022: true\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_3\u0022,\n      \u0022verdict\u0022: \u0022matched\u0022,\n      \u0022matched_evidence_ids\u0022: [\n        \u0022ev_1\u0022\n      ],\n      \u0022rationale_da\u0022: \u0022Kandidaten har direkte dokumenteret erfaring med React-baserede brugerflader, hvilket opfylder kravet om mindst \\u00E9t moderne framework.\u0022,\n      \u0022gap_da\u0022: null,\n      \u0022confidence\u0022: \u0022high\u0022,\n      \u0022needs_human_review\u0022: false\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_4\u0022,\n      \u0022verdict\u0022: \u0022partially_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [\n        \u0022ev_2\u0022\n      ],\n      \u0022rationale_da\u0022: \u0022Kandidaten beskriver fokus p\\u00E5 brugervenlige gr\\u00E6nseflader, hvilket underst\\u00F8tter et vist UI/UX-fokus, men evidensen dokumenterer ikke tydeligt et st\\u00E6rkt \\u00F8je for UI og \\u00E6gte interesse for UX.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler mere direkte evidens for st\\u00E6rke UI-kompetencer og konkret UX-interesse eller -arbejde.\u0022,\n      \u0022confidence\u0022: \u0022medium\u0022,\n      \u0022needs_human_review\u0022: false\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_5\u0022,\n      \u0022verdict\u0022: \u0022partially_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [\n        \u0022ev_2\u0022\n      ],\n      \u0022rationale_da\u0022: \u0022Fokus p\\u00E5 brugervenlige gr\\u00E6nseflader peger i retning af brugeroplevelse, men dokumenterer ikke klart erfaring med at t\\u00E6nke UX ind fra start i udviklingsprocessen.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler konkret evidens for, at kandidaten systematisk har indarbejdet brugeroplevelse fra begyndelsen af l\\u00F8sninger eller projekter.\u0022,\n      \u0022confidence\u0022: \u0022medium\u0022,\n      \u0022needs_human_review\u0022: false\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_6\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [],\n      \u0022rationale_da\u0022: \u0022Der er ingen dokumenteret evidens for interesse for AI-assisteret udvikling eller aktiv eksperimenteren med nye AI-v\\u00E6rkt\\u00F8jer.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler direkte evidens for AI-assisteret udvikling, brug af AI-v\\u00E6rkt\\u00F8jer eller aktiv eksperimenteren med nye v\\u00E6rkt\\u00F8jer.\u0022,\n      \u0022confidence\u0022: \u0022low\u0022,\n      \u0022needs_human_review\u0022: true\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_7\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [],\n      \u0022rationale_da\u0022: \u0022Der er ingen dokumenteret evidens for omstillingsparathed i relation til AI eller for at kandidaten ser AI som en mulighed for at l\\u00F8fte fokus mod arkitektur og kvalitet.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler direkte evidens for holdning til AI, omstillingsparathed og refleksion over AI\\u0027s betydning for arbejdsformen.\u0022,\n      \u0022confidence\u0022: \u0022low\u0022,\n      \u0022needs_human_review\u0022: true\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_8\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [],\n      \u0022rationale_da\u0022: \u0022Der er ingen dokumenteret evidens for, at kandidaten er komfortabel i terminalen p\\u00E5 macOS eller Linux.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler direkte evidens for terminalerfaring p\\u00E5 macOS eller Linux.\u0022,\n      \u0022confidence\u0022: \u0022low\u0022,\n      \u0022needs_human_review\u0022: true\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_9\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [],\n      \u0022rationale_da\u0022: \u0022Der er ingen dokumenteret evidens for erfaring med Node.js.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler direkte evidens for Node.js-erfaring.\u0022,\n      \u0022confidence\u0022: \u0022low\u0022,\n      \u0022needs_human_review\u0022: true\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_10\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [],\n      \u0022rationale_da\u0022: \u0022Der er ingen dokumenteret evidens for erfaring med MongoDB.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler direkte evidens for MongoDB-erfaring.\u0022,\n      \u0022confidence\u0022: \u0022low\u0022,\n      \u0022needs_human_review\u0022: true\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_11\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [],\n      \u0022rationale_da\u0022: \u0022Der er ingen dokumenteret evidens for erfaring med Azure DevOps.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler direkte evidens for Azure DevOps-erfaring.\u0022,\n      \u0022confidence\u0022: \u0022low\u0022,\n      \u0022needs_human_review\u0022: true\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_12\u0022,\n      \u0022verdict\u0022: \u0022partially_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [\n        \u0022ev_5\u0022,\n        \u0022ev_6\u0022\n      ],\n      \u0022rationale_da\u0022: \u0022Kandidaten beskriver struktureret opgavel\\u00F8sning, ansvarlig opf\\u00F8lgning og samarbejde p\\u00E5 tv\\u00E6rs, hvilket underst\\u00F8tter en vis evne til at h\\u00E5ndtere egne opgaver, men evidensen siger ikke direkte, at kandidaten selvst\\u00E6ndigt driver egne opgaver.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler mere direkte evidens for selvst\\u00E6ndigt ansvar for planl\\u00E6gning, prioritering og eksekvering af egne opgaver.\u0022,\n      \u0022confidence\u0022: \u0022medium\u0022,\n      \u0022needs_human_review\u0022: false\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_13\u0022,\n      \u0022verdict\u0022: \u0022matched\u0022,\n      \u0022matched_evidence_ids\u0022: [\n        \u0022ev_7\u0022\n      ],\n      \u0022rationale_da\u0022: \u0022Kandidaten angiver fuldtid som \\u00F8nsket ans\\u00E6ttelsesform, hvilket matcher stillingens fuldtidsformat.\u0022,\n      \u0022gap_da\u0022: null,\n      \u0022confidence\u0022: \u0022high\u0022,\n      \u0022needs_human_review\u0022: false\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_14\u0022,\n      \u0022verdict\u0022: \u0022matched\u0022,\n      \u0022matched_evidence_ids\u0022: [\n        \u0022ev_8\u0022\n      ],\n      \u0022rationale_da\u0022: \u0022Kandidaten angiver fjernarbejde i Danmark som foretrukken lokation, hvilket matcher den 100 % remote arbejdsform.\u0022,\n      \u0022gap_da\u0022: null,\n      \u0022confidence\u0022: \u0022high\u0022,\n      \u0022needs_human_review\u0022: false\n    }\n  ],\n  \u0022overall_assessment\u0022: {\n    \u0022overall_match_level\u0022: \u0022weak\u0022,\n    \u0022summary_da\u0022: \u0022Der er klar st\\u00F8tte for erfaring med et moderne framework (React) samt match p\\u00E5 fuldtid og remote. Der er ogs\\u00E5 delvis st\\u00F8tte for UI/UX-fokus og evnen til at h\\u00E5ndtere egne opgaver. De st\\u00F8rste mangler er, at 4-5\\u002B \\u00E5rs erfaring ikke er dokumenteret, og at der ikke findes evidens for TypeScript, AI-assisteret udvikling, terminalkompetencer, Node.js, MongoDB eller Azure DevOps.\u0022,\n    \u0022major_strength_evidence_ids\u0022: [\n      \u0022ev_1\u0022,\n      \u0022ev_7\u0022,\n      \u0022ev_8\u0022\n    ],\n    \u0022major_gap_requirement_ids\u0022: [\n      \u0022req_1\u0022,\n      \u0022req_2\u0022,\n      \u0022req_6\u0022,\n      \u0022req_7\u0022,\n      \u0022req_8\u0022\n    ]\n  }\n}",
+  "AppliedActions": [
+    {
+      "RequirementId": "req_2",
+      "ActionType": "downgrade_confidence",
+      "MessageDa": "Confidence blev nedjusteret fra high til low, fordi kravet ikke havde underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_2",
+      "ActionType": "require_human_review",
+      "MessageDa": "needs_human_review blev sat til true, fordi kravet stod uden underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_6",
+      "ActionType": "downgrade_confidence",
+      "MessageDa": "Confidence blev nedjusteret fra high til low, fordi kravet ikke havde underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_6",
+      "ActionType": "require_human_review",
+      "MessageDa": "needs_human_review blev sat til true, fordi kravet stod uden underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_7",
+      "ActionType": "downgrade_confidence",
+      "MessageDa": "Confidence blev nedjusteret fra high til low, fordi kravet ikke havde underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_7",
+      "ActionType": "require_human_review",
+      "MessageDa": "needs_human_review blev sat til true, fordi kravet stod uden underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_8",
+      "ActionType": "downgrade_confidence",
+      "MessageDa": "Confidence blev nedjusteret fra high til low, fordi kravet ikke havde underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_8",
+      "ActionType": "require_human_review",
+      "MessageDa": "needs_human_review blev sat til true, fordi kravet stod uden underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_9",
+      "ActionType": "downgrade_confidence",
+      "MessageDa": "Confidence blev nedjusteret fra high til low, fordi kravet ikke havde underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_9",
+      "ActionType": "require_human_review",
+      "MessageDa": "needs_human_review blev sat til true, fordi kravet stod uden underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_10",
+      "ActionType": "downgrade_confidence",
+      "MessageDa": "Confidence blev nedjusteret fra high til low, fordi kravet ikke havde underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_10",
+      "ActionType": "require_human_review",
+      "MessageDa": "needs_human_review blev sat til true, fordi kravet stod uden underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_11",
+      "ActionType": "downgrade_confidence",
+      "MessageDa": "Confidence blev nedjusteret fra high til low, fordi kravet ikke havde underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_11",
+      "ActionType": "require_human_review",
+      "MessageDa": "needs_human_review blev sat til true, fordi kravet stod uden underst\u00F8ttende evidence_ids."
+    }
+  ]
+}

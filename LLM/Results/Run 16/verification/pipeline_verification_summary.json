@@ -1,0 +1,105 @@
+{
+  "VerificationMode": "mechanical_with_gate",
+  "PipelineStatus": "blocked",
+  "StoppedAfterStage": "candidate_evidence",
+  "RecommendedAction": "repair_or_regenerate",
+  "Status": "pass",
+  "ApprovedForDownstream": false,
+  "WarningCount": 0,
+  "ErrorCount": 0,
+  "HardInvalidCount": 0,
+  "SoftQualityCount": 0,
+  "Stages": [
+    {
+      "Stage": "requirements",
+      "DocumentId": "requirements_produktionsleder_bilka_greve",
+      "VerificationMode": "mechanical_with_gate",
+      "Status": "pass",
+      "ApprovedForDownstream": true,
+      "WarningCount": 0,
+      "ErrorCount": 0,
+      "ArtifactPath": "LLM/Results/Run 16/verification/requirements_verification.json",
+      "GateArtifactPath": "LLM/Results/Run 16/verification/requirements_gate.json",
+      "Gate": {
+        "Stage": "requirements",
+        "Decision": "continue",
+        "ApprovedForDownstream": true,
+        "HardInvalidCount": 0,
+        "SoftQualityCount": 0,
+        "SummaryDa": "Stage-gaten bestod.",
+        "BlockingReasons": [],
+        "Metrics": [
+          {
+            "MetricKey": "requirements.count",
+            "Operator": "\u003E=",
+            "Actual": "11",
+            "Expected": "1",
+            "Passed": true,
+            "MessageDa": "OK"
+          }
+        ]
+      },
+      "Findings": []
+    },
+    {
+      "Stage": "candidate_evidence",
+      "DocumentId": "candidate_evidence_borger1",
+      "VerificationMode": "mechanical_with_gate",
+      "Status": "pass",
+      "ApprovedForDownstream": false,
+      "WarningCount": 0,
+      "ErrorCount": 0,
+      "ArtifactPath": "LLM/Results/Run 16/verification/candidate_evidence_verification.json",
+      "GateArtifactPath": "LLM/Results/Run 16/verification/candidate_evidence_gate.json",
+      "Gate": {
+        "Stage": "candidate_evidence",
+        "Decision": "repair_or_regenerate",
+        "ApprovedForDownstream": false,
+        "HardInvalidCount": 0,
+        "SoftQualityCount": 0,
+        "SummaryDa": "Candidate evidence skal have mindst 4 godkendte evidensobjekter. For stor andel af candidate evidence blev afvist. Maksimal discard ratio er 0,4. Candidate evidence skal d\u00E6kke mindst 3 krav efter filtering. Candidate evidence skal have mindst 2 medium eller strong evidensobjekter.",
+        "BlockingReasons": [
+          "Candidate evidence skal have mindst 4 godkendte evidensobjekter.",
+          "For stor andel af candidate evidence blev afvist. Maksimal discard ratio er 0,4.",
+          "Candidate evidence skal d\u00E6kke mindst 3 krav efter filtering.",
+          "Candidate evidence skal have mindst 2 medium eller strong evidensobjekter."
+        ],
+        "Metrics": [
+          {
+            "MetricKey": "candidate_evidence.approved_items",
+            "Operator": "\u003E=",
+            "Actual": "0",
+            "Expected": "4",
+            "Passed": false,
+            "MessageDa": "Candidate evidence skal have mindst 4 godkendte evidensobjekter."
+          },
+          {
+            "MetricKey": "candidate_evidence.discard_ratio",
+            "Operator": "\u003C=",
+            "Actual": "1",
+            "Expected": "0.4",
+            "Passed": false,
+            "MessageDa": "For stor andel af candidate evidence blev afvist. Maksimal discard ratio er 0,4."
+          },
+          {
+            "MetricKey": "candidate_evidence.covered_requirements",
+            "Operator": "\u003E=",
+            "Actual": "0",
+            "Expected": "3",
+            "Passed": false,
+            "MessageDa": "Candidate evidence skal d\u00E6kke mindst 3 krav efter filtering."
+          },
+          {
+            "MetricKey": "candidate_evidence.strong_or_medium_items",
+            "Operator": "\u003E=",
+            "Actual": "0",
+            "Expected": "2",
+            "Passed": false,
+            "MessageDa": "Candidate evidence skal have mindst 2 medium eller strong evidensobjekter."
+          }
+        ]
+      },
+      "Findings": []
+    }
+  ]
+}

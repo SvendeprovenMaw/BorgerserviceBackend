@@ -1,0 +1,23 @@
+{
+  "Stage": "matching",
+  "DocumentId": "matching_borger1_fullstack_developer_returna_aps_nordjylland",
+  "VerificationMode": "mechanical_only",
+  "Status": "pass",
+  "ApprovedForDownstream": true,
+  "WarningCount": 0,
+  "ErrorCount": 0,
+  "ArtifactPath": "",
+  "GateArtifactPath": "",
+  "Gate": {
+    "Stage": "",
+    "Decision": "continue",
+    "ApprovedForDownstream": false,
+    "HardInvalidCount": 0,
+    "SoftQualityCount": 0,
+    "SummaryDa": "",
+    "BlockingReasons": [],
+    "AdvisoryReasons": [],
+    "Metrics": []
+  },
+  "Findings": []
+}

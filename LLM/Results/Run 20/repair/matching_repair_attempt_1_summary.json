@@ -1,0 +1,117 @@
+{
+  "WasModified": true,
+  "SummaryDa": "Deterministisk matching-repair anvendte 22 konservative \u00E6ndringer.",
+  "RepairedJson": "{\n  \u0022matches\u0022: [\n    {\n      \u0022requirement_id\u0022: \u0022req_1\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [],\n      \u0022rationale_da\u0022: \u0022Der er ingen dokumenteret evidens for gartneruddannelse eller solid erfaring fra det gr\\u00F8nne omr\\u00E5de i kandidat-evidensen.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler dokumentation for gartneruddannelse eller relevant praktisk erfaring fra gr\\u00F8n drift, havearbejde eller lignende.\u0022,\n      \u0022confidence\u0022: \u0022low\u0022,\n      \u0022needs_human_review\u0022: true\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_2\u0022,\n      \u0022verdict\u0022: \u0022partially_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [\n        \u0022e1\u0022\n      ],\n      \u0022rationale_da\u0022: \u0022Kandidaten har dokumenteret k\\u00F8rekort kategori B, men der er ingen evidens for villighed til at bruge egen bil i tjenesten.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler dokumentation for, at kandidaten er villig til at bruge egen bil i tjenesten.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022,\n      \u0022needs_human_review\u0022: false\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_3\u0022,\n      \u0022verdict\u0022: \u0022partially_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [\n        \u0022e4\u0022\n      ],\n      \u0022rationale_da\u0022: \u0022Der er evidens for en struktureret arbejdsform og ansvarlig opf\\u00F8lgning, hvilket underst\\u00F8tter selvst\\u00E6ndighed og ansvar. Evidensen dokumenterer dog ikke direkte ansvar for daglig drift inden for \\u00F8konomiske rammer.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler direkte dokumentation for ansvar for daglig drift og arbejde inden for givne \\u00F8konomiske rammer.\u0022,\n      \u0022confidence\u0022: \u0022medium\u0022,\n      \u0022needs_human_review\u0022: false\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_4\u0022,\n      \u0022verdict\u0022: \u0022partially_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [\n        \u0022e6\u0022\n      ],\n      \u0022rationale_da\u0022: \u0022Kandidaten har dokumenteret erfaring med digitale systemer, website-opdateringer og administrative workflows, hvilket er relevant for at kunne arbejde med IT-systemer. Der er dog ingen direkte evidens for kirkens IT-systemer eller udtrykkelig villighed til at l\\u00E6re dem.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler direkte dokumentation for kendskab til kirkens IT-systemer eller en udtrykkelig tilkendegivelse af villighed til at l\\u00E6re dem.\u0022,\n      \u0022confidence\u0022: \u0022medium\u0022,\n      \u0022needs_human_review\u0022: false\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_5\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [],\n      \u0022rationale_da\u0022: \u0022Der er ingen direkte dokumenteret evidens for en engageret, fleksibel og im\\u00F8dekommende tilgang til arbejdet.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler dokumentation for personlige egenskaber som engagement, fleksibilitet og im\\u00F8dekommenhed.\u0022,\n      \u0022confidence\u0022: \u0022low\u0022,\n      \u0022needs_human_review\u0022: true\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_6\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [],\n      \u0022rationale_da\u0022: \u0022Der er ingen dokumenteret evidens for interesse for kirken og sognets liv.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler direkte dokumentation for interesse for kirken, menighedsliv eller sognets aktiviteter.\u0022,\n      \u0022confidence\u0022: \u0022low\u0022,\n      \u0022needs_human_review\u0022: true\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_7\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [],\n      \u0022rationale_da\u0022: \u0022Der er ingen specifik evidens for, at kandidaten aktivt bidrager til et godt arbejdsmilj\\u00F8, hverken fysisk eller psykisk.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler dokumentation for bidrag til arbejdsmilj\\u00F8 og trivsel i en arbejdsplads-kontekst.\u0022,\n      \u0022confidence\u0022: \u0022low\u0022,\n      \u0022needs_human_review\u0022: true\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_8\u0022,\n      \u0022verdict\u0022: \u0022partially_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [\n        \u0022e3\u0022,\n        \u0022e7\u0022\n      ],\n      \u0022rationale_da\u0022: \u0022Kandidaten beskriver samarbejde med forskellige interessenter samt dialog med brugere og udviklere. Det underst\\u00F8tter generelle samarbejdsevner, men ikke direkte samarbejde med kolleger, menighedsr\\u00E5d, frivillige og samarbejdspartnere i en kirkelig kontekst.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler mere direkte evidens for samarbejde i den type relationer og organisatoriske rammer, som stillingen beskriver.\u0022,\n      \u0022confidence\u0022: \u0022medium\u0022,\n      \u0022needs_human_review\u0022: false\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_9\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [],\n      \u0022rationale_da\u0022: \u0022Der er ingen dokumenteret evidens for, at kandidaten har gennemf\\u00F8rt eller er villig til at gennemf\\u00F8re den obligatoriske 5 ugers graveruddannelse.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler dokumentation for gennemf\\u00F8rt uddannelse eller villighed til at gennemf\\u00F8re den obligatoriske graveruddannelse inden for 2 \\u00E5r.\u0022,\n      \u0022confidence\u0022: \u0022low\u0022,\n      \u0022needs_human_review\u0022: true\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_10\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [],\n      \u0022rationale_da\u0022: \u0022Der er ingen dokumenteret evidens for ansvar for drift, vedligeholdelse og udvikling af kirkeg\\u00E5rd eller pr\\u00E6steg\\u00E5rd eller lignende fysiske driftsomr\\u00E5der.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler direkte erfaring med drift, vedligeholdelse og udvikling af gr\\u00F8nne eller bygningsrelaterede omr\\u00E5der.\u0022,\n      \u0022confidence\u0022: \u0022low\u0022,\n      \u0022needs_human_review\u0022: true\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_11\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [],\n      \u0022rationale_da\u0022: \u0022Der er ingen dokumenteret evidens for kirketjeneste ved kirkelige handlinger.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler dokumentation for erfaring med kirketjeneste eller deltagelse i kirkelige handlinger.\u0022,\n      \u0022confidence\u0022: \u0022low\u0022,\n      \u0022needs_human_review\u0022: true\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_12\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [],\n      \u0022rationale_da\u0022: \u0022Der er ingen dokumenteret evidens for, at kandidaten kan eller vil udf\\u00F8re kirketjeneste hver 2. s\\u00F8ndag.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler dokumentation for tilg\\u00E6ngelighed eller villighed til tjeneste hver anden s\\u00F8ndag.\u0022,\n      \u0022confidence\u0022: \u0022low\u0022,\n      \u0022needs_human_review\u0022: true\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_13\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [],\n      \u0022rationale_da\u0022: \u0022Der er ingen dokumenteret evidens for erfaring med reng\\u00F8ring eller andet forefaldende praktisk arbejde.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler dokumentation for praktisk servicearbejde, reng\\u00F8ring eller lignende opgaver.\u0022,\n      \u0022confidence\u0022: \u0022low\u0022,\n      \u0022needs_human_review\u0022: true\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_14\u0022,\n      \u0022verdict\u0022: \u0022partially_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [\n        \u0022e2\u0022,\n        \u0022e5\u0022,\n        \u0022e6\u0022\n      ],\n      \u0022rationale_da\u0022: \u0022Der er relevant evidens for brugerrettet support, registrering, rapportering og administrative workflows. Det underst\\u00F8tter dele af kravet om brugerkontakt og administrative opgaver, men ikke direkte kontakt til kirkens brugere eller udskrivning af regninger.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler direkte dokumentation for kontakt med kirkens brugere og konkret erfaring med regningsudskrivning.\u0022,\n      \u0022confidence\u0022: \u0022medium\u0022,\n      \u0022needs_human_review\u0022: false\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_15\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [],\n      \u0022rationale_da\u0022: \u0022Der er ingen dokumenteret evidens for arbejde med at skabe eller vedligeholde en smuk, v\\u00E6rdig og velholdt kirkeg\\u00E5rd eller lignende gr\\u00F8nne anl\\u00E6g.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler dokumentation for praktisk arbejde med vedligeholdelse af kirkeg\\u00E5rd, haveanl\\u00E6g eller tilsvarende omgivelser.\u0022,\n      \u0022confidence\u0022: \u0022low\u0022,\n      \u0022needs_human_review\u0022: true\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_16\u0022,\n      \u0022verdict\u0022: \u0022partially_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [\n        \u0022e7\u0022\n      ],\n      \u0022rationale_da\u0022: \u0022Kandidaten har dokumenteret erfaring med samarbejde og dialog med forskellige parter, hvilket er relevant for t\\u00E6t samarbejde. Der er dog ingen direkte evidens for vikariat, samarbejde med en graverkollega eller arbejde i lignende driftsfunktion.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler direkte dokumentation for t\\u00E6t operativt samarbejde med en kollega i tilsvarende funktion samt erfaring med at vikariere for andre.\u0022,\n      \u0022confidence\u0022: \u0022medium\u0022,\n      \u0022needs_human_review\u0022: false\n    },\n    {\n      \u0022requirement_id\u0022: \u0022req_17\u0022,\n      \u0022verdict\u0022: \u0022not_matched\u0022,\n      \u0022matched_evidence_ids\u0022: [],\n      \u0022rationale_da\u0022: \u0022Der er ingen dokumenteret evidens for, at kandidaten er indstillet p\\u00E5 r\\u00E5dighedsforpligtelse i stillingen.\u0022,\n      \u0022gap_da\u0022: \u0022Der mangler dokumentation for accept af eller erfaring med r\\u00E5dighedsforpligtelse.\u0022,\n      \u0022confidence\u0022: \u0022low\u0022,\n      \u0022needs_human_review\u0022: true\n    }\n  ],\n  \u0022overall_assessment\u0022: {\n    \u0022overall_match_level\u0022: \u0022weak\u0022,\n    \u0022summary_da\u0022: \u0022Den tilg\\u00E6ngelige evidens underst\\u00F8tter is\\u00E6r generelle IT-kompetencer, administrative arbejdsgange, k\\u00F8rekort og visse samarbejdsevner. Der mangler imidlertid bred og direkte dokumentation for de centrale krav i stillingen, herunder gr\\u00F8n faglighed, kirkelig interesse, praktisk kirkeg\\u00E5rdsdrift, kirketjeneste, reng\\u00F8ring, r\\u00E5dighedsforpligtelse og flere logistiske forhold. Det samlede match fremst\\u00E5r derfor svagt og hovedsageligt indirekte.\u0022,\n    \u0022major_strength_evidence_ids\u0022: [\n      \u0022e1\u0022,\n      \u0022e2\u0022,\n      \u0022e6\u0022\n    ],\n    \u0022major_gap_requirement_ids\u0022: [\n      \u0022req_1\u0022,\n      \u0022req_6\u0022,\n      \u0022req_9\u0022,\n      \u0022req_10\u0022,\n      \u0022req_11\u0022,\n      \u0022req_12\u0022,\n      \u0022req_13\u0022,\n      \u0022req_15\u0022,\n      \u0022req_17\u0022\n    ]\n  }\n}",
+  "AppliedActions": [
+    {
+      "RequirementId": "req_1",
+      "ActionType": "downgrade_confidence",
+      "MessageDa": "Confidence blev nedjusteret fra high til low, fordi kravet ikke havde underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_1",
+      "ActionType": "require_human_review",
+      "MessageDa": "needs_human_review blev sat til true, fordi kravet stod uden underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_5",
+      "ActionType": "downgrade_confidence",
+      "MessageDa": "Confidence blev nedjusteret fra high til low, fordi kravet ikke havde underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_5",
+      "ActionType": "require_human_review",
+      "MessageDa": "needs_human_review blev sat til true, fordi kravet stod uden underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_6",
+      "ActionType": "downgrade_confidence",
+      "MessageDa": "Confidence blev nedjusteret fra high til low, fordi kravet ikke havde underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_6",
+      "ActionType": "require_human_review",
+      "MessageDa": "needs_human_review blev sat til true, fordi kravet stod uden underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_7",
+      "ActionType": "downgrade_confidence",
+      "MessageDa": "Confidence blev nedjusteret fra high til low, fordi kravet ikke havde underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_7",
+      "ActionType": "require_human_review",
+      "MessageDa": "needs_human_review blev sat til true, fordi kravet stod uden underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_9",
+      "ActionType": "downgrade_confidence",
+      "MessageDa": "Confidence blev nedjusteret fra high til low, fordi kravet ikke havde underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_9",
+      "ActionType": "require_human_review",
+      "MessageDa": "needs_human_review blev sat til true, fordi kravet stod uden underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_10",
+      "ActionType": "downgrade_confidence",
+      "MessageDa": "Confidence blev nedjusteret fra high til low, fordi kravet ikke havde underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_10",
+      "ActionType": "require_human_review",
+      "MessageDa": "needs_human_review blev sat til true, fordi kravet stod uden underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_11",
+      "ActionType": "downgrade_confidence",
+      "MessageDa": "Confidence blev nedjusteret fra high til low, fordi kravet ikke havde underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_11",
+      "ActionType": "require_human_review",
+      "MessageDa": "needs_human_review blev sat til true, fordi kravet stod uden underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_12",
+      "ActionType": "downgrade_confidence",
+      "MessageDa": "Confidence blev nedjusteret fra high til low, fordi kravet ikke havde underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_12",
+      "ActionType": "require_human_review",
+      "MessageDa": "needs_human_review blev sat til true, fordi kravet stod uden underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_13",
+      "ActionType": "downgrade_confidence",
+      "MessageDa": "Confidence blev nedjusteret fra high til low, fordi kravet ikke havde underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_13",
+      "ActionType": "require_human_review",
+      "MessageDa": "needs_human_review blev sat til true, fordi kravet stod uden underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_15",
+      "ActionType": "downgrade_confidence",
+      "MessageDa": "Confidence blev nedjusteret fra high til low, fordi kravet ikke havde underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_15",
+      "ActionType": "require_human_review",
+      "MessageDa": "needs_human_review blev sat til true, fordi kravet stod uden underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_17",
+      "ActionType": "downgrade_confidence",
+      "MessageDa": "Confidence blev nedjusteret fra high til low, fordi kravet ikke havde underst\u00F8ttende evidence_ids."
+    },
+    {
+      "RequirementId": "req_17",
+      "ActionType": "require_human_review",
+      "MessageDa": "needs_human_review blev sat til true, fordi kravet stod uden underst\u00F8ttende evidence_ids."
+    }
+  ]
+}

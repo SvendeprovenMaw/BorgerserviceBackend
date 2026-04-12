@@ -1,0 +1,60 @@
+{
+  "Stage": "matching",
+  "Decision": "repair_or_regenerate",
+  "BlockingReasons": [
+    "High-confidence matches m\u00E5 ikke st\u00E5 uden evidens."
+  ],
+  "FailedMetrics": [
+    {
+      "MetricKey": "matching.high_confidence_without_evidence",
+      "Operator": "==",
+      "Actual": "5",
+      "Expected": "0",
+      "Passed": false,
+      "MessageDa": "High-confidence matches m\u00E5 ikke st\u00E5 uden evidens."
+    }
+  ],
+  "Findings": [
+    {
+      "RuleId": "matching.high_confidence_without_evidence",
+      "Severity": "warning",
+      "SubjectType": "match",
+      "SubjectId": "req_2",
+      "MessageDa": "confidence er high, men matched_evidence_ids er tom.",
+      "BlockingForDownstream": false
+    },
+    {
+      "RuleId": "matching.high_confidence_without_evidence",
+      "Severity": "warning",
+      "SubjectType": "match",
+      "SubjectId": "req_5",
+      "MessageDa": "confidence er high, men matched_evidence_ids er tom.",
+      "BlockingForDownstream": false
+    },
+    {
+      "RuleId": "matching.high_confidence_without_evidence",
+      "Severity": "warning",
+      "SubjectType": "match",
+      "SubjectId": "req_6",
+      "MessageDa": "confidence er high, men matched_evidence_ids er tom.",
+      "BlockingForDownstream": false
+    },
+    {
+      "RuleId": "matching.high_confidence_without_evidence",
+      "Severity": "warning",
+      "SubjectType": "match",
+      "SubjectId": "req_9",
+      "MessageDa": "confidence er high, men matched_evidence_ids er tom.",
+      "BlockingForDownstream": false
+    },
+    {
+      "RuleId": "matching.high_confidence_without_evidence",
+      "Severity": "warning",
+      "SubjectType": "match",
+      "SubjectId": "req_10",
+      "MessageDa": "confidence er high, men matched_evidence_ids er tom.",
+      "BlockingForDownstream": false
+    }
+  ],
+  "GuidanceDa": "Regenerer matching mere konservativt. Et krav uden konkrete matched_evidence_ids m\u00E5 ikke have confidence \u0027high\u0027. Hvis ingen evidens reelt st\u00F8tter kravet, brug not_matched eller unclear og lad matched_evidence_ids v\u00E6re tom. Opfind ikke nye evidence_id\u0027er eller nye krav."
+}

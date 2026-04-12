@@ -1,0 +1,108 @@
+{
+  "matches": [
+    {
+      "requirement_id": "req_1",
+      "verdict": "matched",
+      "matched_evidence_ids": [
+        "ev_1",
+        "ev_2"
+      ],
+      "rationale_da": "Kravet om erfaring som udvikler er tydeligt underst\u00F8ttet af en konkret rolle som studentermedhj\u00E6lper i softwareudvikling samt dokumenteret arbejde med .NET-webmoduler, API\u0027er og integrationer.",
+      "gap_da": null,
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_2",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for applikationsudvikling i den finansielle sektor eller andre regulerede sektorer.",
+      "gap_da": "Der mangler direkte evidens for arbejde med applikationsudvikling i finansiel eller anden reguleret sektor.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_3",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_2",
+        "ev_3",
+        "ev_4"
+      ],
+      "rationale_da": "Der er relevant evidens for udviklingsarbejde, fejlretning, kodegennemgang, test og arbejde med flere teknologier. Materialet underst\u00F8tter bred udviklingserfaring, men dokumenterer ikke tydeligt hele udviklingsprocessen eller b\u00E5de kompilerede og fortolkede sprog som et samlet, eksplicit krav.",
+      "gap_da": "Der mangler tydelig dokumentation for erfaring med hele udviklingsprocessen end-to-end samt eksplicit evidens for b\u00E5de kompilerede og fortolkede sprog.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_4",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumenteret evidens for kendskab til eller interesse for at l\u00E6re IBM Z System og COBOL.",
+      "gap_da": "Der mangler direkte evidens for IBM Z System, COBOL eller udtrykt l\u00E6ringsinteresse p\u00E5 dette omr\u00E5de.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_5",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_4",
+        "ev_5"
+      ],
+      "rationale_da": "Kandidaten har et bredt udviklingsstack og beskriver fokus p\u00E5 moderne webudvikling og stabile l\u00F8sninger i produktion. Det peger i retning af interesse for developer experience og DevOps, men DevOps n\u00E6vnes ikke direkte.",
+      "gap_da": "Der mangler direkte evidens for interesse i developer experience og is\u00E6r DevOps som begreber eller praksis.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_6",
+      "verdict": "matched",
+      "matched_evidence_ids": [
+        "ev_6",
+        "ev_7"
+      ],
+      "rationale_da": "Kravet er godt underst\u00F8ttet af direkte beskrivelser af samarbejde med b\u00E5de teknikere og forretning, dialog med brugere og udviklere samt erfaring med teknisk support til brugere.",
+      "gap_da": null,
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_7",
+      "verdict": "matched",
+      "matched_evidence_ids": [
+        "ev_8"
+      ],
+      "rationale_da": "Sprogkravet er direkte dokumenteret med dansk som modersm\u00E5l og engelsk p\u00E5 professionelt niveau.",
+      "gap_da": null,
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_8",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_9",
+        "ev_10"
+      ],
+      "rationale_da": "Der er evidens for nysgerrighed og erfaring med mindre automatiseringer. Materialet dokumenterer dog ikke direkte, at kandidaten f\u00F8lger markedstrends i udviklingsparadigmer og tool-underst\u00F8ttelse eller er nysgerrig p\u00E5 AI specifikt.",
+      "gap_da": "Der mangler direkte evidens for markedstrends, udviklingsparadigmer, tool-underst\u00F8ttelse og AI-interesse.",
+      "confidence": "medium",
+      "needs_human_review": false
+    }
+  ],
+  "overall_assessment": {
+    "overall_match_level": "moderate",
+    "summary_da": "Kandidaten matcher tydeligt kravene om udviklererfaring, samarbejde og dansk/engelsk. Der er delvis st\u00F8tte for bred udviklingsproces, DevOps/developer experience og automatiseringsinteresse, men der mangler klar evidens for reguleret sektor samt IBM Z System og COBOL.",
+    "major_strength_evidence_ids": [
+      "ev_1",
+      "ev_2",
+      "ev_6",
+      "ev_8"
+    ],
+    "major_gap_requirement_ids": [
+      "req_2",
+      "req_4"
+    ]
+  }
+}

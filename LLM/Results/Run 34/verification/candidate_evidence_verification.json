@@ -1,0 +1,32 @@
+{
+  "Stage": "candidate_evidence",
+  "DocumentId": "candidate_evidence_borger1",
+  "VerificationMode": "mechanical_only",
+  "Status": "pass_with_warnings",
+  "ApprovedForDownstream": true,
+  "WarningCount": 1,
+  "ErrorCount": 0,
+  "ArtifactPath": "",
+  "GateArtifactPath": "",
+  "Gate": {
+    "Stage": "",
+    "Decision": "continue",
+    "ApprovedForDownstream": false,
+    "HardInvalidCount": 0,
+    "SoftQualityCount": 0,
+    "SummaryDa": "",
+    "BlockingReasons": [],
+    "AdvisoryReasons": [],
+    "Metrics": []
+  },
+  "Findings": [
+    {
+      "RuleId": "candidate_evidence.strong_weak_excerpt",
+      "Severity": "warning",
+      "SubjectType": "evidence",
+      "SubjectId": "ev_1",
+      "MessageDa": "strength er strong, men citationerne er meget korte eller uklare.",
+      "BlockingForDownstream": false
+    }
+  ]
+}

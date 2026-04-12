@@ -1,10 +1,12 @@
 @OpenAiResponses.Api_HostAddress = http://localhost:5026
 
+# Quick smoke test for the helper endpoint that returns a valid strict-json payload.
 GET {{OpenAiResponses.Api_HostAddress}}/api/responses/sample-request
 Accept: application/json
 
 ###
 
+# Generic strict-json call with explicit files and schema.
 POST {{OpenAiResponses.Api_HostAddress}}/api/responses/strict-json
 Content-Type: application/json
 
@@ -39,6 +41,7 @@ Content-Type: application/json
 
 ###
 
+# Stage-by-stage requests for inspecting the sample pipeline incrementally.
 POST {{OpenAiResponses.Api_HostAddress}}/api/responses/sample/requirements
 
 ###
@@ -52,5 +55,32 @@ POST {{OpenAiResponses.Api_HostAddress}}/api/responses/sample/matching
 ###
 
 POST {{OpenAiResponses.Api_HostAddress}}/api/responses/sample/pipeline
+
+###
+
+# Full pipeline requests used when testing verification, gates, and repair behavior.
+POST {{OpenAiResponses.Api_HostAddress}}/api/responses/sample/pipeline-with-verification
+Accept: application/json
+
+# Inspect these fields in the response:
+# - PipelineStatus
+# - StoppedAfterStage
+# - Verification.RecommendedAction
+# - Verification.Stages[*].Gate.Decision
+# - Verification.Stages[*].GateArtifactPath
+# When a stage is blocked by its downstream gate, ApplicationDocument is null.
+
+###
+
+# Batch run across every sample job listing so output quality can be compared side by side.
+POST {{OpenAiResponses.Api_HostAddress}}/api/responses/sample/pipeline-with-verification/all-jobs
+Accept: application/json
+
+# Returns one compact summary per job listing in TestData/Opslag.
+# Useful fields:
+# - Jobs[*].OverallMatchLevel
+# - Jobs[*].MatchedCount / PartiallyMatchedCount / NotMatchedCount / UnclearCount
+# - Jobs[*].ApplicationGenerated
+# - Jobs[*].ApplicationCoreMessageDa
 
 ###

@@ -1,0 +1,142 @@
+{
+  "matches": [
+    {
+      "requirement_id": "req_1",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der findes ingen dokumenteret evidens for 4-5\u002B \u00E5rs erfaring med softwareudvikling i kandidat-evidensen.",
+      "gap_da": "Der mangler eksplicit dokumentation for samlet varighed af softwareudviklingserfaring p\u00E5 mindst 4-5 \u00E5r.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_2",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_1",
+        "ev_2"
+      ],
+      "rationale_da": "Der er direkte evidens for erfaring med React, som er et moderne framework, men der findes ingen dokumenteret evidens for styrke i TypeScript.",
+      "gap_da": "Der mangler eksplicit evidens for TypeScript-erfaring eller st\u00E6rke kompetencer i TypeScript.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_3",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_2",
+        "ev_3"
+      ],
+      "rationale_da": "Kandidaten dokumenterer front-end-kompetencer i React, HTML og CSS samt fokus p\u00E5 brugervenlige gr\u00E6nseflader, hvilket er relevant for UI/UX. Evidensen underst\u00F8tter dog ikke tydeligt et st\u00E6rkt \u00F8je for UI og en \u00E6gte interesse for UX i fuld styrke.",
+      "gap_da": "Der mangler mere direkte dokumentation for st\u00E6rk UI-kompetence og konkret UX-arbejde eller UX-interesse.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_4",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_3",
+        "ev_4"
+      ],
+      "rationale_da": "Der er relevant evidens for fokus p\u00E5 brugervenlige gr\u00E6nseflader og for at oms\u00E6tte behov til enkle l\u00F8sninger. Det underst\u00F8tter brugerorienteret udvikling, men dokumenterer ikke tydeligt erfaring med at t\u00E6nke brugeroplevelsen ind fra start i udviklingsprocessen.",
+      "gap_da": "Der mangler direkte evidens for, at kandidaten systematisk har indarbejdet brugeroplevelse fra projektets begyndelse.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_5",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der findes ingen dokumenteret evidens for interesse for AI-assisteret udvikling eller aktiv eksperimenteren med nye AI-v\u00E6rkt\u00F8jer.",
+      "gap_da": "Der mangler eksplicit evidens for AI-assisteret udvikling, AI-v\u00E6rkt\u00F8jer eller aktiv eksperimenteren p\u00E5 omr\u00E5det.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_6",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der findes ingen dokumenteret evidens for omstillingsparathed i forhold til AI eller et syn p\u00E5 AI som mulighed for at l\u00F8fte fokus mod arkitektur og kvalitet.",
+      "gap_da": "Der mangler eksplicit evidens om kandidatens holdning til AI, omstillingsevne og anvendelse af AI i udviklingsarbejde.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_7",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "ev_5",
+        "ev_6",
+        "ev_7"
+      ],
+      "rationale_da": "Der er relevant evidens for struktureret og ansvarlig opgavel\u00F8sning, samarbejde med brugere og udviklere samt udviklingsopgaver med API\u0027er og integrationer. Det peger p\u00E5 evne til at drive opgaver, men dokumenterer ikke tydeligt selvst\u00E6ndig opgavedrift i et lille team med kort vej fra id\u00E9 til produktion.",
+      "gap_da": "Der mangler mere direkte evidens for selvst\u00E6ndigt ejerskab af opgaver i et lille team og ansvar t\u00E6t p\u00E5 produktionss\u00E6tning.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_8",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der findes ingen dokumenteret evidens for komfort i terminalen p\u00E5 macOS eller Linux.",
+      "gap_da": "Der mangler eksplicit evidens for terminalarbejde og erfaring med macOS eller Linux.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_9",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Kandidaten har backend- og API-erfaring, men der er ingen dokumenteret evidens for Node.js specifikt.",
+      "gap_da": "Der mangler eksplicit evidens for praktisk erfaring med Node.js.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_10",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der findes ingen dokumenteret evidens for erfaring med MongoDB.",
+      "gap_da": "Der mangler eksplicit evidens for brug af MongoDB.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_11",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der findes ingen dokumenteret evidens for erfaring med Azure DevOps.",
+      "gap_da": "Der mangler eksplicit evidens for brug af Azure DevOps.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_12",
+      "verdict": "matched",
+      "matched_evidence_ids": [
+        "ev_8"
+      ],
+      "rationale_da": "Der er direkte evidens for, at kandidaten s\u00F8ger fuldtidsans\u00E6ttelse og angiver fjernarbejde i Danmark som foretrukken lokation, hvilket underst\u00F8tter kravet om en 100 % remote fuldtidsstilling.",
+      "gap_da": null,
+      "confidence": "high",
+      "needs_human_review": false
+    }
+  ],
+  "overall_assessment": {
+    "overall_match_level": "weak",
+    "summary_da": "Kandidaten matcher tydeligt kravet om remote fuldtid og har delvis relevant evidens inden for React, UI/UX-relateret arbejde og ansvarlig opgavel\u00F8sning. Der mangler dog central evidens for flere must-have krav, is\u00E6r 4-5\u002B \u00E5rs erfaring, TypeScript, AI-assisteret udvikling, AI-omstillingsevne og terminal/macOS/Linux.",
+    "major_strength_evidence_ids": [
+      "ev_1",
+      "ev_2",
+      "ev_8"
+    ],
+    "major_gap_requirement_ids": [
+      "req_1",
+      "req_5",
+      "req_6",
+      "req_8"
+    ]
+  }
+}

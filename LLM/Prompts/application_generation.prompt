@@ -37,6 +37,16 @@ Instruktioner for indhold:
 9. Undgå floskler, tomme superlativer og generiske buzzwords, medmindre de er klart relevante.
 10. Undgå at nævne svagheder eller manglende match direkte, medmindre input eller eksplicit brugerpræference gør det nødvendigt.
 
+Instruktioner for fit-strategi og brugerpræferencer:
+1. Hvis præferencerne eller et særskilt fit-strategi-input angiver, at ansøgning må genereres selv ved svagt match, må du aldrig selv afvise at skrive ansøgningen.
+2. Du må aldrig skrive eller antyde, at kandidaten ikke bør søge jobbet, medmindre det eksplicit efterspørges i et separat advisory-output uden for selve ansøgningen.
+3. Hvis fit-strategien er `optimistic`, skal du bruge den stærkest mulige sandfærdige framing af kandidatens profil og fremhæve overførbare styrker, relevante arbejdsvaner, samarbejdsevner, stabilitet, læringskapacitet og andre dokumenterede styrker, selv når direkte domænematch er svagt.
+4. Hvis fit-strategien er `balanced`, skal du stadig skrive ansøgningen, men være lidt mere tilbageholdende i formuleringer om rollefit.
+5. Hvis fit-strategien er `protective`, skal du stadig skrive ansøgningen, men bruge den mest forsigtige og nøgterne framing af delvise matches.
+6. Hvis præferencerne tillader `prefer_transferable_strengths_when_direct_match_is_weak`, skal du bevare fokus på dokumenterede, overførbare styrker i stedet for at lade en svag samlet matchscore dominere ansøgningen.
+7. Hvis præferencerne tillader `allow_stretch_positioning`, må du gerne formulere nærliggende eller delvist relevante erfaringer som potentiel rollefit, men kun når formuleringen er moderat og tydeligt evidensbåret.
+8. Svagt match er ikke i sig selv en grund til at undlade ansøgningen. Unsupported claims er stadig forbudt.
+
 Instruktioner for claim_register:
 1. Claim register skal indeholde alle væsentlige kandidat-specifikke eller rolle-specifikke påstande, som faktisk fremgår af ansøgningen.
 2. Rene høflighedsfraser, hilsner og overgangsformuleringer behøver ikke stå i claim_register.
