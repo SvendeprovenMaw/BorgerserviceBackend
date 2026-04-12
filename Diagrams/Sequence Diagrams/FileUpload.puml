@@ -1,0 +1,35 @@
+@startuml "consent_first_upload"
+autonumber
+
+actor "Frontend / User" as User
+participant "FileController" as API << (C, #ADD1B2) API >>
+participant "FileService / ConsentService" as App << (S, #Yellow) >>
+database "AppDbContext (SQL)" as DB
+participant "S3StorageService" as S3 << (I, #Orange) >>
+
+User -> API : POST /api/file/upload\n(File + ConsentData)
+
+group Step 1: Legal Validation [Persistence Layer]
+    API -> App : ValidateAndRecordConsent(userId, consentDto)
+    App -> DB : Insert TermsAcceptanceLog
+    DB -->> App : Success (ID Generated)
+    
+    alt Database Failure / Consent Denied
+        App -->> API : Throw SecurityException
+        API -->> User : 403 Forbidden / 500 Error
+    end
+end
+
+group Step 2: Physical Storage [Infrastructure Layer]
+    App -> S3 : Stream to S3\n(Prefix: users/{id}/...)
+    S3 -->> App : Upload Successful (S3Key)
+end
+
+group Step 3: Metadata Finalization [Persistence Layer]
+    App -> DB : Create S3File Entity\n(Linked to AcceptanceLog ID)
+    DB -->> App : Success
+end
+
+App -->> API : S3File (Guid)
+API -->> User : 201 Created
+@enduml

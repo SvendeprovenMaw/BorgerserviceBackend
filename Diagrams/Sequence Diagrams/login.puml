@@ -1,0 +1,30 @@
+@startuml "login_with_checks"
+autonumber
+
+actor "User" as User
+participant "AuthController" as API
+database "AppDbContext" as DB
+participant "JwtProvider" as JWT
+
+User -> API : POST (Email, Pass)
+
+API -> DB : Get User by Email
+DB -->> API : User Object + PasswordHash
+
+group Security & Legal Gates
+    API -> API : Verify Password Hash
+    
+    API -> DB : Check DeletionLog for UserId
+    note right: Safety check against\nrestored backups.
+    
+    API -> DB : Compare User.AcceptedVersion\nwith ActiveVersion
+end
+
+alt All Checks Pass
+    API -> JWT : Generate Token (with Roles)
+    JWT -->> API : Token String
+    API -->> User : 200 OK + JWT
+else New Terms Required
+    API -->> User : 403 Forbidden (Error: "TermsChanged")
+end
+@enduml

@@ -1,0 +1,29 @@
+@startuml "create_account_server_side_version"
+autonumber
+
+actor "User" as User
+participant "AuthController" as API << (C, #ADD1B2) >>
+participant "ConsentService" as Consent << (S, #Yellow) >>
+participant "UserService" as UserSvc << (S, #Yellow) >>
+database "AppDbContext (SQL)" as DB
+
+User -> API : POST /api/auth/register\n(Email, Password, HasAcceptedTerms)
+
+group Phase 1: Server-Side Version Resolution
+    API -> Consent : RecordLatestConsent(userId)
+    
+    Consent -> DB : SELECT TOP 1 Id FROM TermsVersions\nWHERE IsActive = true\nORDER BY CreatedAt DESC
+    DB -->> Consent : ActiveVersionId (v2.4)
+    
+    Consent -> DB : INSERT INTO TermsAcceptanceLog\n(UserId, TermsVersionId, AcceptedAt)
+    DB -->> Consent : Success
+end
+
+group Phase 2: User Persistence
+    API -> UserSvc : FinalizeUser(UserDto)
+    UserSvc -> DB : INSERT INTO Users\n(Email, PasswordHash, binary16 Guid)
+    DB -->> UserSvc : Success
+end
+
+API -->> User : 201 Created + JWT
+@enduml

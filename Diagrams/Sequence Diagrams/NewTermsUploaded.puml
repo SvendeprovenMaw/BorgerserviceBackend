@@ -1,0 +1,25 @@
+@startuml "global_terms_reset_corrected"
+autonumber
+skinparam Style strictuml
+
+actor "Admin" as Admin
+participant "TermsService" as Terms <<Service>>
+database "Database" as DB
+
+Admin -> Terms : Activate New Terms (v2.0)
+
+group Phase 1: The Atomic Switch
+    Terms -> DB : Begin Transaction
+    Terms -> DB : Set All TermsVersions IsActive = false
+    Terms -> DB : Set TermsVersion(v2.0) IsActive = true
+    Terms -> DB : Commit Transaction
+end
+
+group Phase 2: The "Marking" (Background or Set-Based)
+    note over DB : Instead of a slow loop, we update the \nUser table's 'NeedsReconsent' flag.
+    Terms -> DB : UPDATE Users SET NeedsReconsent = true \nWHERE LastAcceptedVersionId != 'v2.0'
+    note right : This "Marks" every user in one \nhigh-performance SQL operation.
+end
+
+Terms -->> Admin : 200 OK (All users marked for re-consent)
+@enduml

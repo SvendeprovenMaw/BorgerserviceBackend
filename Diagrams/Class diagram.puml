@@ -25,6 +25,8 @@ package "Models/entities" {
         + JobStatus Status
         + Guid? ResultFileId
     }
+
+    
 }
 
 package "Services" {
