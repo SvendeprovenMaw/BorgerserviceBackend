@@ -1,0 +1,58 @@
+@startuml
+!theme plain
+left to right direction
+skinparam PackageStyle rectangle
+
+actor "Standard User" as User
+actor "Admin" as Admin
+
+rectangle "Consent & AI Drafting System" {
+    
+    ' Story 1: Account Creation & Legal
+    (Create Account) as UC1
+    note right of UC1
+      **As a** New User
+      **I want to** create an account and accept terms
+      **So that** I can use the AI drafting tools legally.
+    end note
+
+    ' Story 2: File Management
+    (Upload CV/Documents) as UC2
+    note right of UC2
+      **As a** User
+      **I want to** upload my career documents
+      **So that** the AI has context for my drafts.
+    end note
+
+    ' Story 3: AI Generation
+    (Generate Application Draft) as UC3
+    note right of UC3
+      **As a** User
+      **I want to** provide a job link for AI analysis
+      **So that** I get a tailored cover letter.
+    end note
+
+    ' Story 4: The Nuclear Option (Consent)
+    (Retract All Consent) as UC4
+    note right of UC4
+      **As a** User
+      **I want to** nuke my data and files
+      **So that** I have total control over my privacy.
+    end note
+
+    ' Story 5: Global Reset (Admin)
+    (Force Global Re-consent) as UC5
+    note right of UC5
+      **As an** Admin
+      **I want to** update the terms for all users
+      **So that** everyone is on the latest legal version.
+    end note
+}
+
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+
+Admin --> UC5
+@enduml
