@@ -10,13 +10,14 @@ namespace OpenAiResponses.Api.Services;
 /// </summary>
 public sealed class SampleLlmFlowService : ISampleLlmFlowService
 {
-    private const string SampleCandidateDirectory = "Borger1";
-    private const string PreferencesFileName = "Preferences.json";
+    private const string ResourceConsumptionDirectoryName = "Ressource Consumption";
+    private const string TokenUsageFileName = "TokenUsage.json";
     private static readonly JsonSerializerOptions SavedJsonOptions = new() { WriteIndented = true };
     private static readonly Lock ResultsDirectoryLock = new();
 
     private readonly IHostEnvironment _environment;
     private readonly IOpenAiResponsesService _openAiResponsesService;
+    private readonly ICoverLetterTemplateRenderer _coverLetterTemplateRenderer;
     private readonly IVerificationOrchestrator _verificationOrchestrator;
     private readonly IDownstreamGateEvaluator _downstreamGateEvaluator;
     private readonly IRequirementsDeterministicRepairService _requirementsDeterministicRepairService;
@@ -24,14 +25,17 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
     private readonly IApplicationGenerationDeterministicRepairService _applicationGenerationDeterministicRepairService;
     private readonly ILogger<SampleLlmFlowService> _logger;
     private readonly OpenAIOptions _openAiOptions;
+    private readonly SamplePipelineOptions _samplePipelineOptions;
     private readonly VerificationOptions _verificationOptions;
 
     public SampleLlmFlowService(
         IHostEnvironment environment,
         IOpenAiResponsesService openAiResponsesService,
+        ICoverLetterTemplateRenderer coverLetterTemplateRenderer,
         IVerificationOrchestrator verificationOrchestrator,
         IDownstreamGateEvaluator downstreamGateEvaluator,
         IOptions<OpenAIOptions> openAiOptions,
+        IOptions<SamplePipelineOptions> samplePipelineOptions,
         IRequirementsDeterministicRepairService requirementsDeterministicRepairService,
         IMatchingDeterministicRepairService matchingDeterministicRepairService,
         IApplicationGenerationDeterministicRepairService applicationGenerationDeterministicRepairService,
@@ -40,9 +44,11 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
     {
         _environment = environment;
         _openAiResponsesService = openAiResponsesService;
+        _coverLetterTemplateRenderer = coverLetterTemplateRenderer;
         _verificationOrchestrator = verificationOrchestrator;
         _downstreamGateEvaluator = downstreamGateEvaluator;
         _openAiOptions = openAiOptions.Value;
+        _samplePipelineOptions = samplePipelineOptions.Value;
         _requirementsDeterministicRepairService = requirementsDeterministicRepairService;
         _matchingDeterministicRepairService = matchingDeterministicRepairService;
         _applicationGenerationDeterministicRepairService = applicationGenerationDeterministicRepairService;
@@ -50,36 +56,43 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         _logger = logger;
     }
 
-    public Task<string> RunRequirementsParsingAsync(CancellationToken cancellationToken = default)
+    public async Task<string> RunRequirementsParsingAsync(CancellationToken cancellationToken = default)
     {
         var sampleData = GetSampleData();
-        return RunRequirementsParsingCoreAsync(sampleData, cancellationToken);
+        var result = await RunRequirementsParsingCoreAsync(sampleData, cancellationToken);
+        return result.OutputJson;
     }
 
     public async Task<string> RunCandidateEvidenceAsync(CancellationToken cancellationToken = default)
     {
         var sampleData = GetSampleData();
-        var requirementsJson = await RunRequirementsParsingCoreAsync(sampleData, cancellationToken);
+        var requirementsResult = await RunRequirementsParsingCoreAsync(sampleData, cancellationToken);
+        var requirementsJson = requirementsResult.OutputJson;
         var requirementsDocumentId = BuildDocumentId("requirements", Path.GetFileNameWithoutExtension(sampleData.JobApplication));
 
-        return await RunCandidateEvidenceCoreAsync(sampleData, requirementsJson, requirementsDocumentId, cancellationToken);
+        var candidateEvidenceResult = await RunCandidateEvidenceCoreAsync(sampleData, requirementsJson, requirementsDocumentId, cancellationToken);
+        return candidateEvidenceResult.OutputJson;
     }
 
     public async Task<string> RunMatchingAsync(CancellationToken cancellationToken = default)
     {
         var sampleData = GetSampleData();
-        var requirementsJson = await RunRequirementsParsingCoreAsync(sampleData, cancellationToken);
+        var requirementsResult = await RunRequirementsParsingCoreAsync(sampleData, cancellationToken);
+        var requirementsJson = requirementsResult.OutputJson;
         var requirementsDocumentId = BuildDocumentId("requirements", Path.GetFileNameWithoutExtension(sampleData.JobApplication));
-        var candidateEvidenceJson = await RunCandidateEvidenceCoreAsync(sampleData, requirementsJson, requirementsDocumentId, cancellationToken);
+        var candidateEvidenceResult = await RunCandidateEvidenceCoreAsync(sampleData, requirementsJson, requirementsDocumentId, cancellationToken);
+        var candidateEvidenceJson = candidateEvidenceResult.OutputJson;
 
         var candidateEvidenceDocumentId = BuildDocumentId("candidate_evidence", sampleData.CandidateDirectoryName);
-        return await RunMatchingCoreAsync(
+        var matchingResult = await RunMatchingCoreAsync(
             requirementsJson,
             requirementsDocumentId,
             candidateEvidenceJson,
             candidateEvidenceDocumentId,
             regenerationFeedbackJson: null,
             cancellationToken);
+
+        return matchingResult.OutputJson;
     }
 
     public async Task<string> RunPipelineAsync(CancellationToken cancellationToken = default)
@@ -136,7 +149,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
 
         var response = new MultiJobPipelineWithVerificationResponse
         {
-            CandidateDirectory = SampleCandidateDirectory,
+            CandidateDirectory = _samplePipelineOptions.DefaultCandidateDirectory,
             JobListingCount = jobSummaries.Count,
             Jobs = jobSummaries
         };
@@ -164,7 +177,9 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         var runDirectory = CreateNextRunDirectory();
         var runDirectoryRelativePath = Path.GetRelativePath(GetRepositoryRoot(), runDirectory);
         var stageVerificationResults = new List<StageVerificationResult>();
+        var tokenUsageRecords = new List<LlmInteractionUsageRecord>();
         PipelineVerificationSummary? verificationSummary = null;
+        string? applicationJson = null;
 
         _logger.LogInformation("Pipeline run directory created at {RunDirectory}.", runDirectoryRelativePath);
 
@@ -173,7 +188,9 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             Path.GetFileName(sampleData.JobApplication),
             _openAiOptions.Model);
 
-        var requirementsJson = await RunRequirementsParsingCoreAsync(sampleData, cancellationToken);
+        var requirementsResult = await RunRequirementsParsingCoreAsync(sampleData, cancellationToken);
+        RecordLlmInteraction(tokenUsageRecords, phase: "requirements", sequenceKind: "initial_generation", attempt: null, requirementsResult);
+        var requirementsJson = requirementsResult.OutputJson;
         await SaveJsonResultAsync(runDirectory, "requirements.json", requirementsJson, cancellationToken);
 
         if (includeVerification)
@@ -211,6 +228,14 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
                     ? await BuildAndMaybeSaveFitAdvisoryAsync(runDirectory, fitStrategy, matchingJson: null, applicationJson: null, verificationSummary, cancellationToken)
                     : null;
 
+                await SaveTokenUsageReportAsync(
+                    runDirectory: runDirectory,
+                    runDirectoryRelativePath: runDirectoryRelativePath,
+                    jobListingFileName: jobApplicationFileName,
+                    pipelineStatus: verificationSummary.PipelineStatus,
+                    interactions: tokenUsageRecords,
+                    cancellationToken: CancellationToken.None);
+
                 return new PipelineExecutionResult(
                     JobListingFileName: jobApplicationFileName,
                     RunDirectory: runDirectory,
@@ -225,11 +250,13 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         _logger.LogInformation("Flow 1/4 requirements parsing: OpenAI replied.");
         _logger.LogInformation("Flow 2/4 candidate evidence: started.");
 
-        var candidateEvidenceJson = await RunCandidateEvidenceCoreAsync(
+        var candidateEvidenceResult = await RunCandidateEvidenceCoreAsync(
             sampleData,
             requirementsJson,
             requirementsDocumentId,
             cancellationToken);
+        RecordLlmInteraction(tokenUsageRecords, phase: "candidate_evidence", sequenceKind: "initial_generation", attempt: null, candidateEvidenceResult);
+        var candidateEvidenceJson = candidateEvidenceResult.OutputJson;
         await SaveJsonResultAsync(runDirectory, "candidate_evidence.json", candidateEvidenceJson, cancellationToken);
 
         if (includeVerification)
@@ -263,6 +290,14 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
                     ? await BuildAndMaybeSaveFitAdvisoryAsync(runDirectory, fitStrategy, matchingJson: null, applicationJson: null, verificationSummary, cancellationToken)
                     : null;
 
+                await SaveTokenUsageReportAsync(
+                    runDirectory: runDirectory,
+                    runDirectoryRelativePath: runDirectoryRelativePath,
+                    jobListingFileName: jobApplicationFileName,
+                    pipelineStatus: verificationSummary.PipelineStatus,
+                    interactions: tokenUsageRecords,
+                    cancellationToken: CancellationToken.None);
+
                 return new PipelineExecutionResult(
                     JobListingFileName: jobApplicationFileName,
                     RunDirectory: runDirectory,
@@ -277,13 +312,15 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         _logger.LogInformation("Flow 2/4 candidate evidence: completed.");
         _logger.LogInformation("Flow 3/4 matching: started.");
 
-        var matchJson = await RunMatchingCoreAsync(
+        var matchingResult = await RunMatchingCoreAsync(
             requirementsJson,
             requirementsDocumentId,
             candidateEvidenceJson,
             candidateEvidenceDocumentId,
             regenerationFeedbackJson: null,
             cancellationToken);
+        RecordLlmInteraction(tokenUsageRecords, phase: "matching", sequenceKind: "initial_generation", attempt: null, matchingResult);
+        var matchJson = matchingResult.OutputJson;
         await SaveJsonResultAsync(runDirectory, "matching.json", matchJson, cancellationToken);
 
         if (includeVerification)
@@ -313,6 +350,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
                     candidateEvidenceJson: candidateEvidenceJson,
                     candidateEvidenceDocumentId: candidateEvidenceDocumentId,
                     currentStageResult: stageVerificationResults[^1],
+                    tokenUsageRecords: tokenUsageRecords,
                     cancellationToken: cancellationToken);
 
                 matchJson = matchingRecoveryOutcome.MatchingJson;
@@ -330,6 +368,14 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
                     ? await BuildAndMaybeSaveFitAdvisoryAsync(runDirectory, fitStrategy, matchJson, applicationJson: null, verificationSummary, cancellationToken)
                     : null;
 
+                await SaveTokenUsageReportAsync(
+                    runDirectory: runDirectory,
+                    runDirectoryRelativePath: runDirectoryRelativePath,
+                    jobListingFileName: jobApplicationFileName,
+                    pipelineStatus: verificationSummary.PipelineStatus,
+                    interactions: tokenUsageRecords,
+                    cancellationToken: CancellationToken.None);
+
                 return new PipelineExecutionResult(
                     JobListingFileName: jobApplicationFileName,
                     RunDirectory: runDirectory,
@@ -344,7 +390,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         _logger.LogInformation("Flow 3/4 matching: completed.");
         _logger.LogInformation("Flow 4/4 application generation: started.");
 
-        var applicationJson = await RunApplicationGenerationCoreAsync(
+        var applicationResult = await RunApplicationGenerationCoreAsync(
             sampleData,
             requirementsJson,
             requirementsDocumentId,
@@ -354,7 +400,11 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             matchingDocumentId,
             applicationDocumentId,
             cancellationToken);
+        RecordLlmInteraction(tokenUsageRecords, phase: "application_generation", sequenceKind: "initial_generation", attempt: null, applicationResult);
+        applicationJson = applicationResult.OutputJson;
         await SaveJsonResultAsync(runDirectory, "application_generation.json", applicationJson, cancellationToken);
+
+        var coverLetterArtifactsPersisted = false;
 
         if (includeVerification)
         {
@@ -397,6 +447,9 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             verificationSummary = BuildPipelineVerificationSummary(stageVerificationResults, completedAllStages: true);
             await SaveVerificationArtifactAsync(runDirectory, "pipeline_verification_summary.json", verificationSummary, cancellationToken);
 
+            await SaveRenderedCoverLetterArtifactsAsync(runDirectory, applicationJson, cancellationToken);
+            coverLetterArtifactsPersisted = true;
+
             if (!stageVerificationResults[^1].ApprovedForDownstream)
             {
                 _logger.LogWarning("Pipeline completed all stages, but the downstream gate failed at {Stage}.", stageVerificationResults[^1].Stage);
@@ -404,6 +457,14 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
                 var fitAdvisory = includeVerification
                     ? await BuildAndMaybeSaveFitAdvisoryAsync(runDirectory, fitStrategy, matchJson, applicationJson, verificationSummary, cancellationToken)
                     : null;
+
+                await SaveTokenUsageReportAsync(
+                    runDirectory: runDirectory,
+                    runDirectoryRelativePath: runDirectoryRelativePath,
+                    jobListingFileName: jobApplicationFileName,
+                    pipelineStatus: verificationSummary.PipelineStatus,
+                    interactions: tokenUsageRecords,
+                    cancellationToken: CancellationToken.None);
 
                 return new PipelineExecutionResult(
                     JobListingFileName: jobApplicationFileName,
@@ -419,9 +480,22 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         _logger.LogInformation("Flow 4/4 application generation: completed.");
         _logger.LogInformation("Pipeline results saved to {RunDirectory}.", runDirectoryRelativePath);
 
+        if (!coverLetterArtifactsPersisted)
+        {
+            await SaveRenderedCoverLetterArtifactsAsync(runDirectory, applicationJson, cancellationToken);
+        }
+
         var completedFitAdvisory = includeVerification
             ? await BuildAndMaybeSaveFitAdvisoryAsync(runDirectory, fitStrategy, matchJson, applicationJson, verificationSummary, cancellationToken)
             : null;
+
+        await SaveTokenUsageReportAsync(
+            runDirectory: runDirectory,
+            runDirectoryRelativePath: runDirectoryRelativePath,
+            jobListingFileName: jobApplicationFileName,
+            pipelineStatus: verificationSummary?.PipelineStatus ?? "completed",
+            interactions: tokenUsageRecords,
+            cancellationToken: CancellationToken.None);
 
         return new PipelineExecutionResult(
             JobListingFileName: jobApplicationFileName,
@@ -433,7 +507,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             FitAdvisory: completedFitAdvisory);
     }
 
-    private async Task<string> RunMatchingCoreAsync(
+    private async Task<StructuredJsonGenerationResult> RunMatchingCoreAsync(
         string requirementsJson,
         string requirementsDocumentId,
         string candidateEvidenceJson,
@@ -488,10 +562,10 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             InputTexts = inputTexts
         };
 
-        return await _openAiResponsesService.GenerateStructuredJsonAsync(request, cancellationToken);
+        return await _openAiResponsesService.GenerateStructuredJsonWithMetadataAsync(request, cancellationToken);
     }
 
-    private async Task<string> RunApplicationGenerationCoreAsync(
+    private async Task<StructuredJsonGenerationResult> RunApplicationGenerationCoreAsync(
         SampleDataContext sampleData,
         string requirementsJson,
         string requirementsDocumentId,
@@ -566,10 +640,10 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             ]
         };
 
-        return await _openAiResponsesService.GenerateStructuredJsonAsync(request, cancellationToken);
+        return await _openAiResponsesService.GenerateStructuredJsonWithMetadataAsync(request, cancellationToken);
     }
 
-    private async Task<string> RunRequirementsParsingCoreAsync(SampleDataContext sampleData, CancellationToken cancellationToken)
+    private async Task<StructuredJsonGenerationResult> RunRequirementsParsingCoreAsync(SampleDataContext sampleData, CancellationToken cancellationToken)
     {
         var requirementsAsset = await LoadPhaseAssetAsync(
             promptFileName: "requirements.prompt",
@@ -592,10 +666,10 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             ]
         };
 
-        return await _openAiResponsesService.GenerateStructuredJsonAsync(request, cancellationToken);
+        return await _openAiResponsesService.GenerateStructuredJsonWithMetadataAsync(request, cancellationToken);
     }
 
-    private async Task<string> RunCandidateEvidenceCoreAsync(
+    private async Task<StructuredJsonGenerationResult> RunCandidateEvidenceCoreAsync(
         SampleDataContext sampleData,
         string requirementsJson,
         string requirementsDocumentId,
@@ -634,7 +708,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
                 .ToList()
         };
 
-        return await _openAiResponsesService.GenerateStructuredJsonAsync(request, cancellationToken);
+        return await _openAiResponsesService.GenerateStructuredJsonWithMetadataAsync(request, cancellationToken);
     }
 
     /// <summary>
@@ -679,7 +753,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
 
     private IReadOnlyList<string> GetSampleJobApplications()
     {
-        var jobDirectory = Path.Combine(GetRepositoryRoot(), "TestData", "Opslag");
+        var jobDirectory = ResolveRepositoryPath(_samplePipelineOptions.JobListingsPath);
 
         if (!Directory.Exists(jobDirectory))
         {
@@ -703,9 +777,9 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
     /// </summary>
     private SampleDataContext GetSampleData(string? selectedJobApplicationPath = null)
     {
-        var repositoryRoot = GetRepositoryRoot();
-        var personDirectory = Path.Combine(repositoryRoot, "TestData", "Borgere", SampleCandidateDirectory);
-        var jobDirectory = Path.Combine(repositoryRoot, "TestData", "Opslag");
+        var candidateRootDirectory = ResolveRepositoryPath(_samplePipelineOptions.CandidateRootPath);
+        var personDirectory = Path.Combine(candidateRootDirectory, _samplePipelineOptions.DefaultCandidateDirectory);
+        var jobDirectory = ResolveRepositoryPath(_samplePipelineOptions.JobListingsPath);
 
         if (!Directory.Exists(personDirectory))
         {
@@ -718,12 +792,12 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         }
 
         var personFiles = Directory.GetFiles(personDirectory)
-            .Where(path => !string.Equals(Path.GetFileName(path), PreferencesFileName, StringComparison.OrdinalIgnoreCase))
+            .Where(path => !string.Equals(Path.GetFileName(path), _samplePipelineOptions.PreferencesFileName, StringComparison.OrdinalIgnoreCase))
             .OrderBy(path => path, StringComparer.Ordinal)
             .ToArray();
 
         var preferencesFilePath = Directory.GetFiles(personDirectory)
-            .FirstOrDefault(path => string.Equals(Path.GetFileName(path), PreferencesFileName, StringComparison.OrdinalIgnoreCase));
+            .FirstOrDefault(path => string.Equals(Path.GetFileName(path), _samplePipelineOptions.PreferencesFileName, StringComparison.OrdinalIgnoreCase));
 
         if (personFiles.Length == 0)
         {
@@ -750,24 +824,30 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         return Path.GetFullPath(Path.Combine(_environment.ContentRootPath, "..", ".."));
     }
 
+    private string ResolveRepositoryPath(string configuredPath)
+    {
+        return Path.GetFullPath(Path.Combine(GetRepositoryRoot(), configuredPath));
+    }
+
     private string GetParsingSchemaPath(string schemaFileName)
     {
-        return Path.Combine(GetRepositoryRoot(), "LLM", "AI Schemas", "LLM Parsing", schemaFileName);
+        return Path.Combine(ResolveRepositoryPath(_samplePipelineOptions.ParsingSchemasPath), schemaFileName);
     }
 
     /// <summary>
-    /// Allocates the next monotonically increasing run directory under LLM/Results.
+    /// Allocates the next monotonically increasing run directory under the configured results root.
     /// </summary>
     private string CreateNextRunDirectory()
     {
-        var resultsRoot = Path.Combine(GetRepositoryRoot(), "LLM", "Results");
+        var resultsRoot = ResolveRepositoryPath(_samplePipelineOptions.ResultsPath);
+        var runDirectoryPrefix = _samplePipelineOptions.RunDirectoryPrefix;
         Directory.CreateDirectory(resultsRoot);
 
         lock (ResultsDirectoryLock)
         {
-            var nextRunNumber = Directory.GetDirectories(resultsRoot, "Run *", SearchOption.TopDirectoryOnly)
+            var nextRunNumber = Directory.GetDirectories(resultsRoot, $"{runDirectoryPrefix}*", SearchOption.TopDirectoryOnly)
                 .Select(Path.GetFileName)
-                .Select(TryParseRunNumber)
+                .Select(directoryName => TryParseRunNumber(directoryName, runDirectoryPrefix))
                 .Where(number => number.HasValue)
                 .Select(number => number!.Value)
                 .DefaultIfEmpty(0)
@@ -775,7 +855,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
 
             while (true)
             {
-                var runDirectory = Path.Combine(resultsRoot, $"Run {nextRunNumber}");
+                var runDirectory = Path.Combine(resultsRoot, $"{runDirectoryPrefix}{nextRunNumber}");
                 if (!Directory.Exists(runDirectory))
                 {
                     Directory.CreateDirectory(runDirectory);
@@ -841,6 +921,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         string candidateEvidenceJson,
         string candidateEvidenceDocumentId,
         StageVerificationResult currentStageResult,
+        ICollection<LlmInteractionUsageRecord> tokenUsageRecords,
         CancellationToken cancellationToken)
     {
         var currentJson = matchingJson;
@@ -890,13 +971,16 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             var feedbackJson = JsonSerializer.Serialize(feedback, SavedJsonOptions);
             await SaveTextArtifactAsync(runDirectory, "repair", $"matching_regeneration_attempt_{attempt}_feedback.json", feedbackJson, formatAsJson: true, cancellationToken);
 
-            currentJson = await RunMatchingCoreAsync(
+            var regenerationResult = await RunMatchingCoreAsync(
                 requirementsJson,
                 requirementsDocumentId,
                 candidateEvidenceJson,
                 candidateEvidenceDocumentId,
                 regenerationFeedbackJson: feedbackJson,
                 cancellationToken);
+            RecordLlmInteraction(tokenUsageRecords, phase: "matching", sequenceKind: "regeneration_after_gate_failure", attempt: attempt, regenerationResult);
+
+            currentJson = regenerationResult.OutputJson;
 
             await SaveTextArtifactAsync(runDirectory, "repair", $"matching_regeneration_attempt_{attempt}_output.json", currentJson, formatAsJson: true, cancellationToken);
 
@@ -1172,6 +1256,98 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         return await SaveArtifactAsync(runDirectory, "verification", fileName, artifact, cancellationToken);
     }
 
+    private async Task SaveTokenUsageReportAsync(
+        string runDirectory,
+        string runDirectoryRelativePath,
+        string jobListingFileName,
+        string pipelineStatus,
+        IReadOnlyList<LlmInteractionUsageRecord> interactions,
+        CancellationToken cancellationToken)
+    {
+        var pricing = BuildPricingSnapshot();
+        var report = BuildTokenUsageReport(
+            runDirectoryRelativePath: runDirectoryRelativePath,
+            jobListingFileName: jobListingFileName,
+            pipelineStatus: pipelineStatus,
+            pricing: pricing,
+            interactions: interactions);
+
+        await SaveArtifactAsync(runDirectory, ResourceConsumptionDirectoryName, TokenUsageFileName, report, cancellationToken);
+    }
+
+    private async Task SaveRenderedCoverLetterArtifactsAsync(
+        string runDirectory,
+        string applicationJson,
+        CancellationToken cancellationToken)
+    {
+        var templateOptions = _samplePipelineOptions.CoverLetterTemplate;
+
+        try
+        {
+            var renderResult = await _coverLetterTemplateRenderer.RenderAsync(applicationJson, cancellationToken);
+            var htmlArtifactPath = await SaveTextArtifactAsync(
+                runDirectory,
+                templateOptions.OutputDirectoryName,
+                templateOptions.RenderedHtmlFileName,
+                renderResult.HtmlDocument,
+                formatAsJson: false,
+                CancellationToken.None);
+            var cssArtifactPath = await SaveTextArtifactAsync(
+                runDirectory,
+                templateOptions.OutputDirectoryName,
+                templateOptions.RenderedCssFileName,
+                renderResult.StylesheetText,
+                formatAsJson: false,
+                CancellationToken.None);
+
+            var summary = new CoverLetterRenderArtifact(
+                Status: renderResult.WithinMainContentLimit && renderResult.Warnings.Count == 0 && renderResult.MissingFields.Count == 0
+                    ? "rendered"
+                    : "rendered_with_warnings",
+                HtmlArtifactPath: htmlArtifactPath,
+                CssArtifactPath: cssArtifactPath,
+                MainContentCharacterCount: renderResult.MainContentCharacterCount,
+                MaxMainContentCharacters: renderResult.MaxMainContentCharacters,
+                WithinMainContentLimit: renderResult.WithinMainContentLimit,
+                MissingFields: renderResult.MissingFields,
+                Warnings: renderResult.Warnings,
+                ErrorMessage: null);
+
+            await SaveArtifactAsync(
+                runDirectory,
+                templateOptions.OutputDirectoryName,
+                templateOptions.RenderSummaryFileName,
+                summary,
+                CancellationToken.None);
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Cover-letter rendering failed after application generation.");
+
+            var failedSummary = new CoverLetterRenderArtifact(
+                Status: "failed",
+                HtmlArtifactPath: null,
+                CssArtifactPath: null,
+                MainContentCharacterCount: null,
+                MaxMainContentCharacters: templateOptions.MaxMainContentCharacters,
+                WithinMainContentLimit: null,
+                MissingFields: [],
+                Warnings: [],
+                ErrorMessage: exception.Message);
+
+            await SaveArtifactAsync(
+                runDirectory,
+                templateOptions.OutputDirectoryName,
+                templateOptions.RenderSummaryFileName,
+                failedSummary,
+                CancellationToken.None);
+        }
+    }
+
     private async Task<string> SaveArtifactAsync<TArtifact>(
         string runDirectory,
         string subDirectoryName,
@@ -1190,6 +1366,68 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
 
         _logger.LogInformation("Saved artifact to {ResultFile}.", destinationRelativePath);
         return destinationRelativePath;
+    }
+
+    private RunTokenUsageReport BuildTokenUsageReport(
+        string runDirectoryRelativePath,
+        string jobListingFileName,
+        string pipelineStatus,
+        TokenPricingSnapshot pricing,
+        IReadOnlyList<LlmInteractionUsageRecord> interactions)
+    {
+        var totals = SumTokenUsage(interactions.Select(interaction => interaction.TokenUsage));
+        var phaseTotals = interactions
+            .GroupBy(interaction => interaction.Phase, StringComparer.Ordinal)
+            .OrderBy(group => group.Key, StringComparer.Ordinal)
+            .Select(group =>
+            {
+                var groupTotals = SumTokenUsage(group.Select(interaction => interaction.TokenUsage));
+                return new PhaseTokenUsageSummary(
+                    Phase: group.Key,
+                    InteractionCount: group.Count(),
+                    Totals: groupTotals,
+                    EstimatedCost: BuildTokenCostSummary(groupTotals, pricing));
+            })
+            .ToList();
+        var sequenceTotals = interactions
+            .GroupBy(interaction => (interaction.Phase, interaction.SequenceKind))
+            .OrderBy(group => group.Key.Phase, StringComparer.Ordinal)
+            .ThenBy(group => group.Key.SequenceKind, StringComparer.Ordinal)
+            .Select(group =>
+            {
+                var groupTotals = SumTokenUsage(group.Select(interaction => interaction.TokenUsage));
+                return new SequenceTokenUsageSummary(
+                    Phase: group.Key.Phase,
+                    SequenceKind: group.Key.SequenceKind,
+                    InteractionCount: group.Count(),
+                    Totals: groupTotals,
+                    EstimatedCost: BuildTokenCostSummary(groupTotals, pricing));
+            })
+            .ToList();
+        var interactionSummaries = interactions
+            .Select(interaction => new InteractionTokenUsageSummary(
+                Phase: interaction.Phase,
+                SequenceKind: interaction.SequenceKind,
+                Attempt: interaction.Attempt,
+                Model: interaction.Model,
+                ResponseId: interaction.ResponseId,
+                Tokens: CloneTokenUsage(interaction.TokenUsage),
+                EstimatedCost: BuildTokenCostSummary(interaction.TokenUsage, pricing)))
+            .ToList();
+
+        return new RunTokenUsageReport(
+            RunDirectory: runDirectoryRelativePath,
+            JobListingFileName: jobListingFileName,
+            PipelineStatus: pipelineStatus,
+            RecordedAtUtc: DateTimeOffset.UtcNow,
+            Model: ResolveRunModel(interactions),
+            InteractionCount: interactions.Count,
+            Pricing: pricing,
+            Totals: totals,
+            EstimatedCost: BuildTokenCostSummary(totals, pricing),
+            PhaseTotals: phaseTotals,
+            SequenceTotals: sequenceTotals,
+            Interactions: interactionSummaries);
     }
 
     private async Task<string> SaveTextArtifactAsync(
@@ -1211,6 +1449,124 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
 
         _logger.LogInformation("Saved artifact to {ResultFile}.", destinationRelativePath);
         return destinationRelativePath;
+    }
+
+    private TokenPricingSnapshot BuildPricingSnapshot()
+    {
+        var inputPrice = NormalizeNonNegativePrice(_openAiOptions.InputCostPerMillionTokens);
+        var outputPrice = NormalizeNonNegativePrice(_openAiOptions.OutputCostPerMillionTokens);
+
+        return new TokenPricingSnapshot(
+            Currency: NormalizePricingCurrency(_openAiOptions.PricingCurrency),
+            InputCostPerMillionTokens: inputPrice,
+            OutputCostPerMillionTokens: outputPrice,
+            PricingConfigured: inputPrice.HasValue && outputPrice.HasValue);
+    }
+
+    private static void RecordLlmInteraction(
+        ICollection<LlmInteractionUsageRecord> interactions,
+        string phase,
+        string sequenceKind,
+        int? attempt,
+        StructuredJsonGenerationResult generationResult)
+    {
+        interactions.Add(new LlmInteractionUsageRecord(
+            Phase: phase,
+            SequenceKind: sequenceKind,
+            Attempt: attempt,
+            Model: generationResult.Model,
+            ResponseId: generationResult.ResponseId,
+            TokenUsage: CloneTokenUsage(generationResult.TokenUsage)));
+    }
+
+    private TokenCostSummary BuildTokenCostSummary(LlmTokenUsage tokenUsage, TokenPricingSnapshot pricing)
+    {
+        if (!pricing.PricingConfigured || !pricing.InputCostPerMillionTokens.HasValue || !pricing.OutputCostPerMillionTokens.HasValue)
+        {
+            return new TokenCostSummary(pricing.Currency, PricingConfigured: false, InputCost: null, OutputCost: null, TotalCost: null);
+        }
+
+        var inputCost = RoundCost(tokenUsage.InputTokens / 1_000_000m * pricing.InputCostPerMillionTokens.Value);
+        var outputCost = RoundCost(tokenUsage.OutputTokens / 1_000_000m * pricing.OutputCostPerMillionTokens.Value);
+
+        return new TokenCostSummary(
+            Currency: pricing.Currency,
+            PricingConfigured: true,
+            InputCost: inputCost,
+            OutputCost: outputCost,
+            TotalCost: RoundCost(inputCost + outputCost));
+    }
+
+    private static LlmTokenUsage SumTokenUsage(IEnumerable<LlmTokenUsage> usages)
+    {
+        long inputTokens = 0;
+        long outputTokens = 0;
+        long totalTokens = 0;
+        long cachedInputTokens = 0;
+        long reasoningTokens = 0;
+
+        foreach (var usage in usages)
+        {
+            inputTokens += usage.InputTokens;
+            outputTokens += usage.OutputTokens;
+            totalTokens += usage.TotalTokens;
+            cachedInputTokens += usage.CachedInputTokens;
+            reasoningTokens += usage.ReasoningTokens;
+        }
+
+        return new LlmTokenUsage
+        {
+            InputTokens = inputTokens,
+            OutputTokens = outputTokens,
+            TotalTokens = totalTokens,
+            CachedInputTokens = cachedInputTokens,
+            ReasoningTokens = reasoningTokens
+        };
+    }
+
+    private static LlmTokenUsage CloneTokenUsage(LlmTokenUsage tokenUsage)
+    {
+        return new LlmTokenUsage
+        {
+            InputTokens = tokenUsage.InputTokens,
+            OutputTokens = tokenUsage.OutputTokens,
+            TotalTokens = tokenUsage.TotalTokens,
+            CachedInputTokens = tokenUsage.CachedInputTokens,
+            ReasoningTokens = tokenUsage.ReasoningTokens
+        };
+    }
+
+    private static string ResolveRunModel(IReadOnlyList<LlmInteractionUsageRecord> interactions)
+    {
+        var models = interactions
+            .Select(interaction => interaction.Model)
+            .Where(model => !string.IsNullOrWhiteSpace(model))
+            .Distinct(StringComparer.Ordinal)
+            .ToList();
+
+        return models.Count switch
+        {
+            0 => string.Empty,
+            1 => models[0],
+            _ => "mixed"
+        };
+    }
+
+    private static decimal? NormalizeNonNegativePrice(decimal? price)
+    {
+        return price.HasValue && price.Value >= 0m ? price : null;
+    }
+
+    private static string NormalizePricingCurrency(string? currency)
+    {
+        return string.IsNullOrWhiteSpace(currency)
+            ? "USD"
+            : currency.Trim().ToUpperInvariant();
+    }
+
+    private static decimal RoundCost(decimal value)
+    {
+        return decimal.Round(value, 8, MidpointRounding.AwayFromZero);
     }
 
     /// <summary>
@@ -1301,23 +1657,31 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
 
     private async Task<FitStrategyPreferences> LoadFitStrategyPreferencesAsync(string? preferencesFilePath, CancellationToken cancellationToken)
     {
+        var defaultFitStrategy = BuildDefaultFitStrategy();
+
         if (string.IsNullOrWhiteSpace(preferencesFilePath) || !File.Exists(preferencesFilePath))
         {
-            return new FitStrategyPreferences("optimistic", IncludeFitAdvisory: false, AllowApplicationOnWeakMatch: true, PreferTransferableStrengthsWhenDirectMatchIsWeak: true, AllowStretchPositioning: true);
+            return defaultFitStrategy;
         }
 
         var preferencesJson = await File.ReadAllTextAsync(preferencesFilePath, cancellationToken);
         using var document = JsonDocument.Parse(preferencesJson);
         if (!document.RootElement.TryGetProperty("fit_strategy", out var fitStrategy) || fitStrategy.ValueKind != JsonValueKind.Object)
         {
-            return new FitStrategyPreferences("optimistic", IncludeFitAdvisory: false, AllowApplicationOnWeakMatch: true, PreferTransferableStrengthsWhenDirectMatchIsWeak: true, AllowStretchPositioning: true);
+            return defaultFitStrategy;
         }
 
-        var guidanceMode = NormalizeGuidanceMode(GetString(fitStrategy, "guidance_mode"));
-        var includeFitAdvisory = GetBoolean(fitStrategy, "include_fit_advisory", defaultValue: false);
-        var allowApplicationOnWeakMatch = GetBoolean(fitStrategy, "allow_application_on_weak_match", defaultValue: true);
-        var preferTransferableStrengthsWhenDirectMatchIsWeak = GetBoolean(fitStrategy, "prefer_transferable_strengths_when_direct_match_is_weak", defaultValue: true);
-        var allowStretchPositioning = GetBoolean(fitStrategy, "allow_stretch_positioning", defaultValue: true);
+        var configuredGuidanceMode = GetString(fitStrategy, "guidance_mode");
+        var guidanceMode = string.IsNullOrWhiteSpace(configuredGuidanceMode)
+            ? defaultFitStrategy.GuidanceMode
+            : NormalizeGuidanceMode(configuredGuidanceMode);
+        var includeFitAdvisory = GetBoolean(fitStrategy, "include_fit_advisory", defaultValue: defaultFitStrategy.IncludeFitAdvisory);
+        var allowApplicationOnWeakMatch = GetBoolean(fitStrategy, "allow_application_on_weak_match", defaultValue: defaultFitStrategy.AllowApplicationOnWeakMatch);
+        var preferTransferableStrengthsWhenDirectMatchIsWeak = GetBoolean(
+            fitStrategy,
+            "prefer_transferable_strengths_when_direct_match_is_weak",
+            defaultValue: defaultFitStrategy.PreferTransferableStrengthsWhenDirectMatchIsWeak);
+        var allowStretchPositioning = GetBoolean(fitStrategy, "allow_stretch_positioning", defaultValue: defaultFitStrategy.AllowStretchPositioning);
 
         return new FitStrategyPreferences(
             guidanceMode,
@@ -1325,6 +1689,18 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             allowApplicationOnWeakMatch,
             preferTransferableStrengthsWhenDirectMatchIsWeak,
             allowStretchPositioning);
+    }
+
+    private FitStrategyPreferences BuildDefaultFitStrategy()
+    {
+        var defaults = _samplePipelineOptions.DefaultFitStrategy;
+
+        return new FitStrategyPreferences(
+            GuidanceMode: NormalizeGuidanceMode(defaults.GuidanceMode),
+            IncludeFitAdvisory: defaults.IncludeFitAdvisory,
+            AllowApplicationOnWeakMatch: defaults.AllowApplicationOnWeakMatch,
+            PreferTransferableStrengthsWhenDirectMatchIsWeak: defaults.PreferTransferableStrengthsWhenDirectMatchIsWeak,
+            AllowStretchPositioning: defaults.AllowStretchPositioning);
     }
 
     /// <summary>
@@ -1498,10 +1874,8 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         };
     }
 
-    private static int? TryParseRunNumber(string? directoryName)
+    private static int? TryParseRunNumber(string? directoryName, string prefix)
     {
-        const string prefix = "Run ";
-
         if (string.IsNullOrWhiteSpace(directoryName) || !directoryName.StartsWith(prefix, StringComparison.Ordinal))
         {
             return null;
@@ -1537,6 +1911,74 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
     private sealed record MatchingStageRecoveryOutcome(string MatchingJson, StageVerificationResult StageResult);
 
     private sealed record ApplicationGenerationStageRecoveryOutcome(string ApplicationJson, StageVerificationResult StageResult);
+
+    private sealed record CoverLetterRenderArtifact(
+        string Status,
+        string? HtmlArtifactPath,
+        string? CssArtifactPath,
+        int? MainContentCharacterCount,
+        int? MaxMainContentCharacters,
+        bool? WithinMainContentLimit,
+        IReadOnlyList<string> MissingFields,
+        IReadOnlyList<string> Warnings,
+        string? ErrorMessage);
+
+    private sealed record LlmInteractionUsageRecord(
+        string Phase,
+        string SequenceKind,
+        int? Attempt,
+        string Model,
+        string? ResponseId,
+        LlmTokenUsage TokenUsage);
+
+    private sealed record RunTokenUsageReport(
+        string RunDirectory,
+        string JobListingFileName,
+        string PipelineStatus,
+        DateTimeOffset RecordedAtUtc,
+        string Model,
+        int InteractionCount,
+        TokenPricingSnapshot Pricing,
+        LlmTokenUsage Totals,
+        TokenCostSummary EstimatedCost,
+        IReadOnlyList<PhaseTokenUsageSummary> PhaseTotals,
+        IReadOnlyList<SequenceTokenUsageSummary> SequenceTotals,
+        IReadOnlyList<InteractionTokenUsageSummary> Interactions);
+
+    private sealed record TokenPricingSnapshot(
+        string Currency,
+        decimal? InputCostPerMillionTokens,
+        decimal? OutputCostPerMillionTokens,
+        bool PricingConfigured);
+
+    private sealed record TokenCostSummary(
+        string Currency,
+        bool PricingConfigured,
+        decimal? InputCost,
+        decimal? OutputCost,
+        decimal? TotalCost);
+
+    private sealed record PhaseTokenUsageSummary(
+        string Phase,
+        int InteractionCount,
+        LlmTokenUsage Totals,
+        TokenCostSummary EstimatedCost);
+
+    private sealed record SequenceTokenUsageSummary(
+        string Phase,
+        string SequenceKind,
+        int InteractionCount,
+        LlmTokenUsage Totals,
+        TokenCostSummary EstimatedCost);
+
+    private sealed record InteractionTokenUsageSummary(
+        string Phase,
+        string SequenceKind,
+        int? Attempt,
+        string Model,
+        string? ResponseId,
+        LlmTokenUsage Tokens,
+        TokenCostSummary EstimatedCost);
 
     private sealed record FitStrategyPreferences(
         string GuidanceMode,

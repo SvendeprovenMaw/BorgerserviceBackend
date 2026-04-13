@@ -18,6 +18,9 @@
       "closing_preferences"
     ],
     "properties": {
+      "applicant_display_name": {
+        "type": "string"
+      },
       "applicant_id": {
         "type": "string"
       },
@@ -155,6 +158,7 @@
           "avoid_mentioning_missing_requirements",
           "avoid_salary_discussion",
           "avoid_private_life_details",
+          "max_main_content_characters",
           "disallowed_phrases_da"
         ],
         "properties": {
@@ -172,6 +176,11 @@
           },
           "avoid_private_life_details": {
             "type": "boolean"
+          },
+          "max_main_content_characters": {
+            "type": "integer",
+            "minimum": 800,
+            "maximum": 2600
           },
           "disallowed_phrases_da": {
             "type": "array",

@@ -1,4 +1,6 @@
 using System.ClientModel;
+using System.Globalization;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
@@ -33,6 +35,15 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
     /// </summary>
     public async Task<string> GenerateStrictJsonAsync(StrictJsonResponseRequest request, CancellationToken cancellationToken = default)
     {
+        var result = await GenerateStrictJsonWithMetadataAsync(request, cancellationToken);
+        return result.OutputJson;
+    }
+
+    /// <summary>
+    /// Preserves the original strict-json endpoint shape while also returning response metadata.
+    /// </summary>
+    public async Task<StructuredJsonGenerationResult> GenerateStrictJsonWithMetadataAsync(StrictJsonResponseRequest request, CancellationToken cancellationToken = default)
+    {
         ValidateStrictJsonRequest(request);
 
         var structuredRequest = new StructuredJsonResponseRequest
@@ -57,13 +68,22 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
             ]
         };
 
-        return await GenerateStructuredJsonAsync(structuredRequest, cancellationToken);
+        return await GenerateStructuredJsonWithMetadataAsync(structuredRequest, cancellationToken);
     }
 
     /// <summary>
     /// Builds the final Responses API payload from normalized text and file inputs.
     /// </summary>
     public async Task<string> GenerateStructuredJsonAsync(StructuredJsonResponseRequest request, CancellationToken cancellationToken = default)
+    {
+        var result = await GenerateStructuredJsonWithMetadataAsync(request, cancellationToken);
+        return result.OutputJson;
+    }
+
+    /// <summary>
+    /// Builds the final Responses API payload from normalized text and file inputs and returns response metadata.
+    /// </summary>
+    public async Task<StructuredJsonGenerationResult> GenerateStructuredJsonWithMetadataAsync(StructuredJsonResponseRequest request, CancellationToken cancellationToken = default)
     {
         ValidateStructuredRequest(request);
 
@@ -122,7 +142,14 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
             throw new InvalidOperationException("The OpenAI response was not valid JSON.", ex);
         }
 
-        return outputJson;
+        var actualModel = ReadStringProperty(response.Value, "Model", "ResponseModel") ?? selectedModel;
+        return new StructuredJsonGenerationResult
+        {
+            OutputJson = outputJson,
+            Model = actualModel,
+            ResponseId = ReadStringProperty(response.Value, "Id", "ResponseId"),
+            TokenUsage = ExtractTokenUsage(response.Value)
+        };
     }
 
     /// <summary>
@@ -184,6 +211,76 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
         }
 
         return normalizedFiles;
+    }
+
+    private static LlmTokenUsage ExtractTokenUsage(object responseResult)
+    {
+        var usage = GetPropertyValue(responseResult, "Usage");
+        var inputDetails = GetPropertyValue(usage, "InputTokenDetails", "InputDetails");
+        var outputDetails = GetPropertyValue(usage, "OutputTokenDetails", "OutputDetails");
+
+        var inputTokens = ReadLongProperty(usage, "InputTokenCount", "InputTokens", "PromptTokenCount", "PromptTokens");
+        var outputTokens = ReadLongProperty(usage, "OutputTokenCount", "OutputTokens", "CompletionTokenCount", "CompletionTokens");
+        var totalTokens = ReadLongProperty(usage, "TotalTokenCount", "TotalTokens", "TokenCount");
+        var cachedInputTokens = ReadLongProperty(inputDetails, "CachedTokenCount", "CachedTokens", "CachedInputTokenCount");
+        var reasoningTokens = ReadLongProperty(outputDetails, "ReasoningTokenCount", "ReasoningTokens");
+
+        if (totalTokens == 0)
+        {
+            totalTokens = inputTokens + outputTokens;
+        }
+
+        return new LlmTokenUsage
+        {
+            InputTokens = inputTokens,
+            OutputTokens = outputTokens,
+            TotalTokens = totalTokens,
+            CachedInputTokens = cachedInputTokens,
+            ReasoningTokens = reasoningTokens
+        };
+    }
+
+    private static object? GetPropertyValue(object? instance, params string[] propertyNames)
+    {
+        if (instance is null)
+        {
+            return null;
+        }
+
+        var type = instance.GetType();
+        foreach (var propertyName in propertyNames)
+        {
+            var property = type.GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+            if (property is not null)
+            {
+                return property.GetValue(instance);
+            }
+        }
+
+        return null;
+    }
+
+    private static long ReadLongProperty(object? instance, params string[] propertyNames)
+    {
+        var value = GetPropertyValue(instance, propertyNames);
+        return value switch
+        {
+            null => 0,
+            byte byteValue => byteValue,
+            short shortValue => shortValue,
+            int intValue => intValue,
+            long longValue => longValue,
+            _ when long.TryParse(Convert.ToString(value, CultureInfo.InvariantCulture), NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsed) => parsed,
+            _ => 0
+        };
+    }
+
+    private static string? ReadStringProperty(object? instance, params string[] propertyNames)
+    {
+        var value = GetPropertyValue(instance, propertyNames);
+        return value is string text && !string.IsNullOrWhiteSpace(text)
+            ? text
+            : null;
     }
 
     /// <summary>

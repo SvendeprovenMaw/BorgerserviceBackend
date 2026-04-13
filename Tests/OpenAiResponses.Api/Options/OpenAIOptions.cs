@@ -10,4 +10,10 @@ public sealed class OpenAIOptions
     public string ApiKey { get; set; } = string.Empty;
 
     public string Model { get; set; } = "gpt-5-mini";
+
+    public string PricingCurrency { get; set; } = "USD";
+
+    public decimal? InputCostPerMillionTokens { get; set; }
+
+    public decimal? OutputCostPerMillionTokens { get; set; }
 }

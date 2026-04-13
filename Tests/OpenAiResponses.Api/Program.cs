@@ -44,6 +44,23 @@ builder.Services
     .Bind(builder.Configuration.GetSection(VerificationOptions.SectionName))
     .ValidateOnStart();
 
+builder.Services
+    .AddOptions<SamplePipelineOptions>()
+    .Bind(builder.Configuration.GetSection(SamplePipelineOptions.SectionName))
+    .Validate(options => !string.IsNullOrWhiteSpace(options.CandidateRootPath), $"{SamplePipelineOptions.SectionName}:CandidateRootPath must be configured.")
+    .Validate(options => !string.IsNullOrWhiteSpace(options.DefaultCandidateDirectory), $"{SamplePipelineOptions.SectionName}:DefaultCandidateDirectory must be configured.")
+    .Validate(options => !string.IsNullOrWhiteSpace(options.PreferencesFileName), $"{SamplePipelineOptions.SectionName}:PreferencesFileName must be configured.")
+    .Validate(options => !string.IsNullOrWhiteSpace(options.JobListingsPath), $"{SamplePipelineOptions.SectionName}:JobListingsPath must be configured.")
+    .Validate(options => !string.IsNullOrWhiteSpace(options.ParsingSchemasPath), $"{SamplePipelineOptions.SectionName}:ParsingSchemasPath must be configured.")
+    .Validate(options => !string.IsNullOrWhiteSpace(options.ResultsPath), $"{SamplePipelineOptions.SectionName}:ResultsPath must be configured.")
+    .Validate(options => !string.IsNullOrWhiteSpace(options.RunDirectoryPrefix), $"{SamplePipelineOptions.SectionName}:RunDirectoryPrefix must be configured.")
+    .Validate(options => !string.IsNullOrWhiteSpace(options.CoverLetterTemplate.TemplatesPath), $"{SamplePipelineOptions.SectionName}:CoverLetterTemplate:TemplatesPath must be configured.")
+    .Validate(options => !string.IsNullOrWhiteSpace(options.CoverLetterTemplate.HtmlTemplateFileName), $"{SamplePipelineOptions.SectionName}:CoverLetterTemplate:HtmlTemplateFileName must be configured.")
+    .Validate(options => !string.IsNullOrWhiteSpace(options.CoverLetterTemplate.CssTemplateFileName), $"{SamplePipelineOptions.SectionName}:CoverLetterTemplate:CssTemplateFileName must be configured.")
+    .Validate(options => !string.IsNullOrWhiteSpace(options.CoverLetterTemplate.OutputDirectoryName), $"{SamplePipelineOptions.SectionName}:CoverLetterTemplate:OutputDirectoryName must be configured.")
+    .Validate(options => options.CoverLetterTemplate.MaxMainContentCharacters > 0, $"{SamplePipelineOptions.SectionName}:CoverLetterTemplate:MaxMainContentCharacters must be greater than zero.")
+    .ValidateOnStart();
+
 // The responses client is shared so all routes use the same configured API key.
 builder.Services.AddSingleton<ResponsesClient>(serviceProvider =>
 {
@@ -53,6 +70,7 @@ builder.Services.AddSingleton<ResponsesClient>(serviceProvider =>
 
 // Register the services that power the staged sample pipeline and its repair/gate flow.
 builder.Services.AddSingleton<IOpenAiResponsesService, OpenAiResponsesService>();
+builder.Services.AddSingleton<ICoverLetterTemplateRenderer, CoverLetterTemplateRenderer>();
 builder.Services.AddSingleton<IVerificationOrchestrator, VerificationOrchestrator>();
 builder.Services.AddSingleton<IDownstreamGateEvaluator, DownstreamGateEvaluator>();
 builder.Services.AddSingleton<IRequirementsDeterministicRepairService, RequirementsDeterministicRepairService>();
@@ -76,14 +94,16 @@ app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
 // Return a ready-to-run request body so the strict-json endpoint can be tested quickly.
-app.MapGet("/api/responses/sample-request", (IHostEnvironment environment) =>
+app.MapGet("/api/responses/sample-request", (IHostEnvironment environment, IOptions<SamplePipelineOptions> samplePipelineOptions) =>
 {
     var repositoryRoot = Path.GetFullPath(Path.Combine(environment.ContentRootPath, "..", ".."));
-    var personDirectory = Path.Combine(repositoryRoot, "TestData", "Borgere", "Borger1");
-    var jobDirectory = Path.Combine(repositoryRoot, "TestData", "Opslag");
+    var sampleOptions = samplePipelineOptions.Value;
+    var personDirectory = Path.GetFullPath(Path.Combine(repositoryRoot, sampleOptions.CandidateRootPath, sampleOptions.DefaultCandidateDirectory));
+    var jobDirectory = Path.GetFullPath(Path.Combine(repositoryRoot, sampleOptions.JobListingsPath));
 
     var personFiles = Directory.Exists(personDirectory)
         ? Directory.GetFiles(personDirectory)
+            .Where(path => !string.Equals(Path.GetFileName(path), sampleOptions.PreferencesFileName, StringComparison.OrdinalIgnoreCase))
             .OrderBy(path => path)
             .Select(path => Path.GetRelativePath(environment.ContentRootPath, path))
             .ToArray()
@@ -246,7 +266,7 @@ app.MapPost("/api/responses/sample/pipeline-with-verification/all-jobs", async (
         cancellationToken);
 })
 .WithName("RunSamplePipelineWithVerificationForAllJobs")
-.WithSummary("Runs the verified sample pipeline for every job listing in TestData/Opslag.")
+.WithSummary("Runs the verified sample pipeline for every job listing in the configured sample job-listing directory.")
 .WithDescription("Returns one compact summary per job listing, including pipeline status, overall match level, verdict counts, and whether an application was still generated.")
 .Produces<MultiJobPipelineWithVerificationResponse>(StatusCodes.Status200OK, contentType: "application/json")
 .ProducesProblem(StatusCodes.Status404NotFound)

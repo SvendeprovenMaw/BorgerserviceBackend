@@ -24,6 +24,8 @@ Overordnede regler:
 10. Hvis noget er svagt understøttet, skal formuleringen være mere forsigtig og moderat.
 11. Ansøgningen skal lyde menneskelig og professionel, ikke som et maskinelt resumé.
 12. Ansøgningen må ikke nævne interne feltnavne, IDs, verifiering eller schema.
+13. Hvis præferencerne angiver `content_constraints.max_main_content_characters`, skal den fulde synlige ansøgningstekst i `assembled_application_da` holdes inden for denne grænse. Grænsen gælder selve brevteksten, inklusive hilsen og afslutning, men eksklusive metadata og subject_line.
+14. Antag, at ansøgningen bliver rendret i en kompakt A4-skabelon med monospace-font. Vær derfor selektiv, skriv korte afsnit, og undgå unødig gentagelse.
 
 Instruktioner for indhold:
 1. Prioritér de stærkest dokumenterede og mest relevante styrker.
@@ -36,6 +38,7 @@ Instruktioner for indhold:
 8. Brug gerne jobopslagets centrale sprogbrug, men kun som naturlig parafrase.
 9. Undgå floskler, tomme superlativer og generiske buzzwords, medmindre de er klart relevante.
 10. Undgå at nævne svagheder eller manglende match direkte, medmindre input eller eksplicit brugerpræference gør det nødvendigt.
+11. Hvis der er et eksplicit tegnbudget i præferencerne, har det forrang over generelle længdeønsker som short, medium eller long.
 
 Instruktioner for fit-strategi og brugerpræferencer:
 1. Hvis præferencerne eller et særskilt fit-strategi-input angiver, at ansøgning må genereres selv ved svagt match, må du aldrig selv afvise at skrive ansøgningen.
@@ -64,11 +67,17 @@ Instruktioner for sections:
 3. section_ids skal være stabile og maskinvenlige.
 4. content_mode skal afspejle, om sektionen hovedsageligt er overgangstekst, evidensbåret eller en blanding.
 5. supported_requirement_ids og supported_evidence_ids skal være konsistente med de claim_ids, der bruges i sektionen.
+6. Summen af section-teksterne skal være kort nok til, at assembled_application_da kan holdes inden for et eventuelt `max_main_content_characters`-budget.
 
 Instruktioner for assembled_application_da:
 1. assembled_application_da skal være den fulde ansøgning i naturlig læsbar form.
 2. assembled_application_da skal afspejle section-teksterne i logisk rækkefølge.
 3. assembled_application_da må ikke indeholde facts, som ikke kan spores til claim_register eller som ikke er ren overgangstekst.
+4. Hvis `content_constraints.max_main_content_characters` findes, må assembled_application_da ikke overstige denne grænse.
+
+Instruktioner for navngivning i dokumentet:
+1. Hvis præferencerne indeholder `applicant_display_name`, skal `_meta.applicant_display_name` sættes til samme værdi.
+2. Brug aldrig et opdigtet ansøgernavn. Hvis navnet ikke findes eksplicit i inputtet, må feltet være null.
 
 Hvis du er i tvivl, vælg den mere konservative formulering.
 Hvis noget ikke kan understøttes, så undlad det.

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{document_title}}</title>
+    <link rel="stylesheet" href="{{stylesheet_href}}" />
+</head>
+<body>
+    <article class="page">
+        <header class="letterhead">
+            <section class="identity-block">
+                <span class="kicker">Job Application</span>
+                <h1>{{applicant_name}}</h1>
+                <p class="identity-subline">Professionel ansøgning klargjort til A4 / PDF</p>
+            </section>
+
+            <section class="meta-grid" aria-label="Dokumentmetadata">
+                <div class="meta-item">
+                    <span class="meta-label">Dato</span>
+                    <strong class="meta-value">{{date_da}}</strong>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Stilling</span>
+                    <strong class="meta-value">{{position_title}}</strong>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Virksomhed</span>
+                    <strong class="meta-value">{{company_name}}</strong>
+                </div>
+            </section>
+        </header>
+
+        <section class="subject-card">
+            <span class="kicker">Subject</span>
+            <h2>{{subject_line_da}}</h2>
+        </section>
+
+        <section class="letter-body">
+            <div class="main-content">
+                {{main_content_html}}
+            </div>
+        </section>
+
+        <section class="footer-line" aria-hidden="true">
+            <span>{{applicant_name}}</span>
+            <span>{{company_name}}</span>
+        </section>
+    </article>
+</body>
+</html>

@@ -1,8 +1,9 @@
 {
+  "applicant_display_name": "Emma Sørensen",
   "applicant_id": "fictional_citizen_01",
   "target_language": "da",
   "tone": "warm_professional",
-  "length_target": "2000–2800 characters with spaces",
+  "length_target": "medium",
   "formality_level": "medium",
   "motivation_style": {
     "allow_general_interest_language": true,
@@ -32,6 +33,7 @@
     "avoid_mentioning_missing_requirements": true,
     "avoid_salary_discussion": true,
     "avoid_private_life_details": true,
+    "max_main_content_characters": 2200,
     "disallowed_phrases_da": [
       "jeg brænder for",
       "jeg er den perfekte kandidat",

@@ -1,4 +1,4 @@
-@startuml
+@startuml test
 !theme plain
 skinparam PackageStyle rectangle
 

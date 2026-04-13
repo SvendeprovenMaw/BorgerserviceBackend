@@ -13,7 +13,17 @@ public interface IOpenAiResponsesService
     Task<string> GenerateStrictJsonAsync(StrictJsonResponseRequest request, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Generates strict JSON and returns provider metadata such as token usage.
+    /// </summary>
+    Task<StructuredJsonGenerationResult> GenerateStrictJsonWithMetadataAsync(StrictJsonResponseRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Generates strict JSON for arbitrary prompt, text, and file combinations.
     /// </summary>
     Task<string> GenerateStructuredJsonAsync(StructuredJsonResponseRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Generates strict JSON and returns provider metadata such as token usage.
+    /// </summary>
+    Task<StructuredJsonGenerationResult> GenerateStructuredJsonWithMetadataAsync(StructuredJsonResponseRequest request, CancellationToken cancellationToken = default);
 }
