@@ -1,0 +1,295 @@
+{
+  "_meta": {
+    "application_document_id": "application_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "requirements_document_id": "requirements_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "candidate_evidence_document_id": "candidate_evidence_borger1",
+    "matching_document_id": "matching_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "target_language": "da",
+    "position_title": "Udvikler med fokus p\u00E5 DevOps",
+    "company_name": null,
+    "applicant_display_name": "Emma S\u00F8rensen"
+  },
+  "application_strategy": {
+    "tone": "warm_professional",
+    "length_target": "medium",
+    "subject_line_da": "Ans\u00F8gning til stillingen som Udvikler med fokus p\u00E5 DevOps",
+    "core_message_da": "Jeg s\u00F8ger stillingen som Udvikler med fokus p\u00E5 DevOps og vil is\u00E6r fremh\u00E6ve min erfaring som udvikler, mit samarbejde p\u00E5 tv\u00E6rs af teknik og forretning samt min brede tekniske profil med flere sprog og teknologier.",
+    "selected_requirement_ids": [
+      "req_1",
+      "req_3",
+      "req_4",
+      "req_7",
+      "req_8",
+      "req_9",
+      "req_10"
+    ],
+    "selected_evidence_ids": [
+      "e1",
+      "e2",
+      "e3",
+      "e6",
+      "e7",
+      "e8",
+      "e9"
+    ],
+    "omitted_requirement_ids": [
+      "req_2",
+      "req_5",
+      "req_6"
+    ],
+    "omission_strategy_da": "Jeg fokuserer p\u00E5 de krav, hvor der findes tydelig eller delvis dokumentation, og undlader at fremh\u00E6ve omr\u00E5der uden sikker st\u00F8tte, s\u00E5som reguleret sektor og IBM Z/COBOL."
+  },
+  "sections": [
+    {
+      "section_id": "section_salutation",
+      "section_kind": "salutation",
+      "text_da": "K\u00E6re JN Data",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "section_opening",
+      "section_kind": "opening",
+      "text_da": "Jeg s\u00F8ger stillingen som Udvikler med fokus p\u00E5 DevOps. Som junior softwareudvikler har jeg arbejdet med at udvikle og vedligeholde interne .NET-baserede webmoduler og med at bygge REST API-endpoints.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "claim_1",
+        "claim_2"
+      ],
+      "supported_requirement_ids": [
+        "req_1"
+      ],
+      "supported_evidence_ids": [
+        "e1"
+      ]
+    },
+    {
+      "section_id": "section_fit",
+      "section_kind": "fit",
+      "text_da": "Min profil rummer ogs\u00E5 erfaring med flere teknologier, herunder C#, .NET, ASP.NET Core, React og SQL, og jeg har arbejdet med integrationer, fejlretning og kodegennemgang. Det giver mig et solidt udgangspunkt for at bidrage i en udviklingsproces, hvor flere dele skal spille sammen.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "claim_3",
+        "claim_4"
+      ],
+      "supported_requirement_ids": [
+        "req_3",
+        "req_4"
+      ],
+      "supported_evidence_ids": [
+        "e2",
+        "e3"
+      ]
+    },
+    {
+      "section_id": "section_motivation",
+      "section_kind": "motivation",
+      "text_da": "Jeg motiveres af at arbejde t\u00E6t sammen med andre, og jeg trives i samarbejde med b\u00E5de teknikere og forretning. Jeg er vant til dialog med b\u00E5de brugere og udviklere, og jeg har ogs\u00E5 erfaring med mindre automatiseringer i administrative workflows samt med fokus p\u00E5 moderne webudvikling og API-design.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "claim_5",
+        "claim_6",
+        "claim_7"
+      ],
+      "supported_requirement_ids": [
+        "req_7",
+        "req_8",
+        "req_10"
+      ],
+      "supported_evidence_ids": [
+        "e6",
+        "e8",
+        "e9"
+      ]
+    },
+    {
+      "section_id": "section_language",
+      "section_kind": "experience",
+      "text_da": "Jeg behersker dansk som modersm\u00E5l og engelsk p\u00E5 professionelt niveau.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "claim_8"
+      ],
+      "supported_requirement_ids": [
+        "req_9"
+      ],
+      "supported_evidence_ids": [
+        "e7"
+      ]
+    },
+    {
+      "section_id": "section_future_contribution",
+      "section_kind": "other",
+      "text_da": "Jeg vil gerne bruge min erfaring som udvikler og min samarbejdsorienterede arbejdsform til at bidrage konstruktivt i jeres team og l\u00E6re mere i praksis, hvor det er relevant. Hvis min profil v\u00E6kker interesse, deltager jeg gerne i en samtale.",
+      "content_mode": "bridge_text",
+      "claim_ids": [
+        "claim_9"
+      ],
+      "supported_requirement_ids": [
+        "req_8",
+        "req_1"
+      ],
+      "supported_evidence_ids": [
+        "e1",
+        "e6"
+      ]
+    },
+    {
+      "section_id": "section_closing",
+      "section_kind": "closing",
+      "text_da": "Tak for jeres tid og overvejelse. Jeg ser frem til at h\u00F8re fra jer.",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "section_signature",
+      "section_kind": "signature",
+      "text_da": "Venlig hilsen\nEmma S\u00F8rensen",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    }
+  ],
+  "claim_register": [
+    {
+      "claim_id": "claim_1",
+      "claim_text_da": "Kandidaten s\u00F8ger stillingen som Udvikler med fokus p\u00E5 DevOps.",
+      "claim_kind": "motivation_grounded",
+      "evidence_ids": [],
+      "requirement_ids": [],
+      "section_ids": [
+        "section_opening"
+      ],
+      "support_strength": "weak"
+    },
+    {
+      "claim_id": "claim_2",
+      "claim_text_da": "Kandidaten har erfaring som junior softwareudvikler med udvikling og vedligeholdelse af interne .NET-baserede webmoduler samt REST API-endpoints.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "e1"
+      ],
+      "requirement_ids": [
+        "req_1"
+      ],
+      "section_ids": [
+        "section_opening"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "claim_3",
+      "claim_text_da": "Kandidaten har en teknisk profil med flere teknologier, herunder C#, .NET, ASP.NET Core, React og SQL.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "e3"
+      ],
+      "requirement_ids": [
+        "req_4"
+      ],
+      "section_ids": [
+        "section_fit"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "claim_4",
+      "claim_text_da": "Kandidaten har arbejdet med integrationer, fejlretning og kodegennemgang, hvilket peger p\u00E5 erfaring fra flere dele af udviklingsprocessen.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "e2"
+      ],
+      "requirement_ids": [
+        "req_3"
+      ],
+      "section_ids": [
+        "section_fit"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_5",
+      "claim_text_da": "Kandidaten trives i samarbejde med b\u00E5de teknikere og forretning og er vant til dialog med b\u00E5de brugere og udviklere.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "e6"
+      ],
+      "requirement_ids": [
+        "req_8"
+      ],
+      "section_ids": [
+        "section_motivation"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "claim_6",
+      "claim_text_da": "Kandidaten har erfaring med mindre automatiseringer i administrative workflows.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "e9"
+      ],
+      "requirement_ids": [
+        "req_10"
+      ],
+      "section_ids": [
+        "section_motivation"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_7",
+      "claim_text_da": "Kandidaten har fokus p\u00E5 moderne webudvikling og API-design.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "e8"
+      ],
+      "requirement_ids": [
+        "req_7",
+        "req_10"
+      ],
+      "section_ids": [
+        "section_motivation"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_8",
+      "claim_text_da": "Kandidaten behersker dansk som modersm\u00E5l og engelsk p\u00E5 professionelt niveau.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "e7"
+      ],
+      "requirement_ids": [
+        "req_9"
+      ],
+      "section_ids": [
+        "section_language"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "claim_9",
+      "claim_text_da": "Kandidaten vil gerne bidrage konstruktivt i teamet og l\u00E6re mere i praksis, hvor det er relevant.",
+      "claim_kind": "motivation_grounded",
+      "evidence_ids": [
+        "e1",
+        "e6"
+      ],
+      "requirement_ids": [
+        "req_8",
+        "req_1"
+      ],
+      "section_ids": [
+        "section_future_contribution"
+      ],
+      "support_strength": "moderate"
+    }
+  ],
+  "assembled_application_da": "K\u00E6re JN Data\n\nJeg s\u00F8ger stillingen som Udvikler med fokus p\u00E5 DevOps. Som junior softwareudvikler har jeg arbejdet med at udvikle og vedligeholde interne .NET-baserede webmoduler og med at bygge REST API-endpoints.\n\nMin profil rummer ogs\u00E5 erfaring med flere teknologier, herunder C#, .NET, ASP.NET Core, React og SQL, og jeg har arbejdet med integrationer, fejlretning og kodegennemgang. Det giver mig et solidt udgangspunkt for at bidrage i en udviklingsproces, hvor flere dele skal spille sammen.\n\nJeg motiveres af at arbejde t\u00E6t sammen med andre, og jeg trives i samarbejde med b\u00E5de teknikere og forretning. Jeg er vant til dialog med b\u00E5de brugere og udviklere, og jeg har ogs\u00E5 erfaring med mindre automatiseringer i administrative workflows samt med fokus p\u00E5 moderne webudvikling og API-design.\n\nJeg behersker dansk som modersm\u00E5l og engelsk p\u00E5 professionelt niveau.\n\nJeg vil gerne bruge min erfaring som udvikler og min samarbejdsorienterede arbejdsform til at bidrage konstruktivt i jeres team og l\u00E6re mere i praksis, hvor det er relevant. Hvis min profil v\u00E6kker interesse, deltager jeg gerne i en samtale.\n\nTak for jeres tid og overvejelse. Jeg ser frem til at h\u00F8re fra jer.\n\nVenlig hilsen\nEmma S\u00F8rensen"
+}

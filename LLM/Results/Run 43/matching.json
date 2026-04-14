@@ -1,0 +1,128 @@
+{
+  "matches": [
+    {
+      "requirement_id": "req_1",
+      "verdict": "matched",
+      "matched_evidence_ids": [
+        "e1"
+      ],
+      "rationale_da": "E1 dokumenterer direkte, at kandidaten er junior softwareudvikler og har udviklet og vedligeholdt .NET-baserede webmoduler samt REST API-endpoints, hvilket underst\u00F8tter erfaring som udvikler.",
+      "gap_da": null,
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_2",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ikke evidens for, at kandidaten har arbejdet med applikationsudvikling i den finansielle sektor eller andre regulerede sektorer. E5 viser webprojekter for mindre kunder, men ikke den kr\u00E6vede sektor.",
+      "gap_da": "Der mangler dokumentation for applikationsudvikling i finansiel eller anden reguleret sektor.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_3",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "e1",
+        "e2"
+      ],
+      "rationale_da": "E1 og E2 viser udviklingsopgaver, integrationer, fejlretning og kodegennemgang, hvilket peger p\u00E5 erfaring fra flere dele af udviklingsprocessen. Det er dog ikke tydeligt dokumenteret, at kandidaten har erfaring med hele udviklingsprocessen fra ende til ende.",
+      "gap_da": "Der mangler eksplicit dokumentation for erfaring med hele udviklingsprocessen som samlet forl\u00F8b.",
+      "confidence": "medium",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_4",
+      "verdict": "matched",
+      "matched_evidence_ids": [
+        "e3"
+      ],
+      "rationale_da": "E3 dokumenterer flere programmeringssprog og teknologier, herunder C#, ASP.NET Core, React, HTML, CSS og SQL, hvilket underst\u00F8tter kravet.",
+      "gap_da": null,
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_5",
+      "verdict": "unclear",
+      "matched_evidence_ids": [
+        "e4"
+      ],
+      "rationale_da": "E4 giver en rimelig indikation af b\u00E5de kompilerede og fortolkede sprogomr\u00E5der via C# og React-relaterede teknologier, men kilden n\u00E6vner ikke disse kategorier eksplicit.",
+      "gap_da": "Der mangler eksplicit dokumentation for erfaring med b\u00E5de kompilerede og fortolkede sprog.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_6",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen dokumentation for kendskab til IBM Z System eller COBOL, og heller ikke tydelig evidens for lyst til at l\u00E6re om det.",
+      "gap_da": "Der mangler dokumentation for kendskab til eller interesse for IBM Z System og COBOL.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_7",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "e8"
+      ],
+      "rationale_da": "E8 viser interesse for moderne webudvikling og fokus p\u00E5 API-design, hvilket er relevant for developer experience og DevOps, men DevOps n\u00E6vnes ikke direkte.",
+      "gap_da": "Der mangler direkte dokumentation for interesse for DevOps og developer experience specifikt.",
+      "confidence": "medium",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_8",
+      "verdict": "matched",
+      "matched_evidence_ids": [
+        "e6",
+        "e5"
+      ],
+      "rationale_da": "E6 dokumenterer samarbejde med b\u00E5de teknikere og forretning samt dialog med brugere og udviklere. E5 underst\u00F8tter ogs\u00E5 kundekontakt, s\u00E5 kravet om gode samarbejdsevner er tilstr\u00E6kkeligt d\u00E6kket.",
+      "gap_da": null,
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_9",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "e7"
+      ],
+      "rationale_da": "E7 dokumenterer dansk som modersm\u00E5l og engelsk p\u00E5 professionelt niveau, hvilket klart underst\u00F8tter sprogf\u00E6rdighederne. Kilden dokumenterer dog ikke eksplicit skrift og tale separat.",
+      "gap_da": "Der mangler eksplicit dokumentation for b\u00E5de skriftlig og mundtlig beherskelse af dansk og engelsk.",
+      "confidence": "medium",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_10",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "e8",
+        "e9"
+      ],
+      "rationale_da": "E8 viser nysgerrighed og fokus p\u00E5 moderne webudvikling, og E9 viser erfaring med mindre automatiseringer. Det underst\u00F8tter temaet, men der er ingen direkte dokumentation for markedstrends, AI eller automatisering som interesseomr\u00E5de.",
+      "gap_da": "Der mangler direkte dokumentation for interesse i markedstrends, AI og automatisering.",
+      "confidence": "medium",
+      "needs_human_review": true
+    }
+  ],
+  "overall_assessment": {
+    "overall_match_level": "moderate",
+    "summary_da": "Kandidaten matcher tydeligt erfaring som udvikler, samarbejdsevner, sprog og flere tekniske kompetencer. Der mangler dog dokumentation for reguleret sektor, IBM Z/COBOL samt direkte erfaring eller interesse p\u00E5 flere af de mere specifikke \u00F8nskede omr\u00E5der.",
+    "major_strength_evidence_ids": [
+      "e1",
+      "e3",
+      "e6",
+      "e7"
+    ],
+    "major_gap_requirement_ids": [
+      "req_2",
+      "req_6",
+      "req_10"
+    ]
+  }
+}

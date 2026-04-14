@@ -3,6 +3,7 @@ using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
 using OpenAI.Responses;
+using OpenAiResponses.Api.Helpers;
 using OpenAiResponses.Api.Models;
 using OpenAiResponses.Api.Options;
 using OpenAiResponses.Api.Services;
@@ -36,7 +37,15 @@ builder.Services
         }
     })
     .Validate(options => !string.IsNullOrWhiteSpace(options.ApiKey), $"{OpenAIOptions.SectionName}:ApiKey or OPENAI_API_KEY must be configured.")
-    .Validate(options => !string.IsNullOrWhiteSpace(options.Model), $"{OpenAIOptions.SectionName}:Model must be configured.")
+    .Validate(options => CurrencyCodeHelper.IsIso4217Like(options.PricingCurrency), $"{OpenAIOptions.SectionName}:PricingCurrency must be a three-letter ISO 4217 code.")
+    .Validate(options => CurrencyCodeHelper.IsIso4217Like(options.DisplayCurrency), $"{OpenAIOptions.SectionName}:DisplayCurrency must be a three-letter ISO 4217 code.")
+    .Validate(options => options.Models.Count > 0, $"{OpenAIOptions.SectionName}:Models must contain at least one configured entry.")
+    .Validate(options => options.Models.All(model => model.Key > 0 && !string.IsNullOrWhiteSpace(model.Value.Id)), $"{OpenAIOptions.SectionName}:Models entries must use positive numeric keys and non-empty Id values.")
+    .Validate(options => IsVisionModelSelectionConfigured(options, options.Model), $"{OpenAIOptions.SectionName}:Model must point to a configured vision-capable model entry.")
+    .Validate(options => !options.Phases.Requirements.Model.HasValue || IsVisionModelSelectionConfigured(options, options.Phases.Requirements.Model.Value), $"{OpenAIOptions.SectionName}:Phases:Requirements:Model must point to a configured vision-capable model entry.")
+    .Validate(options => !options.Phases.CandidateEvidence.Model.HasValue || IsVisionModelSelectionConfigured(options, options.Phases.CandidateEvidence.Model.Value), $"{OpenAIOptions.SectionName}:Phases:CandidateEvidence:Model must point to a configured vision-capable model entry.")
+    .Validate(options => !options.Phases.Matching.Model.HasValue || IsVisionModelSelectionConfigured(options, options.Phases.Matching.Model.Value), $"{OpenAIOptions.SectionName}:Phases:Matching:Model must point to a configured vision-capable model entry.")
+    .Validate(options => !options.Phases.ApplicationGeneration.Model.HasValue || IsVisionModelSelectionConfigured(options, options.Phases.ApplicationGeneration.Model.Value), $"{OpenAIOptions.SectionName}:Phases:ApplicationGeneration:Model must point to a configured vision-capable model entry.")
     .ValidateOnStart();
 
 builder.Services
@@ -61,6 +70,12 @@ builder.Services
     .Validate(options => options.CoverLetterTemplate.MaxMainContentCharacters > 0, $"{SamplePipelineOptions.SectionName}:CoverLetterTemplate:MaxMainContentCharacters must be greater than zero.")
     .ValidateOnStart();
 
+builder.Services.AddHttpClient("exchange-rate-api", client =>
+{
+    client.BaseAddress = new Uri("https://open.er-api.com/");
+    client.Timeout = TimeSpan.FromSeconds(15);
+});
+
 // The responses client is shared so all routes use the same configured API key.
 builder.Services.AddSingleton<ResponsesClient>(serviceProvider =>
 {
@@ -70,6 +85,8 @@ builder.Services.AddSingleton<ResponsesClient>(serviceProvider =>
 
 // Register the services that power the staged sample pipeline and its repair/gate flow.
 builder.Services.AddSingleton<IOpenAiResponsesService, OpenAiResponsesService>();
+builder.Services.AddSingleton<IExchangeRateCacheService, ExchangeRateCacheService>();
+builder.Services.AddSingleton<ICurrencyDisplayConversionService, CurrencyDisplayConversionService>();
 builder.Services.AddSingleton<ICoverLetterTemplateRenderer, CoverLetterTemplateRenderer>();
 builder.Services.AddSingleton<IVerificationOrchestrator, VerificationOrchestrator>();
 builder.Services.AddSingleton<IDownstreamGateEvaluator, DownstreamGateEvaluator>();
@@ -77,6 +94,7 @@ builder.Services.AddSingleton<IRequirementsDeterministicRepairService, Requireme
 builder.Services.AddSingleton<IMatchingDeterministicRepairService, MatchingDeterministicRepairService>();
 builder.Services.AddSingleton<IApplicationGenerationDeterministicRepairService, ApplicationGenerationDeterministicRepairService>();
 builder.Services.AddSingleton<ISampleLlmFlowService, SampleLlmFlowService>();
+builder.Services.AddHostedService<ExchangeRateRefreshService>();
 
 var app = builder.Build();
 
@@ -319,4 +337,11 @@ static async Task<IResult> ExecuteJsonResponseAsync(
             detail: exception.Message,
             statusCode: StatusCodes.Status500InternalServerError);
     }
+}
+
+static bool IsVisionModelSelectionConfigured(OpenAIOptions options, int modelSelection)
+{
+    return options.Models.TryGetValue(modelSelection, out var model)
+        && !string.IsNullOrWhiteSpace(model.Id)
+        && model.SupportsVision;
 }

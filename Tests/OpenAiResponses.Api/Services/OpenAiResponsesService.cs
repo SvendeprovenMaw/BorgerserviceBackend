@@ -88,7 +88,7 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
         ValidateStructuredRequest(request);
 
         var normalizedInputFiles = NormalizeFileInputs(request.InputFiles);
-        var selectedModel = string.IsNullOrWhiteSpace(request.Model) ? _options.Model : request.Model.Trim();
+        var selectedModel = string.IsNullOrWhiteSpace(request.Model) ? _options.ResolveModelId() : request.Model.Trim();
         var schemaName = SanitizeSchemaName(request.SchemaName);
         var schemaJson = request.OutputSchema.GetRawText();
 

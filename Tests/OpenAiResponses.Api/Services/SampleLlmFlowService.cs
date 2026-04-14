@@ -1,5 +1,7 @@
+using System.Globalization;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
+using OpenAiResponses.Api.Helpers;
 using OpenAiResponses.Api.Models;
 using OpenAiResponses.Api.Options;
 
@@ -17,6 +19,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
 
     private readonly IHostEnvironment _environment;
     private readonly IOpenAiResponsesService _openAiResponsesService;
+    private readonly ICurrencyDisplayConversionService _currencyDisplayConversionService;
     private readonly ICoverLetterTemplateRenderer _coverLetterTemplateRenderer;
     private readonly IVerificationOrchestrator _verificationOrchestrator;
     private readonly IDownstreamGateEvaluator _downstreamGateEvaluator;
@@ -31,6 +34,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
     public SampleLlmFlowService(
         IHostEnvironment environment,
         IOpenAiResponsesService openAiResponsesService,
+        ICurrencyDisplayConversionService currencyDisplayConversionService,
         ICoverLetterTemplateRenderer coverLetterTemplateRenderer,
         IVerificationOrchestrator verificationOrchestrator,
         IDownstreamGateEvaluator downstreamGateEvaluator,
@@ -44,6 +48,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
     {
         _environment = environment;
         _openAiResponsesService = openAiResponsesService;
+        _currencyDisplayConversionService = currencyDisplayConversionService;
         _coverLetterTemplateRenderer = coverLetterTemplateRenderer;
         _verificationOrchestrator = verificationOrchestrator;
         _downstreamGateEvaluator = downstreamGateEvaluator;
@@ -180,16 +185,17 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         var tokenUsageRecords = new List<LlmInteractionUsageRecord>();
         PipelineVerificationSummary? verificationSummary = null;
         string? applicationJson = null;
+        var requirementsPhaseSettings = ResolvePhaseExecutionSettings("requirements");
 
         _logger.LogInformation("Pipeline run directory created at {RunDirectory}.", runDirectoryRelativePath);
 
         _logger.LogInformation(
             "Flow 1/4 requirements parsing: sending job application {JobApplicationFile} to OpenAI model {Model}.",
             Path.GetFileName(sampleData.JobApplication),
-            _openAiOptions.Model);
+            requirementsPhaseSettings.Model);
 
         var requirementsResult = await RunRequirementsParsingCoreAsync(sampleData, cancellationToken);
-        RecordLlmInteraction(tokenUsageRecords, phase: "requirements", sequenceKind: "initial_generation", attempt: null, requirementsResult);
+        RecordLlmInteraction(tokenUsageRecords, phase: "requirements", sequenceKind: "initial_generation", attempt: null, requirementsResult, requirementsPhaseSettings.Pricing);
         var requirementsJson = requirementsResult.OutputJson;
         await SaveJsonResultAsync(runDirectory, "requirements.json", requirementsJson, cancellationToken);
 
@@ -255,7 +261,13 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             requirementsJson,
             requirementsDocumentId,
             cancellationToken);
-        RecordLlmInteraction(tokenUsageRecords, phase: "candidate_evidence", sequenceKind: "initial_generation", attempt: null, candidateEvidenceResult);
+        RecordLlmInteraction(
+            tokenUsageRecords,
+            phase: "candidate_evidence",
+            sequenceKind: "initial_generation",
+            attempt: null,
+            candidateEvidenceResult,
+            ResolvePhaseExecutionSettings("candidate_evidence").Pricing);
         var candidateEvidenceJson = candidateEvidenceResult.OutputJson;
         await SaveJsonResultAsync(runDirectory, "candidate_evidence.json", candidateEvidenceJson, cancellationToken);
 
@@ -319,7 +331,13 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             candidateEvidenceDocumentId,
             regenerationFeedbackJson: null,
             cancellationToken);
-        RecordLlmInteraction(tokenUsageRecords, phase: "matching", sequenceKind: "initial_generation", attempt: null, matchingResult);
+        RecordLlmInteraction(
+            tokenUsageRecords,
+            phase: "matching",
+            sequenceKind: "initial_generation",
+            attempt: null,
+            matchingResult,
+            ResolvePhaseExecutionSettings("matching").Pricing);
         var matchJson = matchingResult.OutputJson;
         await SaveJsonResultAsync(runDirectory, "matching.json", matchJson, cancellationToken);
 
@@ -400,7 +418,13 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             matchingDocumentId,
             applicationDocumentId,
             cancellationToken);
-        RecordLlmInteraction(tokenUsageRecords, phase: "application_generation", sequenceKind: "initial_generation", attempt: null, applicationResult);
+        RecordLlmInteraction(
+            tokenUsageRecords,
+            phase: "application_generation",
+            sequenceKind: "initial_generation",
+            attempt: null,
+            applicationResult,
+            ResolvePhaseExecutionSettings("application_generation").Pricing);
         applicationJson = applicationResult.OutputJson;
         await SaveJsonResultAsync(runDirectory, "application_generation.json", applicationJson, cancellationToken);
 
@@ -559,6 +583,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             SchemaName = matchingAsset.SchemaName,
             SchemaDescription = matchingAsset.SchemaDescription,
             OutputSchema = matchingAsset.OutputSchema,
+            Model = ResolvePhaseExecutionSettings("matching").Model,
             InputTexts = inputTexts
         };
 
@@ -595,6 +620,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             SchemaName = applicationAsset.SchemaName,
             SchemaDescription = applicationAsset.SchemaDescription,
             OutputSchema = applicationAsset.OutputSchema,
+            Model = ResolvePhaseExecutionSettings("application_generation").Model,
             InputTexts =
             [
                 new StructuredTextInput
@@ -656,6 +682,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             SchemaName = requirementsAsset.SchemaName,
             SchemaDescription = requirementsAsset.SchemaDescription,
             OutputSchema = requirementsAsset.OutputSchema,
+            Model = ResolvePhaseExecutionSettings("requirements").Model,
             InputFiles =
             [
                 new StructuredFileInput
@@ -686,6 +713,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             SchemaName = candidateEvidenceAsset.SchemaName,
             SchemaDescription = candidateEvidenceAsset.SchemaDescription,
             OutputSchema = candidateEvidenceAsset.OutputSchema,
+            Model = ResolvePhaseExecutionSettings("candidate_evidence").Model,
             InputTexts =
             [
                 new StructuredTextInput
@@ -978,7 +1006,13 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
                 candidateEvidenceDocumentId,
                 regenerationFeedbackJson: feedbackJson,
                 cancellationToken);
-            RecordLlmInteraction(tokenUsageRecords, phase: "matching", sequenceKind: "regeneration_after_gate_failure", attempt: attempt, regenerationResult);
+            RecordLlmInteraction(
+                tokenUsageRecords,
+                phase: "matching",
+                sequenceKind: "regeneration_after_gate_failure",
+                attempt: attempt,
+                regenerationResult,
+                ResolvePhaseExecutionSettings("matching").Pricing);
 
             currentJson = regenerationResult.OutputJson;
 
@@ -1264,13 +1298,14 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         IReadOnlyList<LlmInteractionUsageRecord> interactions,
         CancellationToken cancellationToken)
     {
-        var pricing = BuildPricingSnapshot();
-        var report = BuildTokenUsageReport(
+        var pricing = BuildPricingConfigurationSnapshot();
+        var report = await BuildTokenUsageReportAsync(
             runDirectoryRelativePath: runDirectoryRelativePath,
             jobListingFileName: jobListingFileName,
             pipelineStatus: pipelineStatus,
             pricing: pricing,
-            interactions: interactions);
+            interactions: interactions,
+            cancellationToken: cancellationToken);
 
         await SaveArtifactAsync(runDirectory, ResourceConsumptionDirectoryName, TokenUsageFileName, report, cancellationToken);
     }
@@ -1368,51 +1403,97 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         return destinationRelativePath;
     }
 
-    private RunTokenUsageReport BuildTokenUsageReport(
+    private async Task<RunTokenUsageReport> BuildTokenUsageReportAsync(
         string runDirectoryRelativePath,
         string jobListingFileName,
         string pipelineStatus,
-        TokenPricingSnapshot pricing,
-        IReadOnlyList<LlmInteractionUsageRecord> interactions)
+        TokenPricingConfigurationSnapshot pricing,
+        IReadOnlyList<LlmInteractionUsageRecord> interactions,
+        CancellationToken cancellationToken)
     {
+        var requestedDisplayCurrency = NormalizePricingCurrency(_openAiOptions.DisplayCurrency);
+        var reportCurrency = pricing.Currency;
+        var shouldConvertCosts = false;
+        var currencyExchange = await _currencyDisplayConversionService.GetDisplayCurrencyQuoteAsync(pricing.Currency, cancellationToken);
+
+        if (string.Equals(pricing.Currency, requestedDisplayCurrency, StringComparison.OrdinalIgnoreCase))
+        {
+            reportCurrency = requestedDisplayCurrency;
+        }
+        else if (currencyExchange.AppliedRate.HasValue)
+        {
+            reportCurrency = requestedDisplayCurrency;
+            shouldConvertCosts = true;
+
+            if (currencyExchange.UsingStaleRate)
+            {
+                _logger.LogWarning(
+                    "Display-currency conversion from {SourceCurrency} to {DisplayCurrency} is using stale exchange-rate data last refreshed at {LastSuccessfulRefreshUtc}.",
+                    pricing.Currency,
+                    requestedDisplayCurrency,
+                    currencyExchange.LastSuccessfulRefreshUtc);
+            }
+        }
+        else
+        {
+            _logger.LogWarning(
+                "Display-currency conversion from {SourceCurrency} to {DisplayCurrency} is unavailable. Token usage will remain in {SourceCurrency} for this run report.",
+                pricing.Currency,
+                requestedDisplayCurrency,
+                pricing.Currency);
+        }
+
         var totals = SumTokenUsage(interactions.Select(interaction => interaction.TokenUsage));
-        var phaseTotals = interactions
-            .GroupBy(interaction => interaction.Phase, StringComparer.Ordinal)
-            .OrderBy(group => group.Key, StringComparer.Ordinal)
-            .Select(group =>
-            {
-                var groupTotals = SumTokenUsage(group.Select(interaction => interaction.TokenUsage));
-                return new PhaseTokenUsageSummary(
-                    Phase: group.Key,
-                    InteractionCount: group.Count(),
-                    Totals: groupTotals,
-                    EstimatedCost: BuildTokenCostSummary(groupTotals, pricing));
-            })
-            .ToList();
-        var sequenceTotals = interactions
-            .GroupBy(interaction => (interaction.Phase, interaction.SequenceKind))
-            .OrderBy(group => group.Key.Phase, StringComparer.Ordinal)
-            .ThenBy(group => group.Key.SequenceKind, StringComparer.Ordinal)
-            .Select(group =>
-            {
-                var groupTotals = SumTokenUsage(group.Select(interaction => interaction.TokenUsage));
-                return new SequenceTokenUsageSummary(
-                    Phase: group.Key.Phase,
-                    SequenceKind: group.Key.SequenceKind,
-                    InteractionCount: group.Count(),
-                    Totals: groupTotals,
-                    EstimatedCost: BuildTokenCostSummary(groupTotals, pricing));
-            })
-            .ToList();
-        var interactionSummaries = interactions
-            .Select(interaction => new InteractionTokenUsageSummary(
+        var interactionSummaries = new List<InteractionTokenUsageSummary>(interactions.Count);
+        foreach (var interaction in interactions)
+        {
+            var rawEstimatedCost = BuildTokenCostSummary(interaction.TokenUsage, interaction.Pricing);
+            var estimatedCost = shouldConvertCosts
+                ? ConvertTokenCostSummary(rawEstimatedCost, currencyExchange)
+                : rawEstimatedCost;
+
+            interactionSummaries.Add(new InteractionTokenUsageSummary(
                 Phase: interaction.Phase,
                 SequenceKind: interaction.SequenceKind,
                 Attempt: interaction.Attempt,
                 Model: interaction.Model,
                 ResponseId: interaction.ResponseId,
                 Tokens: CloneTokenUsage(interaction.TokenUsage),
-                EstimatedCost: BuildTokenCostSummary(interaction.TokenUsage, pricing)))
+                Pricing: interaction.Pricing,
+                EstimatedCost: estimatedCost));
+        }
+
+        var phaseTotals = interactionSummaries
+            .GroupBy(interaction => interaction.Phase, StringComparer.Ordinal)
+            .OrderBy(group => group.Key, StringComparer.Ordinal)
+            .Select(group =>
+            {
+                var groupedInteractions = group.ToList();
+                var groupTotals = SumTokenUsage(groupedInteractions.Select(interaction => interaction.Tokens));
+                return new PhaseTokenUsageSummary(
+                    Phase: group.Key,
+                    Model: ResolveGroupModel(groupedInteractions.Select(interaction => interaction.Model)),
+                    InteractionCount: groupedInteractions.Count,
+                    Totals: groupTotals,
+                    EstimatedCost: SumTokenCostSummaries(groupedInteractions.Select(interaction => interaction.EstimatedCost), reportCurrency));
+            })
+            .ToList();
+        var sequenceTotals = interactionSummaries
+            .GroupBy(interaction => (interaction.Phase, interaction.SequenceKind))
+            .OrderBy(group => group.Key.Phase, StringComparer.Ordinal)
+            .ThenBy(group => group.Key.SequenceKind, StringComparer.Ordinal)
+            .Select(group =>
+            {
+                var groupedInteractions = group.ToList();
+                var groupTotals = SumTokenUsage(groupedInteractions.Select(interaction => interaction.Tokens));
+                return new SequenceTokenUsageSummary(
+                    Phase: group.Key.Phase,
+                    SequenceKind: group.Key.SequenceKind,
+                    Model: ResolveGroupModel(groupedInteractions.Select(interaction => interaction.Model)),
+                    InteractionCount: groupedInteractions.Count,
+                    Totals: groupTotals,
+                    EstimatedCost: SumTokenCostSummaries(groupedInteractions.Select(interaction => interaction.EstimatedCost), reportCurrency));
+            })
             .ToList();
 
         return new RunTokenUsageReport(
@@ -1422,12 +1503,51 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             RecordedAtUtc: DateTimeOffset.UtcNow,
             Model: ResolveRunModel(interactions),
             InteractionCount: interactions.Count,
+            RequestedDisplayCurrency: requestedDisplayCurrency,
+            DisplayCurrency: reportCurrency,
+            CurrencyExchange: currencyExchange,
             Pricing: pricing,
             Totals: totals,
-            EstimatedCost: BuildTokenCostSummary(totals, pricing),
+            EstimatedCost: SumTokenCostSummaries(interactionSummaries.Select(interaction => interaction.EstimatedCost), reportCurrency),
             PhaseTotals: phaseTotals,
             SequenceTotals: sequenceTotals,
             Interactions: interactionSummaries);
+    }
+
+    private static TokenCostSummary ConvertTokenCostSummary(TokenCostSummary summary, CurrencyExchangeRateQuote currencyExchange)
+    {
+        var displayCurrency = currencyExchange.TargetCurrency;
+        if (string.Equals(summary.Currency, displayCurrency, StringComparison.OrdinalIgnoreCase))
+        {
+            return summary with { Currency = displayCurrency };
+        }
+
+        if (!summary.PricingConfigured)
+        {
+            return summary with { Currency = displayCurrency };
+        }
+
+        if (!currencyExchange.AppliedRate.HasValue)
+        {
+            return summary;
+        }
+
+        decimal? inputCost = summary.InputCost.HasValue
+            ? ConvertCost(summary.InputCost.Value, currencyExchange.AppliedRate.Value)
+            : null;
+        decimal? outputCost = summary.OutputCost.HasValue
+            ? ConvertCost(summary.OutputCost.Value, currencyExchange.AppliedRate.Value)
+            : null;
+        decimal? totalCost = summary.TotalCost.HasValue
+            ? ConvertCost(summary.TotalCost.Value, currencyExchange.AppliedRate.Value)
+            : null;
+
+        return CreateTokenCostSummary(
+            Currency: displayCurrency,
+            PricingConfigured: summary.PricingConfigured,
+            InputCost: inputCost,
+            OutputCost: outputCost,
+            TotalCost: totalCost);
     }
 
     private async Task<string> SaveTextArtifactAsync(
@@ -1451,16 +1571,25 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         return destinationRelativePath;
     }
 
-    private TokenPricingSnapshot BuildPricingSnapshot()
+    private TokenPricingConfigurationSnapshot BuildPricingConfigurationSnapshot()
     {
-        var inputPrice = NormalizeNonNegativePrice(_openAiOptions.InputCostPerMillionTokens);
-        var outputPrice = NormalizeNonNegativePrice(_openAiOptions.OutputCostPerMillionTokens);
+        var defaultModel = _openAiOptions.ResolveModelEntry();
+        var defaultPricing = BuildTokenPricingSnapshot(
+            defaultModel.Id,
+            defaultModel.InputCostPerMillionTokens ?? _openAiOptions.InputCostPerMillionTokens,
+            defaultModel.CachedInputCostPerMillionTokens ?? _openAiOptions.CachedInputCostPerMillionTokens,
+            defaultModel.OutputCostPerMillionTokens ?? _openAiOptions.OutputCostPerMillionTokens);
 
-        return new TokenPricingSnapshot(
-            Currency: NormalizePricingCurrency(_openAiOptions.PricingCurrency),
-            InputCostPerMillionTokens: inputPrice,
-            OutputCostPerMillionTokens: outputPrice,
-            PricingConfigured: inputPrice.HasValue && outputPrice.HasValue);
+        return new TokenPricingConfigurationSnapshot(
+            Currency: defaultPricing.Currency,
+            Default: defaultPricing,
+            Phases:
+            [
+                new PhasePricingConfigurationSnapshot("requirements", ResolvePhaseExecutionSettings("requirements").Pricing),
+                new PhasePricingConfigurationSnapshot("candidate_evidence", ResolvePhaseExecutionSettings("candidate_evidence").Pricing),
+                new PhasePricingConfigurationSnapshot("matching", ResolvePhaseExecutionSettings("matching").Pricing),
+                new PhasePricingConfigurationSnapshot("application_generation", ResolvePhaseExecutionSettings("application_generation").Pricing)
+            ]);
     }
 
     private static void RecordLlmInteraction(
@@ -1468,7 +1597,8 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         string phase,
         string sequenceKind,
         int? attempt,
-        StructuredJsonGenerationResult generationResult)
+        StructuredJsonGenerationResult generationResult,
+        TokenPricingSnapshot pricing)
     {
         interactions.Add(new LlmInteractionUsageRecord(
             Phase: phase,
@@ -1476,21 +1606,97 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             Attempt: attempt,
             Model: generationResult.Model,
             ResponseId: generationResult.ResponseId,
-            TokenUsage: CloneTokenUsage(generationResult.TokenUsage)));
+            TokenUsage: CloneTokenUsage(generationResult.TokenUsage),
+            Pricing: pricing));
+    }
+
+    private OpenAiPhaseExecutionSettings ResolvePhaseExecutionSettings(string phase)
+    {
+        var phaseOptions = ResolvePhaseOptions(phase);
+        var selectedModel = _openAiOptions.ResolveModelEntry(phaseOptions.Model);
+        var model = selectedModel.Id.Trim();
+
+        return new OpenAiPhaseExecutionSettings(
+            Phase: phase,
+            Model: model,
+            Pricing: BuildTokenPricingSnapshot(
+                model,
+                phaseOptions.InputCostPerMillionTokens ?? selectedModel.InputCostPerMillionTokens ?? _openAiOptions.InputCostPerMillionTokens,
+                phaseOptions.CachedInputCostPerMillionTokens ?? selectedModel.CachedInputCostPerMillionTokens ?? _openAiOptions.CachedInputCostPerMillionTokens,
+                phaseOptions.OutputCostPerMillionTokens ?? selectedModel.OutputCostPerMillionTokens ?? _openAiOptions.OutputCostPerMillionTokens));
+    }
+
+    private OpenAIPhaseExecutionOptions ResolvePhaseOptions(string phase)
+    {
+        return phase switch
+        {
+            "requirements" => _openAiOptions.Phases.Requirements,
+            "candidate_evidence" => _openAiOptions.Phases.CandidateEvidence,
+            "matching" => _openAiOptions.Phases.Matching,
+            "application_generation" => _openAiOptions.Phases.ApplicationGeneration,
+            _ => new OpenAIPhaseExecutionOptions()
+        };
+    }
+
+    private TokenPricingSnapshot BuildTokenPricingSnapshot(
+        string model,
+        decimal? inputCostPerMillionTokens,
+        decimal? cachedInputCostPerMillionTokens,
+        decimal? outputCostPerMillionTokens)
+    {
+        var normalizedInputCost = NormalizeNonNegativePrice(inputCostPerMillionTokens);
+        var normalizedCachedInputCost = NormalizeNonNegativePrice(cachedInputCostPerMillionTokens) ?? normalizedInputCost;
+        var normalizedOutputCost = NormalizeNonNegativePrice(outputCostPerMillionTokens);
+
+        return new TokenPricingSnapshot(
+            Model: string.IsNullOrWhiteSpace(model) ? _openAiOptions.ResolveModelId() : model.Trim(),
+            Currency: NormalizePricingCurrency(_openAiOptions.PricingCurrency),
+            InputCostPerMillionTokens: normalizedInputCost,
+            CachedInputCostPerMillionTokens: normalizedCachedInputCost,
+            OutputCostPerMillionTokens: normalizedOutputCost,
+            PricingConfigured: normalizedInputCost.HasValue && normalizedOutputCost.HasValue);
     }
 
     private TokenCostSummary BuildTokenCostSummary(LlmTokenUsage tokenUsage, TokenPricingSnapshot pricing)
     {
         if (!pricing.PricingConfigured || !pricing.InputCostPerMillionTokens.HasValue || !pricing.OutputCostPerMillionTokens.HasValue)
         {
-            return new TokenCostSummary(pricing.Currency, PricingConfigured: false, InputCost: null, OutputCost: null, TotalCost: null);
+            return CreateTokenCostSummary(pricing.Currency, PricingConfigured: false, InputCost: null, OutputCost: null, TotalCost: null);
         }
 
-        var inputCost = RoundCost(tokenUsage.InputTokens / 1_000_000m * pricing.InputCostPerMillionTokens.Value);
+        var cachedInputTokens = Math.Max(0L, Math.Min(tokenUsage.CachedInputTokens, tokenUsage.InputTokens));
+        var uncachedInputTokens = Math.Max(0L, tokenUsage.InputTokens - cachedInputTokens);
+        var cachedInputPrice = pricing.CachedInputCostPerMillionTokens ?? pricing.InputCostPerMillionTokens.Value;
+        var inputCost = RoundCost(
+            uncachedInputTokens / 1_000_000m * pricing.InputCostPerMillionTokens.Value
+            + cachedInputTokens / 1_000_000m * cachedInputPrice);
         var outputCost = RoundCost(tokenUsage.OutputTokens / 1_000_000m * pricing.OutputCostPerMillionTokens.Value);
 
-        return new TokenCostSummary(
+        return CreateTokenCostSummary(
             Currency: pricing.Currency,
+            PricingConfigured: true,
+            InputCost: inputCost,
+            OutputCost: outputCost,
+            TotalCost: RoundCost(inputCost + outputCost));
+    }
+
+    private static TokenCostSummary SumTokenCostSummaries(IEnumerable<TokenCostSummary> summaries, string currency)
+    {
+        var summaryList = summaries.ToList();
+        if (summaryList.Count == 0
+            || summaryList.Any(summary => !summary.PricingConfigured
+                || !summary.InputCost.HasValue
+                || !summary.OutputCost.HasValue
+                || !string.Equals(summary.Currency, currency, StringComparison.OrdinalIgnoreCase)))
+        {
+            return CreateTokenCostSummary(currency, PricingConfigured: false, InputCost: null, OutputCost: null, TotalCost: null);
+        }
+
+        var inputCost = RoundCost(summaryList.Sum(summary => summary.InputCost!.Value));
+        var outputCost = RoundCost(summaryList.Sum(summary => summary.OutputCost!.Value));
+
+        return CreateTokenCostSummary(
+            Currency: currency,
             PricingConfigured: true,
             InputCost: inputCost,
             OutputCost: outputCost,
@@ -1538,16 +1744,20 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
 
     private static string ResolveRunModel(IReadOnlyList<LlmInteractionUsageRecord> interactions)
     {
-        var models = interactions
-            .Select(interaction => interaction.Model)
+        return ResolveGroupModel(interactions.Select(interaction => interaction.Model));
+    }
+
+    private static string ResolveGroupModel(IEnumerable<string> models)
+    {
+        var distinctModels = models
             .Where(model => !string.IsNullOrWhiteSpace(model))
             .Distinct(StringComparer.Ordinal)
             .ToList();
 
-        return models.Count switch
+        return distinctModels.Count switch
         {
             0 => string.Empty,
-            1 => models[0],
+            1 => distinctModels[0],
             _ => "mixed"
         };
     }
@@ -1559,14 +1769,53 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
 
     private static string NormalizePricingCurrency(string? currency)
     {
-        return string.IsNullOrWhiteSpace(currency)
-            ? "USD"
-            : currency.Trim().ToUpperInvariant();
+        return CurrencyCodeHelper.Normalize(currency);
     }
 
     private static decimal RoundCost(decimal value)
     {
         return decimal.Round(value, 8, MidpointRounding.AwayFromZero);
+    }
+
+    private static TokenCostSummary CreateTokenCostSummary(
+        string Currency,
+        bool PricingConfigured,
+        decimal? InputCost,
+        decimal? OutputCost,
+        decimal? TotalCost)
+    {
+        decimal? roundedUpTotalCostNumeric = TotalCost.HasValue
+            ? RoundUpCostToTwoDecimals(TotalCost.Value)
+            : null;
+
+        return new TokenCostSummary(
+            Currency: Currency,
+            PricingConfigured: PricingConfigured,
+            InputCost: InputCost,
+            OutputCost: OutputCost,
+            TotalCost: TotalCost,
+            RoundedUpTotalCost: roundedUpTotalCostNumeric.HasValue ? FormatCostToTwoDecimals(roundedUpTotalCostNumeric.Value) : null,
+            RoundedUpTotalCostNumeric: roundedUpTotalCostNumeric);
+    }
+
+    private static decimal RoundUpCostToTwoDecimals(decimal value)
+    {
+        var scaledValue = value * 100m;
+        var roundedScaledValue = value >= 0m
+            ? decimal.Ceiling(scaledValue)
+            : decimal.Floor(scaledValue);
+
+        return decimal.Round(roundedScaledValue / 100m, 2, MidpointRounding.AwayFromZero);
+    }
+
+    private static string FormatCostToTwoDecimals(decimal value)
+    {
+        return value.ToString("0.00", CultureInfo.InvariantCulture);
+    }
+
+    private static decimal ConvertCost(decimal amount, decimal exchangeRate)
+    {
+        return decimal.Round(amount * exchangeRate, 8, MidpointRounding.AwayFromZero);
     }
 
     /// <summary>
@@ -1929,7 +2178,8 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         int? Attempt,
         string Model,
         string? ResponseId,
-        LlmTokenUsage TokenUsage);
+        LlmTokenUsage TokenUsage,
+        TokenPricingSnapshot Pricing);
 
     private sealed record RunTokenUsageReport(
         string RunDirectory,
@@ -1938,16 +2188,30 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         DateTimeOffset RecordedAtUtc,
         string Model,
         int InteractionCount,
-        TokenPricingSnapshot Pricing,
+        string RequestedDisplayCurrency,
+        string DisplayCurrency,
+        CurrencyExchangeRateQuote CurrencyExchange,
+        TokenPricingConfigurationSnapshot Pricing,
         LlmTokenUsage Totals,
         TokenCostSummary EstimatedCost,
         IReadOnlyList<PhaseTokenUsageSummary> PhaseTotals,
         IReadOnlyList<SequenceTokenUsageSummary> SequenceTotals,
         IReadOnlyList<InteractionTokenUsageSummary> Interactions);
 
+    private sealed record TokenPricingConfigurationSnapshot(
+        string Currency,
+        TokenPricingSnapshot Default,
+        IReadOnlyList<PhasePricingConfigurationSnapshot> Phases);
+
+    private sealed record PhasePricingConfigurationSnapshot(
+        string Phase,
+        TokenPricingSnapshot Pricing);
+
     private sealed record TokenPricingSnapshot(
+        string Model,
         string Currency,
         decimal? InputCostPerMillionTokens,
+        decimal? CachedInputCostPerMillionTokens,
         decimal? OutputCostPerMillionTokens,
         bool PricingConfigured);
 
@@ -1956,10 +2220,13 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         bool PricingConfigured,
         decimal? InputCost,
         decimal? OutputCost,
-        decimal? TotalCost);
+        decimal? TotalCost,
+        string? RoundedUpTotalCost,
+        decimal? RoundedUpTotalCostNumeric);
 
     private sealed record PhaseTokenUsageSummary(
         string Phase,
+        string Model,
         int InteractionCount,
         LlmTokenUsage Totals,
         TokenCostSummary EstimatedCost);
@@ -1967,6 +2234,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
     private sealed record SequenceTokenUsageSummary(
         string Phase,
         string SequenceKind,
+        string Model,
         int InteractionCount,
         LlmTokenUsage Totals,
         TokenCostSummary EstimatedCost);
@@ -1978,7 +2246,13 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         string Model,
         string? ResponseId,
         LlmTokenUsage Tokens,
+        TokenPricingSnapshot Pricing,
         TokenCostSummary EstimatedCost);
+
+    private sealed record OpenAiPhaseExecutionSettings(
+        string Phase,
+        string Model,
+        TokenPricingSnapshot Pricing);
 
     private sealed record FitStrategyPreferences(
         string GuidanceMode,

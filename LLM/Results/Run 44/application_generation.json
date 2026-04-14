@@ -1,0 +1,339 @@
+{
+  "_meta": {
+    "application_document_id": "application_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "requirements_document_id": "requirements_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "candidate_evidence_document_id": "candidate_evidence_borger1",
+    "matching_document_id": "matching_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "target_language": "da",
+    "position_title": "Udvikler med fokus p\u00E5 DevOps",
+    "company_name": "JN Data",
+    "applicant_display_name": "Emma S\u00F8rensen"
+  },
+  "application_strategy": {
+    "tone": "warm_professional",
+    "length_target": "medium",
+    "subject_line_da": "Ans\u00F8gning til Udvikler med fokus p\u00E5 DevOps",
+    "core_message_da": "Jeg s\u00F8ger stillingen som Udvikler med fokus p\u00E5 DevOps og vil gerne bidrage med udviklererfaring, en struktureret arbejdsform og et godt samarbejde med b\u00E5de brugere, kolleger og kunder.",
+    "selected_requirement_ids": [
+      "req_1",
+      "req_8",
+      "req_9",
+      "req_12",
+      "req_14",
+      "req_15",
+      "req_3",
+      "req_7",
+      "req_11"
+    ],
+    "selected_evidence_ids": [
+      "evidence_1",
+      "evidence_3",
+      "evidence_4",
+      "evidence_5",
+      "evidence_6",
+      "evidence_7",
+      "evidence_8",
+      "evidence_9",
+      "evidence_10",
+      "evidence_2"
+    ],
+    "omitted_requirement_ids": [
+      "req_2",
+      "req_4",
+      "req_5",
+      "req_6",
+      "req_10",
+      "req_13"
+    ],
+    "omission_strategy_da": "Jeg fokuserer p\u00E5 de krav, der er tydeligt eller delvist underst\u00F8ttet af mit materiale, is\u00E6r udviklererfaring, samarbejde, sprog og arbejde t\u00E6t p\u00E5 brugere og kunder. Jeg undlader at fremh\u00E6ve omr\u00E5der, som ikke er dokumenteret tilstr\u00E6kkeligt."
+  },
+  "sections": [
+    {
+      "section_id": "sec_salutation",
+      "section_kind": "salutation",
+      "text_da": "K\u00E6re rekrutteringsteam",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "sec_opening",
+      "section_kind": "opening",
+      "text_da": "Jeg s\u00F8ger stillingen som Udvikler med fokus p\u00E5 DevOps og ser en god mulighed for at bruge min erfaring som junior softwareudvikler i en rolle, hvor udvikling, test, drift og samarbejde h\u00E6nger t\u00E6t sammen.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "claim_1",
+        "claim_2"
+      ],
+      "supported_requirement_ids": [
+        "req_1",
+        "req_14",
+        "req_3"
+      ],
+      "supported_evidence_ids": [
+        "evidence_1",
+        "evidence_2",
+        "evidence_3",
+        "evidence_8"
+      ]
+    },
+    {
+      "section_id": "sec_fit",
+      "section_kind": "fit",
+      "text_da": "Jeg kommer med konkret erfaring med .NET, API\u2019er og React, hvor jeg har udviklet og vedligeholdt interne webmoduler, bygget REST API-endpoints og arbejdet med fejlretning, kodegennemgang og mindre forbedringer. Dertil har jeg deltaget i integrationer mellem front-end, database og tredjepartssystemer, hvilket har givet mig en praktisk forst\u00E5else af flere led i udviklingsarbejdet.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "claim_3",
+        "claim_4"
+      ],
+      "supported_requirement_ids": [
+        "req_1",
+        "req_3",
+        "req_14"
+      ],
+      "supported_evidence_ids": [
+        "evidence_1",
+        "evidence_2",
+        "evidence_3",
+        "evidence_8"
+      ]
+    },
+    {
+      "section_id": "sec_collaboration",
+      "section_kind": "experience",
+      "text_da": "Jeg trives i samarbejde med b\u00E5de teknikere og forretning og er vant til dialog med brugere og udviklere. Det har jeg blandt andet brugt i teknisk support, dokumentation af l\u00F8sninger og i freelanceopgaver, hvor behov blev omsat til enkle l\u00F8sninger for mindre kunder.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "claim_5",
+        "claim_6"
+      ],
+      "supported_requirement_ids": [
+        "req_8",
+        "req_12",
+        "req_15"
+      ],
+      "supported_evidence_ids": [
+        "evidence_4",
+        "evidence_5",
+        "evidence_6",
+        "evidence_7"
+      ]
+    },
+    {
+      "section_id": "sec_motivation",
+      "section_kind": "motivation",
+      "text_da": "Jeg motiveres af en hverdag med t\u00E6t samarbejde, struktur og ansvarlig opf\u00F8lgning. Jeg er nysgerrig og l\u00F8sningsorienteret, og jeg synes is\u00E6r, det er interessant at arbejde med forbedringer, automatisering og praktiske l\u00F8sninger, der g\u00F8r hverdagen lettere for brugere og kolleger.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "claim_7",
+        "claim_8"
+      ],
+      "supported_requirement_ids": [
+        "req_7",
+        "req_11",
+        "req_13"
+      ],
+      "supported_evidence_ids": [
+        "evidence_6",
+        "evidence_7",
+        "evidence_9"
+      ]
+    },
+    {
+      "section_id": "sec_future",
+      "section_kind": "other",
+      "text_da": "Jeg vil gerne bidrage med en stabil og struktureret tilgang samt en positiv indstilling til l\u00E6ring og samarbejde. Jeg h\u00E5ber at f\u00E5 mulighed for at uddybe min motivation og mit match til stillingen ved en samtale.",
+      "content_mode": "bridge_text",
+      "claim_ids": [
+        "claim_9"
+      ],
+      "supported_requirement_ids": [
+        "req_8",
+        "req_12"
+      ],
+      "supported_evidence_ids": [
+        "evidence_7",
+        "evidence_6"
+      ]
+    },
+    {
+      "section_id": "sec_closing",
+      "section_kind": "closing",
+      "text_da": "Tak for jeres tid og overvejelse. Jeg ser frem til at h\u00F8re fra jer.",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "sec_signature",
+      "section_kind": "signature",
+      "text_da": "Venlig hilsen\nEmma S\u00F8rensen",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    }
+  ],
+  "claim_register": [
+    {
+      "claim_id": "claim_1",
+      "claim_text_da": "Kandidaten s\u00F8ger stillingen som Udvikler med fokus p\u00E5 DevOps og vil bruge sin udviklererfaring i en rolle med udvikling, test, drift og samarbejde.",
+      "claim_kind": "motivation_grounded",
+      "evidence_ids": [
+        "evidence_1",
+        "evidence_2",
+        "evidence_3",
+        "evidence_8"
+      ],
+      "requirement_ids": [
+        "req_1",
+        "req_14",
+        "req_3"
+      ],
+      "section_ids": [
+        "sec_opening"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_2",
+      "claim_text_da": "Kandidaten ser rollen som en mulighed for at arbejde i en sammenh\u00E6ng, hvor udvikling, test, drift og samarbejde h\u00E6nger t\u00E6t sammen.",
+      "claim_kind": "role_alignment",
+      "evidence_ids": [
+        "evidence_1",
+        "evidence_2",
+        "evidence_3",
+        "evidence_8"
+      ],
+      "requirement_ids": [
+        "req_14",
+        "req_3"
+      ],
+      "section_ids": [
+        "sec_opening"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_3",
+      "claim_text_da": "Kandidaten har konkret erfaring med .NET, API\u2019er og React, herunder udvikling og vedligeholdelse af interne webmoduler samt REST API-endpoints.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "evidence_1",
+        "evidence_8"
+      ],
+      "requirement_ids": [
+        "req_1",
+        "req_14"
+      ],
+      "section_ids": [
+        "sec_fit"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "claim_4",
+      "claim_text_da": "Kandidaten har arbejdet med fejlretning, kodegennemgang, mindre forbedringer og integrationer p\u00E5 tv\u00E6rs af front-end, database og tredjepartssystemer.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "evidence_2",
+        "evidence_3"
+      ],
+      "requirement_ids": [
+        "req_3",
+        "req_14"
+      ],
+      "section_ids": [
+        "sec_fit"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_5",
+      "claim_text_da": "Kandidaten trives i samarbejde med b\u00E5de teknikere og forretning og er vant til dialog med brugere og udviklere.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "evidence_6",
+        "evidence_7"
+      ],
+      "requirement_ids": [
+        "req_8",
+        "req_12"
+      ],
+      "section_ids": [
+        "sec_collaboration"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "claim_6",
+      "claim_text_da": "Kandidaten har erfaring med teknisk support, dokumentation og freelanceopgaver, hvor behov blev omsat til enkle l\u00F8sninger for mindre kunder.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "evidence_4",
+        "evidence_5"
+      ],
+      "requirement_ids": [
+        "req_12",
+        "req_15"
+      ],
+      "section_ids": [
+        "sec_collaboration"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_7",
+      "claim_text_da": "Kandidaten er nysgerrig, l\u00F8sningsorienteret og motiveres af struktur, ansvarlig opf\u00F8lgning og samarbejde.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "evidence_6",
+        "evidence_7"
+      ],
+      "requirement_ids": [
+        "req_7",
+        "req_11",
+        "req_13"
+      ],
+      "section_ids": [
+        "sec_motivation"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_8",
+      "claim_text_da": "Kandidaten har arbejdet med mindre automatiseringer i administrative workflows og viser dermed en vis relevans for automatisering og forbedringer.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "evidence_9"
+      ],
+      "requirement_ids": [
+        "req_11"
+      ],
+      "section_ids": [
+        "sec_motivation"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_9",
+      "claim_text_da": "Kandidaten vil gerne bidrage med en stabil og struktureret tilgang samt en positiv indstilling til l\u00E6ring og samarbejde.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "evidence_7",
+        "evidence_6"
+      ],
+      "requirement_ids": [
+        "req_8",
+        "req_12"
+      ],
+      "section_ids": [
+        "sec_future"
+      ],
+      "support_strength": "moderate"
+    }
+  ],
+  "assembled_application_da": "K\u00E6re rekrutteringsteam\n\nJeg s\u00F8ger stillingen som Udvikler med fokus p\u00E5 DevOps og ser en god mulighed for at bruge min erfaring som junior softwareudvikler i en rolle, hvor udvikling, test, drift og samarbejde h\u00E6nger t\u00E6t sammen.\n\nJeg kommer med konkret erfaring med .NET, API\u2019er og React, hvor jeg har udviklet og vedligeholdt interne webmoduler, bygget REST API-endpoints og arbejdet med fejlretning, kodegennemgang og mindre forbedringer. Dertil har jeg deltaget i integrationer mellem front-end, database og tredjepartssystemer, hvilket har givet mig en praktisk forst\u00E5else af flere led i udviklingsarbejdet.\n\nJeg trives i samarbejde med b\u00E5de teknikere og forretning og er vant til dialog med brugere og udviklere. Det har jeg blandt andet brugt i teknisk support, dokumentation af l\u00F8sninger og i freelanceopgaver, hvor behov blev omsat til enkle l\u00F8sninger for mindre kunder.\n\nJeg motiveres af en hverdag med t\u00E6t samarbejde, struktur og ansvarlig opf\u00F8lgning. Jeg er nysgerrig og l\u00F8sningsorienteret, og jeg synes is\u00E6r, det er interessant at arbejde med forbedringer, automatisering og praktiske l\u00F8sninger, der g\u00F8r hverdagen lettere for brugere og kolleger.\n\nJeg vil gerne bidrage med en stabil og struktureret tilgang samt en positiv indstilling til l\u00E6ring og samarbejde. Jeg h\u00E5ber at f\u00E5 mulighed for at uddybe min motivation og mit match til stillingen ved en samtale.\n\nTak for jeres tid og overvejelse. Jeg ser frem til at h\u00F8re fra jer.\n\nVenlig hilsen\nEmma S\u00F8rensen"
+}

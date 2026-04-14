@@ -1,0 +1,124 @@
+{
+  "matches": [
+    {
+      "requirement_id": "req_1",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evi_3_frontend_react_html_css_state",
+        "evi_1_full_lifecycle_dotnet_api_react"
+      ],
+      "rationale_da": "Evidensen underst\u00F8tter, at kandidaten har udviklings-/programmeringsm\u00E6ssig erfaring med forskellige dele (fx React-front-end og .NET/REST API-integrationer). Der er dog ikke dokumentation for, at kandidaten har erfaring med hele udviklingsprocessen samt b\u00E5de kompilerede og fortolkede sprog i den jobopslagets specificerede helhed.",
+      "gap_da": "Manglende eller ikke-dokumenteret eksplicit d\u00E6kning af hele udviklingsprocessen som en samlet erfaring, samt eksplicit kobling til b\u00E5de kompilerede og fortolkede sprog i samme dokumentation.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_2",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen evidens i de udleverede kandidatdata, der dokumenterer arbejde med applikationsudvikling i finansiel sektor eller andre regulerede sektorer.",
+      "gap_da": "Ingen dokumenteret erfaring fra finansiel sektor eller andre regulerede sektorer.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_3",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der findes ingen evidens for kendskab til eller lyst til at l\u00E6re om IBM Z System og COBOL i kandidatmaterialet.",
+      "gap_da": "Manglende dokumentation for IBM Z System og COBOL (kendskab eller l\u00E6ringsintention).",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_4",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen evidens for interesse i developer experience og DevOps i de udleverede kandidatuddrag.",
+      "gap_da": "Manglende dokumentation for interesse i developer experience/DevOps.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_5",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evi_4_fullstack_hybrid_collaboration_dialog"
+      ],
+      "rationale_da": "Evidensen underst\u00F8tter samarbejde og dialog (hybrid) med brugere og udviklere samt struktureret opgavel\u00F8sning og opf\u00F8lgning. Jobkravet n\u00E6vner dog specifikt \u0027kunder\u0027 og \u0027erfarne kolleger\u0027, som ikke er dokumenteret direkte.",
+      "gap_da": "Manglende eksplicit omtale af arbejde t\u00E6t med erfarne kolleger og kunder i den samme formulering/d\u00E6kning som i kravet.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_6",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evi_5_language_danish_english",
+        "evi_6_english_professional_level_profile"
+      ],
+      "rationale_da": "Kandidaten dokumenterer dansk (modersm\u00E5l) og engelsk (professionelt niveau). Der er dog ikke eksplicit dokumentation af, at beherskelsen g\u00E6lder b\u00E5de skrift og tale i kandidatmaterialet.",
+      "gap_da": "Manglende eksplicit angivelse af \u0027i b\u00E5de skrift og tale\u0027.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_7",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ikke dokumentation for, at kandidaten f\u00F8lger markedstrends i udviklingsparadigmer/tool-underst\u00F8ttelse samt er nysgerrig p\u00E5 AI og automatisering.",
+      "gap_da": "Ingen sporbar evidens for markedstrends, udviklingsparadigmer/tool-underst\u00F8ttelse, AI og automatisering.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_8",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen evidens for at kandidaten f\u00F8lger markedstrends i udviklingsparadigmer og tool-underst\u00F8ttelse.",
+      "gap_da": "Manglende dokumentation for markedstrends og tool-underst\u00F8ttelse.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_9",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evi_1_full_lifecycle_dotnet_api_react",
+        "evi_2_dev_test_deploy_responsibility_from_cv"
+      ],
+      "rationale_da": "Evidensen viser udviklingsarbejde med integrationer og REST API samt aktiviteter som fejlretning og kodegennemgang. Der mangler dog eksplicit dokumentation for hele forl\u00F8bet \u0027fra udvikling over test til deploy\u0027 inkl. deploy/udgivelse som del af ansvar.",
+      "gap_da": "Manglende dokumenteret deploy/udgivelse (deploy) samt eksplicit sammenh\u00E6ng fra udvikling til test til deploy som samlet ansvar.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_10",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der findes ingen evidens for udvikling af plugins til IBM Developer for z (eclipse-baseret IDE) i kandidatmaterialet.",
+      "gap_da": "Manglende dokumentation for IBM Developer for z plugin-udvikling.",
+      "confidence": "high",
+      "needs_human_review": false
+    }
+  ],
+  "overall_assessment": {
+    "overall_match_level": "weak",
+    "summary_da": "Kandidaten har delvis relevant evidens for udviklingsarbejde (fx .NET/REST API og React-front-end) samt samarbejde og sprogkompetencer (dansk/engelsk). Flere centrale krav mangler dog sporbar dokumentation, is\u00E6r finansiel/reguleret sektor, IBM Z/COBOL, DevOps/developer experience-interesse, markedstrends/AI/automation og fuld dev-test-deploy samt IBM Developer for z plugins.",
+    "major_strength_evidence_ids": [
+      "evi_1_full_lifecycle_dotnet_api_react",
+      "evi_3_frontend_react_html_css_state",
+      "evi_4_fullstack_hybrid_collaboration_dialog",
+      "evi_5_language_danish_english"
+    ],
+    "major_gap_requirement_ids": [
+      "req_2",
+      "req_3",
+      "req_4",
+      "req_7",
+      "req_8",
+      "req_10",
+      "req_9"
+    ]
+  }
+}

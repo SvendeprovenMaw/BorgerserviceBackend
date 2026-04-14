@@ -1,0 +1,349 @@
+{
+  "RunDirectory": "LLM/Results/Run 39",
+  "JobListingFileName": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+  "PipelineStatus": "completed",
+  "RecordedAtUtc": "2026-04-14T18:23:22.8344896+00:00",
+  "Model": "gpt-5.4-nano-2026-03-17",
+  "InteractionCount": 4,
+  "DisplayCurrency": "DKK",
+  "Pricing": {
+    "Currency": "USD",
+    "Default": {
+      "Model": "gpt-5.4-nano",
+      "Currency": "USD",
+      "InputCostPerMillionTokens": 0.2,
+      "OutputCostPerMillionTokens": 1.25,
+      "PricingConfigured": true
+    },
+    "Phases": [
+      {
+        "Phase": "requirements",
+        "Pricing": {
+          "Model": "gpt-5.4-nano",
+          "Currency": "USD",
+          "InputCostPerMillionTokens": 0.2,
+          "OutputCostPerMillionTokens": 1.25,
+          "PricingConfigured": true
+        }
+      },
+      {
+        "Phase": "candidate_evidence",
+        "Pricing": {
+          "Model": "gpt-5.4-nano",
+          "Currency": "USD",
+          "InputCostPerMillionTokens": 0.2,
+          "OutputCostPerMillionTokens": 1.25,
+          "PricingConfigured": true
+        }
+      },
+      {
+        "Phase": "matching",
+        "Pricing": {
+          "Model": "gpt-5.4-nano",
+          "Currency": "USD",
+          "InputCostPerMillionTokens": 0.2,
+          "OutputCostPerMillionTokens": 1.25,
+          "PricingConfigured": true
+        }
+      },
+      {
+        "Phase": "application_generation",
+        "Pricing": {
+          "Model": "gpt-5.4-nano",
+          "Currency": "USD",
+          "InputCostPerMillionTokens": 0.2,
+          "OutputCostPerMillionTokens": 1.25,
+          "PricingConfigured": true
+        }
+      }
+    ]
+  },
+  "Totals": {
+    "InputTokens": 20652,
+    "OutputTokens": 6855,
+    "TotalTokens": 27507,
+    "CachedInputTokens": 0,
+    "ReasoningTokens": 0
+  },
+  "EstimatedCost": {
+    "Currency": "DKK",
+    "PricingConfigured": true,
+    "InputCost": 0.02629364,
+    "OutputCost": 0.05454765,
+    "TotalCost": 0.08084129
+  },
+  "PhaseTotals": [
+    {
+      "Phase": "application_generation",
+      "Model": "gpt-5.4-nano-2026-03-17",
+      "InteractionCount": 1,
+      "Totals": {
+        "InputTokens": 8033,
+        "OutputTokens": 2269,
+        "TotalTokens": 10302,
+        "CachedInputTokens": 0,
+        "ReasoningTokens": 0
+      },
+      "EstimatedCost": {
+        "Currency": "DKK",
+        "PricingConfigured": true,
+        "InputCost": 0.01022743,
+        "OutputCost": 0.01805523,
+        "TotalCost": 0.02828266
+      }
+    },
+    {
+      "Phase": "candidate_evidence",
+      "Model": "gpt-5.4-nano-2026-03-17",
+      "InteractionCount": 1,
+      "Totals": {
+        "InputTokens": 4396,
+        "OutputTokens": 1644,
+        "TotalTokens": 6040,
+        "CachedInputTokens": 0,
+        "ReasoningTokens": 0
+      },
+      "EstimatedCost": {
+        "Currency": "DKK",
+        "PricingConfigured": true,
+        "InputCost": 0.00559688,
+        "OutputCost": 0.01308189,
+        "TotalCost": 0.01867877
+      }
+    },
+    {
+      "Phase": "matching",
+      "Model": "gpt-5.4-nano-2026-03-17",
+      "InteractionCount": 1,
+      "Totals": {
+        "InputTokens": 4731,
+        "OutputTokens": 1356,
+        "TotalTokens": 6087,
+        "CachedInputTokens": 0,
+        "ReasoningTokens": 0
+      },
+      "EstimatedCost": {
+        "Currency": "DKK",
+        "PricingConfigured": true,
+        "InputCost": 0.00602340,
+        "OutputCost": 0.01079017,
+        "TotalCost": 0.01681357
+      }
+    },
+    {
+      "Phase": "requirements",
+      "Model": "gpt-5.4-nano-2026-03-17",
+      "InteractionCount": 1,
+      "Totals": {
+        "InputTokens": 3492,
+        "OutputTokens": 1586,
+        "TotalTokens": 5078,
+        "CachedInputTokens": 0,
+        "ReasoningTokens": 0
+      },
+      "EstimatedCost": {
+        "Currency": "DKK",
+        "PricingConfigured": true,
+        "InputCost": 0.00444593,
+        "OutputCost": 0.01262036,
+        "TotalCost": 0.01706629
+      }
+    }
+  ],
+  "SequenceTotals": [
+    {
+      "Phase": "application_generation",
+      "SequenceKind": "initial_generation",
+      "Model": "gpt-5.4-nano-2026-03-17",
+      "InteractionCount": 1,
+      "Totals": {
+        "InputTokens": 8033,
+        "OutputTokens": 2269,
+        "TotalTokens": 10302,
+        "CachedInputTokens": 0,
+        "ReasoningTokens": 0
+      },
+      "EstimatedCost": {
+        "Currency": "DKK",
+        "PricingConfigured": true,
+        "InputCost": 0.01022743,
+        "OutputCost": 0.01805523,
+        "TotalCost": 0.02828266
+      }
+    },
+    {
+      "Phase": "candidate_evidence",
+      "SequenceKind": "initial_generation",
+      "Model": "gpt-5.4-nano-2026-03-17",
+      "InteractionCount": 1,
+      "Totals": {
+        "InputTokens": 4396,
+        "OutputTokens": 1644,
+        "TotalTokens": 6040,
+        "CachedInputTokens": 0,
+        "ReasoningTokens": 0
+      },
+      "EstimatedCost": {
+        "Currency": "DKK",
+        "PricingConfigured": true,
+        "InputCost": 0.00559688,
+        "OutputCost": 0.01308189,
+        "TotalCost": 0.01867877
+      }
+    },
+    {
+      "Phase": "matching",
+      "SequenceKind": "initial_generation",
+      "Model": "gpt-5.4-nano-2026-03-17",
+      "InteractionCount": 1,
+      "Totals": {
+        "InputTokens": 4731,
+        "OutputTokens": 1356,
+        "TotalTokens": 6087,
+        "CachedInputTokens": 0,
+        "ReasoningTokens": 0
+      },
+      "EstimatedCost": {
+        "Currency": "DKK",
+        "PricingConfigured": true,
+        "InputCost": 0.00602340,
+        "OutputCost": 0.01079017,
+        "TotalCost": 0.01681357
+      }
+    },
+    {
+      "Phase": "requirements",
+      "SequenceKind": "initial_generation",
+      "Model": "gpt-5.4-nano-2026-03-17",
+      "InteractionCount": 1,
+      "Totals": {
+        "InputTokens": 3492,
+        "OutputTokens": 1586,
+        "TotalTokens": 5078,
+        "CachedInputTokens": 0,
+        "ReasoningTokens": 0
+      },
+      "EstimatedCost": {
+        "Currency": "DKK",
+        "PricingConfigured": true,
+        "InputCost": 0.00444593,
+        "OutputCost": 0.01262036,
+        "TotalCost": 0.01706629
+      }
+    }
+  ],
+  "Interactions": [
+    {
+      "Phase": "requirements",
+      "SequenceKind": "initial_generation",
+      "Attempt": null,
+      "Model": "gpt-5.4-nano-2026-03-17",
+      "ResponseId": "resp_096ddaba624294f50069de85e391148195853fb9cbe9c32773",
+      "Tokens": {
+        "InputTokens": 3492,
+        "OutputTokens": 1586,
+        "TotalTokens": 5078,
+        "CachedInputTokens": 0,
+        "ReasoningTokens": 0
+      },
+      "Pricing": {
+        "Model": "gpt-5.4-nano",
+        "Currency": "USD",
+        "InputCostPerMillionTokens": 0.2,
+        "OutputCostPerMillionTokens": 1.25,
+        "PricingConfigured": true
+      },
+      "EstimatedCost": {
+        "Currency": "DKK",
+        "PricingConfigured": true,
+        "InputCost": 0.00444593,
+        "OutputCost": 0.01262036,
+        "TotalCost": 0.01706629
+      }
+    },
+    {
+      "Phase": "candidate_evidence",
+      "SequenceKind": "initial_generation",
+      "Attempt": null,
+      "Model": "gpt-5.4-nano-2026-03-17",
+      "ResponseId": "resp_0aa04bf4ee2e7b4c0069de85eec888819797fafe71fc060479",
+      "Tokens": {
+        "InputTokens": 4396,
+        "OutputTokens": 1644,
+        "TotalTokens": 6040,
+        "CachedInputTokens": 0,
+        "ReasoningTokens": 0
+      },
+      "Pricing": {
+        "Model": "gpt-5.4-nano",
+        "Currency": "USD",
+        "InputCostPerMillionTokens": 0.2,
+        "OutputCostPerMillionTokens": 1.25,
+        "PricingConfigured": true
+      },
+      "EstimatedCost": {
+        "Currency": "DKK",
+        "PricingConfigured": true,
+        "InputCost": 0.00559688,
+        "OutputCost": 0.01308189,
+        "TotalCost": 0.01867877
+      }
+    },
+    {
+      "Phase": "matching",
+      "SequenceKind": "initial_generation",
+      "Attempt": null,
+      "Model": "gpt-5.4-nano-2026-03-17",
+      "ResponseId": "resp_069198ebfda2e2aa0069de85fa52448193bca9a33950626eb0",
+      "Tokens": {
+        "InputTokens": 4731,
+        "OutputTokens": 1356,
+        "TotalTokens": 6087,
+        "CachedInputTokens": 0,
+        "ReasoningTokens": 0
+      },
+      "Pricing": {
+        "Model": "gpt-5.4-nano",
+        "Currency": "USD",
+        "InputCostPerMillionTokens": 0.2,
+        "OutputCostPerMillionTokens": 1.25,
+        "PricingConfigured": true
+      },
+      "EstimatedCost": {
+        "Currency": "DKK",
+        "PricingConfigured": true,
+        "InputCost": 0.00602340,
+        "OutputCost": 0.01079017,
+        "TotalCost": 0.01681357
+      }
+    },
+    {
+      "Phase": "application_generation",
+      "SequenceKind": "initial_generation",
+      "Attempt": null,
+      "Model": "gpt-5.4-nano-2026-03-17",
+      "ResponseId": "resp_072be260b61e68490069de860ad89481949a8685918d447cb3",
+      "Tokens": {
+        "InputTokens": 8033,
+        "OutputTokens": 2269,
+        "TotalTokens": 10302,
+        "CachedInputTokens": 0,
+        "ReasoningTokens": 0
+      },
+      "Pricing": {
+        "Model": "gpt-5.4-nano",
+        "Currency": "USD",
+        "InputCostPerMillionTokens": 0.2,
+        "OutputCostPerMillionTokens": 1.25,
+        "PricingConfigured": true
+      },
+      "EstimatedCost": {
+        "Currency": "DKK",
+        "PricingConfigured": true,
+        "InputCost": 0.01022743,
+        "OutputCost": 0.01805523,
+        "TotalCost": 0.02828266
+      }
+    }
+  ]
+}

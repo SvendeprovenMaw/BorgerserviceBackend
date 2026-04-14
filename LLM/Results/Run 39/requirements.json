@@ -1,0 +1,166 @@
+{
+  "_meta": {
+    "job_posting_title": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg",
+    "parsed_files": [
+      "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf"
+    ],
+    "errors": []
+  },
+  "requirements": [
+    {
+      "requirement_id": "req_1",
+      "requirement_text_da": "Erfaring som udvikler med hele udviklingsprocessen, gerne med flere forskellige programmeringssprog og med b\u00E5de kompilerede og fortolkede sprog.",
+      "normalized_label": "full_development_lifecycle_experience",
+      "category": "role_experience",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+          "excerpt": "\u0022Erfaring som udvikler med hele udviklingsprocessen\u0022",
+          "section_hint": "Jobopslagets afsnit \u0022Dig\u0022 (side 1/2)."
+        },
+        {
+          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+          "excerpt": "\u0022gerne med flere forskellige programmeringssprog og\u0022 samt \u0022b\u00E5de kompilerede og fortolkede sprog\u0022",
+          "section_hint": "Jobopslagets afsnit \u0022Dig\u0022 (side 1/2)."
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_2",
+      "requirement_text_da": "Har erfaring som udvikler og har arbejdet med applikationsudvikling i den finansielle sektor eller andre regulerede sektorer.",
+      "normalized_label": "regulated_sector_application_dev_experience",
+      "category": "industry_experience",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+          "excerpt": "\u0022du har erfaring som udvikler og har arbejdet med applikationsudvikling i den finansielle sektor eller andre regulerede sektorer\u0022",
+          "section_hint": "Jobopslagets afsnit \u0022Dig\u0022 (side 1/2)."
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_3",
+      "requirement_text_da": "Kendskab til eller lyst til at l\u00E6re om IBM Z System og COBOL.",
+      "normalized_label": "ibm_z_cobol_knowledge_or_learning",
+      "category": "technical_skill",
+      "importance": "should_have",
+      "source_citations": [
+        {
+          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+          "excerpt": "\u0022Kendskab eller lyst til at l\u00E6re om IBM Z System og COBOL\u0022",
+          "section_hint": "Jobopslagets punktliste under \u0022Dig\u0022 (side 1/2)."
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_4",
+      "requirement_text_da": "Er interesseret i developer experience og DevOps.",
+      "normalized_label": "interest_devops_developer_experience",
+      "category": "personal_trait",
+      "importance": "should_have",
+      "source_citations": [
+        {
+          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+          "excerpt": "\u0022Interesse for developer experience og DevOps\u0022",
+          "section_hint": "Jobopslagets punktliste under \u0022Dig\u0022 (side 1/2)."
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_5",
+      "requirement_text_da": "Have gode samarbejdsevner og interesse i at arbejde t\u00E6t sammen med erfarne kolleger og kunder.",
+      "normalized_label": "collaboration_customer_work_interest",
+      "category": "collaboration",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+          "excerpt": "\u0022Gode samarbejdsevner og interesse i at arbejde t\u00E6t sammen med erfarne kolleger og kunder\u0022",
+          "section_hint": "Jobopslagets punktliste under \u0022Dig\u0022 (side 1/2)."
+        },
+        {
+          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+          "excerpt": "\u0022T\u00E6t samarbejde med kunder og brugere for at forst\u00E5 deres behov\u0022",
+          "section_hint": "Jobopslagets afsnit \u0022Dine ansvarsomr\u00E5der\u0022 (side 1/2)."
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_6",
+      "requirement_text_da": "Behersker dansk og engelsk i b\u00E5de skrift og tale.",
+      "normalized_label": "danish_english_fluent_written_spoken",
+      "category": "language",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+          "excerpt": "\u0022Behersker dansk og engelsk i b\u00E5de skrift og tale.\u0022",
+          "section_hint": "Jobopslagets punktliste under \u0022Dig\u0022 (side 1/2)."
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_7",
+      "requirement_text_da": "F\u00F8lger markedstrends i udviklingsparadigmer og tool-underst\u00F8ttelse og er nysgerrig p\u00E5 AI og automatisering.",
+      "normalized_label": "market_trends_tools_ai_automation_narrative",
+      "category": "analytical_skill",
+      "importance": "should_have",
+      "source_citations": [
+        {
+          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+          "excerpt": "\u0022F\u00F8lger markedstrends i udviklingsparadigmer og tool-underst\u00F8ttelse og er nysgerrig p\u00E5 AI og automatisering\u0022",
+          "section_hint": "Jobopslagets punktliste under \u0022Dig\u0022 (side 1/2)."
+        },
+        {
+          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+          "excerpt": "\u0022Implementering og integration af nye v\u00E6rkt\u00F8jer som VS Code og GitLab samt AI og automatisering i alle processer\u0022",
+          "section_hint": "Jobopslagets afsnit \u0022Dine ansvarsomr\u00E5der\u0022 (side 1/2)."
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_8",
+      "requirement_text_da": "F\u00F8lge markedstrends i udviklingsparadigmer og tool underst\u00F8ttelse.",
+      "normalized_label": "follow_market_trends_dev_paradigms_tool_support",
+      "category": "technical_skill",
+      "importance": "should_have",
+      "source_citations": [
+        {
+          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+          "excerpt": "\u0022F\u00F8lge markedstrends i udviklingsparadigmer og tool underst\u00F8ttelse.\u0022",
+          "section_hint": "Jobopslagets afsnit \u0022Dine ansvarsomr\u00E5der\u0022 (side 1/2)."
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_9",
+      "requirement_text_da": "Arbejde med hele udviklingsprocessen fra udvikling over test til deploy af programmer.",
+      "normalized_label": "dev_test_deploy_responsibility",
+      "category": "role_experience",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+          "excerpt": "\u0022Arbejde med hele udviklingsprocessen fra udvikling over test til deploy af programmer\u0022",
+          "section_hint": "Jobopslagets afsnit \u0022Dine ansvarsomr\u00E5der\u0022 (side 1/2)."
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_10",
+      "requirement_text_da": "Udvikle plugins til IBM Developer for z (eclipse-baseret IDE).",
+      "normalized_label": "develop_ibm_developer_for_z_plugins",
+      "category": "technical_skill",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+          "excerpt": "\u0022Udvikling af plugins til IBM Developer for z (eclipse-baseret IDE)\u0022",
+          "section_hint": "Jobopslagets afsnit \u0022Dine ansvarsomr\u00E5der\u0022 (side 1/2)."
+        }
+      ]
+    }
+  ]
+}

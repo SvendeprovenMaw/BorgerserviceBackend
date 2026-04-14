@@ -1,0 +1,241 @@
+{
+  "_meta": {
+    "application_document_id": "application_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "requirements_document_id": "requirements_devops_udvikler_jn_data_roskilde_eller_silkeborgRequirements",
+    "candidate_evidence_document_id": "candidate_evidence_borger1Candidate evidence document",
+    "matching_document_id": "matching_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborgMatching",
+    "target_language": "da",
+    "position_title": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg",
+    "company_name": null,
+    "applicant_display_name": "Emma S\u00F8rensen"
+  },
+  "application_strategy": {
+    "tone": "warm_professional",
+    "length_target": "medium",
+    "subject_line_da": "Ans\u00F8gning: DevOps Udvikler (JN Data \u2013 Roskilde eller Silkeborg)",
+    "core_message_da": "Jeg s\u00F8ger stillingen som DevOps Udvikler hos JN Data. Jeg har dokumenteret erfaring med udvikling og vedligehold af .NET-baserede webmoduler samt REST API\u2019er og integrationer, og jeg trives i samarbejde t\u00E6t med b\u00E5de brugere og udviklere. Jeg vil gerne bidrage med en struktureret arbejdsform og solid udviklingskontekst, og samtidig l\u00E6re det, der kr\u00E6ver endnu mere fokus p\u00E5 DevOps-omr\u00E5det.",
+    "selected_requirement_ids": [
+      "req_1",
+      "req_5",
+      "req_6",
+      "req_9"
+    ],
+    "selected_evidence_ids": [
+      "evi_1_full_lifecycle_dotnet_api_react",
+      "evi_4_fullstack_hybrid_collaboration_dialog",
+      "evi_5_language_danish_english",
+      "evi_6_english_professional_level_profile",
+      "evi_2_dev_test_deploy_responsibility_from_cv"
+    ],
+    "omitted_requirement_ids": [
+      "req_2",
+      "req_3",
+      "req_4",
+      "req_7",
+      "req_8",
+      "req_10"
+    ],
+    "omission_strategy_da": "Jeg fokuserer p\u00E5 de krav, hvor kandidatens evidens passer delvist eller st\u00E6rkt (udviklingsarbejde, samarbejde og dansk/engelsk). \u00D8vrige krav udelades, n\u00E5r der ikke findes sporbar dokumentation i de udleverede kandidatmaterialer."
+  },
+  "sections": [
+    {
+      "section_id": "salutation_1",
+      "section_kind": "salutation",
+      "text_da": "K\u00E6re rekrutteringsansvarlige,\n",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "opening_1",
+      "section_kind": "opening",
+      "text_da": "Jeg skriver for at ans\u00F8ge stillingen som DevOps Udvikler hos JN Data (Roskilde eller Silkeborg).",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "motivation_1",
+      "section_kind": "motivation",
+      "text_da": "Jeg \u00F8nsker at bidrage med min udviklingsm\u00E6ssige erfaring og en struktureret tilgang til opgavel\u00F8sning, hvor jeg samarbejder t\u00E6t med b\u00E5de brugere og udviklere. Samtidig ser jeg frem til at udvide min erfaring med DevOps-arbejdet og de konkrete IBM Z/COBOL-relaterede omr\u00E5der, som rollen beskriver.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "claim_10_fit_reason_structured_collab",
+        "claim_11_motivation_learning_devops_ibm_z_cobol"
+      ],
+      "supported_requirement_ids": [
+        "req_5",
+        "req_3",
+        "req_4"
+      ],
+      "supported_evidence_ids": [
+        "evi_4_fullstack_hybrid_collaboration_dialog"
+      ]
+    },
+    {
+      "section_id": "fit_1",
+      "section_kind": "fit",
+      "text_da": "I mit tidligere arbejde har jeg udviklet og vedligeholdt .NET-baserede webmoduler samt bygget REST API-endpoints og deltaget i integrationer mellem front-end, database og tredjepartssystemer. Det giver mig et solidt udgangspunkt for at arbejde i hele udviklingsk\u00E6den, og jeg har ogs\u00E5 arbejdet med fejlretning og kodegennemgang samt forbedringer i React-baserede brugerflader.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "claim_1_dotnet_rest_api_integrations",
+        "claim_2_dev_improvements_debug_review"
+      ],
+      "supported_requirement_ids": [
+        "req_1",
+        "req_9"
+      ],
+      "supported_evidence_ids": [
+        "evi_1_full_lifecycle_dotnet_api_react",
+        "evi_2_dev_test_deploy_responsibility_from_cv"
+      ]
+    },
+    {
+      "section_id": "fit_2",
+      "section_kind": "fit",
+      "text_da": "Jeg l\u00E6gger v\u00E6gt p\u00E5 god kommunikation og samarbejde i praksis. Jeg har erfaring med hybridt samarbejde og dialog med b\u00E5de brugere og udviklere samt en struktureret opgavel\u00F8sning med dokumentation og ansvarlig opf\u00F8lgning.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "claim_3_hybrid_collaboration_dialog_documentation"
+      ],
+      "supported_requirement_ids": [
+        "req_5"
+      ],
+      "supported_evidence_ids": [
+        "evi_4_fullstack_hybrid_collaboration_dialog"
+      ]
+    },
+    {
+      "section_id": "fit_3",
+      "section_kind": "fit",
+      "text_da": "Derudover matcher min sprogprofil kravene om dansk og engelsk p\u00E5 et professionelt niveau.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "claim_4_language_danish_english_professional"
+      ],
+      "supported_requirement_ids": [
+        "req_6"
+      ],
+      "supported_evidence_ids": [
+        "evi_5_language_danish_english",
+        "evi_6_english_professional_level_profile"
+      ]
+    },
+    {
+      "section_id": "closing_1",
+      "section_kind": "closing",
+      "text_da": "Hvis I mener, at min profil kan v\u00E6re relevant for teamet, vil jeg meget gerne uddybe, hvordan jeg arbejder, og hvad jeg kan bidrage med. Tak for jeres tid og overvejelse \u2013 jeg gl\u00E6der mig til at h\u00F8re fra jer.",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "signature_1",
+      "section_kind": "signature",
+      "text_da": "Med venlig hilsen\nEmma S\u00F8rensen\n",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    }
+  ],
+  "claim_register": [
+    {
+      "claim_id": "claim_1_dotnet_rest_api_integrations",
+      "claim_text_da": "Kandidaten har udviklet og vedligeholdt .NET-baserede webmoduler og bygget REST API-endpoints samt deltaget i integrationer mellem front-end, database og tredjepartssystemer.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "evi_1_full_lifecycle_dotnet_api_react"
+      ],
+      "requirement_ids": [
+        "req_1",
+        "req_9"
+      ],
+      "section_ids": [
+        "fit_1"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "claim_2_dev_improvements_debug_review",
+      "claim_text_da": "Kandidaten har arbejdet med fejlretning, kodegennemgang og mindre forbedringer i React-baserede brugerflader.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "evi_2_dev_test_deploy_responsibility_from_cv"
+      ],
+      "requirement_ids": [
+        "req_9"
+      ],
+      "section_ids": [
+        "fit_1"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_3_hybrid_collaboration_dialog_documentation",
+      "claim_text_da": "Kandidaten er vant til hybridt samarbejde og dialog med b\u00E5de brugere og udviklere samt arbejder struktureret med dokumentation og ansvarlig opf\u00F8lgning.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "evi_4_fullstack_hybrid_collaboration_dialog"
+      ],
+      "requirement_ids": [
+        "req_5"
+      ],
+      "section_ids": [
+        "fit_2"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_4_language_danish_english_professional",
+      "claim_text_da": "Kandidaten har dansk (modersm\u00E5l) og engelsk p\u00E5 professionelt niveau.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "evi_5_language_danish_english",
+        "evi_6_english_professional_level_profile"
+      ],
+      "requirement_ids": [
+        "req_6"
+      ],
+      "section_ids": [
+        "fit_3"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_10_fit_reason_structured_collab",
+      "claim_text_da": "Kandidaten \u00F8nsker at bidrage med en struktureret arbejdsform og et samarbejde, der fungerer t\u00E6t med b\u00E5de brugere og udviklere.",
+      "claim_kind": "role_alignment",
+      "evidence_ids": [
+        "evi_4_fullstack_hybrid_collaboration_dialog"
+      ],
+      "requirement_ids": [
+        "req_5"
+      ],
+      "section_ids": [
+        "motivation_1"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_11_motivation_learning_devops_ibm_z_cobol",
+      "claim_text_da": "Kandidaten ser frem til at udvide sin erfaring med DevOps-arbejdet og de IBM Z/COBOL-relaterede omr\u00E5der, som rollen beskriver.",
+      "claim_kind": "motivation_grounded",
+      "evidence_ids": [
+        "evi_7_devops_ai_automation_tools_vs_code_gitlab_unmentioned"
+      ],
+      "requirement_ids": [
+        "req_3",
+        "req_4"
+      ],
+      "section_ids": [
+        "motivation_1"
+      ],
+      "support_strength": "weak"
+    }
+  ],
+  "assembled_application_da": "K\u00E6re rekrutteringsansvarlige,\n\nJeg skriver for at ans\u00F8ge stillingen som DevOps Udvikler hos JN Data (Roskilde eller Silkeborg).\n\nJeg \u00F8nsker at bidrage med min udviklingsm\u00E6ssige erfaring og en struktureret tilgang til opgavel\u00F8sning, hvor jeg samarbejder t\u00E6t med b\u00E5de brugere og udviklere. Samtidig ser jeg frem til at udvide min erfaring med DevOps-arbejdet og de konkrete IBM Z/COBOL-relaterede omr\u00E5der, som rollen beskriver.\n\nI mit tidligere arbejde har jeg udviklet og vedligeholdt .NET-baserede webmoduler samt bygget REST API-endpoints og deltaget i integrationer mellem front-end, database og tredjepartssystemer. Det giver mig et solidt udgangspunkt for at arbejde i hele udviklingsk\u00E6den, og jeg har ogs\u00E5 arbejdet med fejlretning og kodegennemgang samt forbedringer i React-baserede brugerflader.\n\nJeg l\u00E6gger v\u00E6gt p\u00E5 god kommunikation og samarbejde i praksis. Jeg har erfaring med hybridt samarbejde og dialog med b\u00E5de brugere og udviklere samt en struktureret opgavel\u00F8sning med dokumentation og ansvarlig opf\u00F8lgning.\n\nDerudover matcher min sprogprofil kravene om dansk og engelsk p\u00E5 et professionelt niveau.\n\nHvis I mener, at min profil kan v\u00E6re relevant for teamet, vil jeg meget gerne uddybe, hvordan jeg arbejder, og hvad jeg kan bidrage med. Tak for jeres tid og overvejelse \u2013 jeg gl\u00E6der mig til at h\u00F8re fra jer.\n\nMed venlig hilsen\nEmma S\u00F8rensen\n"
+}
