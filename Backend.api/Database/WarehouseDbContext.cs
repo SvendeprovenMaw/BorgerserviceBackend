@@ -1,3 +1,4 @@
+using Backend.api.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.api.Database
@@ -10,5 +11,8 @@ namespace Backend.api.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
         }
+
+        public DbSet<User> Users { get; set; }
+        public DbSet<Profile> Profiles { get; set; }
     }
 }

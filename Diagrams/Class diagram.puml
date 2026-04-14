@@ -1,6 +1,8 @@
-@startuml test
+@startuml
 !theme plain
 skinparam PackageStyle rectangle
+left to right direction
+
 
 package "Entities" {
   package "DTOs"{
@@ -17,9 +19,8 @@ package "Entities" {
       - base64? ProfileImage
       - file? CurrentCV
       - files? RelavantDocuments
-      - 
     }
-
+ 
     class FileUploadDto <<dto>>{
       - array of files
     }
@@ -54,7 +55,6 @@ package "Entities" {
       UserDraft
       Cv
       RelaventDocuments
-
     }
 
     class User <<Entity>> {
@@ -127,13 +127,24 @@ package "Services" {
       + RetractTermsConsent()
       + UserDeleted()
       }
+
+      interface IUserService{
+      - DbContext _db
+      + CreateUser()
+      + GetUser()
+      + Login()
+      + ChangePassword()
+      + RequestPasswordReset()
+      + HardDeleteAccount()
+      + GetUserProfile()
+    }
     }
 
     class OpenAiService {
         - IS3StorageService _s3
         - IAIService _ai
         - IRepository _db
-        + Task<Guid> StartProcess()
+        + Task GenerateDraft()
         + Task AnalyseJobPosting()
         + Task AnalyseUserDocuments()
         + Task MatchUserCompetences
@@ -171,6 +182,7 @@ package "Services" {
     }
 
 OpenAiService ..|> IAIService : Implements
+UserService ..|> IUserService : Implements
 OpenAiService --> IS3StorageService : Uses
 ConsentService ..|> IConsentService : Implements
 S3StorageService ..|> IS3StorageService : Implements
@@ -204,7 +216,6 @@ package "Controllers"{
     + CreateDraft()
     + AnalyseJobPostingLink()
     + AnalyseJobPostingPDF()
-    
   }
 
 FileController --> IS3StorageService : Uses

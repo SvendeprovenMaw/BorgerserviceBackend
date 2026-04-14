@@ -1,0 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Backend.api.Enums;
+
+namespace Backend.api.Entities
+{
+    public class User
+    {
+        protected User() {}
+        public User(UserRole role, string Email, string Username, string Password)
+        {
+            this.Id = Guid.NewGuid();
+            this.Role = role;
+            this.Password = Password;
+            this.Username = Username;
+            this.Email = Email;
+        }
+        public Guid Id { get; private set; }
+        public UserRole Role { get; private set; }
+        public string Email { get; set; } = "";
+        public string Username { get; set; } = "";
+        public string Password { get; set; } = "";
+    }
+}

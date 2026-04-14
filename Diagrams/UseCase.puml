@@ -1,4 +1,6 @@
 @startuml
+scale max 2480 width
+scale max 3508 height
 !theme plain
 left to right direction
 skinparam PackageStyle rectangle
@@ -8,55 +10,90 @@ actor "Admin" as Admin
 
 rectangle "Consent & AI Drafting System" {
     
-    ' Story 1: Account Creation & Legal
     (Create Account) as UC1
     note right of UC1
       **As a** New User
-      **I want to** create an account and accept terms
-      **So that** I can use the AI drafting tools legally.
+      **I want to** register an account
+      **So that** I can access t  he AI drafting platform.
+      
+      **Acceptance Criteria:**
+      * System validates **Email** format and ensures it is unique.
+      * Password meets complexity requirements and is salted/hashed.
+      * User **MUST** accept the current **Active Term** version to proceed.
+      * System records the specific **TermsId** and **Timestamp** of acceptance.
+      * A default **Profile** entity is initialized for the user.
+      * System generates a unique **OwnerId** to be used for all future file uploads.
     end note
 
-    ' Story 2: File Management
     (Upload CV/Documents) as UC2
     note right of UC2
       **As a** User
-      **I want to** upload my career documents
-      **So that** the AI has context for my drafts.
+      **I want to** upload my career documents to my profile
+      **So that** they are stored centrally for multiple AI drafting jobs.
+      
+      **Acceptance Criteria:**
+      * System validates file type (e.g., PDF, DOCX) and size limits.
+      * File is uploaded to S3 and assigned a unique **S3Key**.
+      * System records the **ChecksumHash** to prevent duplicate data processing.
+      * File is tagged with **FileCategory** (Cv or RelevantDocuments).
+      * The **S3File** reference is added to the user's **Profile** collection.
+      * The user's **OwnerId** is stamped on the record for security.
     end note
 
-    ' Story 3: AI Generation
     (Generate Application Draft) as UC3
     note right of UC3
       **As a** User
-      **I want to** provide a job link for AI analysis
-      **So that** I get a tailored cover letter.
+      **I want to** provide a job description and trigger the AI
+      **So that** I receive a tailored CV or Cover Letter draft.
+      
+      **Acceptance Criteria:**
+      * System retrieves **CurrentCv** and any selected **RelevantDocuments**.
+      * System accepts Job Context (via URL scraping or PDF upload).
+      * An **AIProcessingJob** record is created to track the request.
+      * The **IAIService** runs inference and generates the text.
+      * The result is saved as an **AiDraft** linked to the job.
     end note
 
-    ' Story 4: The Nuclear Option (Consent)
-    (Retract All Consent) as UC4
-    note right of UC4
-      **As a** User
-      **I want to** nuke my data and files
-      **So that** I have total control over my privacy.
-    end note
-
-    ' Story 5: Global Reset (Admin)
     (Force Global Re-consent) as UC5
     note right of UC5
       **As an** Admin
       **I want to** update the terms for all users
       **So that** everyone is on the latest legal version.
+      
+      **Acceptance Criteria:**
+      * Admin uploads new **Term** entity (S3 document + version string).
+      * System sets the new Term as **Active** and deactivates the previous version.
+      * System updates a **GlobalTermsVersion** timestamp/ID in the configuration.
+      * On next request, the **ConsentService** identifies all users whose "LastAcceptedVersion" is less than current.
+      * Affected users are blocked from AI services and redirected to the consent screen.
     end note
+
+    (Anonymize Account/Retract account consent) as UC_Anonymize
+    note right of UC_Anonymize
+      **As a** User
+      **I want to** anonymize my account
+      **So that** my personal identity is removed but my contribution history remains.
+      
+      **Acceptance Criteria:**
+      * System verifies User Identity.
+      * **Email**, **Username**, and **Password** are overwritten with random GUIDs or "DELETED_USER".
+      * **ProfileImage** and **Personal Details** are hard-deleted.
+      * All linked **S3Files** are processed via the "File Scrub" logic (placeholder swap).
+      * Account status is set to **Inactive/Anonymized**.
+      * User is immediately logged out and cannot log back in with old credentials.
+    end note
+
+
     (Delete Specific Document) as UC_DeleteDoc
     note right of UC_DeleteDoc
       **As a** User
       **I want to** delete a specific file (CV or Document)
-      **So that** it is removed from the AI's context and S3 storage.
+      **So that** it is removed from the AIs context and S3 storage.
       
       **Acceptance Criteria:**
       * System verifies User owns the file via **OwnerId**.
       * File is deleted from physical S3 storage.
-      * DB record in **S3File** is removed.
+      * Record in **S3File** is modified to point to a file that says its removed.
       * AI Processing Jobs referencing this file are updated/flagged.
     end note
 
@@ -82,7 +119,6 @@ rectangle "Consent & AI Drafting System" {
       **Acceptance Criteria:**
       * System verifies User owns the file via **OwnerId**.
       * System generates a short-lived **S3 Presigned URL**.
-      * Audit log records that the file was accessed/downloaded.
       * Ensures file is still in a "Consented" state before providing the link.
     end note
 
@@ -97,10 +133,25 @@ rectangle "Consent & AI Drafting System" {
       * Original **AiDraft** entity remains read-only for audit/lineage.
       * System saves edited version as a new **S3File** with category **UserDraft**.
       * System links the new UserDraft to the original **AIProcessingJob**.
-      * User can save progress multiple times (versioning).
+      * User can only save 1 edited version of the ai draft.
     end note
+
+    (Upload Application-Specific File) as UC_AppFile
+    note right of UC_AppFile
+    **As a** User
+    **I want to** upload a document for one specific job application
+    **So that** it is only used as context for that specific AI draft.
+    
+    **Acceptance Criteria:**
+    * File is tagged with **FileCategory.RelevantDocuments**.
+    * System creates a link between the **S3File** and the **AIProcessingJob**.
+    * File is NOT added to the user''s permanent **Profile** collection.
+    * System automatically sets an expiry/cleanup flag if the application is deleted.
+      end note
+
 }
 
+User --> UC_AppFile
 User --> UC_EditDraft
 User --> UC_Download
 User --> UC_Login
@@ -109,7 +160,7 @@ User --> UC_DeleteDoc
 User --> UC1
 User --> UC2
 User --> UC3
-User --> UC4
+User --> UC_Anonymize
 
 Admin --> UC5
 @enduml
