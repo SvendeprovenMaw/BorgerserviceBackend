@@ -18,7 +18,7 @@ namespace Backend.api.Services
 
         public async Task<ResponseResult> ProcessFile(string fileurl)
         {
-            ChatClient chatClient = new(model: "gpt-5.4-nano", "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");
+            ChatClient chatClient = new(model: "gpt-5.4-nano", _conf["OpenAi:SecretKey"]);
 
 
             using HttpClient httpClient = new HttpClient();
@@ -30,7 +30,7 @@ namespace Backend.api.Services
             //OpenAIFile file = await fileClient.UploadFileAsync(fileData, "filename.pdf", FileUploadPurpose.UserData);
 
             ResponsesClient responsesClient = new(
-                "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"
+                _conf["OpenAi:SecretKey"]
             );
 
             CreateResponseOptions options = new(
