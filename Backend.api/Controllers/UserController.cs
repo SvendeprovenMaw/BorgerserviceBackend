@@ -28,7 +28,7 @@ namespace Backend.api.Controllers
             return NoContent();
         }
 
-        [HttpGet]
+        [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
             var User = await _UserService.Login(loginDto);
@@ -39,7 +39,7 @@ namespace Backend.api.Controllers
 
             if(User.Password == PasswordHasher.Hash(loginDto.Password, ""))
             {
-                return Ok("Jwt-Token");
+                return Ok(new {jwt ="Jwt-Token"});
             }
 
             return NoContent();
