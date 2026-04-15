@@ -17,7 +17,7 @@ namespace Backend.api.Database
         public DbSet<AiProcessingJob> AiJobs { get; set; }
         public DbSet<AiDraft> AiDrafts { get; set; }
         public DbSet<S3File> S3Files { get; set; }
-
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     }
 }
