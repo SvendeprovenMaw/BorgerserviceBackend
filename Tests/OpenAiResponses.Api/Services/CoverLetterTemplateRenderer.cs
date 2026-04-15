@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Net;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
+using OpenAiResponses.Api.Helpers;
 using OpenAiResponses.Api.Models;
 using OpenAiResponses.Api.Options;
 
@@ -13,11 +14,13 @@ namespace OpenAiResponses.Api.Services;
 public sealed class CoverLetterTemplateRenderer : ICoverLetterTemplateRenderer
 {
     private readonly IHostEnvironment _environment;
+    private readonly IConfiguration _configuration;
     private readonly SamplePipelineOptions _samplePipelineOptions;
 
-    public CoverLetterTemplateRenderer(IHostEnvironment environment, IOptions<SamplePipelineOptions> samplePipelineOptions)
+    public CoverLetterTemplateRenderer(IHostEnvironment environment, IConfiguration configuration, IOptions<SamplePipelineOptions> samplePipelineOptions)
     {
         _environment = environment;
+        _configuration = configuration;
         _samplePipelineOptions = samplePipelineOptions.Value;
     }
 
@@ -127,7 +130,7 @@ public sealed class CoverLetterTemplateRenderer : ICoverLetterTemplateRenderer
 
     private string ResolveRepositoryPath(string configuredPath)
     {
-        return Path.GetFullPath(Path.Combine(_environment.ContentRootPath, "..", "..", configuredPath));
+        return RepositoryRootResolver.ResolveRepositoryPath(_configuration, _environment, configuredPath);
     }
 
     private static async Task<string> ReadRequiredTextAsync(string filePath, CancellationToken cancellationToken)
