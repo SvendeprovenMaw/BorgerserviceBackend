@@ -1,0 +1,185 @@
+{
+  "matches": [
+    {
+      "requirement_id": "req_1",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evidence_4"
+      ],
+      "rationale_da": "Der er evidens for udvikling og vedligeholdelse af interne webmoduler, som peger i retning af drift/vedligeholdelse, men der er ingen direkte evidens for ansvar for kirkegården og præstegården eller udvikling af disse opgaver specifikt.",
+      "gap_da": "Der mangler direkte evidens for ansvar for drift, vedligeholdelse og udvikling af kirkegården og præstegården som arbejdsområde.",
+      "confidence": "medium",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_2",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der findes ingen evidens for kirketjeneste ved kirkelige handlinger eller for tjeneste hver anden søndag.",
+      "gap_da": "Der mangler dokumenteret erfaring eller villighed til kirketjeneste og den specifikke vagtordning hver 2. søndag.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_3",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Evidensen beskriver tekniske og administrative opgaver, men ikke rengøring eller andet forefaldende praktisk arbejde.",
+      "gap_da": "Der mangler dokumentation for erfaring med rengøring og forefaldende praktisk arbejde.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_4",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evidence_3"
+      ],
+      "rationale_da": "Der er relevant evidens for kontakt til brugere gennem teknisk support, men der er ingen direkte støtte for udskrivning af regninger.",
+      "gap_da": "Der mangler dokumenteret erfaring med regningsudskrivning.",
+      "confidence": "medium",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_5",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen evidens for medvirken til en smuk, værdig og velholdt kirkegård.",
+      "gap_da": "Der mangler dokumentation for arbejde med kirkegårdens æstetik og vedligeholdelse i denne kontekst.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_6",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Kandidatens uddannelse er som datamatiker, og der er ingen evidens for gartneruddannelse eller solid erfaring fra det grønne område.",
+      "gap_da": "Der mangler dokumenteret gartneruddannelse eller solid erfaring fra det grønne område.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_7",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evidence_1"
+      ],
+      "rationale_da": "Der er direkte evidens for kørekort B, men ingen evidens for villighed til at bruge egen bil i tjenesten.",
+      "gap_da": "Der mangler dokumentation for villighed til at bruge egen bil i tjenesten.",
+      "confidence": "high",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_8",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evidence_4",
+        "evidence_5"
+      ],
+      "rationale_da": "Der er evidens for selvstændigt og struktureret arbejde samt uddannelsesbaggrund med fokus på systemer, men der er ikke direkte dokumentation for ansvar for den daglige drift inden for økonomiske rammer.",
+      "gap_da": "Der mangler direkte evidens for ansvar for den daglige drift inden for givne økonomiske rammer.",
+      "confidence": "medium",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_9",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evidence_5",
+        "evidence_4"
+      ],
+      "rationale_da": "Der er evidens for uddannelse og erfaring med systemintegration og tekniske løsninger, som er relevant for it, men der er ingen direkte dokumentation for kendskab til kirkens specifikke IT-systemer eller villighed til at lære dem.",
+      "gap_da": "Der mangler direkte evidens for kendskab til kirkens IT-systemer eller udtrykkelig villighed til at lære dem.",
+      "confidence": "medium",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_10",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evidence_2"
+      ],
+      "rationale_da": "Der er evidens for en nysgerrig, løsningsorienteret og struktureret arbejdsstil, men ikke en direkte angivelse af engageret, fleksibel og imødekommende tilgang.",
+      "gap_da": "Der mangler direkte formulering eller tydelig dokumentation for en engageret, fleksibel og imødekommende tilgang.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_11",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen evidens for interesse for kirken og sognets liv.",
+      "gap_da": "Der mangler dokumentation for interesse for kirken og sognets liv.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_12",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evidence_2"
+      ],
+      "rationale_da": "Der er evidens for samarbejde og trivsel i samarbejde med andre, men ikke direkte for aktivt bidrag til et godt arbejdsmiljø både fysisk og psykisk.",
+      "gap_da": "Der mangler direkte evidens for aktivt bidrag til et godt arbejdsmiljø både fysisk og psykisk.",
+      "confidence": "medium",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_13",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "evidence_2",
+        "evidence_6"
+      ],
+      "rationale_da": "Der er evidens for samarbejde med andre og sproglig baggrund, som støtter kommunikativt samarbejde, men ikke en direkte beskrivelse af samarbejdsevner i forhold til kolleger, menighedsråd, frivillige og samarbejdspartnere.",
+      "gap_da": "Der mangler direkte dokumentation for samarbejde med de nævnte parter i en kirkelig kontekst.",
+      "confidence": "medium",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_14",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen evidens for, at den obligatoriske 5 ugers uddannelse for gravere gennemføres inden for 2 år efter ansættelsesstart.",
+      "gap_da": "Der mangler dokumentation for accept af eller plan for den obligatoriske graveruddannelse inden for 2 år.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_15",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen evidens for rådighedsforpligtelse.",
+      "gap_da": "Der mangler dokumentation for rådighedsforpligtelse eller villighed til en sådan ordning.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_16",
+      "verdict": "unclear",
+      "matched_evidence_ids": [],
+      "rationale_da": "Materialet nævner, at menighedsrådet vil indhente referencer, men det dokumenterer ikke kandidatens forhold til dette krav.",
+      "gap_da": "Det fremgår ikke af kandidatmaterialet, om der er relevante forhold omkring referenceindhentning.",
+      "confidence": "low",
+      "needs_human_review": true
+    }
+  ],
+  "overall_assessment": {
+    "overall_match_level": "weak",
+    "summary_da": "Kandidatens materiale viser primært kørekort, teknisk uddannelse og generelle samarbejds- og arbejdsstilselementer, men der mangler direkte evidens for flere centrale krav i stillingen, især kirkelige opgaver, grønne kvalifikationer, rådighedsforpligtelse og kirkespecifik interesse.",
+    "major_strength_evidence_ids": [
+      "evidence_1",
+      "evidence_5",
+      "evidence_2"
+    ],
+    "major_gap_requirement_ids": [
+      "req_2",
+      "req_3",
+      "req_5",
+      "req_6",
+      "req_11",
+      "req_14",
+      "req_15"
+    ]
+  }
+}

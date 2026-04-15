@@ -1,0 +1,20 @@
+{
+  "Stage": "requirements",
+  "Decision": "continue",
+  "ApprovedForDownstream": true,
+  "HardInvalidCount": 0,
+  "SoftQualityCount": 0,
+  "SummaryDa": "Stage-gaten bestod.",
+  "BlockingReasons": [],
+  "AdvisoryReasons": [],
+  "Metrics": [
+    {
+      "MetricKey": "requirements.count",
+      "Operator": "\u003E=",
+      "Actual": "9",
+      "Expected": "1",
+      "Passed": true,
+      "MessageDa": "OK"
+    }
+  ]
+}

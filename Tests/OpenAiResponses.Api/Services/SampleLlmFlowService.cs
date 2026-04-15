@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using Microsoft.Extensions.Options;
 using OpenAiResponses.Api.Helpers;
 using OpenAiResponses.Api.Models;
@@ -8,20 +9,22 @@ using OpenAiResponses.Api.Options;
 namespace OpenAiResponses.Api.Services;
 
 /// <summary>
-/// Orchestrates the sample four-stage pipeline, including verification, repair, advisory output, and artifact persistence.
+/// Orchestrates the sample pipeline, including company-context enrichment, verification, repair, advisory output, and artifact persistence.
 /// </summary>
 public sealed class SampleLlmFlowService : ISampleLlmFlowService
 {
     private const string ResourceConsumptionDirectoryName = "Ressource Consumption";
     private const string TokenUsageFileName = "TokenUsage.json";
-    private static readonly JsonSerializerOptions SavedJsonOptions = new() { WriteIndented = true };
+    private static readonly JsonSerializerOptions SavedJsonOptions = JsonSerializationDefaults.IndentedUtf8;
     private static readonly Lock ResultsDirectoryLock = new();
 
     private readonly IHostEnvironment _environment;
     private readonly IConfiguration _configuration;
+    private readonly ICompanyContextService _companyContextService;
     private readonly IOpenAiResponsesService _openAiResponsesService;
     private readonly ICurrencyDisplayConversionService _currencyDisplayConversionService;
     private readonly ICoverLetterTemplateRenderer _coverLetterTemplateRenderer;
+    private readonly ICoverLetterPdfRenderer _coverLetterPdfRenderer;
     private readonly IVerificationOrchestrator _verificationOrchestrator;
     private readonly IDownstreamGateEvaluator _downstreamGateEvaluator;
     private readonly IRequirementsDeterministicRepairService _requirementsDeterministicRepairService;
@@ -35,9 +38,11 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
     public SampleLlmFlowService(
         IHostEnvironment environment,
         IConfiguration configuration,
+        ICompanyContextService companyContextService,
         IOpenAiResponsesService openAiResponsesService,
         ICurrencyDisplayConversionService currencyDisplayConversionService,
         ICoverLetterTemplateRenderer coverLetterTemplateRenderer,
+        ICoverLetterPdfRenderer coverLetterPdfRenderer,
         IVerificationOrchestrator verificationOrchestrator,
         IDownstreamGateEvaluator downstreamGateEvaluator,
         IOptions<OpenAIOptions> openAiOptions,
@@ -50,9 +55,11 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
     {
         _environment = environment;
         _configuration = configuration;
+        _companyContextService = companyContextService;
         _openAiResponsesService = openAiResponsesService;
         _currencyDisplayConversionService = currencyDisplayConversionService;
         _coverLetterTemplateRenderer = coverLetterTemplateRenderer;
+        _coverLetterPdfRenderer = coverLetterPdfRenderer;
         _verificationOrchestrator = verificationOrchestrator;
         _downstreamGateEvaluator = downstreamGateEvaluator;
         _openAiOptions = openAiOptions.Value;
@@ -62,6 +69,13 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         _applicationGenerationDeterministicRepairService = applicationGenerationDeterministicRepairService;
         _verificationOptions = verificationOptions.Value;
         _logger = logger;
+    }
+
+    public async Task<string> RunCompanyContextAsync(CancellationToken cancellationToken = default)
+    {
+        var sampleData = GetSampleData();
+        var result = await RunCompanyContextCoreAsync(sampleData, cancellationToken);
+        return result.OutputJson;
     }
 
     public async Task<string> RunRequirementsParsingAsync(CancellationToken cancellationToken = default)
@@ -103,22 +117,25 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         return matchingResult.OutputJson;
     }
 
-    public async Task<string> RunPipelineAsync(CancellationToken cancellationToken = default)
+    public async Task<string> RunPipelineAsync(SamplePipelineSelectionRequest? selection = null, CancellationToken cancellationToken = default)
     {
-        var executionResult = await ExecutePipelineAsync(includeVerification: false, cancellationToken);
+        var executionResult = await ExecutePipelineAsync(includeVerification: false, cancellationToken: cancellationToken, selection: selection);
         return executionResult.ApplicationJson ?? throw new InvalidOperationException("Pipeline execution did not produce an application document.");
     }
 
-    public async Task<string> RunPipelineWithVerificationAsync(CancellationToken cancellationToken = default)
+    public async Task<string> RunPipelineWithVerificationAsync(SamplePipelineSelectionRequest? selection = null, CancellationToken cancellationToken = default)
     {
-        var executionResult = await ExecutePipelineAsync(includeVerification: true, cancellationToken);
+        var executionResult = await ExecutePipelineAsync(includeVerification: true, cancellationToken: cancellationToken, selection: selection);
         var response = new PipelineWithVerificationResponse
         {
+            CandidateDirectory = executionResult.CandidateDirectoryName,
+            JobListingFileName = executionResult.JobListingFileName,
             RunDirectory = executionResult.RunDirectoryRelativePath,
             PipelineStatus = executionResult.VerificationSummary?.PipelineStatus ?? "completed",
             StoppedAfterStage = executionResult.VerificationSummary?.StoppedAfterStage,
             ApplicationDocument = executionResult.ApplicationJson is null ? null : ParseJsonElement(executionResult.ApplicationJson),
             FitAdvisory = executionResult.FitAdvisory,
+            CoverLetter = executionResult.CoverLetter,
             Verification = executionResult.VerificationSummary ?? new PipelineVerificationSummary
             {
                 VerificationMode = "mechanical_with_gate",
@@ -148,6 +165,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             var executionResult = await ExecutePipelineAsync(
                 includeVerification: true,
                 cancellationToken,
+                selection: null,
                 selectedJobApplicationPath: jobApplication);
 
             jobSummaries.Add(BuildJobListingPipelineRunSummary(
@@ -165,17 +183,20 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         return JsonSerializer.Serialize(response, SavedJsonOptions);
     }
 
-    // The pipeline intentionally runs stage by stage so each output can be saved, verified, repaired, and reused.
     private async Task<PipelineExecutionResult> ExecutePipelineAsync(
         bool includeVerification,
         CancellationToken cancellationToken,
+        SamplePipelineSelectionRequest? selection = null,
         string? selectedJobApplicationPath = null)
     {
-        var sampleData = GetSampleData(selectedJobApplicationPath);
+        var sampleData = GetSampleData(selection, selectedJobApplicationPath);
         var fitStrategy = await LoadFitStrategyPreferencesAsync(sampleData.PreferencesFilePath, cancellationToken);
         var jobApplicationFileName = Path.GetFileName(sampleData.JobApplication);
         var requirementsDocumentId = BuildDocumentId("requirements", Path.GetFileNameWithoutExtension(sampleData.JobApplication));
         var candidateEvidenceDocumentId = BuildDocumentId("candidate_evidence", sampleData.CandidateDirectoryName);
+        var companyContextDocumentId = BuildDocumentId(
+            "company_context",
+            $"{sampleData.CandidateDirectoryName}_{Path.GetFileNameWithoutExtension(sampleData.JobApplication)}");
         var matchingDocumentId = BuildDocumentId(
             "matching",
             $"{sampleData.CandidateDirectoryName}_{Path.GetFileNameWithoutExtension(sampleData.JobApplication)}");
@@ -189,11 +210,12 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         PipelineVerificationSummary? verificationSummary = null;
         string? applicationJson = null;
         var requirementsPhaseSettings = ResolvePhaseExecutionSettings("requirements");
+        CoverLetterRenderArtifact? coverLetterArtifact = null;
 
         _logger.LogInformation("Pipeline run directory created at {RunDirectory}.", runDirectoryRelativePath);
 
         _logger.LogInformation(
-            "Flow 1/4 requirements parsing: sending job application {JobApplicationFile} to OpenAI model {Model}.",
+            "Flow 1/5 requirements parsing: sending job application {JobApplicationFile} to OpenAI model {Model}.",
             Path.GetFileName(sampleData.JobApplication),
             requirementsPhaseSettings.Model);
 
@@ -246,18 +268,35 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
                     cancellationToken: CancellationToken.None);
 
                 return new PipelineExecutionResult(
+                    CandidateDirectoryName: sampleData.CandidateDirectoryName,
                     JobListingFileName: jobApplicationFileName,
                     RunDirectory: runDirectory,
                     RunDirectoryRelativePath: runDirectoryRelativePath,
                     MatchingJson: null,
                     ApplicationJson: null,
                     VerificationSummary: verificationSummary,
-                    FitAdvisory: fitAdvisory);
+                    FitAdvisory: fitAdvisory,
+                    CoverLetter: null);
             }
         }
 
-        _logger.LogInformation("Flow 1/4 requirements parsing: OpenAI replied.");
-        _logger.LogInformation("Flow 2/4 candidate evidence: started.");
+        _logger.LogInformation("Flow 1/5 requirements parsing: OpenAI replied.");
+        _logger.LogInformation("Flow 2/5 company context: started.");
+
+        var companyContextResult = await RunCompanyContextCoreAsync(sampleData, cancellationToken);
+        RecordLlmInteraction(
+            tokenUsageRecords,
+            phase: "company_context",
+            sequenceKind: "initial_generation",
+            attempt: null,
+            companyContextResult,
+            ResolvePhaseExecutionSettings("company_context").Pricing);
+        var companyContextJson = companyContextResult.OutputJson;
+        await SaveJsonResultAsync(runDirectory, "company_context.json", companyContextJson, cancellationToken);
+
+        // CompanyContext is currently an enrichment stage without downstream gating.
+        _logger.LogInformation("Flow 2/5 company context: completed.");
+        _logger.LogInformation("Flow 3/5 candidate evidence: started.");
 
         var candidateEvidenceResult = await RunCandidateEvidenceCoreAsync(
             sampleData,
@@ -314,18 +353,20 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
                     cancellationToken: CancellationToken.None);
 
                 return new PipelineExecutionResult(
+                    CandidateDirectoryName: sampleData.CandidateDirectoryName,
                     JobListingFileName: jobApplicationFileName,
                     RunDirectory: runDirectory,
                     RunDirectoryRelativePath: runDirectoryRelativePath,
                     MatchingJson: null,
                     ApplicationJson: null,
                     VerificationSummary: verificationSummary,
-                    FitAdvisory: fitAdvisory);
+                    FitAdvisory: fitAdvisory,
+                    CoverLetter: null);
             }
         }
 
-        _logger.LogInformation("Flow 2/4 candidate evidence: completed.");
-        _logger.LogInformation("Flow 3/4 matching: started.");
+        _logger.LogInformation("Flow 3/5 candidate evidence: completed.");
+        _logger.LogInformation("Flow 4/5 matching: started.");
 
         var matchingResult = await RunMatchingCoreAsync(
             requirementsJson,
@@ -398,18 +439,20 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
                     cancellationToken: CancellationToken.None);
 
                 return new PipelineExecutionResult(
+                    CandidateDirectoryName: sampleData.CandidateDirectoryName,
                     JobListingFileName: jobApplicationFileName,
                     RunDirectory: runDirectory,
                     RunDirectoryRelativePath: runDirectoryRelativePath,
                     MatchingJson: matchJson,
                     ApplicationJson: null,
                     VerificationSummary: verificationSummary,
-                    FitAdvisory: fitAdvisory);
+                    FitAdvisory: fitAdvisory,
+                    CoverLetter: null);
             }
         }
 
-        _logger.LogInformation("Flow 3/4 matching: completed.");
-        _logger.LogInformation("Flow 4/4 application generation: started.");
+        _logger.LogInformation("Flow 4/5 matching: completed.");
+        _logger.LogInformation("Flow 5/5 application generation: started.");
 
         var applicationResult = await RunApplicationGenerationCoreAsync(
             sampleData,
@@ -417,6 +460,8 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             requirementsDocumentId,
             candidateEvidenceJson,
             candidateEvidenceDocumentId,
+            companyContextJson,
+            companyContextDocumentId,
             matchJson,
             matchingDocumentId,
             applicationDocumentId,
@@ -444,8 +489,11 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
                     requirementsDocumentId: requirementsDocumentId,
                     candidateEvidenceJson: candidateEvidenceJson,
                     candidateEvidenceDocumentId: candidateEvidenceDocumentId,
+                    companyContextDocumentId: companyContextDocumentId,
                     matchingJson: matchJson,
-                    matchingDocumentId: matchingDocumentId),
+                    matchingDocumentId: matchingDocumentId,
+                    maxMainContentCharacters: _samplePipelineOptions.CoverLetterTemplate.MaxMainContentCharacters,
+                    estimatedCharactersPerLine: _samplePipelineOptions.CoverLetterTemplate.EstimatedCharactersPerLine),
                 runDirectory,
                 artifactFileName: "application_generation_verification.json",
                 gateArtifactFileName: "application_generation_gate.json",
@@ -461,6 +509,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
                     requirementsDocumentId: requirementsDocumentId,
                     candidateEvidenceJson: candidateEvidenceJson,
                     candidateEvidenceDocumentId: candidateEvidenceDocumentId,
+                    companyContextDocumentId: companyContextDocumentId,
                     matchingJson: matchJson,
                     matchingDocumentId: matchingDocumentId,
                     currentStageResult: stageVerificationResults[^1],
@@ -474,7 +523,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             verificationSummary = BuildPipelineVerificationSummary(stageVerificationResults, completedAllStages: true);
             await SaveVerificationArtifactAsync(runDirectory, "pipeline_verification_summary.json", verificationSummary, cancellationToken);
 
-            await SaveRenderedCoverLetterArtifactsAsync(runDirectory, applicationJson, cancellationToken);
+            coverLetterArtifact = await SaveRenderedCoverLetterArtifactsAsync(runDirectory, applicationJson, cancellationToken);
             coverLetterArtifactsPersisted = true;
 
             if (!stageVerificationResults[^1].ApprovedForDownstream)
@@ -494,22 +543,24 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
                     cancellationToken: CancellationToken.None);
 
                 return new PipelineExecutionResult(
+                    CandidateDirectoryName: sampleData.CandidateDirectoryName,
                     JobListingFileName: jobApplicationFileName,
                     RunDirectory: runDirectory,
                     RunDirectoryRelativePath: runDirectoryRelativePath,
                     MatchingJson: matchJson,
                     ApplicationJson: applicationJson,
                     VerificationSummary: verificationSummary,
-                    FitAdvisory: fitAdvisory);
+                    FitAdvisory: fitAdvisory,
+                    CoverLetter: coverLetterArtifact);
             }
         }
 
-        _logger.LogInformation("Flow 4/4 application generation: completed.");
+        _logger.LogInformation("Flow 5/5 application generation: completed.");
         _logger.LogInformation("Pipeline results saved to {RunDirectory}.", runDirectoryRelativePath);
 
         if (!coverLetterArtifactsPersisted)
         {
-            await SaveRenderedCoverLetterArtifactsAsync(runDirectory, applicationJson, cancellationToken);
+            coverLetterArtifact = await SaveRenderedCoverLetterArtifactsAsync(runDirectory, applicationJson, cancellationToken);
         }
 
         var completedFitAdvisory = includeVerification
@@ -525,13 +576,15 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             cancellationToken: CancellationToken.None);
 
         return new PipelineExecutionResult(
+            CandidateDirectoryName: sampleData.CandidateDirectoryName,
             JobListingFileName: jobApplicationFileName,
             RunDirectory: runDirectory,
             RunDirectoryRelativePath: runDirectoryRelativePath,
             MatchingJson: matchJson,
             ApplicationJson: applicationJson,
             VerificationSummary: verificationSummary,
-            FitAdvisory: completedFitAdvisory);
+            FitAdvisory: completedFitAdvisory,
+            CoverLetter: coverLetterArtifact);
     }
 
     private async Task<StructuredJsonGenerationResult> RunMatchingCoreAsync(
@@ -593,12 +646,27 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         return await _openAiResponsesService.GenerateStructuredJsonWithMetadataAsync(request, cancellationToken);
     }
 
+    private async Task<StructuredJsonGenerationResult> RunCompanyContextCoreAsync(
+        SampleDataContext sampleData,
+        CancellationToken cancellationToken)
+    {
+        return await _companyContextService.GenerateCompanyContextAsync(
+            new CompanyContextGenerationRequest
+            {
+                JobPostingFilePath = sampleData.JobApplication,
+                ApplicantProfileFilePaths = ResolveCompanyContextApplicantProfileFiles(sampleData)
+            },
+            cancellationToken);
+    }
+
     private async Task<StructuredJsonGenerationResult> RunApplicationGenerationCoreAsync(
         SampleDataContext sampleData,
         string requirementsJson,
         string requirementsDocumentId,
         string candidateEvidenceJson,
         string candidateEvidenceDocumentId,
+        string companyContextJson,
+        string companyContextDocumentId,
         string matchingJson,
         string matchingDocumentId,
         string applicationDocumentId,
@@ -617,6 +685,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             cancellationToken);
 
         var preferencesJson = await ReadRequiredTextAsync(sampleData.PreferencesFilePath, cancellationToken);
+        preferencesJson = NormalizeApplicationGenerationPreferencesJson(preferencesJson);
         var request = new StructuredJsonResponseRequest
         {
             Prompt = applicationAsset.Prompt,
@@ -650,6 +719,16 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
                 {
                     Label = "Candidate evidence document JSON",
                     Content = candidateEvidenceJson
+                },
+                new StructuredTextInput
+                {
+                    Label = "Company context document ID",
+                    Content = companyContextDocumentId
+                },
+                new StructuredTextInput
+                {
+                    Label = "Company context document JSON",
+                    Content = companyContextJson
                 },
                 new StructuredTextInput
                 {
@@ -803,14 +882,33 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         return jobApplications;
     }
 
+    private IReadOnlyList<string> GetSampleCandidateDirectories(string candidateRootDirectory)
+    {
+        if (!Directory.Exists(candidateRootDirectory))
+        {
+            throw new FileNotFoundException($"Sample candidate root directory was not found: {candidateRootDirectory}", candidateRootDirectory);
+        }
+
+        var candidateDirectories = Directory.GetDirectories(candidateRootDirectory)
+            .OrderBy(path => path, StringComparer.Ordinal)
+            .ToArray();
+
+        if (candidateDirectories.Length == 0)
+        {
+            throw new FileNotFoundException($"No sample candidate directories were found in: {candidateRootDirectory}", candidateRootDirectory);
+        }
+
+        return candidateDirectories;
+    }
+
     /// <summary>
-    /// Resolves the default sample candidate plus either the default or a caller-selected job posting.
+    /// Resolves the selected sample candidate plus either the default or a caller-selected job posting.
     /// </summary>
-    private SampleDataContext GetSampleData(string? selectedJobApplicationPath = null)
+    private SampleDataContext GetSampleData(SamplePipelineSelectionRequest? selection = null, string? selectedJobApplicationPath = null)
     {
         var candidateRootDirectory = ResolveRepositoryPath(_samplePipelineOptions.CandidateRootPath);
-        var personDirectory = Path.Combine(candidateRootDirectory, _samplePipelineOptions.DefaultCandidateDirectory);
         var jobDirectory = ResolveRepositoryPath(_samplePipelineOptions.JobListingsPath);
+        var personDirectory = ResolveSelectedCandidateDirectory(candidateRootDirectory, selection);
 
         if (!Directory.Exists(personDirectory))
         {
@@ -836,9 +934,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         }
 
         var jobApplications = GetSampleJobApplications();
-        var jobApplication = string.IsNullOrWhiteSpace(selectedJobApplicationPath)
-            ? jobApplications[0]
-            : jobApplications.FirstOrDefault(path => string.Equals(path, selectedJobApplicationPath, StringComparison.Ordinal));
+        var jobApplication = ResolveSelectedJobApplication(jobApplications, jobDirectory, selection, selectedJobApplicationPath);
 
         if (string.IsNullOrWhiteSpace(jobApplication))
         {
@@ -848,6 +944,58 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         }
 
         return new SampleDataContext(personDirectory, personFiles, jobApplication, preferencesFilePath);
+    }
+
+    private string ResolveSelectedCandidateDirectory(string candidateRootDirectory, SamplePipelineSelectionRequest? selection)
+    {
+        if (selection?.CandidateNumber is null)
+        {
+            return Path.Combine(candidateRootDirectory, _samplePipelineOptions.DefaultCandidateDirectory);
+        }
+
+        var candidateDirectories = GetSampleCandidateDirectories(candidateRootDirectory);
+        var candidateNumber = selection.CandidateNumber.Value;
+
+        if (candidateNumber < 1 || candidateNumber > candidateDirectories.Count)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(selection.CandidateNumber),
+                candidateNumber,
+                $"candidateNumber must be between 1 and {candidateDirectories.Count}.");
+        }
+
+        return candidateDirectories[candidateNumber - 1];
+    }
+
+    private static string ResolveSelectedJobApplication(
+        IReadOnlyList<string> jobApplications,
+        string jobDirectory,
+        SamplePipelineSelectionRequest? selection,
+        string? selectedJobApplicationPath)
+    {
+        if (!string.IsNullOrWhiteSpace(selectedJobApplicationPath))
+        {
+            return jobApplications.FirstOrDefault(path => string.Equals(path, selectedJobApplicationPath, StringComparison.Ordinal))
+                ?? throw new FileNotFoundException(
+                    $"The selected sample job application file was not found in: {jobDirectory}",
+                    selectedJobApplicationPath);
+        }
+
+        if (selection?.JobPostingNumber is null)
+        {
+            return jobApplications[0];
+        }
+
+        var jobPostingNumber = selection.JobPostingNumber.Value;
+        if (jobPostingNumber < 1 || jobPostingNumber > jobApplications.Count)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(selection.JobPostingNumber),
+                jobPostingNumber,
+                $"jobPostingNumber must be between 1 and {jobApplications.Count}.");
+        }
+
+        return jobApplications[jobPostingNumber - 1];
     }
 
     private string GetRepositoryRoot()
@@ -937,7 +1085,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         var destinationRelativePath = Path.GetRelativePath(GetRepositoryRoot(), destinationPath);
         var formattedJson = FormatJson(json);
 
-        await File.WriteAllTextAsync(destinationPath, formattedJson + Environment.NewLine, cancellationToken);
+        await File.WriteAllTextAsync(destinationPath, formattedJson + Environment.NewLine, JsonSerializationDefaults.Utf8NoBom, cancellationToken);
 
         _logger.LogInformation("Saved pipeline result to {ResultFile}.", destinationRelativePath);
     }
@@ -1088,8 +1236,11 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         string requirementsDocumentId,
         string candidateEvidenceJson,
         string candidateEvidenceDocumentId,
+        string companyContextDocumentId,
         string matchingJson,
-        string matchingDocumentId)
+        string matchingDocumentId,
+        int maxMainContentCharacters,
+        int estimatedCharactersPerLine)
     {
         return new StageVerificationRequest
         {
@@ -1102,9 +1253,64 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             MatchingDocumentJson = matchingJson,
             ExpectedRequirementsDocumentId = requirementsDocumentId,
             ExpectedCandidateEvidenceDocumentId = candidateEvidenceDocumentId,
+            ExpectedCompanyContextDocumentId = companyContextDocumentId,
             ExpectedMatchingDocumentId = matchingDocumentId,
-            ExpectedApplicationDocumentId = applicationDocumentId
+            ExpectedApplicationDocumentId = applicationDocumentId,
+            MaxMainContentCharacters = maxMainContentCharacters,
+            EstimatedCharactersPerLine = estimatedCharactersPerLine
         };
+    }
+
+    private string NormalizeApplicationGenerationPreferencesJson(string preferencesJson)
+    {
+        var templateMax = _samplePipelineOptions.CoverLetterTemplate.MaxMainContentCharacters;
+        if (templateMax <= 0)
+        {
+            return preferencesJson;
+        }
+
+        JsonNode? parsedNode;
+        try
+        {
+            parsedNode = JsonNode.Parse(preferencesJson);
+        }
+        catch (JsonException exception)
+        {
+            throw new InvalidOperationException("Application generation preferences file did not contain valid JSON.", exception);
+        }
+
+        if (parsedNode is not JsonObject root)
+        {
+            throw new InvalidOperationException("Application generation preferences file must contain a JSON object at the root.");
+        }
+
+        var contentConstraints = root["content_constraints"] as JsonObject;
+        if (contentConstraints is null)
+        {
+            contentConstraints = new JsonObject();
+            root["content_constraints"] = contentConstraints;
+        }
+
+        int? configuredMax = null;
+        if (contentConstraints["max_main_content_characters"] is JsonNode existingMaxNode)
+        {
+            configuredMax = existingMaxNode.GetValue<int>();
+        }
+
+        if (!configuredMax.HasValue || configuredMax.Value > templateMax)
+        {
+            contentConstraints["max_main_content_characters"] = templateMax;
+
+            if (configuredMax.HasValue && configuredMax.Value != templateMax)
+            {
+                _logger.LogInformation(
+                    "Application generation preferences requested max_main_content_characters={ConfiguredMax}, but template maximum is {TemplateMax}. The prompt input was clamped to the template limit.",
+                    configuredMax.Value,
+                    templateMax);
+            }
+        }
+
+        return root.ToJsonString(JsonSerializationDefaults.IndentedUtf8);
     }
 
     private static MatchingRegenerationFeedback BuildMatchingRegenerationFeedback(StageVerificationResult stageResult)
@@ -1189,6 +1395,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         string requirementsDocumentId,
         string candidateEvidenceJson,
         string candidateEvidenceDocumentId,
+        string companyContextDocumentId,
         string matchingJson,
         string matchingDocumentId,
         StageVerificationResult currentStageResult,
@@ -1226,8 +1433,11 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
                     requirementsDocumentId: requirementsDocumentId,
                     candidateEvidenceJson: candidateEvidenceJson,
                     candidateEvidenceDocumentId: candidateEvidenceDocumentId,
+                    companyContextDocumentId: companyContextDocumentId,
                     matchingJson: matchingJson,
-                    matchingDocumentId: matchingDocumentId),
+                    matchingDocumentId: matchingDocumentId,
+                    maxMainContentCharacters: _samplePipelineOptions.CoverLetterTemplate.MaxMainContentCharacters,
+                    estimatedCharactersPerLine: _samplePipelineOptions.CoverLetterTemplate.EstimatedCharactersPerLine),
                 runDirectory: runDirectory,
                 artifactFileName: $"application_generation_repair_attempt_{attempt}_verification.json",
                 gateArtifactFileName: $"application_generation_repair_attempt_{attempt}_gate.json",
@@ -1313,7 +1523,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         await SaveArtifactAsync(runDirectory, ResourceConsumptionDirectoryName, TokenUsageFileName, report, cancellationToken);
     }
 
-    private async Task SaveRenderedCoverLetterArtifactsAsync(
+    private async Task<CoverLetterRenderArtifact> SaveRenderedCoverLetterArtifactsAsync(
         string runDirectory,
         string applicationJson,
         CancellationToken cancellationToken)
@@ -1337,19 +1547,65 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
                 renderResult.StylesheetText,
                 formatAsJson: false,
                 CancellationToken.None);
+            string? pdfArtifactPath = null;
+            int? pdfPageCount = null;
+            bool? withinSinglePageLimit = null;
+            string? pdfErrorMessage = null;
+            var warnings = new List<string>(renderResult.Warnings);
 
-            var summary = new CoverLetterRenderArtifact(
-                Status: renderResult.WithinMainContentLimit && renderResult.Warnings.Count == 0 && renderResult.MissingFields.Count == 0
-                    ? "rendered"
-                    : "rendered_with_warnings",
-                HtmlArtifactPath: htmlArtifactPath,
-                CssArtifactPath: cssArtifactPath,
-                MainContentCharacterCount: renderResult.MainContentCharacterCount,
-                MaxMainContentCharacters: renderResult.MaxMainContentCharacters,
-                WithinMainContentLimit: renderResult.WithinMainContentLimit,
-                MissingFields: renderResult.MissingFields,
-                Warnings: renderResult.Warnings,
-                ErrorMessage: null);
+            try
+            {
+                var pdfRenderResult = await _coverLetterPdfRenderer.RenderAsync(applicationJson, cancellationToken);
+                pdfArtifactPath = await SaveBinaryArtifactAsync(
+                    runDirectory,
+                    templateOptions.OutputDirectoryName,
+                    templateOptions.RenderedPdfFileName,
+                    pdfRenderResult.PdfDocument,
+                    CancellationToken.None);
+                pdfPageCount = pdfRenderResult.PageCount;
+                withinSinglePageLimit = pdfRenderResult.WithinSinglePageLimit;
+
+                if (!pdfRenderResult.WithinSinglePageLimit)
+                {
+                    warnings.Add("PDF generation completed, but the rendered document exceeded the one-page limit.");
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "Cover-letter PDF generation failed after HTML rendering.");
+                pdfErrorMessage = exception.Message;
+                warnings.Add("PDF generation failed, so no one-page PDF artifact was persisted for this run.");
+            }
+
+            var summary = new CoverLetterRenderArtifact
+            {
+                Status = renderResult.WithinMainContentLimit
+                    && warnings.Count == 0
+                    && renderResult.MissingFields.Count == 0
+                    && string.IsNullOrWhiteSpace(pdfErrorMessage)
+                        ? "rendered"
+                        : "rendered_with_warnings",
+                HtmlArtifactPath = htmlArtifactPath,
+                CssArtifactPath = cssArtifactPath,
+                PdfArtifactPath = pdfArtifactPath,
+                PdfPageCount = pdfPageCount,
+                WithinSinglePageLimit = withinSinglePageLimit,
+                MainContentCharacterCount = renderResult.MainContentCharacterCount,
+                MainContentBudgetUsage = renderResult.MainContentBudgetUsage,
+                MaxMainContentCharacters = renderResult.MaxMainContentCharacters,
+                ExplicitLineBreakCount = renderResult.ExplicitLineBreakCount,
+                ParagraphBreakCount = renderResult.ParagraphBreakCount,
+                EstimatedCharactersPerLine = renderResult.EstimatedCharactersPerLine,
+                WithinMainContentLimit = renderResult.WithinMainContentLimit,
+                MissingFields = renderResult.MissingFields,
+                Warnings = warnings,
+                PdfErrorMessage = pdfErrorMessage,
+                ErrorMessage = null
+            };
 
             await SaveArtifactAsync(
                 runDirectory,
@@ -1357,6 +1613,8 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
                 templateOptions.RenderSummaryFileName,
                 summary,
                 CancellationToken.None);
+
+            return summary;
         }
         catch (OperationCanceledException)
         {
@@ -1366,16 +1624,26 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         {
             _logger.LogError(exception, "Cover-letter rendering failed after application generation.");
 
-            var failedSummary = new CoverLetterRenderArtifact(
-                Status: "failed",
-                HtmlArtifactPath: null,
-                CssArtifactPath: null,
-                MainContentCharacterCount: null,
-                MaxMainContentCharacters: templateOptions.MaxMainContentCharacters,
-                WithinMainContentLimit: null,
-                MissingFields: [],
-                Warnings: [],
-                ErrorMessage: exception.Message);
+            var failedSummary = new CoverLetterRenderArtifact
+            {
+                Status = "failed",
+                HtmlArtifactPath = null,
+                CssArtifactPath = null,
+                PdfArtifactPath = null,
+                PdfPageCount = null,
+                WithinSinglePageLimit = null,
+                MainContentCharacterCount = null,
+                MainContentBudgetUsage = null,
+                MaxMainContentCharacters = templateOptions.MaxMainContentCharacters,
+                ExplicitLineBreakCount = null,
+                ParagraphBreakCount = null,
+                EstimatedCharactersPerLine = templateOptions.EstimatedCharactersPerLine,
+                WithinMainContentLimit = null,
+                MissingFields = [],
+                Warnings = [],
+                PdfErrorMessage = null,
+                ErrorMessage = exception.Message
+            };
 
             await SaveArtifactAsync(
                 runDirectory,
@@ -1383,6 +1651,8 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
                 templateOptions.RenderSummaryFileName,
                 failedSummary,
                 CancellationToken.None);
+
+            return failedSummary;
         }
     }
 
@@ -1400,7 +1670,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         var destinationRelativePath = Path.GetRelativePath(GetRepositoryRoot(), destinationPath);
         var json = JsonSerializer.Serialize(artifact, SavedJsonOptions);
 
-        await File.WriteAllTextAsync(destinationPath, json + Environment.NewLine, cancellationToken);
+        await File.WriteAllTextAsync(destinationPath, json + Environment.NewLine, JsonSerializationDefaults.Utf8NoBom, cancellationToken);
 
         _logger.LogInformation("Saved artifact to {ResultFile}.", destinationRelativePath);
         return destinationRelativePath;
@@ -1568,7 +1838,26 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         var destinationRelativePath = Path.GetRelativePath(GetRepositoryRoot(), destinationPath);
         var outputContent = formatAsJson ? FormatJson(content) : content;
 
-        await File.WriteAllTextAsync(destinationPath, outputContent + Environment.NewLine, cancellationToken);
+        await File.WriteAllTextAsync(destinationPath, outputContent + Environment.NewLine, JsonSerializationDefaults.Utf8NoBom, cancellationToken);
+
+        _logger.LogInformation("Saved artifact to {ResultFile}.", destinationRelativePath);
+        return destinationRelativePath;
+    }
+
+    private async Task<string> SaveBinaryArtifactAsync(
+        string runDirectory,
+        string subDirectoryName,
+        string fileName,
+        byte[] content,
+        CancellationToken cancellationToken)
+    {
+        var destinationDirectory = Path.Combine(runDirectory, subDirectoryName);
+        Directory.CreateDirectory(destinationDirectory);
+
+        var destinationPath = Path.Combine(destinationDirectory, fileName);
+        var destinationRelativePath = Path.GetRelativePath(GetRepositoryRoot(), destinationPath);
+
+        await File.WriteAllBytesAsync(destinationPath, content, cancellationToken);
 
         _logger.LogInformation("Saved artifact to {ResultFile}.", destinationRelativePath);
         return destinationRelativePath;
@@ -1588,6 +1877,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             Default: defaultPricing,
             Phases:
             [
+                new PhasePricingConfigurationSnapshot("company_context", ResolvePhaseExecutionSettings("company_context").Pricing),
                 new PhasePricingConfigurationSnapshot("requirements", ResolvePhaseExecutionSettings("requirements").Pricing),
                 new PhasePricingConfigurationSnapshot("candidate_evidence", ResolvePhaseExecutionSettings("candidate_evidence").Pricing),
                 new PhasePricingConfigurationSnapshot("matching", ResolvePhaseExecutionSettings("matching").Pricing),
@@ -1633,12 +1923,30 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
     {
         return phase switch
         {
+            "company_context" => _openAiOptions.Phases.CompanyContext,
             "requirements" => _openAiOptions.Phases.Requirements,
             "candidate_evidence" => _openAiOptions.Phases.CandidateEvidence,
             "matching" => _openAiOptions.Phases.Matching,
             "application_generation" => _openAiOptions.Phases.ApplicationGeneration,
             _ => new OpenAIPhaseExecutionOptions()
         };
+    }
+
+    private static List<string> ResolveCompanyContextApplicantProfileFiles(SampleDataContext sampleData)
+    {
+        var prioritizedFiles = sampleData.PersonFiles
+            .Where(path =>
+            {
+                var fileName = Path.GetFileName(path);
+                return fileName.Contains("profile", StringComparison.OrdinalIgnoreCase)
+                    || fileName.Contains("profil", StringComparison.OrdinalIgnoreCase)
+                    || fileName.Contains("cv", StringComparison.OrdinalIgnoreCase);
+            })
+            .ToList();
+
+        return prioritizedFiles.Count > 0
+            ? prioritizedFiles
+            : sampleData.PersonFiles.ToList();
     }
 
     private TokenPricingSnapshot BuildTokenPricingSnapshot(
@@ -1873,8 +2181,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
 
     private static string FormatJson(string json)
     {
-        using var document = JsonDocument.Parse(json);
-        return JsonSerializer.Serialize(document.RootElement, SavedJsonOptions);
+        return JsonSerializationDefaults.FormatJson(json);
     }
 
     private static JobListingPipelineRunSummary BuildJobListingPipelineRunSummary(string jobListingFileName, PipelineExecutionResult executionResult)
@@ -1892,6 +2199,8 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             StoppedAfterStage = executionResult.VerificationSummary?.StoppedAfterStage,
             RecommendedAction = executionResult.VerificationSummary?.RecommendedAction ?? "inspect",
             ApplicationGenerated = executionResult.ApplicationJson is not null,
+            CoverLetterStatus = executionResult.CoverLetter?.Status,
+            PdfGenerated = !string.IsNullOrWhiteSpace(executionResult.CoverLetter?.PdfArtifactPath),
             OverallMatchLevel = overallMatchLevel,
             MatchingSummaryDa = matchingSummaryDa,
             ApplicationCoreMessageDa = applicationCoreMessageDa,
@@ -2150,30 +2459,21 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
     }
 
     private sealed record PipelineExecutionResult(
+        string CandidateDirectoryName,
         string JobListingFileName,
         string RunDirectory,
         string RunDirectoryRelativePath,
         string? MatchingJson,
         string? ApplicationJson,
         PipelineVerificationSummary? VerificationSummary,
-        FitAdvisorySummary? FitAdvisory);
+        FitAdvisorySummary? FitAdvisory,
+        CoverLetterRenderArtifact? CoverLetter);
 
     private sealed record RequirementsStageRecoveryOutcome(string RequirementsJson, StageVerificationResult StageResult);
 
     private sealed record MatchingStageRecoveryOutcome(string MatchingJson, StageVerificationResult StageResult);
 
     private sealed record ApplicationGenerationStageRecoveryOutcome(string ApplicationJson, StageVerificationResult StageResult);
-
-    private sealed record CoverLetterRenderArtifact(
-        string Status,
-        string? HtmlArtifactPath,
-        string? CssArtifactPath,
-        int? MainContentCharacterCount,
-        int? MaxMainContentCharacters,
-        bool? WithinMainContentLimit,
-        IReadOnlyList<string> MissingFields,
-        IReadOnlyList<string> Warnings,
-        string? ErrorMessage);
 
     private sealed record LlmInteractionUsageRecord(
         string Phase,

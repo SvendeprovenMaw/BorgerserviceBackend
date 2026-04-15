@@ -69,6 +69,11 @@ public sealed class StageVerificationRequest
     public string? ExpectedMatchingDocumentId { get; init; }
 
     /// <summary>
+    /// Expected upstream company-context document identifier.
+    /// </summary>
+    public string? ExpectedCompanyContextDocumentId { get; init; }
+
+    /// <summary>
     /// Expected application document identifier for the final stage.
     /// </summary>
     public string? ExpectedApplicationDocumentId { get; init; }
@@ -87,6 +92,16 @@ public sealed class StageVerificationRequest
     /// Upstream matching JSON used for application-stage verification.
     /// </summary>
     public string? MatchingDocumentJson { get; init; }
+
+    /// <summary>
+    /// Maximum number of visible main-content character-units allowed by the active cover-letter template.
+    /// </summary>
+    public int? MaxMainContentCharacters { get; init; }
+
+    /// <summary>
+    /// Estimated monospace characters that fit on one rendered line in the active cover-letter template.
+    /// </summary>
+    public int? EstimatedCharactersPerLine { get; init; }
 }
 
 /// <summary>
@@ -527,6 +542,16 @@ public sealed class PipelineVerificationSummary
 public sealed class PipelineWithVerificationResponse
 {
     /// <summary>
+    /// Candidate directory used for this run.
+    /// </summary>
+    public string CandidateDirectory { get; init; } = string.Empty;
+
+    /// <summary>
+    /// Source job posting file name used for this run.
+    /// </summary>
+    public string JobListingFileName { get; init; } = string.Empty;
+
+    /// <summary>
     /// Relative path to the persisted run directory.
     /// </summary>
     public string RunDirectory { get; init; } = string.Empty;
@@ -555,6 +580,11 @@ public sealed class PipelineWithVerificationResponse
     /// Optional fit advisory generated from the user's strategy preferences.
     /// </summary>
     public FitAdvisorySummary? FitAdvisory { get; init; }
+
+    /// <summary>
+    /// Persisted cover-letter artifact summary, including the generated PDF path when available.
+    /// </summary>
+    public CoverLetterRenderArtifact? CoverLetter { get; init; }
 }
 
 /// <summary>
@@ -633,6 +663,16 @@ public sealed class JobListingPipelineRunSummary
     /// Whether an application document was produced.
     /// </summary>
     public bool ApplicationGenerated { get; init; }
+
+    /// <summary>
+    /// Cover-letter artifact status for this run.
+    /// </summary>
+    public string? CoverLetterStatus { get; init; }
+
+    /// <summary>
+    /// Whether a PDF cover-letter artifact was generated.
+    /// </summary>
+    public bool PdfGenerated { get; init; }
 
     /// <summary>
     /// Overall fit level extracted from the matching output.

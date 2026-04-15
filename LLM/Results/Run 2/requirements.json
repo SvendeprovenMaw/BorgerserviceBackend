@@ -1,160 +1,233 @@
 {
   "_meta": {
-    "job_posting_title": "Udvikler med fokus p\u00E5 DevOps",
+    "job_posting_title": "Graver søges til Føllenslev Kirkegård (Genopslag)",
     "parsed_files": [
-      "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf"
+      "Graver - Føllenslev Kirkegård.pdf"
     ],
     "errors": []
   },
   "requirements": [
     {
       "requirement_id": "req_1",
-      "requirement_text_da": "Erfaring som udvikler.",
-      "normalized_label": "developer_experience",
+      "requirement_text_da": "Stillingen kræver, at ansøgeren kan varetage ansvar for drift, vedligeholdelse og udvikling af kirkegården og præstegården.",
+      "normalized_label": "ansvar_for_drift_vedligeholdelse_udvikling",
       "category": "role_experience",
-      "importance": "should_have",
+      "importance": "must_have",
       "source_citations": [
         {
-          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
-          "excerpt": "Vi forestiller os, at du har erfaring som udvikler",
-          "section_hint": "Dig"
-        },
-        {
-          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
-          "excerpt": "Erfaring som udvikler med hele udviklingsprocessen",
-          "section_hint": "Dig"
+          "filename": "Graver - Føllenslev Kirkegård.pdf",
+          "excerpt": "Ansvar for drift, vedligeholdelse og udvikling af kirkegården og præstegården",
+          "section_hint": "Arbejdsopgaver"
         }
       ]
     },
     {
       "requirement_id": "req_2",
-      "requirement_text_da": "Erfaring med applikationsudvikling i den finansielle sektor eller andre regulerede sektorer.",
-      "normalized_label": "regulated_sector_application_development",
-      "category": "industry_experience",
-      "importance": "should_have",
+      "requirement_text_da": "Stillingen kræver kirketjeneste ved kirkelige handlinger, herunder kirketjeneste hver anden søndag.",
+      "normalized_label": "kirketjeneste_hver_2_sondag",
+      "category": "role_experience",
+      "importance": "must_have",
       "source_citations": [
         {
-          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
-          "excerpt": "har arbejdet med applikationsudvikling i den finansielle sektor eller andre regulerede sektorer",
-          "section_hint": "Dig"
+          "filename": "Graver - Føllenslev Kirkegård.pdf",
+          "excerpt": "Kirketjeneste ved kirkelige handlinger\n• Kirketjeneste hver 2. søndag.",
+          "section_hint": "Arbejdsopgaver"
         }
       ]
     },
     {
       "requirement_id": "req_3",
-      "requirement_text_da": "Erfaring med hele udviklingsprocessen.",
-      "normalized_label": "full_development_lifecycle",
-      "category": "technical_skill",
-      "importance": "should_have",
+      "requirement_text_da": "Stillingen omfatter rengøring og andet forefaldende praktisk arbejde.",
+      "normalized_label": "rengoering_praktisk_arbejde",
+      "category": "role_experience",
+      "importance": "must_have",
       "source_citations": [
         {
-          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
-          "excerpt": "Erfaring som udvikler med hele udviklingsprocessen",
-          "section_hint": "Dig"
-        },
-        {
-          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
-          "excerpt": "Arbejde med hele udviklingsprocessen fra udvikling over test til deploy af programmer",
-          "section_hint": "Dine ansvarsomr\u00E5der"
+          "filename": "Graver - Føllenslev Kirkegård.pdf",
+          "excerpt": "Rengøring og andet forefaldende praktisk arbejde",
+          "section_hint": "Arbejdsopgaver"
         }
       ]
     },
     {
       "requirement_id": "req_4",
-      "requirement_text_da": "Erfaring med flere forskellige programmeringssprog, herunder b\u00E5de kompilerede og fortolkede sprog, er \u00F8nskelig.",
-      "normalized_label": "multiple_programming_languages",
-      "category": "technical_skill",
-      "importance": "nice_to_have",
+      "requirement_text_da": "Stillingen kræver kontakt til kirkens brugere og udskrivning af regninger.",
+      "normalized_label": "kontakt_brugere_regningsudskrivning",
+      "category": "customer_focus",
+      "importance": "must_have",
       "source_citations": [
         {
-          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
-          "excerpt": "gerne med flere forskellige programmeringssprog og med b\u00E5de kompilerede og fortolkede sprog",
-          "section_hint": "Dig"
+          "filename": "Graver - Føllenslev Kirkegård.pdf",
+          "excerpt": "Kontakt til kirkens brugere og udskrivning af regninger",
+          "section_hint": "Arbejdsopgaver"
         }
       ]
     },
     {
       "requirement_id": "req_5",
-      "requirement_text_da": "Kendskab til eller lyst til at l\u00E6re om IBM Z System og COBOL.",
-      "normalized_label": "ibm_z_and_cobol",
-      "category": "technical_skill",
-      "importance": "should_have",
+      "requirement_text_da": "Ansøgeren skal medvirke til en smuk, værdig og velholdt kirkegård.",
+      "normalized_label": "medvirke_til_velholdt_kirkegard",
+      "category": "other",
+      "importance": "must_have",
       "source_citations": [
         {
-          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
-          "excerpt": "Kendskab eller lyst til at l\u00E6re om IBM Z System og COBOL",
-          "section_hint": "Dig"
+          "filename": "Graver - Føllenslev Kirkegård.pdf",
+          "excerpt": "Medvirken til en smuk, værdig og velholdt kirkegård",
+          "section_hint": "Arbejdsopgaver"
         }
       ]
     },
     {
       "requirement_id": "req_6",
-      "requirement_text_da": "Interesse for developer experience og DevOps.",
-      "normalized_label": "developer_experience_and_devops_interest",
-      "category": "technical_skill",
-      "importance": "should_have",
+      "requirement_text_da": "Ansøgeren skal være gartneruddannet eller have solid erfaring fra det grønne område.",
+      "normalized_label": "gartneruddannelse_eller_solid_erfaring_groent_omraade",
+      "category": "education",
+      "importance": "must_have",
       "source_citations": [
         {
-          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
-          "excerpt": "Interesse for developer experience og DevOps",
-          "section_hint": "Dig"
+          "filename": "Graver - Føllenslev Kirkegård.pdf",
+          "excerpt": "Gartneruddannet eller solid erfaring fra det grønne område",
+          "section_hint": "Kvalifikationer"
         }
       ]
     },
     {
       "requirement_id": "req_7",
-      "requirement_text_da": "Gode samarbejdsevner og interesse i at arbejde t\u00E6t sammen med erfarne kolleger og kunder.",
-      "normalized_label": "collaboration_with_colleagues_and_customers",
-      "category": "collaboration",
-      "importance": "should_have",
+      "requirement_text_da": "Ansøgeren skal have kørekort og være villig til at bruge egen bil i tjenesten.",
+      "normalized_label": "koerekort_og_bil_i_tjenesten",
+      "category": "logistics",
+      "importance": "must_have",
       "source_citations": [
         {
-          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
-          "excerpt": "Gode samarbejdsevner og interesse i at arbejde t\u00E6t sammen med erfarne kolleger og kunder",
-          "section_hint": "Dig"
-        },
-        {
-          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
-          "excerpt": "T\u00E6t samarbejde med kunder og brugere for at forst\u00E5 deres behov",
-          "section_hint": "Dine ansvarsomr\u00E5der"
+          "filename": "Graver - Føllenslev Kirkegård.pdf",
+          "excerpt": "Kørekort og villighed til at bruge egen bil i tjenesten",
+          "section_hint": "Kvalifikationer"
         }
       ]
     },
     {
       "requirement_id": "req_8",
-      "requirement_text_da": "Behersker dansk og engelsk i b\u00E5de skrift og tale.",
-      "normalized_label": "danish_and_english",
-      "category": "language",
+      "requirement_text_da": "Ansøgeren skal kunne arbejde selvstændigt og tage ansvar for den daglige drift inden for de givne økonomiske rammer.",
+      "normalized_label": "selvstaendigt_arbejde_ansvar_daglig_drift",
+      "category": "analytical_skill",
       "importance": "must_have",
       "source_citations": [
         {
-          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
-          "excerpt": "Behersker dansk og engelsk i b\u00E5de skrift og tale",
-          "section_hint": "Dig"
+          "filename": "Graver - Føllenslev Kirkegård.pdf",
+          "excerpt": "Evne til at arbejde selvstændigt og tage ansvar for den daglige drift inden for de givne økonomiske rammer",
+          "section_hint": "Kvalifikationer"
         }
       ]
     },
     {
       "requirement_id": "req_9",
-      "requirement_text_da": "F\u00F8lger markedstrends i udviklingsparadigmer og tool-underst\u00F8ttelse samt er nysgerrig p\u00E5 AI og automatisering.",
-      "normalized_label": "development_trends_ai_automation",
-      "category": "personal_trait",
-      "importance": "should_have",
+      "requirement_text_da": "Ansøgeren skal have kendskab til kirkens IT-systemer eller være villig til at lære dem.",
+      "normalized_label": "kendskab_til_it_systemer_eller_villighed_til_at_laere",
+      "category": "technical_skill",
+      "importance": "must_have",
       "source_citations": [
         {
-          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
-          "excerpt": "F\u00F8lger markedstrends i udviklingsparadigmer og tool-underst\u00F8ttelse og er nysgerrig p\u00E5 AI og automatisering",
-          "section_hint": "Dig"
-        },
+          "filename": "Graver - Føllenslev Kirkegård.pdf",
+          "excerpt": "Kendskab til eller villighed til at lære kirkens IT-systemer",
+          "section_hint": "Kvalifikationer"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_10",
+      "requirement_text_da": "Ansøgeren skal have en engageret, fleksibel og imødekommende tilgang til arbejdet.",
+      "normalized_label": "engageret_fleksibel_imodekommende",
+      "category": "personal_trait",
+      "importance": "must_have",
+      "source_citations": [
         {
-          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
-          "excerpt": "F\u00F8lge markedstrends i udviklingsparadigmer og tool underst\u00F8ttelse",
-          "section_hint": "Dine ansvarsomr\u00E5der"
-        },
+          "filename": "Graver - Føllenslev Kirkegård.pdf",
+          "excerpt": "Engageret, fleksibel og imødekommende tilgang til arbejdet",
+          "section_hint": "Kvalifikationer"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_11",
+      "requirement_text_da": "Ansøgeren skal have interesse for kirken og sognets liv.",
+      "normalized_label": "interesse_for_kirken_og_sognets_liv",
+      "category": "personal_trait",
+      "importance": "must_have",
+      "source_citations": [
         {
-          "filename": "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
-          "excerpt": "Implementering og integration af nye v\u00E6rkt\u00F8jer som VS Code og GitLab samt AI og automatisering i alle processer",
-          "section_hint": "Dine ansvarsomr\u00E5der"
+          "filename": "Graver - Føllenslev Kirkegård.pdf",
+          "excerpt": "Interesse for kirken og sognets liv",
+          "section_hint": "Kvalifikationer"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_12",
+      "requirement_text_da": "Ansøgeren skal bidrage aktivt til et godt arbejdsmiljø, både fysisk og psykisk.",
+      "normalized_label": "bidrage_til_godt_arbejdsmiljoe",
+      "category": "collaboration",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Graver - Føllenslev Kirkegård.pdf",
+          "excerpt": "Bidrager aktivt til et godt arbejdsmiljø – både fysisk og psykisk",
+          "section_hint": "Kvalifikationer"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_13",
+      "requirement_text_da": "Ansøgeren skal have gode samarbejdsevner i forhold til kolleger, menighedsråd, frivillige og samarbejdspartnere.",
+      "normalized_label": "gode_samarbejdsevner",
+      "category": "collaboration",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Graver - Føllenslev Kirkegård.pdf",
+          "excerpt": "Gode samarbejdsevner i forhold til kolleger, menighedsråd, frivillige og samarbejdspartnere",
+          "section_hint": "Kvalifikationer"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_14",
+      "requirement_text_da": "Det er en betingelse, at den obligatoriske 5 ugers uddannelse for gravere gennemføres inden for 2 år efter ansættelsens start.",
+      "normalized_label": "obligatorisk_graveruddannelse_inden_2_ar",
+      "category": "education",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Graver - Føllenslev Kirkegård.pdf",
+          "excerpt": "Det er en betingelse, at den obligatoriske 5 ugers uddannelse for gravere gennemføres indenfor 2 år efter ansættelsens start.",
+          "section_hint": "Ansættelsesvilkår"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_15",
+      "requirement_text_da": "Der er rådighedsforpligtelse til stillingen.",
+      "normalized_label": "raadighedsforpligtelse",
+      "category": "logistics",
+      "importance": "must_have",
+      "source_citations": [
+        {
+          "filename": "Graver - Føllenslev Kirkegård.pdf",
+          "excerpt": "Der er rådighedsforpligtelse til stillingen.",
+          "section_hint": "Ansættelsesvilkår"
+        }
+      ]
+    },
+    {
+      "requirement_id": "req_16",
+      "requirement_text_da": "Menighedsrådet vil indhente referencer.",
+      "normalized_label": "referencer_vil_blive_indhentet",
+      "category": "logistics",
+      "importance": "unknown",
+      "source_citations": [
+        {
+          "filename": "Graver - Føllenslev Kirkegård.pdf",
+          "excerpt": "Menighedsrådet kan oplyse, at der vil blive indhentet referencer.",
+          "section_hint": "Ansøgning/øvrigt"
         }
       ]
     }

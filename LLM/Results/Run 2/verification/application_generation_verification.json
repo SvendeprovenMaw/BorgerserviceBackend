@@ -1,0 +1,32 @@
+{
+  "Stage": "application_generation",
+  "DocumentId": "application_borger1_graver_føllenslev_kirkegård",
+  "VerificationMode": "mechanical_only",
+  "Status": "pass_with_warnings",
+  "ApprovedForDownstream": true,
+  "WarningCount": 1,
+  "ErrorCount": 0,
+  "ArtifactPath": "",
+  "GateArtifactPath": "",
+  "Gate": {
+    "Stage": "",
+    "Decision": "continue",
+    "ApprovedForDownstream": false,
+    "HardInvalidCount": 0,
+    "SoftQualityCount": 0,
+    "SummaryDa": "",
+    "BlockingReasons": [],
+    "AdvisoryReasons": [],
+    "Metrics": []
+  },
+  "Findings": [
+    {
+      "RuleId": "application.omitted_requirement_conflict",
+      "Severity": "warning",
+      "SubjectType": "application_strategy",
+      "SubjectId": "application_borger1_graver_føllenslev_kirkegård",
+      "MessageDa": "omitted_requirement_id \u0027req_11\u0027 optræder samtidig som understøttet i sections.",
+      "BlockingForDownstream": false
+    }
+  ]
+}

@@ -1,3 +1,5 @@
+using OpenAiResponses.Api.Models;
+
 namespace OpenAiResponses.Api.Services;
 
 /// <summary>
@@ -5,6 +7,11 @@ namespace OpenAiResponses.Api.Services;
 /// </summary>
 public interface ISampleLlmFlowService
 {
+    /// <summary>
+    /// Builds company context for the default sample job listing and applicant profile.
+    /// </summary>
+    Task<string> RunCompanyContextAsync(CancellationToken cancellationToken = default);
+
     /// <summary>
     /// Parses requirements from the default sample job listing.
     /// </summary>
@@ -21,14 +28,14 @@ public interface ISampleLlmFlowService
     Task<string> RunMatchingAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Runs the four-stage sample pipeline without verification metadata.
+    /// Runs the sample pipeline without verification metadata.
     /// </summary>
-    Task<string> RunPipelineAsync(CancellationToken cancellationToken = default);
+    Task<string> RunPipelineAsync(SamplePipelineSelectionRequest? selection = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Runs the pipeline with verification, repair, and gate information included in the response.
     /// </summary>
-    Task<string> RunPipelineWithVerificationAsync(CancellationToken cancellationToken = default);
+    Task<string> RunPipelineWithVerificationAsync(SamplePipelineSelectionRequest? selection = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Repeats the verified pipeline for every job listing in the sample corpus.

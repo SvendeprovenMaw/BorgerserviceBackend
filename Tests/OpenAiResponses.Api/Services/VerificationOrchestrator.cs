@@ -1,4 +1,7 @@
+using System.Globalization;
+using System.Text;
 using System.Text.Json;
+using OpenAiResponses.Api.Helpers;
 using OpenAiResponses.Api.Models;
 
 namespace OpenAiResponses.Api.Services;
@@ -299,8 +302,29 @@ public sealed class VerificationOrchestrator : IVerificationOrchestrator
             ValidateExpectedId(meta, "application_document_id", request.ExpectedApplicationDocumentId, findings, request.DocumentId);
             ValidateExpectedId(meta, "requirements_document_id", request.ExpectedRequirementsDocumentId, findings, request.DocumentId);
             ValidateExpectedId(meta, "candidate_evidence_document_id", request.ExpectedCandidateEvidenceDocumentId, findings, request.DocumentId);
+            ValidateExpectedId(meta, "company_context_document_id", request.ExpectedCompanyContextDocumentId, findings, request.DocumentId);
             ValidateExpectedId(meta, "matching_document_id", request.ExpectedMatchingDocumentId, findings, request.DocumentId);
         }
+
+        var signatureName = root.TryGetProperty("_meta", out var rootMeta)
+            ? GetString(rootMeta, "applicant_display_name")
+            : string.Empty;
+
+        if (request.MaxMainContentCharacters.HasValue && request.MaxMainContentCharacters.Value > 0)
+        {
+            var estimatedCharactersPerLine = request.EstimatedCharactersPerLine.GetValueOrDefault(CoverLetterContentMetrics.DefaultEstimatedCharactersPerLine);
+            var budgetMetrics = CoverLetterContentMetrics.CalculateBudgetMetrics(root, signatureName, estimatedCharactersPerLine);
+            if (budgetMetrics.BudgetUsage > request.MaxMainContentCharacters.Value)
+            {
+                findings.Add(Error(
+                    "application.template_main_content_length",
+                    "document",
+                    request.DocumentId,
+                    $"Ansøgningens synlige hovedtekst er {budgetMetrics.VisibleCharacterCount} rå tegn, men {budgetMetrics.ParagraphBreakCount} paragrafskift og {budgetMetrics.ExplicitLineBreakCount} interne linjeskift løfter det effektive template-forbrug til {budgetMetrics.BudgetUsage} mod maksimum {request.MaxMainContentCharacters.Value}. Dokumentet risikerer at blive klippet i PDF-layoutet."));
+            }
+        }
+
+        findings.AddRange(ValidateVisibleTextScripts(root, request.DocumentId));
 
         var claimsById = new Dictionary<string, JsonElement>(StringComparer.Ordinal);
         if (!root.TryGetProperty("claim_register", out var claims) || claims.ValueKind != JsonValueKind.Array)
@@ -533,6 +557,127 @@ public sealed class VerificationOrchestrator : IVerificationOrchestrator
         }
 
         return findings;
+    }
+
+    private static IEnumerable<VerificationFinding> ValidateVisibleTextScripts(JsonElement root, string documentId)
+    {
+        var findings = new List<VerificationFinding>();
+
+        foreach (var candidate in EnumerateVisibleTextCandidates(root, documentId))
+        {
+            var suspiciousRuneSamples = FindSuspiciousLetterRuneSamples(candidate.Text);
+            if (suspiciousRuneSamples.Count == 0)
+            {
+                continue;
+            }
+
+            findings.Add(Error(
+                "application.visible_text.non_latin_script",
+                candidate.SubjectType,
+                candidate.SubjectId,
+                $"{candidate.FieldPath} indeholder mistænkelige ikke-latinske bogstavtegn, fx {string.Join(", ", suspiciousRuneSamples)}. Ansøgningsteksten må kun bruge latinbaseret skrift med normale nordiske tegn."));
+        }
+
+        return findings;
+    }
+
+    private static IEnumerable<ApplicationVisibleTextCandidate> EnumerateVisibleTextCandidates(JsonElement root, string documentId)
+    {
+        if (root.TryGetProperty("application_strategy", out var strategy) && strategy.ValueKind == JsonValueKind.Object)
+        {
+            var subjectLine = GetString(strategy, "subject_line_da");
+            if (!string.IsNullOrWhiteSpace(subjectLine))
+            {
+                yield return new ApplicationVisibleTextCandidate("application_strategy", documentId, "application_strategy.subject_line_da", subjectLine);
+            }
+
+            var coreMessage = GetString(strategy, "core_message_da");
+            if (!string.IsNullOrWhiteSpace(coreMessage))
+            {
+                yield return new ApplicationVisibleTextCandidate("application_strategy", documentId, "application_strategy.core_message_da", coreMessage);
+            }
+        }
+
+        var yieldedSectionText = false;
+        if (root.TryGetProperty("sections", out var sections) && sections.ValueKind == JsonValueKind.Array)
+        {
+            foreach (var section in sections.EnumerateArray())
+            {
+                var text = GetString(section, "text_da");
+                if (string.IsNullOrWhiteSpace(text))
+                {
+                    continue;
+                }
+
+                yieldedSectionText = true;
+                yield return new ApplicationVisibleTextCandidate(
+                    "section",
+                    GetString(section, "section_id"),
+                    "sections[].text_da",
+                    text);
+            }
+        }
+
+        if (!yieldedSectionText)
+        {
+            var assembledApplication = GetString(root, "assembled_application_da");
+            if (!string.IsNullOrWhiteSpace(assembledApplication))
+            {
+                yield return new ApplicationVisibleTextCandidate("document", documentId, "assembled_application_da", assembledApplication);
+            }
+        }
+    }
+
+    private static List<string> FindSuspiciousLetterRuneSamples(string text)
+    {
+        var samples = new List<string>();
+        var seenRunes = new HashSet<int>();
+
+        foreach (var rune in text.EnumerateRunes())
+        {
+            if (!IsSuspiciousLetterRune(rune) || !seenRunes.Add(rune.Value))
+            {
+                continue;
+            }
+
+            samples.Add($"'{rune}' (U+{rune.Value:X4})");
+            if (samples.Count >= 4)
+            {
+                break;
+            }
+        }
+
+        return samples;
+    }
+
+    private static bool IsSuspiciousLetterRune(Rune rune)
+    {
+        var category = Rune.GetUnicodeCategory(rune);
+        if (category is not UnicodeCategory.UppercaseLetter
+            and not UnicodeCategory.LowercaseLetter
+            and not UnicodeCategory.TitlecaseLetter
+            and not UnicodeCategory.ModifierLetter
+            and not UnicodeCategory.OtherLetter)
+        {
+            return false;
+        }
+
+        return !IsLatinLetterRune(rune);
+    }
+
+    private static bool IsLatinLetterRune(Rune rune)
+    {
+        var value = rune.Value;
+        return value is >= 0x0041 and <= 0x005A
+            or >= 0x0061 and <= 0x007A
+            or 0x00AA
+            or 0x00BA
+            or >= 0x00C0 and <= 0x00FF
+            or >= 0x0100 and <= 0x024F
+            or >= 0x1E00 and <= 0x1EFF
+            or >= 0x2C60 and <= 0x2C7F
+            or >= 0xA720 and <= 0xA7FF
+            or >= 0xAB30 and <= 0xAB6F;
     }
 
     private static void ValidateExpectedId(JsonElement meta, string propertyName, string? expectedValue, List<VerificationFinding> findings, string documentId)
@@ -912,4 +1057,6 @@ public sealed class VerificationOrchestrator : IVerificationOrchestrator
         };
 
     private sealed record CitationInfo(string FileName, string Excerpt);
+
+    private sealed record ApplicationVisibleTextCandidate(string SubjectType, string? SubjectId, string FieldPath, string Text);
 }

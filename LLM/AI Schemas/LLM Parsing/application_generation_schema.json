@@ -19,6 +19,7 @@
           "application_document_id",
           "requirements_document_id",
           "candidate_evidence_document_id",
+          "company_context_document_id",
           "matching_document_id",
           "target_language",
           "position_title",
@@ -33,6 +34,9 @@
             "type": "string"
           },
           "candidate_evidence_document_id": {
+            "type": "string"
+          },
+          "company_context_document_id": {
             "type": "string"
           },
           "matching_document_id": {

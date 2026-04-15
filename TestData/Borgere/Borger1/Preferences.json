@@ -33,7 +33,7 @@
     "avoid_mentioning_missing_requirements": true,
     "avoid_salary_discussion": true,
     "avoid_private_life_details": true,
-    "max_main_content_characters": 2200,
+    "max_main_content_characters": 1550,
     "disallowed_phrases_da": [
       "jeg brænder for",
       "jeg er den perfekte kandidat",

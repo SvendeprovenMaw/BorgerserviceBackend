@@ -64,6 +64,8 @@ public sealed class OpenAIModelCatalogEntry
 /// </summary>
 public sealed class OpenAIPhaseCollectionOptions
 {
+    public OpenAIPhaseExecutionOptions CompanyContext { get; set; } = new();
+
     public OpenAIPhaseExecutionOptions Requirements { get; set; } = new();
 
     public OpenAIPhaseExecutionOptions CandidateEvidence { get; set; } = new();

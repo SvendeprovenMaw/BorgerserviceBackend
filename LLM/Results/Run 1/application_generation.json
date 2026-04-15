@@ -1,0 +1,343 @@
+{
+  "_meta": {
+    "application_document_id": "application_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "requirements_document_id": "requirements_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "candidate_evidence_document_id": "candidate_evidence_borger1",
+    "company_context_document_id": "company_context_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "matching_document_id": "matching_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "target_language": "da",
+    "position_title": "Udvikler med fokus på DevOps",
+    "company_name": "JN Data",
+    "applicant_display_name": "Emma Sørensen"
+  },
+  "application_strategy": {
+    "tone": "warm_professional",
+    "length_target": "medium",
+    "subject_line_da": "Ansøgning til stillingen som Udvikler med fokus på DevOps",
+    "core_message_da": "Jeg søger stillingen som Udvikler med fokus på DevOps hos JN Data, fordi min baggrund som junior softwareudvikler og min erfaring med .NET, API\u0027er, integrationer og samarbejde på tværs kan bidrage til udvikling i et miljø med fokus på drift og developer experience.",
+    "selected_requirement_ids": [
+      "req_1",
+      "req_3",
+      "req_4",
+      "req_6",
+      "req_7",
+      "req_8",
+      "req_9"
+    ],
+    "selected_evidence_ids": [
+      "e1",
+      "e2",
+      "e3",
+      "e4",
+      "e6",
+      "e7",
+      "e8",
+      "e9",
+      "e10"
+    ],
+    "omitted_requirement_ids": [
+      "req_2",
+      "req_5"
+    ],
+    "omission_strategy_da": "Jeg fokuserer på de stærkeste og dokumenterede match og nævner ikke de krav, der ikke er direkte understøttet af mine input."
+  },
+  "sections": [
+    {
+      "section_id": "sec_salutation",
+      "section_kind": "salutation",
+      "text_da": "Kære JN Data",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "sec_opening",
+      "section_kind": "opening",
+      "text_da": "Jeg søger stillingen som Udvikler med fokus på DevOps hos JN Data. Jeres arbejde med IT-drift, finansiel it-infrastruktur og developer experience-platforme taler ind i den type udviklingsmiljø, jeg gerne vil bidrage til.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "cl_1"
+      ],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "sec_fit",
+      "section_kind": "fit",
+      "text_da": "Jeg kommer med dokumenteret udviklererfaring som junior softwareudvikler med fokus på .NET, API\u0027er og React. I mit arbejde har jeg udviklet og vedligeholdt interne .NET-baserede webmoduler, bygget REST API-endpoints og deltaget i integrationer mellem front-end, database og tredjepartssystemer. Jeg har også arbejdet med fejlretning, kodegennemgang og mindre forbedringer i React-baserede brugerflader.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "cl_2",
+        "cl_3",
+        "cl_4",
+        "cl_5"
+      ],
+      "supported_requirement_ids": [
+        "req_1",
+        "req_3",
+        "req_4"
+      ],
+      "supported_evidence_ids": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e10"
+      ]
+    },
+    {
+      "section_id": "sec_collaboration",
+      "section_kind": "experience",
+      "text_da": "Samtidig trives jeg i samarbejde med både teknikere og forretning, og jeg er vant til hybridt samarbejde og dialog med både brugere og udviklere. Jeg har også erfaring fra freelance webprojekter, hvor jeg udarbejdede simple portfolio- og præsentationssider for mindre kunder. Det gør, at jeg er vant til at arbejde tæt sammen med andre og tilpasse løsninger til forskellige behov.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "cl_6",
+        "cl_7",
+        "cl_8"
+      ],
+      "supported_requirement_ids": [
+        "req_7"
+      ],
+      "supported_evidence_ids": [
+        "e5",
+        "e6",
+        "e7"
+      ]
+    },
+    {
+      "section_id": "sec_motivation",
+      "section_kind": "motivation",
+      "text_da": "Jeg beskriver mig selv som nysgerrig og løsningsorienteret med fokus på moderne webudvikling, og derfor tiltaler rollen også det læringsrum, der ligger i developer experience og DevOps. Jeg vil gerne bidrage med en stabil og praktisk tilgang, hvor samarbejde og faglig nysgerrighed går hånd i hånd.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "cl_9",
+        "cl_10"
+      ],
+      "supported_requirement_ids": [
+        "req_6",
+        "req_9"
+      ],
+      "supported_evidence_ids": [
+        "e9"
+      ]
+    },
+    {
+      "section_id": "sec_language",
+      "section_kind": "experience",
+      "text_da": "Jeg behersker dansk som modersmål og engelsk på professionelt niveau.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "cl_11"
+      ],
+      "supported_requirement_ids": [
+        "req_8"
+      ],
+      "supported_evidence_ids": [
+        "e8"
+      ]
+    },
+    {
+      "section_id": "sec_future",
+      "section_kind": "other",
+      "text_da": "Jeg håber, I vil se min profil som et godt udgangspunkt for at bidrage i jeres udviklingsmiljø i Roskilde eller Silkeborg. Jeg ser frem til muligheden for at uddybe min motivation og erfaring ved en samtale.",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "sec_closing",
+      "section_kind": "closing",
+      "text_da": "Tak for jeres tid og overvejelse.",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "sec_signature",
+      "section_kind": "signature",
+      "text_da": "Med venlig hilsen\nEmma Sørensen",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    }
+  ],
+  "claim_register": [
+    {
+      "claim_id": "cl_1",
+      "claim_text_da": "Rollen og virksomhedens fokus på IT-drift, finansiel it-infrastruktur og developer experience er relevant for kandidatens ønskede udviklingsmiljø.",
+      "claim_kind": "motivation_grounded",
+      "evidence_ids": [],
+      "requirement_ids": [],
+      "section_ids": [
+        "sec_opening"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "cl_2",
+      "claim_text_da": "Kandidaten har udviklererfaring som junior softwareudvikler med fokus på .NET, API\u0027er og React.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "e1"
+      ],
+      "requirement_ids": [
+        "req_1",
+        "req_3",
+        "req_4"
+      ],
+      "section_ids": [
+        "sec_fit"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "cl_3",
+      "claim_text_da": "Kandidaten har udviklet og vedligeholdt interne .NET-baserede webmoduler.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "e2"
+      ],
+      "requirement_ids": [
+        "req_1",
+        "req_3",
+        "req_4"
+      ],
+      "section_ids": [
+        "sec_fit"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "cl_4",
+      "claim_text_da": "Kandidaten har bygget REST API-endpoints og deltaget i integrationer mellem front-end, database og tredjepartssystemer.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "e3"
+      ],
+      "requirement_ids": [
+        "req_1",
+        "req_3",
+        "req_4"
+      ],
+      "section_ids": [
+        "sec_fit"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "cl_5",
+      "claim_text_da": "Kandidaten har arbejdet med fejlretning, kodegennemgang og mindre forbedringer i React-baserede brugerflader.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "e4"
+      ],
+      "requirement_ids": [
+        "req_3",
+        "req_4"
+      ],
+      "section_ids": [
+        "sec_fit"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "cl_6",
+      "claim_text_da": "Kandidaten trives i samarbejde med både teknikere og forretning.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "e6"
+      ],
+      "requirement_ids": [
+        "req_7"
+      ],
+      "section_ids": [
+        "sec_collaboration"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "cl_7",
+      "claim_text_da": "Kandidaten er vant til hybridt samarbejde og dialog med både brugere og udviklere.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "e7"
+      ],
+      "requirement_ids": [
+        "req_7"
+      ],
+      "section_ids": [
+        "sec_collaboration"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "cl_8",
+      "claim_text_da": "Kandidaten har erfaring fra freelance webprojekter for mindre kunder.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "e5"
+      ],
+      "requirement_ids": [
+        "req_1",
+        "req_3",
+        "req_7"
+      ],
+      "section_ids": [
+        "sec_collaboration"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "cl_9",
+      "claim_text_da": "Kandidaten beskriver sig som nysgerrig og løsningsorienteret med fokus på moderne webudvikling.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "e9"
+      ],
+      "requirement_ids": [
+        "req_6",
+        "req_9"
+      ],
+      "section_ids": [
+        "sec_motivation"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "cl_10",
+      "claim_text_da": "Kandidaten forbinder sin faglige nysgerrighed med interesse i developer experience og DevOps som læringsrum.",
+      "claim_kind": "motivation_grounded",
+      "evidence_ids": [
+        "e9"
+      ],
+      "requirement_ids": [
+        "req_6",
+        "req_9"
+      ],
+      "section_ids": [
+        "sec_motivation"
+      ],
+      "support_strength": "weak"
+    },
+    {
+      "claim_id": "cl_11",
+      "claim_text_da": "Kandidaten behersker dansk som modersmål og engelsk på professionelt niveau.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "e8"
+      ],
+      "requirement_ids": [
+        "req_8"
+      ],
+      "section_ids": [
+        "sec_language"
+      ],
+      "support_strength": "strong"
+    }
+  ],
+  "assembled_application_da": "Kære JN Data\n\nJeg søger stillingen som Udvikler med fokus på DevOps hos JN Data. Jeres arbejde med IT-drift, finansiel it-infrastruktur og developer experience-platforme taler ind i den type udviklingsmiljø, jeg gerne vil bidrage til.\n\nJeg kommer med dokumenteret udviklererfaring som junior softwareudvikler med fokus på .NET, API\u0027er og React. I mit arbejde har jeg udviklet og vedligeholdt interne .NET-baserede webmoduler, bygget REST API-endpoints og deltaget i integrationer mellem front-end, database og tredjepartssystemer. Jeg har også arbejdet med fejlretning, kodegennemgang og mindre forbedringer i React-baserede brugerflader.\n\nSamtidig trives jeg i samarbejde med både teknikere og forretning, og jeg er vant til hybridt samarbejde og dialog med både brugere og udviklere. Jeg har også erfaring fra freelance webprojekter, hvor jeg udarbejdede simple portfolio- og præsentationssider for mindre kunder. Det gør, at jeg er vant til at arbejde tæt sammen med andre og tilpasse løsninger til forskellige behov.\n\nJeg beskriver mig selv som nysgerrig og løsningsorienteret med fokus på moderne webudvikling, og derfor tiltaler rollen også det læringsrum, der ligger i developer experience og DevOps. Jeg vil gerne bidrage med en stabil og praktisk tilgang, hvor samarbejde og faglig nysgerrighed går hånd i hånd.\n\nJeg behersker dansk som modersmål og engelsk på professionelt niveau.\n\nJeg håber, I vil se min profil som et godt udgangspunkt for at bidrage i jeres udviklingsmiljø i Roskilde eller Silkeborg. Jeg ser frem til muligheden for at uddybe min motivation og erfaring ved en samtale.\n\nTak for jeres tid og overvejelse.\n\nMed venlig hilsen\nEmma Sørensen"
+}

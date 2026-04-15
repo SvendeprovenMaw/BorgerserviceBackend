@@ -55,16 +55,32 @@ POST {{OpenAiResponses.Api_HostAddress}}/api/responses/sample/matching
 ###
 
 POST {{OpenAiResponses.Api_HostAddress}}/api/responses/sample/pipeline
+Content-Type: application/json
+Accept: application/json
+
+{
+	"candidateNumber": 1,
+	"jobPostingNumber": 3
+}
 
 ###
 
 # Full pipeline requests used when testing verification, gates, and repair behavior.
 POST {{OpenAiResponses.Api_HostAddress}}/api/responses/sample/pipeline-with-verification
+Content-Type: application/json
 Accept: application/json
 
+{
+	"candidateNumber": 2,
+	"jobPostingNumber": 5
+}
+
 # Inspect these fields in the response:
+# - CandidateDirectory
+# - JobListingFileName
 # - PipelineStatus
 # - StoppedAfterStage
+# - CoverLetter.PdfArtifactPath
 # - Verification.RecommendedAction
 # - Verification.Stages[*].Gate.Decision
 # - Verification.Stages[*].GateArtifactPath

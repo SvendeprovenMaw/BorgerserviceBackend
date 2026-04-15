@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using OpenAiResponses.Api.Helpers;
 using OpenAiResponses.Api.Models;
 
 namespace OpenAiResponses.Api.Services;
@@ -10,7 +11,7 @@ namespace OpenAiResponses.Api.Services;
 /// </summary>
 public sealed class RequirementsDeterministicRepairService : IRequirementsDeterministicRepairService
 {
-    private static readonly JsonSerializerOptions RepairJsonOptions = new() { WriteIndented = true };
+    private static readonly JsonSerializerOptions RepairJsonOptions = JsonSerializationDefaults.IndentedUtf8;
 
     /// <summary>
     /// Replaces duplicate or missing requirement IDs with deterministic, label-based identifiers.

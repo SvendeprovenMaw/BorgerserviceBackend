@@ -124,6 +124,16 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
             }
         };
 
+        if (request.EnableWebSearch)
+        {
+            options.Tools.Add(ResponseTool.CreateWebSearchTool());
+        }
+
+        if (request.EnableWebSearch && request.ForceWebSearchTool)
+        {
+            options.ToolChoice = ResponseToolChoice.CreateWebSearchChoice();
+        }
+
         ClientResult<ResponseResult> response = await _responsesClient.CreateResponseAsync(options, cancellationToken);
         var outputJson = response.Value.GetOutputText();
 

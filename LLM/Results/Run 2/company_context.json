@@ -1,0 +1,59 @@
+{
+  "_meta": {
+    "company_name": "Føllenslev-Særslev Sogns Menighedsråd",
+    "input_summary_da": "Analyse af jobopslag til graver ved Føllenslev Kirkegård samt to ansøgerprofiler for Emma Sørensen.",
+    "parsed_files": [
+      "Graver - Føllenslev Kirkegård.pdf",
+      "emma_sorensen_cv_da.pdf",
+      "profile.pdf"
+    ],
+    "errors": []
+  },
+  "company_profile": {
+    "employee_count": {
+      "value": null,
+      "display_da": "Ukendt"
+    },
+    "industry_da": "Folkekirkelig kirkegårds- og menighedsrådsdrift",
+    "homepage_values_mission_vision_da": [
+      "Samarbejde",
+      "Ordentlighed",
+      "Arbejdsglæde"
+    ],
+    "trustpilot": {
+      "score": null,
+      "display_da": "Ukendt"
+    },
+    "glassdoor": {
+      "score": null,
+      "display_da": "Ukendt",
+      "pros_themes_da": [],
+      "cons_themes_da": []
+    }
+  },
+  "economics": {
+    "growth_assessment_da": "Stabil",
+    "primary_products_da": [
+      "Drift og vedligeholdelse af kirkegård",
+      "Kirketjeneste ved kirkelige handlinger",
+      "Rengøring og praktiske opgaver"
+    ],
+    "primary_cashcows_da": [
+      "Menighedsrådets drift af Føllenslev og Nekselø Kirker samt præstegården"
+    ],
+    "salary_conditions_da": "Årslønnen er angivet i et interval på 336.046,12 kr. til 413.600,61 kr. uden gartnerisk uddannelse og 343.808,19 kr. til 429.971,65 kr. med gartnerisk uddannelse. Derudover er der et årligt rådighedstillæg på 26.731,30 kr., kvoteret efter ansættelsesbrøk."
+  },
+  "employee_conditions": {
+    "union_agreement_indication_da": "Ja, overenskomst med OAO-S og Forbundet af kirke- og kirkegårdsansatte (FAKK).",
+    "skill_development_opportunities_da": "Der er mulighed for efteruddannelse, og den obligatoriske 5 ugers uddannelse for gravere skal gennemføres inden for 2 år efter ansættelsesstart."
+  },
+  "media_mentions": {
+    "recent_media_mentions_da": []
+  },
+  "distance": {
+    "commute_distance_da": "Ca. 44 km",
+    "applicant_address_da": "Roskilde, Danmark",
+    "workplace_address_da": "Skippingevej 15, 4460 Snertinge",
+    "calculation_basis_da": "Afstanden er vurderet ud fra ansøgerens angivne lokation Roskilde og arbejdsstedets adresse i Snertinge; det er en grov geografisk afstandsvurdering og ikke en ruteberegning."
+  }
+}

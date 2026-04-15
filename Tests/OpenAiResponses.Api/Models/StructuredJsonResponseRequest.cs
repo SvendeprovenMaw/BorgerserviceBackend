@@ -44,6 +44,16 @@ public sealed class StructuredJsonResponseRequest
     /// File inputs uploaded alongside the prompt context.
     /// </summary>
     public List<StructuredFileInput> InputFiles { get; init; } = [];
+
+    /// <summary>
+    /// Enables the Responses API web search tool for this request.
+    /// </summary>
+    public bool EnableWebSearch { get; init; }
+
+    /// <summary>
+    /// Forces the model to use the web search tool before responding.
+    /// </summary>
+    public bool ForceWebSearchTool { get; init; }
 }
 
 /// <summary>

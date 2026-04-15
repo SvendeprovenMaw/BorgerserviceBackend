@@ -93,16 +93,19 @@ public sealed class CoverLetterTemplateRenderer : ICoverLetterTemplateRenderer
             warnings.Add("assembled_application_da var tom, så renderer forsøgte at bygge teksten fra sections-arrayet.");
         }
 
-        var mainContentCharacterCount = string.IsNullOrWhiteSpace(assembledApplication)
-            ? CountVisibleCharactersFromSections(root)
-            : assembledApplication.Length;
-        var withinMainContentLimit = mainContentCharacterCount <= templateOptions.MaxMainContentCharacters;
+        var renderedParagraphs = CoverLetterContentMetrics.BuildRenderedParagraphs(root, rawApplicantName);
+        var budgetMetrics = CoverLetterContentMetrics.CalculateBudgetMetrics(
+            renderedParagraphs,
+            templateOptions.EstimatedCharactersPerLine);
+        var mainContentCharacterCount = budgetMetrics.VisibleCharacterCount;
+        var withinMainContentLimit = budgetMetrics.BudgetUsage <= templateOptions.MaxMainContentCharacters;
         if (!withinMainContentLimit)
         {
-            warnings.Add($"Den synlige hovedtekst er {mainContentCharacterCount} tegn og overskrider maksimum på {templateOptions.MaxMainContentCharacters}. PDF-layoutet kan blive klippet i højden.");
+            warnings.Add(
+                $"Den synlige hovedtekst er {mainContentCharacterCount} rå tegn, men {budgetMetrics.ParagraphBreakCount} paragrafskift og {budgetMetrics.ExplicitLineBreakCount} interne linjeskift løfter det effektive template-forbrug til {budgetMetrics.BudgetUsage} mod maksimum {templateOptions.MaxMainContentCharacters}. PDF-layoutet kan blive klippet i højden.");
         }
 
-        var mainContentHtml = BuildMainContentHtml(root, signatureName: rawApplicantName);
+        var mainContentHtml = BuildMainContentHtml(renderedParagraphs);
         var dateText = DateTime.Today.ToString("d. MMMM yyyy", CultureInfo.GetCultureInfo("da-DK"));
         var documentTitle = subjectLine;
 
@@ -121,7 +124,11 @@ public sealed class CoverLetterTemplateRenderer : ICoverLetterTemplateRenderer
             HtmlDocument = htmlDocument,
             StylesheetText = stylesheetText,
             MainContentCharacterCount = mainContentCharacterCount,
+            MainContentBudgetUsage = budgetMetrics.BudgetUsage,
             MaxMainContentCharacters = templateOptions.MaxMainContentCharacters,
+            ExplicitLineBreakCount = budgetMetrics.ExplicitLineBreakCount,
+            ParagraphBreakCount = budgetMetrics.ParagraphBreakCount,
+            EstimatedCharactersPerLine = budgetMetrics.EstimatedCharactersPerLine,
             WithinMainContentLimit = withinMainContentLimit,
             MissingFields = missingFields,
             Warnings = warnings
@@ -149,66 +156,24 @@ public sealed class CoverLetterTemplateRenderer : ICoverLetterTemplateRenderer
         return content;
     }
 
-    private static int CountVisibleCharactersFromSections(JsonElement root)
+    private static string BuildMainContentHtml(IReadOnlyList<CoverLetterParagraph> paragraphs)
     {
-        if (!root.TryGetProperty("sections", out var sections) || sections.ValueKind != JsonValueKind.Array)
-        {
-            return 0;
-        }
-
-        return sections.EnumerateArray()
-            .Select(section => GetString(section, "text_da").Trim())
-            .Where(text => !string.IsNullOrWhiteSpace(text))
-            .Select(text => text.Length)
-            .Sum();
-    }
-
-    private static string BuildMainContentHtml(JsonElement root, string? signatureName)
-    {
-        if (root.TryGetProperty("sections", out var sections) && sections.ValueKind == JsonValueKind.Array)
-        {
-            var paragraphs = new List<string>();
-
-            foreach (var section in sections.EnumerateArray())
-            {
-                var text = GetString(section, "text_da").Trim();
-                if (string.IsNullOrWhiteSpace(text))
-                {
-                    continue;
-                }
-
-                var sectionKind = SanitizeCssToken(GetString(section, "section_kind"));
-                paragraphs.Add($"<p class=\"letter-paragraph letter-paragraph--{sectionKind}\">{WebUtility.HtmlEncode(text)}</p>");
-
-                if (string.Equals(sectionKind, "signature", StringComparison.Ordinal)
-                    && !string.IsNullOrWhiteSpace(signatureName)
-                    && !text.Contains(signatureName, StringComparison.OrdinalIgnoreCase))
-                {
-                    paragraphs.Add($"<p class=\"letter-paragraph letter-paragraph--signature-name\">{WebUtility.HtmlEncode(signatureName)}</p>");
-                }
-            }
-
-            if (paragraphs.Count > 0)
-            {
-                return string.Join(Environment.NewLine, paragraphs);
-            }
-        }
-
-        var assembledApplication = GetString(root, "assembled_application_da").Trim();
-        if (string.IsNullOrWhiteSpace(assembledApplication))
+        if (paragraphs.Count == 0)
         {
             return "<p class=\"letter-paragraph\">Ansøgningsteksten mangler i application_generation-dokumentet.</p>";
         }
 
-        var paragraphsFromAssembledText = assembledApplication
-            .Replace("\r\n", "\n", StringComparison.Ordinal)
-            .Split("\n\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-            .Select(text => $"<p class=\"letter-paragraph\">{WebUtility.HtmlEncode(text)}</p>")
+        var htmlParagraphs = paragraphs
+            .Select(paragraph =>
+            {
+                var cssClass = string.IsNullOrWhiteSpace(paragraph.SectionKind)
+                    ? "letter-paragraph"
+                    : $"letter-paragraph letter-paragraph--{SanitizeCssToken(paragraph.SectionKind)}";
+                return $"<p class=\"{cssClass}\">{WebUtility.HtmlEncode(paragraph.Text)}</p>";
+            })
             .ToList();
 
-        return paragraphsFromAssembledText.Count > 0
-            ? string.Join(Environment.NewLine, paragraphsFromAssembledText)
-            : $"<p class=\"letter-paragraph\">{WebUtility.HtmlEncode(assembledApplication)}</p>";
+        return string.Join(Environment.NewLine, htmlParagraphs);
     }
 
     private static string GetString(JsonElement parent, string propertyName)

@@ -1,0 +1,55 @@
+Din opgave i dette run er at opbygge et struktureret CompanyContext for virksomheden bag et jobopslag.
+
+Du får én eller flere af følgende inputtyper:
+- et jobopslag som fil eller tekst
+- ansøgerens profildata som fil eller tekst
+- et eksplicit firmanavn
+
+Du skal bruge disse input sammen med web search tool til at undersøge virksomheden og returnere ét JSON-objekt, der følger schemaet præcist.
+
+Overordnede regler:
+- Returnér kun gyldig JSON.
+- Brug jobopslaget og ansøgerprofilen som primær kontekst for at identificere virksomheden og arbejdsstedet.
+- Brug web search tool aktivt til at finde offentligt tilgængelig information om virksomheden.
+- Vær konservativ. Hvis noget ikke kan bekræftes rimeligt, så skriv en konservativ værdi i stedet for at gætte.
+- Når et felt er et tekstfelt og informationen ikke kan fastslås, brug "Ukendt".
+- Når et felt er en liste og du ikke kan finde sikre svar, returnér en tom liste.
+- Du må ikke opfinde tal, anmeldelser, adresser eller lønoplysninger.
+
+Virksomhedsidentifikation:
+- Hvis firmanavnet ikke er givet eksplicit, skal du forsøge at udlede det fra jobopslaget.
+- Hvis virksomheden ikke kan identificeres sikkert, sæt company_name til null og brug ellers konservative Ukendt-værdier.
+
+Web research-instruktioner:
+- Søg først efter virksomhedens officielle hjemmeside.
+- Brug derefter web search til at undersøge medarbejderantal, branche, mission/værdier/vision, Trustpilot, Glassdoor, produkter, økonomiske signaler, lønforhold, overenskomstindikatorer, udviklingsmuligheder og nyere medieomtale.
+- Foretræk officielle kilder, virksomhedens egen hjemmeside, velkendte rating-sites og troværdige medier.
+- Hvis Trustpilot eller Glassdoor ikke kan findes sikkert, brug null i score-felter og "Ukendt" i display-felter.
+- For Glassdoor skal du forsøge at udlede op til 5 vigtigste pro-temaer og op til 5 vigtigste con-temaer fra reviews. Hvis det ikke er muligt sikkert, returnér tomme lister.
+
+Specifikke felter:
+- employee_count.value skal kun udfyldes med et heltal, hvis et nogenlunde sikkert tal kan findes. Ellers null.
+- industry_da skal være en kort dansk beskrivelse af branchen, eller "Ukendt".
+- homepage_values_mission_vision_da må kun indeholde værdier, missioner eller visioner, som virksomheden selv kommunikerer offentligt.
+- growth_assessment_da skal være en kort dansk vurdering af om virksomheden ser ud til at være i vækst, stabil eller under pres, baseret på offentlige signaler. Hvis uklart: "Ukendt".
+- primary_products_da og primary_cashcows_da skal være konkrete og konservative.
+- salary_conditions_da må kun beskrive lønforhold, hvis det står i jobopslaget eller kan findes sikkert i offentlige kilder. Ellers "Ukendt".
+- union_agreement_indication_da skal kort angive, om der er indikationer på overenskomst og med hvilken fagforening. Hvis uklart: "Ukendt".
+- skill_development_opportunities_da skal kort beskrive kurser, certificeringer eller udviklingsmuligheder, hvis de fremgår. Ellers "Ukendt".
+- recent_media_mentions_da skal være korte danske punktformuleringer om relevant nylig medieomtale. Hvis intet sikkert findes, brug tom liste.
+
+Afstand:
+- Forsøg at finde ansøgerens adresse ud fra ansøgerprofilen eller et eksplicit adresse-hint.
+- Forsøg at finde arbejdspladsens adresse ud fra jobopslaget eller offentlige kilder.
+- Hvis begge adresser kan fastslås rimeligt, giv commute_distance_da som en konservativ, kort dansk afstandsangivelse, fx "ca. 18 km" eller "ca. 45 minutters kørsel".
+- Hvis det ikke er muligt at svare rimeligt, skal commute_distance_da være præcis "Ukendt".
+- Hvis en adresse ikke kan fastslås, skal applicant_address_da eller workplace_address_da være "Ukendt".
+- calculation_basis_da skal kort forklare, hvad afstandsvurderingen bygger på, eller "Ukendt".
+
+Kvalitetskrav:
+- Skriv alle *_da felter på dansk.
+- Hold input_summary_da kort og konkret.
+- parsed_files skal indeholde de filnavne, der faktisk indgik i dette run.
+- errors må kun bruges til reelle mangler eller usikkerheder, ikke som generelle noter.
+
+Returnér kun JSON i det udleverede schema.

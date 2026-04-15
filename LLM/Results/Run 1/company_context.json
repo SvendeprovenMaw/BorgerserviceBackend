@@ -1,0 +1,78 @@
+{
+  "_meta": {
+    "company_name": "JN Data",
+    "input_summary_da": "Analyse af jobopslag og ansøgerprofil for JN Data med fokus på DevOps-udviklerstilling i Roskilde/Silkeborg.",
+    "parsed_files": [
+      "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+      "emma_sorensen_cv_da.pdf",
+      "profile.pdf"
+    ],
+    "errors": []
+  },
+  "company_profile": {
+    "employee_count": {
+      "value": 670,
+      "display_da": "ca. 670 medarbejdere i Danmark"
+    },
+    "industry_da": "IT-drift og finansiel it-infrastruktur",
+    "homepage_values_mission_vision_da": [
+      "Vi gør det usynlige",
+      "Vi gør det seriøst",
+      "Vi gør det sammen",
+      "Som medarbejder i JN Data er du med til at drifte Danmarks økonomi"
+    ],
+    "trustpilot": {
+      "score": null,
+      "display_da": "Ukendt"
+    },
+    "glassdoor": {
+      "score": 3.3,
+      "display_da": "3,3/5",
+      "pros_themes_da": [
+        "God work-life balance",
+        "Fleksibilitet",
+        "Gode kolleger",
+        "Gode benefits og ferie",
+        "Jobstabilitet"
+      ],
+      "cons_themes_da": [
+        "Lav løn",
+        "Overtid opmuntres",
+        "Rigid og lidt gammeldags kultur",
+        "Begrænset forbedringsrum",
+        "Udfordringer i arbejdsmiljøet"
+      ]
+    }
+  },
+  "economics": {
+    "growth_assessment_da": "Ser ud til at være i moderat vækst eller stabil udvikling.",
+    "primary_products_da": [
+      "IT-drift og finansiel it-infrastruktur",
+      "Drift af developer experience-platforme og værktøjer til mainframe-udvikling",
+      "Indkøbsfællesskab for kunderne"
+    ],
+    "primary_cashcows_da": [
+      "Sikker og stabil IT-drift for finansielle kunder",
+      "Indkøbsfællesskab og fælles indkøbsaftaler",
+      "Drift af kritisk infrastruktur for bank- og realkreditsektoren"
+    ],
+    "salary_conditions_da": "Ukendt"
+  },
+  "employee_conditions": {
+    "union_agreement_indication_da": "Ny overenskomst nævnes i årsrapport 2025, men fagforening fremgår ikke tydeligt.",
+    "skill_development_opportunities_da": "Der nævnes praktik, studiejob, læreplads, mulighed for hjemmearbejde og fokus på udvikling; i jobopslaget også undervisning af kunder og konsulenter."
+  },
+  "media_mentions": {
+    "recent_media_mentions_da": [
+      "4. marts 2026: omtale af styrket resiliens i et år præget af uforudsigelighed.",
+      "11. marts 2025: årsresultat 2024 med fokus på Full Recovery og øget aktivitet.",
+      "5. marts 2024: årsresultat 2023 og omsætningsvækst drevet af indkøbsfællesskabet."
+    ]
+  },
+  "distance": {
+    "commute_distance_da": "Ukendt",
+    "applicant_address_da": "Roskilde, Danmark",
+    "workplace_address_da": "Havsteensvej 4, 4000 Roskilde eller Frichsvej 18, 8600 Silkeborg",
+    "calculation_basis_da": "Ansøgeren bor i Roskilde, og stillingen kan være placeret i Roskilde eller Silkeborg; da den præcise arbejdsadresse ikke kan fastslås, kan pendlerafstand ikke beregnes sikkert."
+  }
+}

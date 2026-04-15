@@ -59,7 +59,11 @@ public sealed class CoverLetterTemplateOptions
 
     public string RenderedCssFileName { get; set; } = "cover_letter.css";
 
+    public string RenderedPdfFileName { get; set; } = "cover_letter.pdf";
+
     public string RenderSummaryFileName { get; set; } = "cover_letter_render_summary.json";
 
-    public int MaxMainContentCharacters { get; set; } = 2200;
+    public int EstimatedCharactersPerLine { get; set; } = 72;
+
+    public int MaxMainContentCharacters { get; set; } = 1550;
 }
