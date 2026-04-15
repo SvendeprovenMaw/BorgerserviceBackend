@@ -9,6 +9,23 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        if (builder.Environment.IsDevelopment())
+        {
+            policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+            return;
+        }
+
+        var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+        if (allowedOrigins is { Length: > 0 })
+        {
+            policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod();
+        }
+    });
+});
 
 // Add services to the container.
 builder.Services.AddDbContext<WarehouseDbContext>(options =>
@@ -20,6 +37,7 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+await DatabaseInitializer.InitializeAsync(app.Services, app.Configuration);
 
 app.MapSwagger();
 // Configure the HTTP request pipeline.
@@ -34,15 +52,12 @@ if (app.Environment.IsDevelopment())
         });
 }
 
-using (var scope = app.Services.CreateScope())
+if (!app.Configuration.GetValue("DisableHttpsRedirection", false))
 {
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<WarehouseDbContext>();
-    context.Database.EnsureCreated();
+    app.UseHttpsRedirection();
 }
 
-app.UseHttpsRedirection();
-
+app.UseCors("Frontend");
 app.UseAuthorization();
 
 app.MapControllers();

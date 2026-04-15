@@ -109,28 +109,31 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseExceptionHandler();
-app.UseHttpsRedirection();
+if (!app.Configuration.GetValue("DisableHttpsRedirection", false))
+{
+    app.UseHttpsRedirection();
+}
 
 // Return a ready-to-run request body so the strict-json endpoint can be tested quickly.
 app.MapGet("/api/responses/sample-request", (IHostEnvironment environment, IOptions<SamplePipelineOptions> samplePipelineOptions) =>
 {
-    var repositoryRoot = Path.GetFullPath(Path.Combine(environment.ContentRootPath, "..", ".."));
     var sampleOptions = samplePipelineOptions.Value;
-    var personDirectory = Path.GetFullPath(Path.Combine(repositoryRoot, sampleOptions.CandidateRootPath, sampleOptions.DefaultCandidateDirectory));
-    var jobDirectory = Path.GetFullPath(Path.Combine(repositoryRoot, sampleOptions.JobListingsPath));
+    var personDirectory = RepositoryRootResolver.ResolveRepositoryPath(
+        app.Configuration,
+        environment,
+        Path.Combine(sampleOptions.CandidateRootPath, sampleOptions.DefaultCandidateDirectory));
+    var jobDirectory = RepositoryRootResolver.ResolveRepositoryPath(app.Configuration, environment, sampleOptions.JobListingsPath);
 
     var personFiles = Directory.Exists(personDirectory)
         ? Directory.GetFiles(personDirectory)
             .Where(path => !string.Equals(Path.GetFileName(path), sampleOptions.PreferencesFileName, StringComparison.OrdinalIgnoreCase))
             .OrderBy(path => path)
-            .Select(path => Path.GetRelativePath(environment.ContentRootPath, path))
             .ToArray()
         : [];
 
     var jobApplication = Directory.Exists(jobDirectory)
         ? Directory.GetFiles(jobDirectory)
             .OrderBy(path => path)
-            .Select(path => Path.GetRelativePath(environment.ContentRootPath, path))
             .FirstOrDefault()
         : null;
 

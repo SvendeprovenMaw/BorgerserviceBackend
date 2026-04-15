@@ -18,6 +18,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
     private static readonly Lock ResultsDirectoryLock = new();
 
     private readonly IHostEnvironment _environment;
+    private readonly IConfiguration _configuration;
     private readonly IOpenAiResponsesService _openAiResponsesService;
     private readonly ICurrencyDisplayConversionService _currencyDisplayConversionService;
     private readonly ICoverLetterTemplateRenderer _coverLetterTemplateRenderer;
@@ -33,6 +34,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
 
     public SampleLlmFlowService(
         IHostEnvironment environment,
+        IConfiguration configuration,
         IOpenAiResponsesService openAiResponsesService,
         ICurrencyDisplayConversionService currencyDisplayConversionService,
         ICoverLetterTemplateRenderer coverLetterTemplateRenderer,
@@ -47,6 +49,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
         ILogger<SampleLlmFlowService> logger)
     {
         _environment = environment;
+        _configuration = configuration;
         _openAiResponsesService = openAiResponsesService;
         _currencyDisplayConversionService = currencyDisplayConversionService;
         _coverLetterTemplateRenderer = coverLetterTemplateRenderer;
@@ -849,7 +852,7 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
 
     private string GetRepositoryRoot()
     {
-        return Path.GetFullPath(Path.Combine(_environment.ContentRootPath, "..", ".."));
+        return RepositoryRootResolver.GetRepositoryRoot(_configuration, _environment);
     }
 
     private string ResolveRepositoryPath(string configuredPath)
