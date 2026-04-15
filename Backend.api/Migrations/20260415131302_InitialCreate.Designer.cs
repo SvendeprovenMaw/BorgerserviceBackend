@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.api.Migrations
 {
     [DbContext(typeof(WarehouseDbContext))]
-    [Migration("20260415070600_InitialCreate")]
+    [Migration("20260415131302_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -83,6 +83,39 @@ namespace Backend.api.Migrations
                     b.ToTable("Profiles");
                 });
 
+            modelBuilder.Entity("Backend.api.Entities.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedByIp")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("Backend.api.Entities.S3File", b =>
                 {
                     b.Property<Guid>("Id")
@@ -135,6 +168,10 @@ namespace Backend.api.Migrations
                     b.Property<int>("Role")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");
@@ -185,6 +222,17 @@ namespace Backend.api.Migrations
                         .IsRequired();
 
                     b.Navigation("CurrentCv");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Backend.api.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("Backend.api.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
