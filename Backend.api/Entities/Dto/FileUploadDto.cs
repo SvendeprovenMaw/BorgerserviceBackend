@@ -7,6 +7,7 @@ namespace Backend.api.Entities.Dto
 {
     public class FileUploadDto
     {
+        public string Name { get; set; } = String.Empty;
         public IFormFile File { get; set; }
     }
 }

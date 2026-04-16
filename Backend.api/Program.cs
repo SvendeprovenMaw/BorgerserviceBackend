@@ -6,6 +6,9 @@ using Backend.api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,24 +21,16 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IS3StorageService, S3StorageService>();
 builder.Services.AddScoped<IFileService, FileService>();
 
-builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("Frontend", policy =>
-    {
-        if (builder.Environment.IsDevelopment())
-        {
-            policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-            return;
-        }
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
-        var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
-        if (allowedOrigins is { Length: > 0 })
-        {
-            policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod();
-        }
-    });
-});
+var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+
+if (jwtSettings == null || string.IsNullOrEmpty(jwtSettings.Key))
+{
+    throw new Exception("JWT Settings failed to bind! check section name.");
+}
+
+Console.WriteLine($"SECRET KEY BOUND: {jwtSettings.Key}");
 
 // Add services to the container.
 builder.Services.AddDbContext<WarehouseDbContext>(options =>
@@ -52,31 +47,36 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
+    options.MapInboundClaims = false;
     options.Events = new JwtBearerEvents
     {
-        OnMessageReceived = context =>
+        OnMessageReceived = context => {
+            context.Token = context.Request.Cookies["AccessToken"];
+            return Task.CompletedTask;
+        },
+        OnTokenValidated = context => {
+            // Check the console now. It SHOULD say "sub" instead of the URL.
+            return Task.CompletedTask;
+        },
+        OnAuthenticationFailed = context =>
         {
-            var accessToken = context.Request.Cookies["AccessToken"];
-
-            if (!string.IsNullOrEmpty(accessToken))
-            {
-                context.Token = accessToken;
-            }
+            Console.WriteLine($"FAILURE: {context.Exception.Message}");
             return Task.CompletedTask;
         }
     };
 
-    // 2. Standard JWT Validation Settings
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+        ValidIssuer = jwtSettings.Issuer,
+        ValidAudience = jwtSettings.Audience,
         IssuerSigningKey = new SymmetricSecurityKey(
-        Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]!))
+        Encoding.UTF8.GetBytes(jwtSettings.Key)),
+        NameClaimType = "sub",
+        RoleClaimType = "role"
     };
 });
 
@@ -92,7 +92,7 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-
+app.UseRouting();
 app.UseCors("AngularPolicy");
 await DatabaseInitializer.InitializeAsync(app.Services, app.Configuration);
 

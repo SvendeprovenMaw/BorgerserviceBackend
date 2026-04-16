@@ -13,7 +13,6 @@ namespace Backend.api.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private IConfiguration _conf;
         private readonly JwtSettings jwtSettings;
         private readonly IUserService _UserService;
         private readonly IAuthService _authService;
@@ -50,7 +49,7 @@ namespace Backend.api.Controllers
                     var cookieOptions = new CookieOptions
                     {
                         HttpOnly = true,
-                        Secure = true, // Only sends over HTTPS
+                        Secure = false, // Only sends over HTTPS
                         SameSite = SameSiteMode.Strict,
                         Expires = DateTime.UtcNow.AddMinutes(jwtSettings.DurationInMinutes)
                     };
@@ -65,13 +64,10 @@ namespace Backend.api.Controllers
                     string refreshTokenString = JwtLibrary.TokenGenerator.GenerateRefreshToken();
                     var refreshToken = new RefreshToken(User, HttpContext.Connection.RemoteIpAddress.ToString() ?? "127.0.0.1", refreshTokenString);
                     await this._authService.SaveRefreshToken(refreshToken);
-                    Response.Cookies.Append("AccessToken", jwt, new CookieOptions {
-                        HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict,
-                        Expires = DateTime.UtcNow.AddMinutes(jwtSettings.DurationInMinutes)
-                    });
+                    Response.Cookies.Append("AccessToken", jwt, cookieOptions);
 
                     Response.Cookies.Append("RefreshToken", refreshTokenString, new CookieOptions {
-                        HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict,
+                        HttpOnly = true, Secure = false, SameSite = SameSiteMode.Strict,
                         Expires = refreshToken.ExpiryDate,
                         Path = "/api/user/refresh"
                     });

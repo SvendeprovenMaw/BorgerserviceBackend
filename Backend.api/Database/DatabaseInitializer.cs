@@ -1,5 +1,6 @@
 using Backend.api.Entities;
 using Backend.api.Enums;
+using JwtLibrary;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.api.Database;
@@ -36,9 +37,9 @@ public static class DatabaseInitializer
             return;
         }
 
-        var role = Enum.TryParse<UserRole>(configuration["SeedUser:Role"], true, out var configuredRole)
+        var role = Enum.TryParse<JwtRoles>(configuration["SeedUser:Role"], true, out var configuredRole)
             ? configuredRole
-            : UserRole.User;
+            : JwtRoles.User;
 
         var seededUser = new User(role, email, username, PasswordHasher.Hash(password, string.Empty));
         await context.Users.AddAsync(seededUser, cancellationToken);

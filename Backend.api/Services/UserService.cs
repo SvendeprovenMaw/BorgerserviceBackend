@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Backend.api.Database;
 using Backend.api.Entities;
@@ -15,7 +17,8 @@ namespace Backend.api.Services
     {
         Task ChangePassword();
         Task<bool> CreateUser(CreateUserDto createUserDto);
-        Task GetUser();
+        Task<User?> GetUser(Guid id);
+        Task<User?> GetUser(ClaimsPrincipal claims);
         Task GetUserProfile();
         Task HardDeleteAccount();
         Task<User?> Login(LoginDto loginDto);
@@ -40,9 +43,15 @@ namespace Backend.api.Services
             return true;
         }
 
-        public async Task GetUser()
+        public async Task<User?> GetUser(Guid id)
         {
-
+            return await _db.Users.Where(i=>i.Id == id).AsNoTracking().FirstOrDefaultAsync();
+        }
+        
+        public async Task<User?> GetUser(ClaimsPrincipal claims)
+        {
+            var userid = Guid.Parse(claims.FindFirstValue(JwtRegisteredClaimNames.Sub));
+            return await _db.Users.Where(i=>i.Id == userid).AsNoTracking().FirstOrDefaultAsync();
         }
 
         public async Task<User?> Login(LoginDto loginDto)
