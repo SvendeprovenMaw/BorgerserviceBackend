@@ -65,6 +65,16 @@ package "Entities" {
         - String Password
     }
 
+    class Consent <<Entity>> {
+        - Guid Id 
+        - Guid UserId 
+        - User User 
+        - bool ConsentGiven 
+        - Guid FileId 
+        - S3File File 
+        - Term TermsAccepted 
+    }
+
     class Profile <<Entity>>{
       - Guid Id
       - Guid UserId

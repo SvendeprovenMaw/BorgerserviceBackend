@@ -12,6 +12,17 @@ namespace Backend.api.Database
         {
             modelBuilder.Entity<S3File>().ToTable("S3File");
             modelBuilder.Entity<Term>().ToTable("Terms");
+
+            //makes sure theres only one consent pr file            
+            modelBuilder.Entity<Consent>()
+                .HasIndex(c => new { c.FileId })
+                .IsUnique();
+
+            //makes sure there can only be 1 term that has an active bool
+            modelBuilder.Entity<Term>()
+                .HasIndex(t => t.Active)
+                .IsUnique()
+                .HasFilter("[IsActive] = 1");
         }
 
         public DbSet<User> Users { get; set; }
@@ -21,6 +32,7 @@ namespace Backend.api.Database
         public DbSet<S3File> S3Files { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Term> Term { get; set; }
+        public DbSet<Consent> Consents { get; set; }
 
     }
 }

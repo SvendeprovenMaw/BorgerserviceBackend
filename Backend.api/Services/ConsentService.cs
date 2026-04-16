@@ -1,51 +1,48 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading.Tasks;
+using Backend.api.Database;
+using Backend.api.Entities;
+using Backend.api.Entities.Dto;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.api.Services
 {
     public class ConsentService
     {
-        public ConsentService()
+        private readonly WarehouseDbContext _db;
+        public ConsentService(WarehouseDbContext db)
         {
-            
+            this._db = db;
         }
 
-        public async Task GiveConsent()
+        public async Task GiveConsent(User user, S3File s3File,  GiveConsentDto dto)
         {
-            
+            var consent = new Consent(user, dto.ConsentGiven, s3File, dto.TimeOfConsent);
+            await _db.Consents.AddAsync(consent);
+            await _db.SaveChangesAsync();
         }
 
-        public async Task RetractConsent()
+        public async Task<bool> RetractFileConsent(S3File file, User user)
         {
-            
+            int rows = await _db.Consents.Where(i=>i.FileId == file.Id && i.UserId == user.Id).
+            ExecuteUpdateAsync(s=>s.SetProperty(c=>c.ConsentRetracted, true));
+
+            return rows > 0;
         }
 
-        public async Task AccecptTerms()
+        public async Task AccecptTerms(User user, Term activeTerms, GiveConsentDto dto)
         {
-            
+            var consent = new Consent(user, dto.ConsentGiven, activeTerms, dto.TimeOfConsent);
+            await _db.Consents.AddAsync(consent);
+            await _db.SaveChangesAsync();
         }
 
         public async Task RetractAccountConsent()
         {
-            
+            // will set all consent linked to the user as retracted
         }
 
-        public async Task RetractFileConsent()
+        public async Task<Consent> VerifyConsent(S3File s3File)
         {
-            
-        }
-
-        public async Task UserDeleted()
-        {
-            //for when deleting a user it will remove all consent signed
-        }
-
-        public async Task VerifyConsent()
-        {
-            
+            return await _db.Consents.Where(i=>i.File.Id == s3File.Id && i.ConsentRetracted == false).FirstAsync();
         }
     }
 }
