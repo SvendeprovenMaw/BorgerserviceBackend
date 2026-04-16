@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using Backend.api.Middleware;
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -92,6 +93,7 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+app.UseMiddleware<CustomExceptionHandlingMiddleware>();
 app.UseRouting();
 app.UseCors("AngularPolicy");
 await DatabaseInitializer.InitializeAsync(app.Services, app.Configuration);

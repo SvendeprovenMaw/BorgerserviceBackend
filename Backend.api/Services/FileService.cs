@@ -8,6 +8,7 @@ namespace Backend.api.Services
     {
         Task<bool> FileUploaded(User user, string filename, string s3Key, string bucket, string checksumHash);
         Task<S3File?> GetFile(Guid fileId, Guid userId);
+        Task<S3File[]> GetUserFiles(Guid userId);
     }
 
     public class FileService : IFileService
@@ -20,7 +21,7 @@ namespace Backend.api.Services
 
         public async Task<bool> FileUploaded(User user, string filename, string s3Key, string bucket, string checksumHash)
         {
-            S3File newFile = new(user, s3Key, checksumHash);
+            S3File newFile = new(user, filename, s3Key, checksumHash);
             await _db.AddAsync(newFile);
             await _db.SaveChangesAsync();
             return true;
@@ -30,6 +31,12 @@ namespace Backend.api.Services
         {
             var file = await _db.S3Files.Where(i=>i.UserId == userId && i.Id == fileId).FirstOrDefaultAsync();
             return file;
+        }
+
+        public async Task<S3File[]> GetUserFiles(Guid userId)
+        {
+            var files = await _db.S3Files.Where(i=>i.UserId == userId).ToArrayAsync();
+            return files;
         }
     }
 }

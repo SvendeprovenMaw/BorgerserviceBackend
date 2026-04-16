@@ -126,6 +126,10 @@ namespace Backend.api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<Guid?>("ProfileId")
                         .HasColumnType("uuid");
 

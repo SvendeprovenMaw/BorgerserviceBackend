@@ -46,12 +46,9 @@ namespace Backend.api.Controllers
         [Authorize]
         public async Task<IActionResult> DownloadFile(Guid fileId){ 
             var user = await _userService.GetUser(HttpContext.User);
-            if(user == null)
-            {
-                return NotFound("User not found");
-            }
+            Console.WriteLine(fileId);
             var presignedUrl = await _s3.LinkToFIle(fileId, user);
-            return NotFound(); 
+            return Ok(presignedUrl); 
         }
         
         [HttpGet("FileStructure")]

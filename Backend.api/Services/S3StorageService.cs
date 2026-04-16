@@ -14,7 +14,7 @@ namespace Backend.api.Services
     public interface IS3StorageService
     {
         Task DeleteFileAsync(string bucketname, string filename);
-        Task<ListObjectsV2Response> GetFileStructure(Guid userId);
+        Task<S3File[]> GetFileStructure(Guid userId);
         Task<string> LinkToFIle(Guid fileId, User user);
         Task PermentlyUserFilesAsync(string bucketname, Guid userId);
         Task UploadFile(Stream fileStream, string filename, User user, FileCategory fileCategory);
@@ -25,24 +25,27 @@ namespace Backend.api.Services
         private IConfiguration _conf;
         private IFileService _files;
         AmazonS3Client s3Client;
-        AmazonS3Config config = new AmazonS3Config
-        {
-            ServiceURL = "https://s3.eu-central-003.backblazeb2.com"
-        };
         public S3StorageService(IConfiguration conf, IFileService files)
         {
+            var config = new AmazonS3Config 
+            { 
+                ServiceURL = "https://s3.eu-central-003.backblazeb2.com",
+                // This is the missing piece!
+                // 2. Use a "real" RegionEndpoint object instead of just a string.
+                // Even though it's BackBlaze, the SDK needs this to avoid the NullRef.
+                RegionEndpoint = Amazon.RegionEndpoint.EUCentral1, 
+                
+                // 3. This tells the SDK to use the URL provided above for the actual call
+                ForcePathStyle = true
+            };
             this._conf = conf;
             this._files = files;
-            this.s3Client = new(_conf["BackBlaze:Keyid"], _conf["BackBlaze:ApplicationKey"], new AmazonS3Config { ServiceURL = "https://s3.eu-central-003.backblazeb2.com" });
+            this.s3Client = new(_conf["BackBlaze:Keyid"], _conf["BackBlaze:ApplicationKey"], config);
         }
 
-        public async Task<ListObjectsV2Response> GetFileStructure(Guid userId)
+        public async Task<S3File[]> GetFileStructure(Guid userId)
         {
-            var response = await s3Client.ListObjectsV2Async(new ListObjectsV2Request
-            {
-                BucketName = _conf["BackBlaze:KeyName"],
-                Prefix = $"users/{userId}"
-            });
+            var response = await _files.GetUserFiles(userId);
             return response;
         }
 
@@ -71,10 +74,10 @@ namespace Backend.api.Services
         public async Task<string> LinkToFIle(Guid fileId, User user)
         {
             var s3File = await _files.GetFile(fileId, user.Id);
-
+            Console.WriteLine(s3File.S3Key);
             string urlString = s3Client.GetPreSignedURL(new GetPreSignedUrlRequest
             {
-                BucketName = _conf["BackBlaze:bucket"],
+                BucketName = _conf["BackBlaze:KeyName"],
                 Key = s3File.S3Key,
                 Expires = DateTime.UtcNow.AddMinutes(5)
             });

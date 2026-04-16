@@ -100,6 +100,7 @@ namespace Backend.api.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    FileName = table.Column<string>(type: "text", nullable: false),
                     S3Key = table.Column<string>(type: "text", nullable: false),
                     ChecksumHash = table.Column<string>(type: "text", nullable: false),
                     UploadTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),

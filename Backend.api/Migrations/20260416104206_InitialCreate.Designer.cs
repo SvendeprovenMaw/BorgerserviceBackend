@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.api.Migrations
 {
     [DbContext(typeof(WarehouseDbContext))]
-    [Migration("20260415131302_InitialCreate")]
+    [Migration("20260416104206_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -126,6 +126,10 @@ namespace Backend.api.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("ChecksumHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("text");
 
