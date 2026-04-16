@@ -10,6 +10,8 @@ namespace Backend.api.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<S3File>().ToTable("S3File");
+            modelBuilder.Entity<Term>().ToTable("Terms");
         }
 
         public DbSet<User> Users { get; set; }
@@ -18,6 +20,7 @@ namespace Backend.api.Database
         public DbSet<AiDraft> AiDrafts { get; set; }
         public DbSet<S3File> S3Files { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Term> Term { get; set; }
 
     }
 }

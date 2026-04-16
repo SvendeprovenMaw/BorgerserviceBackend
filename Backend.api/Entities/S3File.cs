@@ -7,7 +7,7 @@ namespace Backend.api.Entities
 {
     public class S3File
     {
-        private S3File(){}
+        protected S3File(){}
         public S3File(User user, string filename, string s3Key, string checksumHash)
         {
             this.Id = Guid.NewGuid();

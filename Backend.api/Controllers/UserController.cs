@@ -62,7 +62,7 @@ namespace Backend.api.Controllers
                     };
                     var jwt = JwtLibrary.TokenGenerator.JwtGenerator.CreateToken(jwtSettings.Key, jwtSettings.Issuer, jwtSettings.Audience, jwtSettings.DurationInMinutes, claims);
                     string refreshTokenString = JwtLibrary.TokenGenerator.GenerateRefreshToken();
-                    var refreshToken = new RefreshToken(User, HttpContext.Connection.RemoteIpAddress.ToString() ?? "127.0.0.1", refreshTokenString);
+                    var refreshToken = new RefreshToken(User, HttpContext.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1", refreshTokenString);
                     await this._authService.SaveRefreshToken(refreshToken);
                     Response.Cookies.Append("AccessToken", jwt, cookieOptions);
 
