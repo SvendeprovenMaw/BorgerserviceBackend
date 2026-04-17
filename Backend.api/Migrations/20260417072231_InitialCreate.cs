@@ -76,6 +76,28 @@ namespace Backend.api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Consents",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ConsentGiven = table.Column<bool>(type: "boolean", nullable: false),
+                    ConsentRetracted = table.Column<bool>(type: "boolean", nullable: false),
+                    TimeOfConsent = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    FileId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Consents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Consents_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Profiles",
                 columns: table => new
                 {
@@ -95,7 +117,7 @@ namespace Backend.api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "S3Files",
+                name: "S3File",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -109,17 +131,36 @@ namespace Backend.api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_S3Files", x => x.Id);
+                    table.PrimaryKey("PK_S3File", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_S3Files_AiJobs_AiProcessingJobId",
+                        name: "FK_S3File_AiJobs_AiProcessingJobId",
                         column: x => x.AiProcessingJobId,
                         principalTable: "AiJobs",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_S3Files_Profiles_ProfileId",
+                        name: "FK_S3File_Profiles_ProfileId",
                         column: x => x.ProfileId,
                         principalTable: "Profiles",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Terms",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Version = table.Column<string>(type: "text", nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Terms", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Terms_S3File_Id",
+                        column: x => x.Id,
+                        principalTable: "S3File",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -138,6 +179,17 @@ namespace Backend.api.Migrations
                 column: "ResultFileId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Consents_FileId",
+                table: "Consents",
+                column: "FileId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Consents_UserId",
+                table: "Consents",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Profiles_CurrentCvId",
                 table: "Profiles",
                 column: "CurrentCvId");
@@ -153,14 +205,21 @@ namespace Backend.api.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_S3Files_AiProcessingJobId",
-                table: "S3Files",
+                name: "IX_S3File_AiProcessingJobId",
+                table: "S3File",
                 column: "AiProcessingJobId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_S3Files_ProfileId",
-                table: "S3Files",
+                name: "IX_S3File_ProfileId",
+                table: "S3File",
                 column: "ProfileId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Terms_Active",
+                table: "Terms",
+                column: "Active",
+                unique: true,
+                filter: "[IsActive] = 1");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AiDrafts_AiJobs_AiProcessingJobId",
@@ -171,25 +230,33 @@ namespace Backend.api.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AiDrafts_S3Files_DraftId",
+                name: "FK_AiDrafts_S3File_DraftId",
                 table: "AiDrafts",
                 column: "DraftId",
-                principalTable: "S3Files",
+                principalTable: "S3File",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AiJobs_S3Files_ResultFileId",
+                name: "FK_AiJobs_S3File_ResultFileId",
                 table: "AiJobs",
                 column: "ResultFileId",
-                principalTable: "S3Files",
+                principalTable: "S3File",
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Profiles_S3Files_CurrentCvId",
+                name: "FK_Consents_S3File_FileId",
+                table: "Consents",
+                column: "FileId",
+                principalTable: "S3File",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Profiles_S3File_CurrentCvId",
                 table: "Profiles",
                 column: "CurrentCvId",
-                principalTable: "S3Files",
+                principalTable: "S3File",
                 principalColumn: "Id");
         }
 
@@ -197,24 +264,30 @@ namespace Backend.api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_S3Files_AiJobs_AiProcessingJobId",
-                table: "S3Files");
+                name: "FK_S3File_AiJobs_AiProcessingJobId",
+                table: "S3File");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Profiles_S3Files_CurrentCvId",
+                name: "FK_Profiles_S3File_CurrentCvId",
                 table: "Profiles");
 
             migrationBuilder.DropTable(
                 name: "AiDrafts");
 
             migrationBuilder.DropTable(
+                name: "Consents");
+
+            migrationBuilder.DropTable(
                 name: "RefreshTokens");
+
+            migrationBuilder.DropTable(
+                name: "Terms");
 
             migrationBuilder.DropTable(
                 name: "AiJobs");
 
             migrationBuilder.DropTable(
-                name: "S3Files");
+                name: "S3File");
 
             migrationBuilder.DropTable(
                 name: "Profiles");

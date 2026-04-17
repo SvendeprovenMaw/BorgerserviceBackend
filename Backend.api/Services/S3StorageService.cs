@@ -7,6 +7,7 @@ using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Backend.api.Database;
 using Backend.api.Entities;
+using Backend.api.Entities.Dto;
 using Backend.api.Enums;
 
 namespace Backend.api.Services
@@ -17,7 +18,7 @@ namespace Backend.api.Services
         Task<S3File[]> GetFileStructure(Guid userId);
         Task<string> LinkToFIle(Guid fileId, User user);
         Task PermentlyUserFilesAsync(string bucketname, Guid userId);
-        Task UploadFile(Stream fileStream, string filename, User user, FileCategory fileCategory);
+        Task UploadFile(Stream fileStream, GiveConsentDto consentDto, string filename, User user, FileCategory fileCategory);
     }
 
     public class S3StorageService : IS3StorageService
@@ -49,7 +50,7 @@ namespace Backend.api.Services
             return response;
         }
 
-        public async Task UploadFile(Stream fileStream, string filename, User user, FileCategory fileCategory)
+        public async Task UploadFile(Stream fileStream, GiveConsentDto consentDto, string filename, User user, FileCategory fileCategory)
         {
             try
             {
@@ -63,7 +64,7 @@ namespace Backend.api.Services
                     ChecksumAlgorithm = ChecksumAlgorithm.SHA256
                 };
                 var result = await this.s3Client.PutObjectAsync(request);
-                await this._files.FileUploaded(user, filename, key, _conf["BackBlaze:KeyName"], result.ChecksumSHA256);
+                await this._files.FileUploaded(user, filename, key, _conf["BackBlaze:KeyName"], result.ChecksumSHA256, consentDto);
             }
             catch (System.Exception)
             {

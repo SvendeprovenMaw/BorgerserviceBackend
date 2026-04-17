@@ -20,13 +20,11 @@ namespace Backend.api.Controllers
         private IConfiguration _conf;
         private IS3StorageService _s3;
         private readonly IUserService _userService;
-        private readonly IFileService _fileService;
-        public FileController(IConfiguration conf, IUserService user, IFileService fileService, IS3StorageService s3)
+        public FileController(IConfiguration conf, IUserService user, IS3StorageService s3)
         {
             this._conf = conf;
             this._s3 = s3;
             this._userService = user;
-            this._fileService = fileService;
         }
 
         [HttpPost]
@@ -37,7 +35,7 @@ namespace Backend.api.Controllers
             var user = await _userService.GetUser(HttpContext.User);
             using (Stream stream = file.File.OpenReadStream())
             {
-                await _s3.UploadFile(stream, file.Name, user, FileCategory.Cv);
+                await _s3.UploadFile(stream, file.Consent, file.Name, user, FileCategory.Cv);
             }
             return Ok();
         }

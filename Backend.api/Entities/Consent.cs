@@ -7,6 +7,7 @@ namespace Backend.api.Entities
 {
     public class Consent
     {
+        private Consent(){}
         public Consent(User user, bool consent, S3File file, DateTime timeOfConsent)
         {
             this.Id = Guid.NewGuid();

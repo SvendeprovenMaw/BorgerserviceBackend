@@ -8,7 +8,7 @@ namespace Backend.api.Entities.Dto
     public class FileUploadDto
     {
         public string Name { get; set; } = String.Empty;
-        public bool ConsentGiven { get; set; } = false;
+        public GiveConsentDto Consent { get; set; }
         public IFormFile File { get; set; }
         
     }

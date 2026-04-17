@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.api.Migrations
 {
     [DbContext(typeof(WarehouseDbContext))]
-    [Migration("20260416104206_InitialCreate")]
+    [Migration("20260417072231_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -60,6 +60,37 @@ namespace Backend.api.Migrations
                     b.HasIndex("ResultFileId");
 
                     b.ToTable("AiJobs");
+                });
+
+            modelBuilder.Entity("Backend.api.Entities.Consent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("ConsentGiven")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("ConsentRetracted")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("TimeOfConsent")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FileId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Consents");
                 });
 
             modelBuilder.Entity("Backend.api.Entities.Profile", b =>
@@ -152,7 +183,9 @@ namespace Backend.api.Migrations
 
                     b.HasIndex("ProfileId");
 
-                    b.ToTable("S3Files");
+                    b.ToTable("S3File", (string)null);
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("Backend.api.Entities.User", b =>
@@ -185,6 +218,24 @@ namespace Backend.api.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Backend.api.Entities.Term", b =>
+                {
+                    b.HasBaseType("Backend.api.Entities.S3File");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasIndex("Active")
+                        .IsUnique()
+                        .HasFilter("[IsActive] = 1");
+
+                    b.ToTable("Terms", (string)null);
+                });
+
             modelBuilder.Entity("Backend.api.Entities.AiDraft", b =>
                 {
                     b.HasOne("Backend.api.Entities.AiProcessingJob", "AiProcessingJob")
@@ -211,6 +262,25 @@ namespace Backend.api.Migrations
                         .HasForeignKey("ResultFileId");
 
                     b.Navigation("ResultFile");
+                });
+
+            modelBuilder.Entity("Backend.api.Entities.Consent", b =>
+                {
+                    b.HasOne("Backend.api.Entities.S3File", "File")
+                        .WithMany()
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.api.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("File");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Backend.api.Entities.Profile", b =>
@@ -250,6 +320,15 @@ namespace Backend.api.Migrations
                     b.HasOne("Backend.api.Entities.Profile", null)
                         .WithMany("RelevantDocuments")
                         .HasForeignKey("ProfileId");
+                });
+
+            modelBuilder.Entity("Backend.api.Entities.Term", b =>
+                {
+                    b.HasOne("Backend.api.Entities.S3File", null)
+                        .WithOne()
+                        .HasForeignKey("Backend.api.Entities.Term", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Backend.api.Entities.AiProcessingJob", b =>
