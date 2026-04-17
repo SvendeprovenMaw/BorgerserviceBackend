@@ -2,6 +2,7 @@ using Backend.api.Entities;
 using Backend.api.Enums;
 using JwtLibrary;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace Backend.api.Database;
 
@@ -11,9 +12,37 @@ public static class DatabaseInitializer
     {
         using var scope = services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<WarehouseDbContext>();
+        var logger = scope.ServiceProvider
+            .GetRequiredService<ILoggerFactory>()
+            .CreateLogger("DatabaseInitializer");
 
-        await context.Database.MigrateAsync(cancellationToken);
+        try
+        {
+            await context.Database.MigrateAsync(cancellationToken);
+        }
+        catch (Exception ex) when (IsNonCriticalMigrationException(ex))
+        {
+            logger.LogWarning(ex, "Skipping database migration because schema is already present or model drift is expected in local development.");
+        }
+
         await SeedUserAsync(context, configuration, cancellationToken);
+    }
+
+    private static bool IsNonCriticalMigrationException(Exception exception)
+    {
+        if (exception is InvalidOperationException invalidOperation
+            && invalidOperation.Message.Contains("PendingModelChangesWarning", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        if (exception is PostgresException postgresException
+            && postgresException.SqlState == PostgresErrorCodes.DuplicateTable)
+        {
+            return true;
+        }
+
+        return exception.InnerException is not null && IsNonCriticalMigrationException(exception.InnerException);
     }
 
     private static async Task SeedUserAsync(WarehouseDbContext context, IConfiguration configuration, CancellationToken cancellationToken)
