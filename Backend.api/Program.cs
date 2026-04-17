@@ -57,7 +57,7 @@ var allowedOrigins = builder.Configuration
     ?? ["http://localhost:4200"];
 
 // Add services to the container.
-builder.Services.AddDbContext<WarehouseDbContext>(options =>
+builder.Services.AddDbContext<ApplyAIDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

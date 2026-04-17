@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.api.Database
 {
-    public class WarehouseDbContext : DbContext
+    public class ApplyAIDbContext : DbContext
     {
-        public WarehouseDbContext(DbContextOptions<WarehouseDbContext> options) : base(options) { }
+        public ApplyAIDbContext(DbContextOptions<ApplyAIDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

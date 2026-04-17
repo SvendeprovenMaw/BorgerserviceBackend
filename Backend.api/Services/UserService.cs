@@ -27,8 +27,8 @@ namespace Backend.api.Services
 
     public class UserService : IUserService
     {
-        private WarehouseDbContext _db;
-        public UserService(WarehouseDbContext db)
+        private ApplyAIDbContext _db;
+        public UserService(ApplyAIDbContext db)
         {
             this._db = db;
         }

@@ -234,16 +234,16 @@ UserController --> IConsentService : Uses
 }
 
 package "Data" {
-    class WareHouseDbContext {
+  class ApplyAIDbContext {
         + DbSet<User> Users
         + DbSet<S3File> Files
         --
         # OnModelCreating(ModelBuilder)
     }
-OpenAiService --> WareHouseDbContext : Uses
-ConsentService --> WareHouseDbContext : Uses
-S3StorageService --> WareHouseDbContext : Uses
-UserService --> WareHouseDbContext : Uses
+OpenAiService --> ApplyAIDbContext : Uses
+ConsentService --> ApplyAIDbContext : Uses
+S3StorageService --> ApplyAIDbContext : Uses
+UserService --> ApplyAIDbContext : Uses
 }
 
 @enduml
