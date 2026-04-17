@@ -12,5 +12,10 @@ namespace Backend.api.Configuration
         public string Audience { get; set; } = string.Empty;
         public string Actor { get; set; } = string.Empty;
         public int DurationInMinutes { get; set; }
+        public int Duration
+        {
+            get => DurationInMinutes;
+            set => DurationInMinutes = value;
+        }
     }
 }

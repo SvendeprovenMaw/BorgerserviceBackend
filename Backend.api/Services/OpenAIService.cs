@@ -25,10 +25,6 @@ namespace Backend.api.Services
             byte[] fileBytes = await httpClient.GetByteArrayAsync(fileurl);
             BinaryData fileData = BinaryData.FromBytes(fileBytes, "application/pdf");
 
-            // 2. Upload to OpenAI
-            //OpenAIFileClient fileClient = new("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");
-            //OpenAIFile file = await fileClient.UploadFileAsync(fileData, "filename.pdf", FileUploadPurpose.UserData);
-
             ResponsesClient responsesClient = new(
                 _conf["OpenAi:SecretKey"]
             );

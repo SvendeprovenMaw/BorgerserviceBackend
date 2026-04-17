@@ -178,7 +178,6 @@ namespace Backend.api.Migrations
                     b.HasIndex("ProfileId");
 
                     b.HasIndex("UserId");
-
                     b.ToTable("S3File", (string)null);
 
                     b.UseTptMappingStrategy();

@@ -3,6 +3,7 @@ using System.Text;
 using Backend.api.Configuration;
 using Backend.api.Database;
 using Backend.api.Services;
+using JwtLibrary.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -23,22 +24,42 @@ builder.Services.AddScoped<IS3StorageService, S3StorageService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IConsentService, ConsentService>();
 
-builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
-
-var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
-
-if (jwtSettings == null || string.IsNullOrEmpty(jwtSettings.Key))
+var jwtSettings = new JwtSettings
 {
-    throw new Exception("JWT Settings failed to bind! check section name.");
+    Key = JwtConfigurationReader.GetSigningKey(builder.Configuration),
+    Issuer = JwtConfigurationReader.GetIssuer(builder.Configuration),
+    Audience = JwtConfigurationReader.GetAudience(builder.Configuration),
+    Actor = JwtConfigurationReader.GetActor(builder.Configuration),
+    DurationInMinutes = JwtConfigurationReader.GetDurationInMinutes(builder.Configuration)
+};
+
+builder.Services.Configure<JwtSettings>(options =>
+{
+    options.Key = jwtSettings.Key;
+    options.Issuer = jwtSettings.Issuer;
+    options.Audience = jwtSettings.Audience;
+    options.Actor = jwtSettings.Actor;
+    options.DurationInMinutes = jwtSettings.DurationInMinutes;
+});
+
+var connectionString = builder.Configuration.GetConnectionString("Default");
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException("Connection string 'Default' failed to bind.");
 }
 
-Console.WriteLine($"SECRET KEY BOUND: {jwtSettings.Key}");
+var allowedOrigins = builder.Configuration
+    .GetSection("Cors:AllowedOrigins")
+    .Get<string[]>()?
+    .Where(origin => !string.IsNullOrWhiteSpace(origin))
+    .ToArray()
+    ?? ["http://localhost:4200"];
 
 // Add services to the container.
 builder.Services.AddDbContext<WarehouseDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+    options.UseNpgsql(connectionString));
 
-builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -86,7 +107,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AngularPolicy", policy =>
     {
-        policy.WithOrigins("http://localhost:4200") // Must be specific!
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials(); // This allows the cookies to travel
@@ -116,8 +137,6 @@ if (!app.Configuration.GetValue("DisableHttpsRedirection", false))
 {
     app.UseHttpsRedirection();
 }
-
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

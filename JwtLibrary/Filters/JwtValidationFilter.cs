@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using JwtLibrary.Configuration;
 
 namespace JwtLibrary.Filters
 {
@@ -16,17 +17,21 @@ namespace JwtLibrary.Filters
             try
             {
                 IConfiguration config = (context.HttpContext.RequestServices.GetService(typeof(IConfiguration)) as IConfiguration)!;
+                string encryptionKey = JwtConfigurationReader.GetEncryptionKey(config);
+                string issuer = JwtConfigurationReader.GetIssuer(config);
+                string audience = JwtConfigurationReader.GetAudience(config);
+                string signingKey = JwtConfigurationReader.GetSigningKey(config);
                 string EncryptedToken = context.HttpContext.Request.Headers.First(x => x.Key == "Authorization").Value!;
                 EncryptedToken = EncryptedToken.Replace("Bearer ", string.Empty);
                 EncryptedToken = EncryptedToken.Replace("\"", string.Empty);
-                var token = Encrypter.Decrypt(EncryptedToken, config!["Secret:Key"]!);
+                var token = Encrypter.Decrypt(EncryptedToken, encryptionKey);
                 
                 JsonWebTokenHandler handler = new JsonWebTokenHandler();
                 TokenValidationParameters parameters = new TokenValidationParameters
                 {
-                    ValidIssuer = config!["Secret:JwtSettings:Issuer"]!,
-                    ValidAudience = config!["Secret:JwtSettings:Audience"]!,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Secret:JwtSettings:Key"]!)),
+                    ValidIssuer = issuer,
+                    ValidAudience = audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey)),
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,

@@ -19,7 +19,7 @@ namespace Backend.api.Entities
         }
         public Guid Id { get; private set; }
         public Guid UserId { get; private set; }
-        public User User { get; private set; }
+        public User User { get; private set; } = null!;
         public S3File? CurrentCv { get; private set; }
         public Collection<S3File>? RelevantDocuments { get; private set; }
     }

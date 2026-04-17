@@ -3,7 +3,6 @@ using Amazon.S3.Model;
 using Backend.api.Entities;
 using Backend.api.Entities.Dto;
 using Backend.api.Enums;
-using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace Backend.api.Services
 {
@@ -18,11 +17,13 @@ namespace Backend.api.Services
 
     public class S3StorageService : IS3StorageService
     {
-        private IConfiguration _conf;
-        private IFileService _files;
+        private readonly IConfiguration _conf;
+        private readonly IFileService _files;
         private readonly IConsentService _consent;
-        IAmazonS3 s3Uploader;
-        IAmazonS3 s3Downloader;
+        private readonly IAmazonS3 s3Uploader;
+        private readonly IAmazonS3 s3Downloader;
+        private readonly string _bucketName;
+
         public S3StorageService(IConfiguration conf, IFileService files, IConsentService consent)
         {
             this._consent = consent;
@@ -38,7 +39,7 @@ namespace Backend.api.Services
                 
             };
 
-             var uploaderconfig = new AmazonS3Config 
+            var uploaderConfig = new AmazonS3Config 
             { 
                 ServiceURL = "https://s3.eu-central-003.backblazeb2.com",
                 ForcePathStyle = true,
@@ -46,20 +47,31 @@ namespace Backend.api.Services
                 UseHttp = false
                 
             };
-            
+            var keyId = GetRequiredConfigurationValue("BackBlaze:Keyid");
+            var applicationKey = GetRequiredConfigurationValue("BackBlaze:ApplicationKey");
+            _bucketName = GetRequiredConfigurationValue("BackBlaze:Bucket");
 
-            var keyId = conf["BackBlaze:Keyid"];
-            var appKey = conf["BackBlaze:ApplicationKey"];
-
-            var credentials = new Amazon.Runtime.BasicAWSCredentials(keyId, appKey);
-            this.s3Downloader = new AmazonS3Client(
+            var credentials = new Amazon.Runtime.BasicAWSCredentials(keyId, applicationKey);
+            s3Downloader = new AmazonS3Client(
                 credentials,
                 downloaderConfig
             );
-            this.s3Uploader = new AmazonS3Client(
+            s3Uploader = new AmazonS3Client(
                 credentials,
-                uploaderconfig
+                uploaderConfig
             );
+        }
+
+        private string GetRequiredConfigurationValue(string key)
+        {
+            var value = _conf[key];
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new InvalidOperationException($"Missing configuration value: {key}.");
+            }
+
+            return value;
         }
 
         public async Task<S3File[]> GetFileStructure(Guid userId)
@@ -79,14 +91,14 @@ namespace Backend.api.Services
                 var key = $"users/{user.Id}/{fileCategory}/{Guid.NewGuid()}";
                 var request = new PutObjectRequest
                 {
-                    BucketName = _conf["BackBlaze:KeyName"],
+                    BucketName = _bucketName,
                     Key = key,
                     InputStream = fileStream,
                     ContentType = fileCategory == FileCategory.Cv ? "application/pdf" : "image/jpeg",
                     ChecksumAlgorithm = ChecksumAlgorithm.SHA256
                 };
                 var result = await this.s3Uploader.PutObjectAsync(request);
-                await this._files.FileUploaded(user, filename, key, _conf["BackBlaze:KeyName"], result.ChecksumSHA256, consentDto);
+                await this._files.FileUploaded(user, filename, key, _bucketName, result.ChecksumSHA256, consentDto);
             }
             catch (System.Exception)
             {
@@ -97,14 +109,16 @@ namespace Backend.api.Services
         public async Task<string> UserDownloadFile(Guid fileId, User user)
         {
             var s3File = await _files.GetFile(fileId, user.Id);
-            if(s3File == null)
+
+            if (s3File is null)
             {
-                throw new FileNotFoundException($"file deleted  fileId:{fileId}, UserId:{user.Id}");
+                throw new FileNotFoundException($"No file with id '{fileId}' was found for user '{user.Id}'.");
             }
+
             Console.WriteLine($"{s3File.FileName}, {fileId}, { user.Id}");
             string urlString = s3Downloader.GetPreSignedURL(new GetPreSignedUrlRequest
             {
-                BucketName = _conf["BackBlaze:KeyName"],
+                BucketName = _bucketName,
                 Key = s3File.S3Key,
                 Expires = DateTime.UtcNow.AddMinutes(5),
                 Verb = HttpVerb.GET
@@ -115,16 +129,25 @@ namespace Backend.api.Services
         public async Task<string> AiDownloadUserFile(Guid fileId, User user)
         {
             var s3File = await _files.GetFile(fileId, user.Id);
-            var consent = await _consent.VerifyConsent(s3File);
-            if(consent.ConsentRetracted)
+
+            if (s3File is null)
             {
-                throw new FileNotFoundException("Consent Retracted or file deleted");
+                throw new FileNotFoundException($"No file with id '{fileId}' was found for user '{user.Id}'.");
             }
+
+            var consent = await _consent.VerifyConsent(s3File);
+
+            if (consent.ConsentRetracted)
+            {
+                throw new FileNotFoundException("Consent retracted or file deleted.");
+            }
+
             string urlString = s3Downloader.GetPreSignedURL(new GetPreSignedUrlRequest
             {
-                BucketName = _conf["BackBlaze:KeyName"],
+                BucketName = _bucketName,
                 Key = s3File.S3Key,
-                Expires = DateTime.UtcNow.AddMinutes(5)
+                Expires = DateTime.UtcNow.AddMinutes(5),
+                Verb = HttpVerb.GET
             });
             return urlString;
         }
