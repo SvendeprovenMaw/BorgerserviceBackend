@@ -11,7 +11,7 @@ namespace Backend.api.Services
     public interface IAuthService
     {
         Task SaveRefreshToken(RefreshToken refreshToken);
-        public Task<RefreshToken> GetRefreshToken(string token);
+        public Task<RefreshToken?> GetRefreshToken(string token);
         public Task RevokeToken(RefreshToken token);
     }
 

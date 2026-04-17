@@ -24,7 +24,7 @@ namespace Backend.api.Services
 
         public async Task GiveConsent(User user, S3File s3File, GiveConsentDto dto)
         {
-            var consent = new Consent(user, dto.ConsentGiven, s3File, dto.TimeOfConsent);
+            var consent = new Consent(user, s3File, dto.TimeOfConsent);
             await _db.Consents.AddAsync(consent);
             await _db.SaveChangesAsync();
         }
@@ -39,7 +39,7 @@ namespace Backend.api.Services
 
         public async Task AccecptTerms(User user, Term activeTerms, GiveConsentDto dto)
         {
-            var consent = new Consent(user, dto.ConsentGiven, activeTerms, dto.TimeOfConsent);
+            var consent = new Consent(user, activeTerms, dto.TimeOfConsent);
             await _db.Consents.AddAsync(consent);
             await _db.SaveChangesAsync();
         }
