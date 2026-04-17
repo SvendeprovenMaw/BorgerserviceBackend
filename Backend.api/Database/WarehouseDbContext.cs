@@ -21,7 +21,7 @@ namespace Backend.api.Database
             modelBuilder.Entity<Term>()
                 .HasIndex(t => t.Active)
                 .IsUnique()
-                .HasFilter("\"IsActive\" = TRUE");
+                .HasFilter("\"Active\" = TRUE");
         }
 
         public DbSet<User> Users { get; set; }
