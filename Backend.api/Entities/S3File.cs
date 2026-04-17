@@ -19,6 +19,7 @@ namespace Backend.api.Entities
         }
         public Guid Id { get; private set; }
         public Guid UserId { get; private set; }
+        public User User { get; private set; }
         public string FileName { get; set; } = string.Empty;
         public string S3Key { get; private set; } = "";
         public string ChecksumHash { get; private set; } = "";

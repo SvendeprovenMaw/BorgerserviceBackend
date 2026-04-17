@@ -44,8 +44,7 @@ namespace Backend.api.Controllers
         [Authorize]
         public async Task<IActionResult> DownloadFile(Guid fileId){ 
             var user = await _userService.GetUser(HttpContext.User);
-            Console.WriteLine(fileId);
-            var presignedUrl = await _s3.LinkToFIle(fileId, user);
+            var presignedUrl = await _s3.UserDownloadFile(fileId, user);
             return Ok(presignedUrl); 
         }
         

@@ -37,10 +37,30 @@ namespace Backend.api.Services
             return file;
         }
 
+        /// <summary>
+        /// Gets everyfile even ones not for ai use
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<S3File[]> GetUserFiles(Guid userId)
         {
             var files = await _db.S3Files.Where(i=>i.UserId == userId).ToArrayAsync();
             return files;
         }
+
+        /// <summary>
+        /// gets files that are consented and can be used with the ai
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<S3File[]> GetUserConsentedFiles(Guid userId)
+        {
+            return await _db.Consents.AsNoTracking()
+                    // This filters out any File that is actually a Term
+                    .Where(c => c.UserId == userId && !(c.File is Term) && c.ConsentRetracted == false) 
+                    .Select(i=>i.File)
+                    .ToArrayAsync();
+        }
+
     }
 }

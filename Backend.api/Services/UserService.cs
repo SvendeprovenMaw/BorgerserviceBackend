@@ -38,20 +38,22 @@ namespace Backend.api.Services
             var result = await _db.Users.Where(i => i.Username == createUserDto.Username || i.Email == createUserDto.Email).AnyAsync();
             if (result) { return false; }
             User user = new(JwtRoles.User, createUserDto.Email, createUserDto.Username, PasswordHasher.Hash(createUserDto.Password, ""));
+            Profile profile = new(user);
             await _db.AddAsync(user);
+            await _db.AddAsync(profile);
             await _db.SaveChangesAsync();
             return true;
         }
 
         public async Task<User> GetUser(Guid id)
         {
-            return await _db.Users.Where(i=>i.Id == id).AsNoTracking().FirstAsync();
+            return await _db.Users.Where(i=>i.Id == id).FirstAsync();
         }
         
         public async Task<User> GetUser(ClaimsPrincipal claims)
         {
             var userid = Guid.Parse(claims.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
-            return await _db.Users.Where(i=>i.Id == userid).AsNoTracking().FirstAsync();
+            return await _db.Users.Where(i=>i.Id == userid).FirstAsync();
         }
 
         public async Task<User?> Login(LoginDto loginDto)
