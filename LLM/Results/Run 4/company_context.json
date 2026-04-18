@@ -1,0 +1,75 @@
+{
+  "_meta": {
+    "company_name": "JN Data",
+    "input_summary_da": "Jobopslag for udvikler med fokus på DevOps hos JN Data samt to ansøgerprofiler for Emma Sørensen med adresse i Roskilde.",
+    "parsed_files": [
+      "JN Data - Udvikler med fokus på DevOps - Roskilde eller Silkeborg.pdf",
+      "emma_sorensen_cv_da.pdf",
+      "profile.pdf"
+    ],
+    "errors": []
+  },
+  "company_profile": {
+    "employee_count": {
+      "value": 670,
+      "display_da": "ca. 670 medarbejdere i Danmark"
+    },
+    "industry_da": "IT-drift og finansiel it-infrastruktur",
+    "homepage_values_mission_vision_da": [
+      "Vi gør det usynlige",
+      "Vi gør det seriøst",
+      "Vi gør det sammen"
+    ],
+    "trustpilot": {
+      "score": null,
+      "display_da": "Ukendt"
+    },
+    "glassdoor": {
+      "score": 3.3,
+      "display_da": "3,3/5",
+      "pros_themes_da": [
+        "god work-life balance",
+        "gode kolleger",
+        "fleksibilitet",
+        "jobstabilitet",
+        "gode fordele"
+      ],
+      "cons_themes_da": [
+        "lav løn",
+        "overtid forventes",
+        "rigid og ufleksibel kultur",
+        "moden eller gammeldags organisation",
+        "begrænset forbedringskultur"
+      ]
+    }
+  },
+  "economics": {
+    "growth_assessment_da": "Stabil med tegn på modernisering og styrket resiliens.",
+    "primary_products_da": [
+      "IT-drift til finanssektoren",
+      "developer experience platform til kunder",
+      "mainframe- og z-platform-relaterede udviklings- og driftstjenester"
+    ],
+    "primary_cashcows_da": [
+      "sikker og stabil IT-drift for finansielle kunder",
+      "drift af kritisk infrastruktur og tilhørende udviklingsprojekter"
+    ],
+    "salary_conditions_da": "Der fremgår ikke konkrete lønoplysninger i materialet; Glassdoor-anmeldelser nævner lav løn."
+  },
+  "employee_conditions": {
+    "union_agreement_indication_da": "Ukendt",
+    "skill_development_opportunities_da": "Der nævnes undervisning af kunder og konsulenter samt arbejde med nye værktøjer, integration og automatisering."
+  },
+  "media_mentions": {
+    "recent_media_mentions_da": [
+      "4. marts 2026: artikel om styrket resiliens, mindre nedetid og fokus på cyber- og operationel robusthed.",
+      "Finanstilsynet-redegørelse om IT-inspektion hos JN Data er omtalt i en PDF fra backoffice-jndata.dk."
+    ]
+  },
+  "distance": {
+    "commute_distance_da": "ca. 0 km",
+    "applicant_address_da": "Roskilde, Danmark",
+    "workplace_address_da": "Havsteensvej 4, 4000 Roskilde",
+    "calculation_basis_da": "Ansøgerens by er Roskilde, og arbejdsstedet er angivet som Roskilde/Havsteensvej 4 i jobopslaget og på virksomhedens hjemmeside."
+  }
+}

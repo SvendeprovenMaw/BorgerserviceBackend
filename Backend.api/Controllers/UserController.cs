@@ -9,6 +9,9 @@ using Microsoft.Extensions.Options;
 
 namespace Backend.api.Controllers
 {
+    /// <summary>
+    /// User-account routes for registration, login, and token refresh.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
@@ -22,8 +25,20 @@ namespace Backend.api.Controllers
             this.jwtSettings = options.Value;
             this._authService = authService;
         }
+
+        /// <summary>
+        /// Creates a new user account.
+        /// </summary>
+        /// <remarks>
+        /// Input fields:
+        /// - **username**: the login name that should be reserved for the new user.
+        /// - **password**: the raw password that will be hashed and stored for the new account.
+        /// - **email**: the email address stored with the user account.
+        /// </remarks>
+        /// <param name="createUserDto">Registration payload for the new user account.</param>
+        /// <returns>A created response when registration succeeds, otherwise a no-content result.</returns>
         [HttpPost]
-        public async Task<IActionResult> RegisterUser(CreateUserDto createUserDto)
+        public async Task<IActionResult> RegisterUser([FromBody] CreateUserDto createUserDto)
         {
             if(await _UserService.CreateUser(createUserDto))
             {
@@ -33,8 +48,22 @@ namespace Backend.api.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Signs a user in and issues the access-token and refresh-token cookies.
+        /// </summary>
+        /// <remarks>
+        /// Input fields:
+        /// - **email**: the email address used to locate the user account.
+        /// - **password**: the raw password used to verify the stored password hash.
+        ///
+        /// On success the route sets:
+        /// - the `AccessToken` cookie used by authorized backend routes
+        /// - the `RefreshToken` cookie used by the refresh route
+        /// </remarks>
+        /// <param name="loginDto">Login payload containing email and password.</param>
+        /// <returns>An OK result when login succeeds, or a not-found/no-content response when it does not.</returns>
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto loginDto)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             try
             {
@@ -83,12 +112,31 @@ namespace Backend.api.Controllers
             }
         }
 
+        /// <summary>
+        /// Reserved delete route for future user-removal support.
+        /// </summary>
+        /// <remarks>
+        /// The route is present in the controller but is not implemented yet and currently always returns `404 Not Found`.
+        /// </remarks>
+        /// <returns>A not-found response because deletion is not implemented yet.</returns>
         [HttpDelete]
         public async Task<IActionResult> DeleteUser()
         {
             return NotFound();
         }
 
+        /// <summary>
+        /// Exchanges a valid refresh-token cookie for a new access-token and refresh-token pair.
+        /// </summary>
+        /// <remarks>
+        /// This route does not take a JSON body.
+        ///
+        /// Input source:
+        /// - **RefreshToken cookie**: read from the incoming request and validated against the backend database.
+        ///
+        /// When the refresh token is valid, the route revokes the old token, creates a new token pair, and writes updated cookies back to the client.
+        /// </remarks>
+        /// <returns>An OK result when refresh succeeds, or an unauthorized response when the refresh token is missing, invalid, or expired.</returns>
         [HttpPost("refresh")]
         public async Task<IActionResult> Refresh()
         {

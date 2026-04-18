@@ -1,0 +1,225 @@
+{
+  "_meta": {
+    "requirements_document_id": "requirements_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "parsed_files": [
+      "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+      "emma_sorensen_cv_da.pdf",
+      "profile.pdf"
+    ],
+    "errors": []
+  },
+  "evidence_items": [
+    {
+      "evidence_id": "evidence_1",
+      "fact_da": "Emma Sørensen er uddannet og arbejder som junior softwareudvikler med fokus på .NET, API\u0027er og React.",
+      "normalized_label": "junior_softwareudvikler_profil",
+      "category": "role_experience",
+      "support_type": "document_metadata",
+      "strength": "strong",
+      "relevant_requirement_ids": [
+        "req_1"
+      ],
+      "requirement_relevance_reason_da": "Understøtter, at kandidaten har erfaring som udvikler.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Junior softwareudvikler | .NET, API’er og React",
+          "section_hint": null
+        },
+        {
+          "filename": "profile.pdf",
+          "excerpt": "Junior softwareudvikler | .NET, API\u0027er og React",
+          "section_hint": null
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_2",
+      "fact_da": "Emma Sørensen har arbejdet som studentermedhjælper inden for softwareudvikling hos Nordic Digital Solutions fra 2024 til 2026.",
+      "normalized_label": "softwareudvikling_studentermedhjaelper",
+      "category": "role_experience",
+      "support_type": "explicit",
+      "strength": "strong",
+      "relevant_requirement_ids": [
+        "req_1"
+      ],
+      "requirement_relevance_reason_da": "Direkte dokumenteret erfaring med udvikling.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Studentermedhjælper, softwareudvikling\nNordic Digital Solutions, Roskilde | 2024 - 2026",
+          "section_hint": "Erhvervserfaring"
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_3",
+      "fact_da": "Emma Sørensen har udviklet og vedligeholdt interne .NET-baserede webmoduler til registrering og rapportering.",
+      "normalized_label": "udviklet_vedligeholdt_dotnet_webmoduler",
+      "category": "technical_skill",
+      "support_type": "explicit",
+      "strength": "strong",
+      "relevant_requirement_ids": [
+        "req_3",
+        "req_11"
+      ],
+      "requirement_relevance_reason_da": "Viser konkret arbejde i udviklingsprocessen og vedligeholdelse af software.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Udviklede og vedligeholdt interne .NET-baserede webmoduler til registrering og rapportering.",
+          "section_hint": "Erhvervserfaring"
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_4",
+      "fact_da": "Emma Sørensen har bygget REST API-endpoints og deltaget i integrationer mellem front-end, database og tredjepartssystemer.",
+      "normalized_label": "api_endpoints_og_integrationer",
+      "category": "technical_skill",
+      "support_type": "explicit",
+      "strength": "strong",
+      "relevant_requirement_ids": [
+        "req_3",
+        "req_11"
+      ],
+      "requirement_relevance_reason_da": "Dokumenterer arbejde med udvikling og integration som del af udviklingsprocessen.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Byggede REST API-endpoints og deltog i integrationer mellem front-end, database og tredjepartssystemer.",
+          "section_hint": "Erhvervserfaring"
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_5",
+      "fact_da": "Emma Sørensen har arbejdet med fejlretning, kodegennemgang og mindre forbedringer i React-baserede brugerflader.",
+      "normalized_label": "fejlretning_kodegennemgang_react",
+      "category": "technical_skill",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_3",
+        "req_11"
+      ],
+      "requirement_relevance_reason_da": "Understøtter, at kandidaten har erfaring med flere dele af udviklingsarbejdet, herunder forbedringer og fejlfinding.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Arbejdede med fejlretning, kodegennemgang og mindre forbedringer i React-baserede brugerflader.",
+          "section_hint": "Erhvervserfaring"
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_6",
+      "fact_da": "Emma Sørensen beskriver sig som nysgerrig og løsningsorienteret og angiver, at hun trives i samarbejde med både teknikere og forretning.",
+      "normalized_label": "nysgerrig_loesningsorienteret_samarbejde",
+      "category": "collaboration",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_7",
+        "req_9"
+      ],
+      "requirement_relevance_reason_da": "Relevans til samarbejdsevner og til en nysgerrig arbejdsform i forhold til nye udviklingsparadigmer og automatisering.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Nysgerrig og løsningsorienteret junior softwareudvikler",
+          "section_hint": null
+        },
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Trives i samarbejde med både teknikere og forretning",
+          "section_hint": null
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_7",
+      "fact_da": "Emma Sørensen angiver, at hun har erfaring med Git, test og versionsstyring.",
+      "normalized_label": "git_test_versionsstyring",
+      "category": "technical_skill",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_3",
+        "req_11",
+        "req_14"
+      ],
+      "requirement_relevance_reason_da": "Relevans til udviklingsprocessen og værktøjsarbejde i udvikling.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "SQL, datamodellering, Git, test og versionsstyring.",
+          "section_hint": "Kompetencer"
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_8",
+      "fact_da": "Emma Sørensen har dansk som modersmål og engelsk på professionelt niveau.",
+      "normalized_label": "dansk_engelsk_sprogniveau",
+      "category": "language",
+      "support_type": "explicit",
+      "strength": "strong",
+      "relevant_requirement_ids": [
+        "req_8"
+      ],
+      "requirement_relevance_reason_da": "Direkte dokumenteret sprogfærdighed i dansk og engelsk.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Dansk - modersmål\nEngelsk - professionelt niveau",
+          "section_hint": "Sprog"
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_9",
+      "fact_da": "Emma Sørensen har arbejdet med mindre automatiseringer i administrative workflows.",
+      "normalized_label": "mindre_automatiseringer_workflows",
+      "category": "technical_skill",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_9"
+      ],
+      "requirement_relevance_reason_da": "Relevans til interesse og arbejde med automatisering, men uden direkte dokumentation for markedstrends eller AI.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Bidrog til indholdsopdateringer på website og mindre automatiseringer i administrative workflows.",
+          "section_hint": "Erhvervserfaring"
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_10",
+      "fact_da": "Emma Sørensen har en uddannelse som datamatiker ved Zealand Erhvervsakademi i Roskilde med fokus på softwareudvikling, databaser, systemintegration og projektarbejde.",
+      "normalized_label": "datamatiker_softwareudvikling_integration",
+      "category": "education",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_1",
+        "req_3"
+      ],
+      "requirement_relevance_reason_da": "Uddannelsesbaggrund relateret til softwareudvikling og systemintegration, som er relevant for udviklerrollen og udviklingsprocessen.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Datamatiker, erhvervsakademiuddannelse\nZealand Erhvervsakademi, Roskilde | 2024 - 2026",
+          "section_hint": "Uddannelse"
+        },
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Fokus på softwareudvikling, databaser, systemintegration og projektarbejde.",
+          "section_hint": "Uddannelse"
+        }
+      ]
+    }
+  ]
+}

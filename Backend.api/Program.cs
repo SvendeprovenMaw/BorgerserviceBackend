@@ -1,12 +1,15 @@
 
 using System.Text;
+using System.Reflection;
 using Backend.api.Configuration;
 using Backend.api.Database;
 using Backend.api.Services;
+using Backend.api.Services.ApplyAIService;
 using JwtLibrary.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.IdentityModel.Tokens.Jwt;
 using Backend.api.Middleware;
 
@@ -17,12 +20,49 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "ApplyAI Backend API",
+        Version = "v1",
+        Description = "Authenticated backend routes for account access, consent-backed file handling, and the ApplyAI pipeline. Route descriptions document what each input field is used for so the frontend can integrate against the backend contract directly from Swagger."
+    });
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath))
+    {
+        options.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+    }
+
+    options.AddSecurityDefinition("AccessTokenCookie", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.ApiKey,
+        In = ParameterLocation.Cookie,
+        Name = "AccessToken",
+        Description = "JWT access token cookie issued by /api/User/login. Authorized routes read this cookie automatically."
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecurityScheme
+        {
+            Reference = new OpenApiReference
+            {
+                Type = ReferenceType.SecurityScheme,
+                Id = "AccessTokenCookie"
+            }
+        }] = Array.Empty<string>()
+    });
+});
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IS3StorageService, S3StorageService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IConsentService, ConsentService>();
+builder.Services.AddApplyAiServiceModule(builder.Configuration);
 
 var jwtSettings = new JwtSettings
 {
@@ -129,6 +169,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 app.UseMiddleware<CustomExceptionHandlingMiddleware>();
+app.UseStaticFiles();
 app.UseRouting();
 app.UseCors("AngularPolicy");
 await DatabaseInitializer.InitializeAsync(app.Services, app.Configuration);
@@ -141,7 +182,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
         {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Warehouse Management Api");
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApplyAI Backend API v1");
+            c.DocumentTitle = "ApplyAI Backend Swagger";
+            c.InjectStylesheet("/swagger-ui/custom.css");
             c.RoutePrefix = "";
         });
 }

@@ -1,0 +1,191 @@
+{
+  "name": "candidate_evidence_verification_v1",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "_meta",
+      "verification_summary",
+      "evidence_reviews"
+    ],
+    "properties": {
+      "_meta": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "candidate_evidence_document_id",
+          "requirements_document_id",
+          "verification_policy_version"
+        ],
+        "properties": {
+          "candidate_evidence_document_id": {
+            "type": "string"
+          },
+          "requirements_document_id": {
+            "type": "string"
+          },
+          "verification_policy_version": {
+            "type": "string"
+          }
+        }
+      },
+      "verification_summary": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status",
+          "approved_count",
+          "warning_count",
+          "rejected_count",
+          "manual_review_count"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "pass",
+              "pass_with_warnings",
+              "fail"
+            ]
+          },
+          "approved_count": {
+            "type": "integer"
+          },
+          "warning_count": {
+            "type": "integer"
+          },
+          "rejected_count": {
+            "type": "integer"
+          },
+          "manual_review_count": {
+            "type": "integer"
+          }
+        }
+      },
+      "evidence_reviews": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "evidence_id",
+            "claim_support_verdict",
+            "requirement_link_verdict",
+            "citation_quality",
+            "source_alignment",
+            "support_type_fit",
+            "overstatement_risk",
+            "approved_relevant_requirement_ids",
+            "rejected_relevant_requirement_ids",
+            "problems",
+            "approved_for_downstream",
+            "needs_human_review",
+            "reviewer_reason_da",
+            "suggested_fix_da"
+          ],
+          "properties": {
+            "evidence_id": {
+              "type": "string"
+            },
+            "claim_support_verdict": {
+              "type": "string",
+              "enum": [
+                "supported",
+                "weakly_supported",
+                "unsupported",
+                "unclear"
+              ]
+            },
+            "requirement_link_verdict": {
+              "type": "string",
+              "enum": [
+                "supported",
+                "partially_supported",
+                "unsupported",
+                "not_applicable",
+                "unclear"
+              ]
+            },
+            "citation_quality": {
+              "type": "string",
+              "enum": [
+                "sufficient",
+                "insufficient",
+                "unclear"
+              ]
+            },
+            "source_alignment": {
+              "type": "string",
+              "enum": [
+                "exact",
+                "fair_paraphrase",
+                "overstated",
+                "not_supported",
+                "unclear"
+              ]
+            },
+            "support_type_fit": {
+              "type": "string",
+              "enum": [
+                "fits_source",
+                "too_strong",
+                "too_weak",
+                "unclear"
+              ]
+            },
+            "overstatement_risk": {
+              "type": "string",
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            },
+            "approved_relevant_requirement_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "rejected_relevant_requirement_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "problems": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "missing_citation",
+                  "citation_too_vague",
+                  "claim_not_in_source",
+                  "claim_overstates_source",
+                  "inference_too_strong",
+                  "testimonial_only_support",
+                  "requirement_link_not_explained",
+                  "wrong_requirement_link",
+                  "other"
+                ]
+              }
+            },
+            "approved_for_downstream": {
+              "type": "boolean"
+            },
+            "needs_human_review": {
+              "type": "boolean"
+            },
+            "reviewer_reason_da": {
+              "type": "string"
+            },
+            "suggested_fix_da": {
+              "type": ["string", "null"]
+            }
+          }
+        }
+      }
+    }
+  }
+}

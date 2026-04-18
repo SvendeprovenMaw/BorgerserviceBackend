@@ -7,7 +7,7 @@ namespace Backend.api.Services
 {
     public interface IFileService
     {
-        Task<bool> FileUploaded(User user, string filename, string s3Key, string bucket, string checksumHash, GiveConsentDto consentDto);
+        Task<bool> FileUploaded(User user, string filename, string s3Key, string bucket, string checksumHash, GiveConsentDto consentDto, Guid? fileIdOverride = null, DateTime? uploadTimeOverride = null);
         Task<S3File?> GetFile(Guid fileId, Guid userId);
         Task<S3File[]> GetUserFiles(Guid userId);
     }
@@ -22,9 +22,11 @@ namespace Backend.api.Services
             this._consent = consent;
         }
 
-        public async Task<bool> FileUploaded(User user, string filename, string s3Key, string bucket, string checksumHash, GiveConsentDto consentDto)
+        public async Task<bool> FileUploaded(User user, string filename, string s3Key, string bucket, string checksumHash, GiveConsentDto consentDto, Guid? fileIdOverride = null, DateTime? uploadTimeOverride = null)
         {
-            S3File newFile = new(user, filename, s3Key, checksumHash);
+            S3File newFile = fileIdOverride.HasValue
+                ? new(fileIdOverride.Value, user, filename, s3Key, checksumHash, uploadTimeOverride ?? DateTime.UtcNow)
+                : new(user, filename, s3Key, checksumHash);
             await _db.AddAsync(newFile);
             await _consent.GiveConsent(user, newFile, consentDto);
             await _db.SaveChangesAsync();

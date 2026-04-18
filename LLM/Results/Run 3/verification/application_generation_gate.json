@@ -1,0 +1,39 @@
+{
+  "Stage": "application_generation",
+  "Decision": "repair_or_regenerate",
+  "ApprovedForDownstream": false,
+  "HardInvalidCount": 4,
+  "SoftQualityCount": 1,
+  "SummaryDa": "Fasen har 4 blokkerende findings og må ikke gå downstream endnu. Ansøgningen har unsupported claims over den tilladte grænse.",
+  "BlockingReasons": [
+    "Fasen har 4 blokkerende findings og må ikke gå downstream endnu.",
+    "Ansøgningen har unsupported claims over den tilladte grænse."
+  ],
+  "AdvisoryReasons": [],
+  "Metrics": [
+    {
+      "MetricKey": "application_generation.unsupported_claims",
+      "Operator": "\u003C=",
+      "Actual": "1",
+      "Expected": "0",
+      "Passed": false,
+      "MessageDa": "Ansøgningen har unsupported claims over den tilladte grænse."
+    },
+    {
+      "MetricKey": "application_generation.dangling_relations",
+      "Operator": "\u003C=",
+      "Actual": "0",
+      "Expected": "0",
+      "Passed": true,
+      "MessageDa": "OK"
+    },
+    {
+      "MetricKey": "application_generation.unsupported_sections",
+      "Operator": "\u003C=",
+      "Actual": "0",
+      "Expected": "0",
+      "Passed": true,
+      "MessageDa": "OK"
+    }
+  ]
+}

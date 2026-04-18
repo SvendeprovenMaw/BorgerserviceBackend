@@ -1,0 +1,100 @@
+{
+  "matches": [
+    {
+      "requirement_id": "req_1",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "e1",
+        "e2",
+        "e6"
+      ],
+      "rationale_da": "Der er klar evidens for udviklererfaring og praktisk softwareudvikling, herunder .NET, API\u0027er og webmoduler. Der er dog ingen dokumenteret erfaring specifikt fra den finansielle sektor eller andre regulerede sektorer.",
+      "gap_da": "Mangler dokumentation for applikationsudvikling i den finansielle sektor eller anden reguleret sektor.",
+      "confidence": "medium",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_2",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "e1",
+        "e2"
+      ],
+      "rationale_da": "Evidensen viser arbejde med flere teknologier og dele af udviklingsarbejdet, herunder .NET, API\u0027er, React og integrationer. Det fremgår dog ikke tydeligt, at kandidaten har erfaring med hele udviklingsprocessen i fuldt omfang, eller at der specifikt er arbejdet med både kompilerede og fortolkede sprog.",
+      "gap_da": "Mangler tydelig dokumentation for hele udviklingsprocessen samt eksplicit erfaring med både kompilerede og fortolkede sprog.",
+      "confidence": "medium",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_3",
+      "verdict": "not_matched",
+      "matched_evidence_ids": [],
+      "rationale_da": "Der er ingen evidens for kendskab til eller lyst til at lære IBM Z System og COBOL.",
+      "gap_da": "Mangler dokumentation for IBM Z System og COBOL eller interesse i at lære det.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_4",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "e3",
+        "e7"
+      ],
+      "rationale_da": "Kandidaten viser interesse for moderne webudvikling, API-design og stabile produktionsløsninger, hvilket kun indirekte relaterer til developer experience og DevOps. Der er ikke direkte dokumentation for specifik interesse i DevOps.",
+      "gap_da": "Mangler direkte dokumentation for interesse i developer experience og DevOps.",
+      "confidence": "low",
+      "needs_human_review": true
+    },
+    {
+      "requirement_id": "req_5",
+      "verdict": "matched",
+      "matched_evidence_ids": [
+        "e4"
+      ],
+      "rationale_da": "Kandidaten dokumenterer gode samarbejdsevner, dialog med både brugere og udviklere samt trives i samarbejde med teknikere og forretning. Det understøtter kravet om tæt samarbejde med kolleger og kunder.",
+      "gap_da": null,
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_6",
+      "verdict": "matched",
+      "matched_evidence_ids": [
+        "e5"
+      ],
+      "rationale_da": "Kandidaten angiver dansk som modersmål og engelsk på professionelt niveau, hvilket klart understøtter kravet om dansk og engelsk i skrift og tale.",
+      "gap_da": null,
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "requirement_id": "req_7",
+      "verdict": "partially_matched",
+      "matched_evidence_ids": [
+        "e3",
+        "e7"
+      ],
+      "rationale_da": "Der er evidens for interesse i moderne udvikling og et ønske om stabile produktionsløsninger, men ikke direkte dokumentation for interesse i markedstrends, tool-understøttelse, AI eller automatisering.",
+      "gap_da": "Mangler direkte dokumentation for interesse i markedstrends, tool-understøttelse, AI og automatisering.",
+      "confidence": "low",
+      "needs_human_review": true
+    }
+  ],
+  "overall_assessment": {
+    "overall_match_level": "moderate",
+    "summary_da": "Kandidaten matcher tydeligt på samarbejde og sprog og har dokumenteret udviklererfaring. De væsentligste mangler er manglende evidens for finansiel/reguleret sektor, IBM Z/COBOL samt direkte interesse for DevOps, trends, AI og automatisering.",
+    "major_strength_evidence_ids": [
+      "e4",
+      "e5",
+      "e1",
+      "e6"
+    ],
+    "major_gap_requirement_ids": [
+      "req_1",
+      "req_3",
+      "req_4",
+      "req_7"
+    ]
+  }
+}

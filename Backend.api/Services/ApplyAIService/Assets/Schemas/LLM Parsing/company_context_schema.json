@@ -1,0 +1,211 @@
+{
+  "name": "company_context_v1",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "_meta",
+      "company_profile",
+      "economics",
+      "employee_conditions",
+      "media_mentions",
+      "distance"
+    ],
+    "properties": {
+      "_meta": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "company_name",
+          "input_summary_da",
+          "parsed_files",
+          "errors"
+        ],
+        "properties": {
+          "company_name": {
+            "type": ["string", "null"]
+          },
+          "input_summary_da": {
+            "type": "string"
+          },
+          "parsed_files": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "company_profile": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "employee_count",
+          "industry_da",
+          "homepage_values_mission_vision_da",
+          "trustpilot",
+          "glassdoor"
+        ],
+        "properties": {
+          "employee_count": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["value", "display_da"],
+            "properties": {
+              "value": {
+                "type": ["integer", "null"]
+              },
+              "display_da": {
+                "type": "string"
+              }
+            }
+          },
+          "industry_da": {
+            "type": "string"
+          },
+          "homepage_values_mission_vision_da": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "trustpilot": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["score", "display_da"],
+            "properties": {
+              "score": {
+                "type": ["number", "null"]
+              },
+              "display_da": {
+                "type": "string"
+              }
+            }
+          },
+          "glassdoor": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "score",
+              "display_da",
+              "pros_themes_da",
+              "cons_themes_da"
+            ],
+            "properties": {
+              "score": {
+                "type": ["number", "null"]
+              },
+              "display_da": {
+                "type": "string"
+              },
+              "pros_themes_da": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 5
+              },
+              "cons_themes_da": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 5
+              }
+            }
+          }
+        }
+      },
+      "economics": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "growth_assessment_da",
+          "primary_products_da",
+          "primary_cashcows_da",
+          "salary_conditions_da"
+        ],
+        "properties": {
+          "growth_assessment_da": {
+            "type": "string"
+          },
+          "primary_products_da": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "primary_cashcows_da": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "salary_conditions_da": {
+            "type": "string"
+          }
+        }
+      },
+      "employee_conditions": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "union_agreement_indication_da",
+          "skill_development_opportunities_da"
+        ],
+        "properties": {
+          "union_agreement_indication_da": {
+            "type": "string"
+          },
+          "skill_development_opportunities_da": {
+            "type": "string"
+          }
+        }
+      },
+      "media_mentions": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["recent_media_mentions_da"],
+        "properties": {
+          "recent_media_mentions_da": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "distance": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "commute_distance_da",
+          "applicant_address_da",
+          "workplace_address_da",
+          "calculation_basis_da"
+        ],
+        "properties": {
+          "commute_distance_da": {
+            "type": "string"
+          },
+          "applicant_address_da": {
+            "type": "string"
+          },
+          "workplace_address_da": {
+            "type": "string"
+          },
+          "calculation_basis_da": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

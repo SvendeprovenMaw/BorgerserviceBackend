@@ -5,10 +5,32 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>e1cc33a3-644c-4cdc-b60c-2f99743708a2</UserSecretsId>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);OPENAI001;1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="Services\ApplyAIService\ApplyAI.Playwright\ApplyAI.Playwright.csproj" />
+    <ProjectReference Include="..\LLM\ApplyAI.LlmPipeline\ApplyAI.LlmPipeline.csproj" />
     <ProjectReference Include="..\JwtLibrary\JwtLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Services\ApplyAIService\ApplyAI.Playwright\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Services\ApplyAIService\Assets\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Services\ApplyAIService\Assets\Prompts\**\*;Services\ApplyAIService\Assets\Templates\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +47,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="OpenAI" Version="2.10.0" />
+    <PackageReference Include="QuestPDF" Version="2026.2.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 

@@ -1,0 +1,39 @@
+Din opgave i dette run er at indsamle kandidat-evidens med krav-dokumentet som analytisk linse.
+Du får:
+Et krav-dokument med requirement_id'er og jobkrav.
+Kandidatens profiloplysninger og kandidatdokumenter, fx CV, biografi, udtalelser, certifikater og andre relevante filer.
+Mål:  Identificér konkrete, dokumenterbare evidensfund i kandidatens materiale, som er relevante for et eller flere krav i krav-dokumentet, og returnér dem i det udleverede schema for kandidat-evidens.
+Vigtige afgrænsninger:
+Du må bruge krav-dokumentet som linse til at opdage relevant evidens.
+Du må ikke afsige dom om, hvorvidt et krav er opfyldt.
+Du må ikke returnere matched, not_matched, score eller samlet vurdering.
+Du må ikke opfinde kompetencer, erfaringer eller personlige egenskaber, som ikke kan spores til kandidatmaterialet.
+Du må ikke bruge jobopslaget som citation-kilde for kandidatens egenskaber.
+Du må kun bruge kandidatens egne dokumenter og profildata som evidenskilder.
+Instruktioner for evidensudtræk:
+Medtag kun evidens, som er relevant for mindst ét requirement_id i krav-dokumentet.
+Hvis et fund ikke kan kobles meningsfuldt til et krav, skal det ikke medtages.
+Hvert evidence item skal beskrive ét klart og afgrænset fund.
+fact_da skal være en præcis dansk formulering af det dokumenterede fund.
+normalized_label skal være kort, stabil og skrevet i lowercase snake_case.
+relevant_requirement_ids skal kun indeholde requirement_id'er, som faktisk findes i krav-dokumentet.
+requirement_relevance_reason_da skal kort forklare, hvorfor evidensen er relevant for de angivne krav.
+citations må kun pege på kandidatmateriale.
+Hvert evidensfund skal have mindst én konkret citation med excerpt.
+Hvis evidensen er direkte og klart formuleret i kilden, brug support_type = explicit.
+Hvis evidensen kræver en rimelig, men stadig konservativ slutning, brug support_type = strong_inference.
+Hvis evidensen kommer fra en udtalelse eller reference, brug support_type = testimonial.
+Hvis evidensen primært bygger på dokumentets metadata eller strukturelle signaler, brug support_type = document_metadata.
+strength skal afspejle hvor stærkt fundet er understøttet af kilden:
+strong: tydelig, direkte eller solidt dokumenteret støtte
+moderate: relevant støtte, men mindre direkte eller mindre omfattende
+weak: svag eller indirekte støtte, som stadig er relevant men skal behandles forsigtigt
+Hvis et fund kun er antydet og ikke kan underbygges ordentligt, skal det ikke medtages.
+Hvis flere kilder støtter samme evidensfund, må de samles i ét evidence item med flere citations.
+Hvis to fund er forskellige, må de ikke klumpes sammen i samme item.
+Kvalitetskrav:
+Vær konservativ.
+Vær kildebunden.
+Brug kravene som søgelinse, men ikke som facit.
+Beskriv kun evidens, ikke match-domme.
+Returnér kun JSON i det udleverede schema.

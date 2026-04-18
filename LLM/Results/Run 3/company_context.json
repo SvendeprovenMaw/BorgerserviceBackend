@@ -1,0 +1,68 @@
+{
+  "_meta": {
+    "company_name": "JN Data",
+    "input_summary_da": "Jobopslag for DevOps-udvikler hos JN Data samt to ansøgerprofiler for Emma Sørensen.",
+    "parsed_files": [
+      "DevOps Udvikler - JN Data - Roskilde eller Silkeborg.pdf",
+      "emma_sorensen_cv_da.pdf",
+      "profile.pdf"
+    ],
+    "errors": [
+      "Ansøgerprofilerne angiver Roskilde som lokation, men ingen præcis adresse fremgår.",
+      "Trustpilot- og Glassdoor-data kunne ikke fastslås sikkert i inputtet."
+    ]
+  },
+  "company_profile": {
+    "employee_count": {
+      "value": 1000,
+      "display_da": "ca. 1.000 medarbejdere"
+    },
+    "industry_da": "IT-drift og infrastruktur til den finansielle sektor",
+    "homepage_values_mission_vision_da": [
+      "Vi holder, hvad vi lover",
+      "Sikker, compliant og stabil IT-drift",
+      "Ansvarlig for samfundskritisk IT-drift til den finansielle sektor"
+    ],
+    "trustpilot": {
+      "score": null,
+      "display_da": "Ukendt"
+    },
+    "glassdoor": {
+      "score": null,
+      "display_da": "Ukendt",
+      "pros_themes_da": [],
+      "cons_themes_da": []
+    }
+  },
+  "economics": {
+    "growth_assessment_da": "Ser ud til at være i vækst eller styrket position, da virksomheden omtaler nye services, øget aktivitet og forbedret drift.",
+    "primary_products_da": [
+      "IT-drift til finansielle kunder",
+      "Developer experience-platform og mainframe-værktøjer",
+      "Indkøbsfællesskab for kunder"
+    ],
+    "primary_cashcows_da": [
+      "IT-driftsydelser til finanssektoren",
+      "Relaterede drifts- og infrastrukturydelser på z-platformen"
+    ],
+    "salary_conditions_da": "Ukendt"
+  },
+  "employee_conditions": {
+    "union_agreement_indication_da": "Der er indikation på overenskomst med Finansforbundet.",
+    "skill_development_opportunities_da": "Jobopslaget nævner oplæring/undervisning af kunder, samarbejde med erfarne kolleger og fokus på udvikling; der fremgår ikke konkrete kurser eller certificeringer."
+  },
+  "media_mentions": {
+    "recent_media_mentions_da": [
+      "JN Data reducerede nedetid med 17 procent i 2024.",
+      "JN Data blev i 2024 anerkendt som en af Danmarks 10 Best Managed Companies.",
+      "JN Data modtog Drewsens bæredygtighedspris for grøn omstilling.",
+      "Finanstilsynets IT-inspektion gav ikke anledning til tilsynsreaktioner."
+    ]
+  },
+  "distance": {
+    "commute_distance_da": "ca. 0-40 km",
+    "applicant_address_da": "Roskilde, Danmark",
+    "workplace_address_da": "Silkeborg eller Roskilde, Danmark",
+    "calculation_basis_da": "Baseret på ansøgerens angivne lokation Roskilde og jobopslagets angivne arbejdssteder Silkeborg/Roskilde; uden præcis arbejdspladsadresse kan afstanden kun angives konservativt."
+  }
+}

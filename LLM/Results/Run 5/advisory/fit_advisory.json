@@ -1,0 +1,5 @@
+{
+  "GuidanceMode": "optimistic",
+  "SummaryDa": "Denne advisory er sat til optimistic. Matchniveauet ser moderate ud med 4 matched, 6 delvist matched, 5 not_matched og 1 unclear krav. Systemet har forsøgt at skrive den stærkest mulige sandfærdige ansøgning og fremhæve overførbare styrker frem for at agere gatekeeper. Ansøgningen fokuserer på de bedst dokumenterede og mest overførbare styrker.",
+  "ArtifactPath": ""
+}

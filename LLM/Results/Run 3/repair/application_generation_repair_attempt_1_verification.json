@@ -1,0 +1,48 @@
+{
+  "Stage": "application_generation",
+  "DocumentId": "application_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+  "VerificationMode": "mechanical_only",
+  "Status": "fail",
+  "ApprovedForDownstream": false,
+  "WarningCount": 1,
+  "ErrorCount": 2,
+  "ArtifactPath": "",
+  "GateArtifactPath": "",
+  "Gate": {
+    "Stage": "",
+    "Decision": "continue",
+    "ApprovedForDownstream": false,
+    "HardInvalidCount": 0,
+    "SoftQualityCount": 0,
+    "SummaryDa": "",
+    "BlockingReasons": [],
+    "AdvisoryReasons": [],
+    "Metrics": []
+  },
+  "Findings": [
+    {
+      "RuleId": "application.template_main_content_length",
+      "Severity": "error",
+      "SubjectType": "document",
+      "SubjectId": "application_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+      "MessageDa": "Ansøgningens synlige hovedtekst er 1179 rå tegn, men 5 paragrafskift og 1 interne linjeskift løfter det effektive template-forbrug til 1610 mod maksimum 1550. Dokumentet risikerer at blive klippet i PDF-layoutet.",
+      "BlockingForDownstream": true
+    },
+    {
+      "RuleId": "application.visible_text.non_latin_script",
+      "Severity": "error",
+      "SubjectType": "section",
+      "SubjectId": "sec_opening",
+      "MessageDa": "sections[].text_da indeholder mistænkelige ikke-latinske bogstavtegn, fx \u0027ფ\u0027 (U\u002B10E4), \u0027ი\u0027 (U\u002B10D8), \u0027ნ\u0027 (U\u002B10DC), \u0027ა\u0027 (U\u002B10D0). Ansøgningsteksten må kun bruge latinbaseret skrift med normale nordiske tegn.",
+      "BlockingForDownstream": true
+    },
+    {
+      "RuleId": "application.assembled_sequence",
+      "Severity": "warning",
+      "SubjectType": "section",
+      "SubjectId": "sec_opening",
+      "MessageDa": "Sektionsteksten kan ikke genfindes i assembled_application_da i forventet rækkefølge.",
+      "BlockingForDownstream": false
+    }
+  ]
+}

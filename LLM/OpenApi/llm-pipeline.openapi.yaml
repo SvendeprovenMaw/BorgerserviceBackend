@@ -1,0 +1,495 @@
+openapi: 3.1.0
+info:
+  title: ApplyAI LLM Pipeline
+  version: 0.1.0
+  description: >-
+    Proposed contract for the auto/manual LLM pipeline workflows. This fragment is intended
+    to guide controller and swagger grouping work once the backend wiring is implemented.
+tags:
+  - name: LLM Pipeline Jobs
+    description: Create and inspect LLM pipeline jobs.
+  - name: LLM Pipeline Manual Review
+    description: Approve or retry individual phases in manual mode.
+  - name: LLM Pipeline Events
+    description: Server-sent events for high-detail progress updates.
+paths:
+  /api/ai/pipeline/jobs:
+    post:
+      tags:
+        - LLM Pipeline Jobs
+      summary: Create an LLM pipeline job
+      description: >-
+        Accepts either a job-listing upload reference or a remote job-listing URL and returns
+        a unique job URL for polling or subscribing to events.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PipelineSubmissionRequest'
+      responses:
+        '202':
+          description: Job accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineJobAcceptedResponse'
+  /api/ai/pipeline/jobs/{jobId}:
+    get:
+      tags:
+        - LLM Pipeline Jobs
+      summary: Get the latest pipeline job snapshot
+      parameters:
+        - $ref: '#/components/parameters/JobId'
+      responses:
+        '200':
+          description: Current pipeline snapshot
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineJobSnapshot'
+  /api/ai/pipeline/jobs/{jobId}/events:
+    get:
+      tags:
+        - LLM Pipeline Events
+      summary: Stream pipeline progress events
+      parameters:
+        - $ref: '#/components/parameters/JobId'
+      responses:
+        '200':
+          description: SSE stream carrying JSON-encoded PipelineEventEnvelope payloads.
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                example: |
+                  event: progress
+                  data: {"eventId":"job-1:4","eventType":"JobProgressUpdated","jobId":"job-1","jobStatus":"Running","phase":"Requirements","activity":"WaitingForLlmResponse","progressPercent":33,"message":"Requirements: waiting for LLM response.","occurredAtUtc":"2026-04-18T12:00:00Z"}
+  /api/ai/pipeline/jobs/{jobId}/phases/{phase}/approval:
+    post:
+      tags:
+        - LLM Pipeline Manual Review
+      summary: Approve a phase and continue the manual workflow
+      parameters:
+        - $ref: '#/components/parameters/JobId'
+        - $ref: '#/components/parameters/Phase'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PipelinePhaseApprovalRequest'
+      responses:
+        '202':
+          description: Approval accepted and next phase queued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineJobSnapshot'
+  /api/ai/pipeline/jobs/{jobId}/phases/{phase}/retry:
+    post:
+      tags:
+        - LLM Pipeline Manual Review
+      summary: Retry a failed or rejected phase
+      parameters:
+        - $ref: '#/components/parameters/JobId'
+        - $ref: '#/components/parameters/Phase'
+      responses:
+        '202':
+          description: Retry accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineJobSnapshot'
+components:
+  parameters:
+    JobId:
+      name: jobId
+      in: path
+      required: true
+      schema:
+        type: string
+    Phase:
+      name: phase
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/PipelinePhaseRouteSegment'
+  schemas:
+    PipelineWorkflowMode:
+      type: string
+      enum:
+        - auto
+        - manual
+    PipelineInputKind:
+      type: string
+      enum:
+        - uploaded-file
+        - remote-url
+    PipelinePhaseRouteSegment:
+      type: string
+      enum:
+        - company-context
+        - requirements
+        - candidate-evidence
+        - matching
+        - application-generation
+    PipelineJobStatus:
+      type: string
+      enum:
+        - queued
+        - running
+        - awaiting-user-action
+        - completed
+        - failed
+    PipelineActivity:
+      type: string
+      enum:
+        - queued
+        - hydrating-user-context
+        - preparing-prompt
+        - sending-task-to-llm
+        - waiting-for-llm-response
+        - parsing-response
+        - running-verification
+        - running-repair
+        - persisting-artifacts
+        - awaiting-user-approval
+        - completed
+        - failed
+    PipelineArtifactKind:
+      type: string
+      enum:
+        - json-document
+        - html-document
+        - pdf-document
+        - css-stylesheet
+        - verification-report
+        - gate-report
+        - advisory
+        - usage-report
+        - other
+    PipelineActionKind:
+      type: string
+      enum:
+        - approve-phase
+        - retry-phase
+    PipelineSourceReference:
+      type: object
+      additionalProperties: false
+      required:
+        - kind
+        - reference
+      properties:
+        kind:
+          $ref: '#/components/schemas/PipelineInputKind'
+        reference:
+          type: string
+        fileName:
+          type:
+            - string
+            - 'null'
+        contentType:
+          type:
+            - string
+            - 'null'
+    PipelineRequestedArtifacts:
+      type: object
+      additionalProperties: false
+      required:
+        - includeCoverLetter
+        - includeFitAdvisory
+      properties:
+        includeCoverLetter:
+          type: boolean
+        includeFitAdvisory:
+          type: boolean
+    PipelineSubmissionRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - applicantId
+        - workflowMode
+        - jobListingSource
+        - requestedArtifacts
+      properties:
+        applicantId:
+          type: string
+        workflowMode:
+          $ref: '#/components/schemas/PipelineWorkflowMode'
+        jobListingSource:
+          $ref: '#/components/schemas/PipelineSourceReference'
+        requestedArtifacts:
+          $ref: '#/components/schemas/PipelineRequestedArtifacts'
+        correlationId:
+          type:
+            - string
+            - 'null'
+    PipelineArtifactReference:
+      type: object
+      additionalProperties: false
+      required:
+        - kind
+        - relativePath
+        - displayName
+        - mediaType
+        - isPrimary
+      properties:
+        kind:
+          $ref: '#/components/schemas/PipelineArtifactKind'
+        relativePath:
+          type: string
+        displayName:
+          type: string
+        mediaType:
+          type: string
+        phase:
+          oneOf:
+            - $ref: '#/components/schemas/PipelinePhaseRouteSegment'
+            - type: 'null'
+        isPrimary:
+          type: boolean
+    PipelineActionLink:
+      type: object
+      additionalProperties: false
+      required:
+        - action
+        - label
+        - targetUrl
+        - httpMethod
+      properties:
+        action:
+          $ref: '#/components/schemas/PipelineActionKind'
+        label:
+          type: string
+        targetUrl:
+          type: string
+        httpMethod:
+          type: string
+        phase:
+          oneOf:
+            - $ref: '#/components/schemas/PipelinePhaseRouteSegment'
+            - type: 'null'
+    PipelinePhaseSnapshot:
+      type: object
+      additionalProperties: false
+      required:
+        - phase
+        - displayName
+        - status
+        - statusMessage
+        - attemptCount
+        - repairAttemptCount
+        - warningCount
+        - errorCount
+        - approvalRequired
+        - artifacts
+      properties:
+        phase:
+          $ref: '#/components/schemas/PipelinePhaseRouteSegment'
+        displayName:
+          type: string
+        status:
+          type: string
+          enum:
+            - pending
+            - running
+            - awaiting-approval
+            - completed
+            - failed
+            - skipped
+        currentActivity:
+          oneOf:
+            - $ref: '#/components/schemas/PipelineActivity'
+            - type: 'null'
+        statusMessage:
+          type: string
+        attemptCount:
+          type: integer
+        repairAttemptCount:
+          type: integer
+        warningCount:
+          type: integer
+        errorCount:
+          type: integer
+        approvalRequired:
+          type: boolean
+        startedAtUtc:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        completedAtUtc:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        approvedAtUtc:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        artifacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineArtifactReference'
+    PipelineJobAcceptedResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - jobId
+        - workflowMode
+        - statusUrl
+        - eventsUrl
+        - approvePhaseUrlTemplate
+        - retryPhaseUrlTemplate
+        - recommendedPollIntervalSeconds
+        - supportsServerSentEvents
+        - createdAtUtc
+      properties:
+        jobId:
+          type: string
+        workflowMode:
+          $ref: '#/components/schemas/PipelineWorkflowMode'
+        statusUrl:
+          type: string
+        eventsUrl:
+          type: string
+        approvePhaseUrlTemplate:
+          type: string
+        retryPhaseUrlTemplate:
+          type: string
+        recommendedPollIntervalSeconds:
+          type: integer
+        supportsServerSentEvents:
+          type: boolean
+        createdAtUtc:
+          type: string
+          format: date-time
+    PipelineJobSnapshot:
+      type: object
+      additionalProperties: false
+      required:
+        - jobId
+        - workflowMode
+        - status
+        - currentActivity
+        - statusMessage
+        - progressPercent
+        - statusUrl
+        - eventsUrl
+        - recommendedPollIntervalSeconds
+        - createdAtUtc
+        - updatedAtUtc
+        - availableActions
+        - artifacts
+        - phases
+      properties:
+        jobId:
+          type: string
+        workflowMode:
+          $ref: '#/components/schemas/PipelineWorkflowMode'
+        status:
+          $ref: '#/components/schemas/PipelineJobStatus'
+        currentPhase:
+          oneOf:
+            - $ref: '#/components/schemas/PipelinePhaseRouteSegment'
+            - type: 'null'
+        currentActivity:
+          $ref: '#/components/schemas/PipelineActivity'
+        statusMessage:
+          type: string
+        progressPercent:
+          type: integer
+          minimum: 0
+          maximum: 100
+        statusUrl:
+          type: string
+        eventsUrl:
+          type: string
+        recommendedPollIntervalSeconds:
+          type: integer
+        createdAtUtc:
+          type: string
+          format: date-time
+        updatedAtUtc:
+          type: string
+          format: date-time
+        completedAtUtc:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        availableActions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineActionLink'
+        artifacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineArtifactReference'
+        phases:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelinePhaseSnapshot'
+    PipelinePhaseApprovalRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - phase
+        - editedArtifactPaths
+      properties:
+        phase:
+          $ref: '#/components/schemas/PipelinePhaseRouteSegment'
+        editedArtifactPaths:
+          type: array
+          items:
+            type: string
+        reviewerComment:
+          oneOf:
+            - type: string
+            - type: 'null'
+    PipelineEventEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+        - eventId
+        - eventType
+        - jobId
+        - jobStatus
+        - activity
+        - progressPercent
+        - message
+        - occurredAtUtc
+      properties:
+        eventId:
+          type: string
+        eventType:
+          type: string
+          enum:
+            - job-accepted
+            - job-progress-updated
+            - phase-started
+            - phase-completed
+            - approval-required
+            - job-failed
+            - job-completed
+        jobId:
+          type: string
+        jobStatus:
+          $ref: '#/components/schemas/PipelineJobStatus'
+        phase:
+          oneOf:
+            - $ref: '#/components/schemas/PipelinePhaseRouteSegment'
+            - type: 'null'
+        activity:
+          $ref: '#/components/schemas/PipelineActivity'
+        progressPercent:
+          type: integer
+          minimum: 0
+          maximum: 100
+        message:
+          type: string
+        occurredAtUtc:
+          type: string
+          format: date-time

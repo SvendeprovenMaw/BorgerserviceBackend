@@ -1,0 +1,248 @@
+{
+  "name": "job_application_generation_v1",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "_meta",
+      "application_strategy",
+      "sections",
+      "claim_register",
+      "assembled_application_da"
+    ],
+    "properties": {
+      "_meta": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "application_document_id",
+          "requirements_document_id",
+          "candidate_evidence_document_id",
+          "company_context_document_id",
+          "matching_document_id",
+          "target_language",
+          "position_title",
+          "company_name",
+          "applicant_display_name"
+        ],
+        "properties": {
+          "application_document_id": {
+            "type": "string"
+          },
+          "requirements_document_id": {
+            "type": "string"
+          },
+          "candidate_evidence_document_id": {
+            "type": "string"
+          },
+          "company_context_document_id": {
+            "type": "string"
+          },
+          "matching_document_id": {
+            "type": "string"
+          },
+          "target_language": {
+            "type": "string",
+            "enum": ["da", "en"]
+          },
+          "position_title": {
+            "type": ["string", "null"]
+          },
+          "company_name": {
+            "type": ["string", "null"]
+          },
+          "applicant_display_name": {
+            "type": ["string", "null"]
+          }
+        }
+      },
+      "application_strategy": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "tone",
+          "length_target",
+          "subject_line_da",
+          "core_message_da",
+          "selected_requirement_ids",
+          "selected_evidence_ids",
+          "omitted_requirement_ids",
+          "omission_strategy_da"
+        ],
+        "properties": {
+          "tone": {
+            "type": "string",
+            "enum": [
+              "professional",
+              "warm_professional",
+              "formal",
+              "confident",
+              "humble"
+            ]
+          },
+          "length_target": {
+            "type": "string",
+            "enum": [
+              "short",
+              "medium",
+              "long"
+            ]
+          },
+          "subject_line_da": {
+            "type": ["string", "null"]
+          },
+          "core_message_da": {
+            "type": "string"
+          },
+          "selected_requirement_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "selected_evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "omitted_requirement_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "omission_strategy_da": {
+            "type": "string"
+          }
+        }
+      },
+      "sections": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "section_id",
+            "section_kind",
+            "text_da",
+            "content_mode",
+            "claim_ids",
+            "supported_requirement_ids",
+            "supported_evidence_ids"
+          ],
+          "properties": {
+            "section_id": {
+              "type": "string"
+            },
+            "section_kind": {
+              "type": "string",
+              "enum": [
+                "salutation",
+                "opening",
+                "motivation",
+                "experience",
+                "fit",
+                "closing",
+                "signature",
+                "other"
+              ]
+            },
+            "text_da": {
+              "type": "string"
+            },
+            "content_mode": {
+              "type": "string",
+              "enum": [
+                "bridge_text",
+                "evidence_backed",
+                "mixed"
+              ]
+            },
+            "claim_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "supported_requirement_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "supported_evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "claim_register": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "claim_id",
+            "claim_text_da",
+            "claim_kind",
+            "evidence_ids",
+            "requirement_ids",
+            "section_ids",
+            "support_strength"
+          ],
+          "properties": {
+            "claim_id": {
+              "type": "string"
+            },
+            "claim_text_da": {
+              "type": "string"
+            },
+            "claim_kind": {
+              "type": "string",
+              "enum": [
+                "candidate_fact",
+                "candidate_strength",
+                "role_alignment",
+                "motivation_grounded"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "requirement_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "section_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "support_strength": {
+              "type": "string",
+              "enum": [
+                "strong",
+                "moderate",
+                "weak"
+              ]
+            }
+          }
+        }
+      },
+      "assembled_application_da": {
+        "type": "string"
+      }
+    }
+  }
+}

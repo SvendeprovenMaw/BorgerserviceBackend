@@ -93,17 +93,49 @@ namespace Backend.api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ApplicantId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<Guid?>("CurrentCvId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Municipality")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PreferencesJson")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<string>("ProfileEnhancementJson")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<string>("ShortBio")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicantId")
+                        .IsUnique();
+
                     b.HasIndex("CurrentCvId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Profiles");
                 });
@@ -178,6 +210,7 @@ namespace Backend.api.Migrations
                     b.HasIndex("ProfileId");
 
                     b.HasIndex("UserId");
+
                     b.ToTable("S3File", (string)null);
 
                     b.UseTptMappingStrategy();
@@ -211,6 +244,257 @@ namespace Backend.api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Backend.api.Services.ApplyAIService.ApplyAiPipelineArtifact", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("ArtifactKind")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("JobId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("MediaType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("Phase")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("RelativePath")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("StorageKey")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobId", "Phase");
+
+                    b.ToTable("pipeline_artifacts", "llm_pipeline");
+                });
+
+            modelBuilder.Entity("Backend.api.Services.ApplyAIService.ApplyAiPipelineEvent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Activity")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("EventId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("EventType")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("JobId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("JobStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("OccurredAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("Phase")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProgressPercent")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobId", "OccurredAtUtc");
+
+                    b.ToTable("pipeline_events", "llm_pipeline");
+                });
+
+            modelBuilder.Entity("Backend.api.Services.ApplyAIService.ApplyAiPipelineJob", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ApplicantAddressHint")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CandidateFileSnapshotJson")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<string>("CompanyNameOverride")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("CompletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CorrelationId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("CurrentActivity")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("CurrentPhase")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("DisplayRunName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IncludeAllConsentedFiles")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IncludeCurrentCv")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IncludeProfileRelevantDocuments")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("JobPostingContentType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("JobPostingOriginalFileName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("JobPostingReference")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("JobPostingSourceType")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PreferencesSnapshotJson")
+                        .HasColumnType("jsonb");
+
+                    b.Property<int>("ProgressPercent")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("RequestedArtifactsJson")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<string>("RunStoragePrefix")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SelectedFileIdsJson")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("StatusMessage")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("UpdatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("WorkflowMode")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId", "CreatedAtUtc");
+
+                    b.ToTable("pipeline_jobs", "llm_pipeline");
+                });
+
+            modelBuilder.Entity("Backend.api.Services.ApplyAIService.ApplyAiPipelinePhaseState", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("ApprovalRequired")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("ApprovedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("ApprovedForDownstream")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("AttemptCount")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("CompletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("CurrentActivity")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("DocumentId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DocumentJson")
+                        .HasColumnType("jsonb");
+
+                    b.Property<int>("ErrorCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("GateJson")
+                        .HasColumnType("jsonb");
+
+                    b.Property<bool>("HasUnverifiedEdits")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("JobId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Phase")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RepairAttemptCount")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("StartedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("StatusMessage")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("VerificationJson")
+                        .HasColumnType("jsonb");
+
+                    b.Property<int>("WarningCount")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobId", "Phase")
+                        .IsUnique();
+
+                    b.ToTable("pipeline_phase_states", "llm_pipeline");
                 });
 
             modelBuilder.Entity("Backend.api.Entities.Term", b =>
@@ -282,7 +566,8 @@ namespace Backend.api.Migrations
                 {
                     b.HasOne("Backend.api.Entities.S3File", "CurrentCv")
                         .WithMany()
-                        .HasForeignKey("CurrentCvId");
+                        .HasForeignKey("CurrentCvId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Backend.api.Entities.User", "User")
                         .WithMany()
@@ -325,6 +610,50 @@ namespace Backend.api.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Backend.api.Services.ApplyAIService.ApplyAiPipelineArtifact", b =>
+                {
+                    b.HasOne("Backend.api.Services.ApplyAIService.ApplyAiPipelineJob", "Job")
+                        .WithMany("Artifacts")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+                });
+
+            modelBuilder.Entity("Backend.api.Services.ApplyAIService.ApplyAiPipelineEvent", b =>
+                {
+                    b.HasOne("Backend.api.Services.ApplyAIService.ApplyAiPipelineJob", "Job")
+                        .WithMany("Events")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+                });
+
+            modelBuilder.Entity("Backend.api.Services.ApplyAIService.ApplyAiPipelineJob", b =>
+                {
+                    b.HasOne("Backend.api.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Backend.api.Services.ApplyAIService.ApplyAiPipelinePhaseState", b =>
+                {
+                    b.HasOne("Backend.api.Services.ApplyAIService.ApplyAiPipelineJob", "Job")
+                        .WithMany("PhaseStates")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+                });
+
             modelBuilder.Entity("Backend.api.Entities.Term", b =>
                 {
                     b.HasOne("Backend.api.Entities.S3File", null)
@@ -342,6 +671,15 @@ namespace Backend.api.Migrations
             modelBuilder.Entity("Backend.api.Entities.Profile", b =>
                 {
                     b.Navigation("RelevantDocuments");
+                });
+
+            modelBuilder.Entity("Backend.api.Services.ApplyAIService.ApplyAiPipelineJob", b =>
+                {
+                    b.Navigation("Artifacts");
+
+                    b.Navigation("Events");
+
+                    b.Navigation("PhaseStates");
                 });
 #pragma warning restore 612, 618
         }

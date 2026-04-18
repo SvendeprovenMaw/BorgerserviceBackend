@@ -5,16 +5,20 @@ using Backend.api.Entities;
 using Backend.api.Entities.Dto;
 using Backend.api.Enums;
 using Microsoft.Extensions.Options;
+using System.Net;
 
 namespace Backend.api.Services
 {
     public interface IS3StorageService
     {
         Task DeleteFileAsync(string bucketname, string filename);
+        Task<byte[]> DownloadFileContentAsync(string storageKey, CancellationToken cancellationToken = default);
         Task<S3File[]> GetFileStructure(Guid userId);
+        Task<bool> HasObjectTagAsync(string storageKey, string tagKey, string expectedValue, CancellationToken cancellationToken = default);
+        Task RegisterExistingFileAsync(string storageKey, GiveConsentDto consentDto, string filename, User user, string checksumHash, Guid? fileIdOverride = null, DateTime? uploadTimeOverride = null);
         Task<string> UserDownloadFile(Guid fileId, User user);
         Task PermentlyUserFilesAsync(string bucketname, Guid userId);
-        Task UploadFile(Stream fileStream, GiveConsentDto consentDto, string filename, User user, FileCategory fileCategory);
+        Task UploadFile(Stream fileStream, GiveConsentDto consentDto, string filename, User user, FileCategory fileCategory, Guid? fileIdOverride = null, DateTime? uploadTimeOverride = null, string? storageKeyOverride = null, Dictionary<string, string>? objectTags = null, string? contentTypeOverride = null);
     }
 
     public class S3StorageService : IS3StorageService
@@ -66,7 +70,22 @@ namespace Backend.api.Services
             return response;
         }
 
-        public async Task UploadFile(Stream fileStream, GiveConsentDto consentDto, string filename, User user, FileCategory fileCategory)
+        public async Task<byte[]> DownloadFileContentAsync(string storageKey, CancellationToken cancellationToken = default)
+        {
+            using var response = await s3Uploader.GetObjectAsync(
+                new GetObjectRequest
+                {
+                    BucketName = _bucketName,
+                    Key = storageKey
+                },
+                cancellationToken);
+
+            await using var output = new MemoryStream();
+            await response.ResponseStream.CopyToAsync(output, cancellationToken);
+            return output.ToArray();
+        }
+
+        public async Task UploadFile(Stream fileStream, GiveConsentDto consentDto, string filename, User user, FileCategory fileCategory, Guid? fileIdOverride = null, DateTime? uploadTimeOverride = null, string? storageKeyOverride = null, Dictionary<string, string>? objectTags = null, string? contentTypeOverride = null)
         {
             try
             {
@@ -74,22 +93,59 @@ namespace Backend.api.Services
                 {
                     throw new ConsentNotGivenException();
                 }
-                var key = $"users/{user.Id}/{fileCategory}/{Guid.NewGuid()}";
-                var request = new PutObjectRequest
+                var key = string.IsNullOrWhiteSpace(storageKeyOverride)
+                    ? $"users/{user.Id}/{fileCategory}/{Guid.NewGuid()}"
+                    : storageKeyOverride;
+                var contentType = ResolveContentType(filename, fileCategory, contentTypeOverride);
+                var request = CreatePutObjectRequest(key, fileStream, contentType, objectTags);
+
+                PutObjectResponse result;
+                try
                 {
-                    BucketName = _bucketName,
-                    Key = key,
-                    InputStream = fileStream,
-                    ContentType = fileCategory == FileCategory.Cv ? "application/pdf" : "image/jpeg",
-                    ChecksumAlgorithm = ChecksumAlgorithm.SHA256
-                };
-                var result = await this.s3Uploader.PutObjectAsync(request);
-                await this._files.FileUploaded(user, filename, key, _bucketName, result.ChecksumSHA256, consentDto);
+                    result = await this.s3Uploader.PutObjectAsync(request);
+                }
+                catch (AmazonS3Exception exception) when (ShouldRetryWithoutObjectTags(exception, objectTags, fileStream))
+                {
+                    fileStream.Position = 0;
+                    request = CreatePutObjectRequest(key, fileStream, contentType, objectTags: null);
+                    result = await this.s3Uploader.PutObjectAsync(request);
+                }
+
+                await this._files.FileUploaded(user, filename, key, _bucketName, result.ChecksumSHA256, consentDto, fileIdOverride, uploadTimeOverride);
             }
             catch (System.Exception)
             {
                 throw;
             }
+        }
+
+        public async Task<bool> HasObjectTagAsync(string storageKey, string tagKey, string expectedValue, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var response = await s3Uploader.GetObjectTaggingAsync(
+                    new GetObjectTaggingRequest
+                    {
+                        BucketName = _bucketName,
+                        Key = storageKey
+                    },
+                    cancellationToken);
+
+                return response.Tagging?.Any(tag =>
+                    string.Equals(tag.Key, tagKey, StringComparison.Ordinal)
+                    && string.Equals(tag.Value, expectedValue, StringComparison.Ordinal)) == true;
+            }
+            catch (AmazonS3Exception exception) when (
+                exception.StatusCode == HttpStatusCode.NotFound
+                || string.Equals(exception.ErrorCode, "NoSuchKey", StringComparison.Ordinal))
+            {
+                return false;
+            }
+        }
+
+        public async Task RegisterExistingFileAsync(string storageKey, GiveConsentDto consentDto, string filename, User user, string checksumHash, Guid? fileIdOverride = null, DateTime? uploadTimeOverride = null)
+        {
+            await _files.FileUploaded(user, filename, storageKey, _bucketName, checksumHash, consentDto, fileIdOverride, uploadTimeOverride);
         }
 
         public async Task<string> UserDownloadFile(Guid fileId, User user)
@@ -146,6 +202,48 @@ namespace Backend.api.Services
         public async Task PermentlyUserFilesAsync(string bucketname, Guid userId)
         {
 
+        }
+
+        private static string ResolveContentType(string filename, FileCategory fileCategory, string? contentTypeOverride)
+        {
+            if (!string.IsNullOrWhiteSpace(contentTypeOverride))
+            {
+                return contentTypeOverride;
+            }
+
+            return string.Equals(Path.GetExtension(filename), ".pdf", StringComparison.OrdinalIgnoreCase)
+                ? "application/pdf"
+                : fileCategory == FileCategory.Cv
+                    ? "application/pdf"
+                    : "image/jpeg";
+        }
+
+        private PutObjectRequest CreatePutObjectRequest(string key, Stream fileStream, string contentType, Dictionary<string, string>? objectTags)
+        {
+            var request = new PutObjectRequest
+            {
+            BucketName = _bucketName,
+                Key = key,
+                InputStream = fileStream,
+                ContentType = contentType,
+                ChecksumAlgorithm = ChecksumAlgorithm.SHA256
+            };
+
+            if (objectTags is { Count: > 0 })
+            {
+                request.TagSet = objectTags
+                    .Select(tag => new Tag { Key = tag.Key, Value = tag.Value })
+                    .ToList();
+            }
+
+            return request;
+        }
+
+        private static bool ShouldRetryWithoutObjectTags(AmazonS3Exception exception, Dictionary<string, string>? objectTags, Stream fileStream)
+        {
+            return objectTags is { Count: > 0 }
+                && fileStream.CanSeek
+                && exception.Message.Contains("Unsupported header 'x-amz-tagging'", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

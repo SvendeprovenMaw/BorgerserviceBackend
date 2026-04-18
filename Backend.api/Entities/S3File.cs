@@ -10,9 +10,14 @@ namespace Backend.api.Entities
         protected S3File(){}
 
         public S3File(User user, string filename, string s3Key, string checksumHash)
+            : this(Guid.NewGuid(), user, filename, s3Key, checksumHash, DateTime.UtcNow)
         {
-            this.Id = Guid.NewGuid();
-            this.UploadTime = DateTime.UtcNow;
+        }
+
+        public S3File(Guid id, User user, string filename, string s3Key, string checksumHash, DateTime uploadTime)
+        {
+            this.Id = id;
+            this.UploadTime = uploadTime;
             this.UserId = user.Id;
             this.User = user;
             this.S3Key = s3Key;

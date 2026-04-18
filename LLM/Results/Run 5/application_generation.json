@@ -1,0 +1,286 @@
+{
+  "_meta": {
+    "application_document_id": "application_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "requirements_document_id": "requirements_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "candidate_evidence_document_id": "candidate_evidence_borger1",
+    "company_context_document_id": "company_context_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "matching_document_id": "matching_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "target_language": "da",
+    "position_title": "Udvikler med fokus på DevOps",
+    "company_name": "JN Data",
+    "applicant_display_name": "Emma Sørensen"
+  },
+  "application_strategy": {
+    "tone": "warm_professional",
+    "length_target": "medium",
+    "subject_line_da": "Ansøgning til stillingen som Udvikler med fokus på DevOps",
+    "core_message_da": "Jeg søger stillingen som Udvikler med fokus på DevOps hos JN Data. Jeg kan bidrage med solid udviklererfaring, samarbejdsevner og praktisk arbejde med udvikling, test, integration og vedligeholdelse. Samtidig motiveres jeg af at arbejde tæt sammen med brugere og kolleger om stabile løsninger og forbedringer i udviklingsprocessen.",
+    "selected_requirement_ids": [
+      "req_1",
+      "req_3",
+      "req_5",
+      "req_6",
+      "req_7",
+      "req_8",
+      "req_10",
+      "req_11",
+      "req_13",
+      "req_15"
+    ],
+    "selected_evidence_ids": [
+      "evidence_1",
+      "evidence_3",
+      "evidence_4",
+      "evidence_5",
+      "evidence_6",
+      "evidence_8",
+      "evidence_9",
+      "evidence_10",
+      "evidence_11",
+      "evidence_12",
+      "evidence_13"
+    ],
+    "omitted_requirement_ids": [
+      "req_2",
+      "req_4",
+      "req_9",
+      "req_12",
+      "req_14",
+      "req_16"
+    ],
+    "omission_strategy_da": "Jeg fokuserer på de dokumenterede styrker inden for udvikling, samarbejde, sprog og procesarbejde. De mere konkrete mainframe- og IBM Z-relaterede krav samt undervisning omtales ikke direkte, da der ikke foreligger sikker dokumentation for dem."
+  },
+  "sections": [
+    {
+      "section_id": "sec_salutation",
+      "section_kind": "salutation",
+      "text_da": "Kære JN Data",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "sec_opening",
+      "section_kind": "opening",
+      "text_da": "Jeg søger stillingen som Udvikler med fokus på DevOps hos JN Data. Som junior softwareudvikler med erfaring fra både udvikling og vedligeholdelse vil jeg gerne bidrage til jeres arbejde med stabile løsninger og udviklingsværktøjer.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "clm_1",
+        "clm_2"
+      ],
+      "supported_requirement_ids": [
+        "req_1",
+        "req_11"
+      ],
+      "supported_evidence_ids": [
+        "evidence_1",
+        "evidence_3",
+        "evidence_6",
+        "evidence_7"
+      ]
+    },
+    {
+      "section_id": "sec_fit",
+      "section_kind": "fit",
+      "text_da": "Jeg arbejder gerne på tværs af udvikling, test og integration, og jeg trives i samarbejde med både teknikere, forretning og brugere. Det passer godt til en rolle, hvor man skal forstå behov og omsætte dem til løsninger i tæt dialog med andre.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "clm_3",
+        "clm_4"
+      ],
+      "supported_requirement_ids": [
+        "req_6",
+        "req_10",
+        "req_11"
+      ],
+      "supported_evidence_ids": [
+        "evidence_4",
+        "evidence_5",
+        "evidence_9",
+        "evidence_10",
+        "evidence_12"
+      ]
+    },
+    {
+      "section_id": "sec_motivation",
+      "section_kind": "motivation",
+      "text_da": "Jeg motiveres af at arbejde med udvikling, der også har fokus på driftssikkerhed, samarbejde og løbende forbedringer. JN Data’s arbejde med IT-drift og udviklingsværktøjer gør stillingen særligt interessant for mig.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "clm_5"
+      ],
+      "supported_requirement_ids": [
+        "req_5",
+        "req_8",
+        "req_13",
+        "req_15"
+      ],
+      "supported_evidence_ids": [
+        "evidence_8",
+        "evidence_11"
+      ]
+    },
+    {
+      "section_id": "sec_future",
+      "section_kind": "other",
+      "text_da": "Jeg vil gerne bringe min erfaring med API’er, Git, test og brugerrettede løsninger i spil og udvikle mig videre i et professionelt miljø. Jeg håber, at vi kan tale nærmere om, hvordan jeg kan bidrage hos jer. Tak for jeres tid og overvejelse.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "clm_6",
+        "clm_7"
+      ],
+      "supported_requirement_ids": [
+        "req_3",
+        "req_7",
+        "req_11",
+        "req_13"
+      ],
+      "supported_evidence_ids": [
+        "evidence_4",
+        "evidence_6",
+        "evidence_13"
+      ]
+    },
+    {
+      "section_id": "sec_signature",
+      "section_kind": "signature",
+      "text_da": "Venlig hilsen\nEmma Sørensen",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    }
+  ],
+  "claim_register": [
+    {
+      "claim_id": "clm_1",
+      "claim_text_da": "Kandidaten er junior softwareudvikler med erfaring fra udvikling og vedligeholdelse.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "evidence_1",
+        "evidence_3",
+        "evidence_2"
+      ],
+      "requirement_ids": [
+        "req_1",
+        "req_11"
+      ],
+      "section_ids": [
+        "sec_opening"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "clm_2",
+      "claim_text_da": "Kandidaten kan bidrage til stabile løsninger og udviklingsværktøjer.",
+      "claim_kind": "role_alignment",
+      "evidence_ids": [
+        "evidence_3",
+        "evidence_6",
+        "evidence_7"
+      ],
+      "requirement_ids": [
+        "req_11",
+        "req_13"
+      ],
+      "section_ids": [
+        "sec_opening"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "clm_3",
+      "claim_text_da": "Kandidaten arbejder gerne på tværs af udvikling, test og integration.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "evidence_4",
+        "evidence_5",
+        "evidence_6",
+        "evidence_7"
+      ],
+      "requirement_ids": [
+        "req_3",
+        "req_11"
+      ],
+      "section_ids": [
+        "sec_fit"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "clm_4",
+      "claim_text_da": "Kandidaten trives i samarbejde med teknikere, forretning og brugere.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "evidence_9",
+        "evidence_10",
+        "evidence_12"
+      ],
+      "requirement_ids": [
+        "req_6",
+        "req_10",
+        "req_16"
+      ],
+      "section_ids": [
+        "sec_fit"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "clm_5",
+      "claim_text_da": "Kandidaten motiveres af udvikling med fokus på driftssikkerhed, samarbejde og løbende forbedringer.",
+      "claim_kind": "motivation_grounded",
+      "evidence_ids": [
+        "evidence_8",
+        "evidence_11"
+      ],
+      "requirement_ids": [
+        "req_5",
+        "req_8",
+        "req_13",
+        "req_15"
+      ],
+      "section_ids": [
+        "sec_motivation"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "clm_6",
+      "claim_text_da": "Kandidaten vil gerne bringe erfaring med API’er, Git, test og brugerrettede løsninger i spil.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "evidence_4",
+        "evidence_6",
+        "evidence_10"
+      ],
+      "requirement_ids": [
+        "req_3",
+        "req_11",
+        "req_13"
+      ],
+      "section_ids": [
+        "sec_future"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "clm_7",
+      "claim_text_da": "Kandidaten ønsker at udvikle sig videre i et professionelt miljø.",
+      "claim_kind": "motivation_grounded",
+      "evidence_ids": [
+        "evidence_7",
+        "evidence_8"
+      ],
+      "requirement_ids": [
+        "req_5"
+      ],
+      "section_ids": [
+        "sec_future"
+      ],
+      "support_strength": "moderate"
+    }
+  ],
+  "assembled_application_da": "Kære JN Data\n\nJeg søger stillingen som Udvikler med fokus på DevOps hos JN Data. Som junior softwareudvikler med erfaring fra både udvikling og vedligeholdelse vil jeg gerne bidrage til jeres arbejde med stabile løsninger og udviklingsværktøjer.\n\nJeg arbejder gerne på tværs af udvikling, test og integration, og jeg trives i samarbejde med både teknikere, forretning og brugere. Det passer godt til en rolle, hvor man skal forstå behov og omsætte dem til løsninger i tæt dialog med andre.\n\nJeg motiveres af at arbejde med udvikling, der også har fokus på driftssikkerhed, samarbejde og løbende forbedringer. JN Data’s arbejde med IT-drift og udviklingsværktøjer gør stillingen særligt interessant for mig.\n\nJeg vil gerne bringe min erfaring med API’er, Git, test og brugerrettede løsninger i spil og udvikle mig videre i et professionelt miljø. Jeg håber, at vi kan tale nærmere om, hvordan jeg kan bidrage hos jer. Tak for jeres tid og overvejelse.\n\nVenlig hilsen\nEmma Sørensen"
+}

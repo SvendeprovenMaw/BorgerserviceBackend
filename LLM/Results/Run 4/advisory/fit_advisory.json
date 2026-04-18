@@ -1,0 +1,5 @@
+{
+  "GuidanceMode": "optimistic",
+  "SummaryDa": "Kørslen blev stoppet ved application_generation på grund af verifikations- eller integritetsregler, ikke fordi systemet vurderede, at brugeren ikke bør søge stillingen. Brugeren bestemmer stadig selv, om jobbet skal forfølges.",
+  "ArtifactPath": ""
+}

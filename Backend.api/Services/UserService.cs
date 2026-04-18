@@ -38,7 +38,12 @@ namespace Backend.api.Services
             var result = await _db.Users.Where(i => i.Username == createUserDto.Username || i.Email == createUserDto.Email).AnyAsync();
             if (result) { return false; }
             User user = new(JwtRoles.User, createUserDto.Email, createUserDto.Username, PasswordHasher.Hash(createUserDto.Password, ""));
-            Profile profile = new(user);
+            Profile profile = new(
+                user,
+                applicantId: createUserDto.Username,
+                fullName: createUserDto.Username,
+                preferencesJson: ProfileDefaults.SerializePreferences(ProfileDefaults.CreateDefaultPreferences(createUserDto.Username, createUserDto.Username)),
+                profileEnhancementJson: ProfileDefaults.SerializeProfileEnhancement(ProfileDefaults.CreateDefaultEnhancement()));
             await _db.AddAsync(user);
             await _db.AddAsync(profile);
             await _db.SaveChangesAsync();
@@ -58,7 +63,8 @@ namespace Backend.api.Services
 
         public async Task<User?> Login(LoginDto loginDto)
         {
-            return await _db.Users.Where(i => i.Username == loginDto.Username || i.Email == loginDto.Username).FirstOrDefaultAsync();
+            var normalizedEmail = loginDto.Email.Trim().ToLowerInvariant();
+            return await _db.Users.Where(i => i.Email == normalizedEmail).FirstOrDefaultAsync();
         }
 
         public async Task ChangePassword()

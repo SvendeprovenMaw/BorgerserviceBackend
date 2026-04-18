@@ -1,0 +1,252 @@
+{
+  "_meta": {
+    "application_document_id": "application_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "requirements_document_id": "requirements_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "candidate_evidence_document_id": "candidate_evidence_borger1",
+    "company_context_document_id": "company_context_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "matching_document_id": "matching_borger1_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "target_language": "da",
+    "position_title": "Udvikler med fokus på DevOps",
+    "company_name": "JN Data",
+    "applicant_display_name": "Emma Sørensen"
+  },
+  "application_strategy": {
+    "tone": "warm_professional",
+    "length_target": "medium",
+    "subject_line_da": "Ansøgning til stillingen som Udvikler med fokus på DevOps",
+    "core_message_da": "Jeg søger stillingen som Udvikler med fokus på DevOps hos JN Data, fordi min erfaring med softwareudvikling, integrationer, test og samarbejde kan bidrage til udvikling af en stabil og brugbar developer experience-platform. Jeg arbejder struktureret, trives i tæt samarbejde og er nysgerrig på at lære nye værktøjer og processer.",
+    "selected_requirement_ids": [
+      "req_1",
+      "req_3",
+      "req_7",
+      "req_8",
+      "req_9",
+      "req_11"
+    ],
+    "selected_evidence_ids": [
+      "evidence_1",
+      "evidence_2",
+      "evidence_3",
+      "evidence_4",
+      "evidence_5",
+      "evidence_6",
+      "evidence_7",
+      "evidence_8",
+      "evidence_9",
+      "evidence_10"
+    ],
+    "omitted_requirement_ids": [
+      "req_2",
+      "req_4",
+      "req_5",
+      "req_6",
+      "req_10",
+      "req_12",
+      "req_13",
+      "req_14",
+      "req_15",
+      "req_16"
+    ],
+    "omission_strategy_da": "Jeg fokuserer på de krav, der er bedst dokumenteret i kandidatmaterialet: udviklererfaring, arbejde gennem udviklingsprocessen, samarbejde og sprogfærdigheder. De mere specifikke områder omkring IBM Z, COBOL, DevOps og værktøjsintegration omtales ikke, da der ikke findes direkte evidens til at understøtte dem."
+  },
+  "sections": [
+    {
+      "section_id": "sec_salutation",
+      "section_kind": "salutation",
+      "text_da": "Kære JN Data",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "sec_opening",
+      "section_kind": "opening",
+      "text_da": "Jeg søger stillingen som Udvikler med fokus på DevOps hos JN Data. Jeres fokus på sikker, compliant og stabil IT-drift til den ფინანსielle sektor gør rollen særligt interessant for mig.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "claim_1"
+      ],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "sec_fit",
+      "section_kind": "fit",
+      "text_da": "Jeg er uddannet og arbejder som junior softwareudvikler med erfaring fra .NET, API’er, React, test og versionsstyring. I mit arbejde hos Nordic Digital Solutions har jeg blandt andet udviklet og vedligeholdt interne webmoduler, bygget REST API-endpoints og deltaget i integrationer mellem front-end, database og tredjepartssystemer.",
+      "content_mode": "evidence_backed",
+      "claim_ids": [
+        "claim_2",
+        "claim_3",
+        "claim_4"
+      ],
+      "supported_requirement_ids": [
+        "req_1",
+        "req_3",
+        "req_11"
+      ],
+      "supported_evidence_ids": [
+        "evidence_1",
+        "evidence_2",
+        "evidence_3",
+        "evidence_4",
+        "evidence_5",
+        "evidence_7",
+        "evidence_10"
+      ]
+    },
+    {
+      "section_id": "sec_motivation",
+      "section_kind": "motivation",
+      "text_da": "Jeg trives i samarbejde med både teknikere og forretning og arbejder gerne tæt sammen med andre om at finde praktiske løsninger. Derfor tiltaler det mig også, at stillingen lægger vægt på samarbejde, læring og et miljø med erfarne kolleger og kunder. Jeg er nysgerrig og har erfaring med mindre automatiseringer i administrative workflows, så jeg ser det som en naturlig mulighed at bidrage med en nysgerrig og struktureret tilgang i en udviklingskontekst.",
+      "content_mode": "mixed",
+      "claim_ids": [
+        "claim_5",
+        "claim_6",
+        "claim_7"
+      ],
+      "supported_requirement_ids": [
+        "req_7",
+        "req_9"
+      ],
+      "supported_evidence_ids": [
+        "evidence_6",
+        "evidence_9"
+      ]
+    },
+    {
+      "section_id": "sec_closing",
+      "section_kind": "closing",
+      "text_da": "Jeg håber, at min baggrund kan være relevant for jer, og jeg ser gerne frem til en samtale, hvis I vurderer, at der er et godt match. Tak for jeres tid og overvejelse.",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    },
+    {
+      "section_id": "sec_signature",
+      "section_kind": "signature",
+      "text_da": "Venlig hilsen\nEmma Sørensen",
+      "content_mode": "bridge_text",
+      "claim_ids": [],
+      "supported_requirement_ids": [],
+      "supported_evidence_ids": []
+    }
+  ],
+  "claim_register": [
+    {
+      "claim_id": "claim_1",
+      "claim_text_da": "Ansøgningen er rettet mod stillingen som Udvikler med fokus på DevOps hos JN Data, og virksomhedens fokus på sikker, compliant og stabil IT-drift til den finansielle sektor bruges som naturlig kontekst.",
+      "claim_kind": "role_alignment",
+      "evidence_ids": [
+        "evidence_1"
+      ],
+      "requirement_ids": [
+        "req_1"
+      ],
+      "section_ids": [
+        "sec_opening"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_2",
+      "claim_text_da": "Emma Sørensen er uddannet og arbejder som junior softwareudvikler.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "evidence_1",
+        "evidence_2",
+        "evidence_10"
+      ],
+      "requirement_ids": [
+        "req_1"
+      ],
+      "section_ids": [
+        "sec_fit"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "claim_3",
+      "claim_text_da": "Emma Sørensen har erfaring med .NET, API’er, React, test og versionsstyring samt med at udvikle og vedligeholde interne webmoduler og bygge REST API-endpoints.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "evidence_3",
+        "evidence_4",
+        "evidence_5",
+        "evidence_7"
+      ],
+      "requirement_ids": [
+        "req_3",
+        "req_11"
+      ],
+      "section_ids": [
+        "sec_fit"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "claim_4",
+      "claim_text_da": "Emma Sørensen har deltaget i integrationer mellem front-end, database og tredjepartssystemer.",
+      "claim_kind": "candidate_fact",
+      "evidence_ids": [
+        "evidence_4"
+      ],
+      "requirement_ids": [
+        "req_3",
+        "req_11"
+      ],
+      "section_ids": [
+        "sec_fit"
+      ],
+      "support_strength": "strong"
+    },
+    {
+      "claim_id": "claim_5",
+      "claim_text_da": "Emma Sørensen trives i samarbejde med både teknikere og forretning.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "evidence_6"
+      ],
+      "requirement_ids": [
+        "req_7"
+      ],
+      "section_ids": [
+        "sec_motivation"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_6",
+      "claim_text_da": "Emma Sørensen arbejder gerne tæt sammen med andre om at finde praktiske løsninger.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "evidence_6"
+      ],
+      "requirement_ids": [
+        "req_7"
+      ],
+      "section_ids": [
+        "sec_motivation"
+      ],
+      "support_strength": "moderate"
+    },
+    {
+      "claim_id": "claim_7",
+      "claim_text_da": "Emma Sørensen har erfaring med mindre automatiseringer i administrative workflows og beskrives som nysgerrig og struktureret i tilgangen til arbejdet.",
+      "claim_kind": "candidate_strength",
+      "evidence_ids": [
+        "evidence_6",
+        "evidence_9"
+      ],
+      "requirement_ids": [
+        "req_9"
+      ],
+      "section_ids": [
+        "sec_motivation"
+      ],
+      "support_strength": "moderate"
+    }
+  ],
+  "assembled_application_da": "Kære JN Data\n\nJeg søger stillingen som Udvikler med fokus på DevOps hos JN Data. Jeres fokus på sikker, compliant og stabil IT-drift til den finansielle sektor gør rollen særligt interessant for mig.\n\nJeg er uddannet og arbejder som junior softwareudvikler med erfaring fra .NET, API’er, React, test og versionsstyring. I mit arbejde hos Nordic Digital Solutions har jeg blandt andet udviklet og vedligeholdt interne webmoduler, bygget REST API-endpoints og deltaget i integrationer mellem front-end, database og tredjepartssystemer.\n\nJeg trives i samarbejde med både teknikere og forretning og arbejder gerne tæt sammen med andre om at finde praktiske løsninger. Derfor tiltaler det mig også, at stillingen lægger vægt på samarbejde, læring og et miljø med erfarne kolleger og kunder. Jeg er nysgerrig og har erfaring med mindre automatiseringer i administrative workflows, så jeg ser det som en naturlig mulighed at bidrage med en nysgerrig og struktureret tilgang i en udviklingskontekst.\n\nJeg håber, at min baggrund kan være relevant for jer, og jeg ser gerne frem til en samtale, hvis I vurderer, at der er et godt match. Tak for jeres tid og overvejelse.\n\nVenlig hilsen\nEmma Sørensen"
+}

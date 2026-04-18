@@ -100,6 +100,7 @@ builder.Services.AddSingleton<ResponsesClient>(serviceProvider =>
 // Register the services that power the staged sample pipeline and its repair/gate flow.
 builder.Services.AddSingleton<IOpenAiResponsesService, OpenAiResponsesService>();
 builder.Services.AddSingleton<ICompanyContextService, CompanyContextService>();
+builder.Services.AddSingleton<IRequirementsParsingService, RequirementsParsingService>();
 builder.Services.AddSingleton<IExchangeRateCacheService, ExchangeRateCacheService>();
 builder.Services.AddSingleton<ICurrencyDisplayConversionService, CurrencyDisplayConversionService>();
 builder.Services.AddSingleton<ICoverLetterTemplateRenderer, CoverLetterTemplateRenderer>();
@@ -274,6 +275,106 @@ app.MapPost("/api/responses/sample/requirements", async (
 .ProducesProblem(StatusCodes.Status500InternalServerError)
 .ProducesProblem(StatusCodes.Status502BadGateway);
 
+app.MapPost("/api/responses/requirements/upload", async (
+    [FromForm] RequirementsUploadRequest request,
+    IRequirementsParsingService requirementsParsingService,
+    ILogger<Program> logger,
+    CancellationToken cancellationToken) =>
+{
+    var tempDirectory = CreateTemporaryUploadDirectory();
+
+    try
+    {
+        string? jobPostingFilePath = null;
+        if (request.JobPostingFile is not null)
+        {
+            jobPostingFilePath = await SaveUploadedFileAsync(request.JobPostingFile, tempDirectory, cancellationToken);
+        }
+
+        var generationRequest = new RequirementsGenerationRequest
+        {
+            JobPostingText = request.JobPostingText,
+            JobPostingFilePath = jobPostingFilePath
+        };
+
+        return await ExecuteJsonResponseAsync(
+            async token => (await requirementsParsingService.GenerateRequirementsAsync(generationRequest, token)).OutputJson,
+            logger,
+            cancellationToken);
+    }
+    finally
+    {
+        DeleteTemporaryUploadDirectory(tempDirectory);
+    }
+})
+.WithName("GenerateRequirementsFromUpload")
+.WithSummary("Generates structured requirements from an uploaded or inline job posting.")
+.WithDescription(
+    "Use this route when another backend service already has the job posting bytes and needs the real requirements prompt/schema path from the llm-api.\n\n"
+    + "Input fields:\n"
+    + "- **jobPostingFile**: uploaded job posting that should be parsed directly\n"
+    + "- **jobPostingText**: optional raw text fallback when the caller already extracted the posting upstream")
+.Accepts<RequirementsUploadRequest>("multipart/form-data")
+.DisableAntiforgery()
+.Produces(StatusCodes.Status200OK, contentType: "application/json")
+.ProducesProblem(StatusCodes.Status400BadRequest)
+.ProducesProblem(StatusCodes.Status404NotFound)
+.ProducesProblem(StatusCodes.Status500InternalServerError)
+.ProducesProblem(StatusCodes.Status502BadGateway);
+
+app.MapPost("/api/responses/requirements/verify", async (
+    RequirementsVerificationDirectRequest request,
+    IVerificationOrchestrator verificationOrchestrator,
+    IDownstreamGateEvaluator downstreamGateEvaluator,
+    IHostEnvironment environment,
+    IConfiguration configuration,
+    CancellationToken cancellationToken) =>
+{
+    var schemaPath = RepositoryRootResolver.ResolveRepositoryPath(
+        configuration,
+        environment,
+        Path.Combine("LLM", "AI Schemas", "LLM Parsing", "requirements_schema.json"));
+
+    var verificationRequest = new StageVerificationRequest
+    {
+        Stage = VerificationStage.Requirements,
+        DocumentId = request.DocumentId,
+        DocumentJson = request.DocumentJson,
+        OutputSchemaPath = schemaPath,
+        ExpectedParsedFiles = string.IsNullOrWhiteSpace(request.JobPostingFileName) ? [] : [request.JobPostingFileName],
+        AllowedCitationFiles = string.IsNullOrWhiteSpace(request.JobPostingFileName) ? [] : [request.JobPostingFileName],
+        DisallowedCitationFiles = []
+    };
+
+    var verificationResult = await verificationOrchestrator.VerifyStageAsync(verificationRequest, cancellationToken);
+    var gateResult = downstreamGateEvaluator.Evaluate(verificationRequest, verificationResult);
+
+    var response = new StageVerificationResult
+    {
+        Stage = verificationResult.Stage,
+        DocumentId = verificationResult.DocumentId,
+        VerificationMode = "mechanical_with_gate",
+        Status = verificationResult.Status,
+        ApprovedForDownstream = verificationResult.ApprovedForDownstream && gateResult.ApprovedForDownstream,
+        WarningCount = verificationResult.WarningCount,
+        ErrorCount = verificationResult.ErrorCount,
+        ArtifactPath = string.Empty,
+        GateArtifactPath = string.Empty,
+        Gate = gateResult,
+        Findings = verificationResult.Findings
+    };
+
+    return Results.Ok(response);
+})
+.WithName("VerifyRequirementsDocument")
+.WithSummary("Runs mechanical verification and gate evaluation for one requirements document.")
+.WithDescription(
+    "This route lets another backend service reuse the same requirements verification and downstream gate rules as the sample pipeline, without running the full sample corpus flow.")
+.Accepts<RequirementsVerificationDirectRequest>("application/json")
+.Produces<StageVerificationResult>(StatusCodes.Status200OK)
+.ProducesProblem(StatusCodes.Status400BadRequest)
+.ProducesProblem(StatusCodes.Status500InternalServerError);
+
 app.MapPost("/api/responses/company-context", async (
     CompanyContextDirectRequest request,
     ICompanyContextService companyContextService,
@@ -328,7 +429,7 @@ app.MapPost("/api/responses/company-context/upload", async (
         }
 
         var applicantProfileFilePaths = new List<string>();
-        foreach (var uploadedApplicantProfile in request.ApplicantProfileFiles)
+        foreach (var uploadedApplicantProfile in request.ApplicantProfileFiles ?? [])
         {
             applicantProfileFilePaths.Add(await SaveUploadedFileAsync(uploadedApplicantProfile, tempDirectory, cancellationToken));
         }

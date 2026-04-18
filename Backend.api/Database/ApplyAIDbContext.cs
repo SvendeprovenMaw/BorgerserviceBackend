@@ -1,4 +1,5 @@
 using Backend.api.Entities;
+using Backend.api.Services.ApplyAIService;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.api.Database
@@ -11,6 +12,29 @@ namespace Backend.api.Database
         {
             modelBuilder.Entity<S3File>().ToTable("S3File");
             modelBuilder.Entity<Term>().ToTable("Terms");
+            modelBuilder.AddApplyAiPipelineModel();
+
+            modelBuilder.Entity<Profile>()
+                .HasIndex(profile => profile.UserId)
+                .IsUnique();
+
+            modelBuilder.Entity<Profile>()
+                .HasIndex(profile => profile.ApplicantId)
+                .IsUnique();
+
+            modelBuilder.Entity<Profile>()
+                .HasOne(profile => profile.CurrentCv)
+                .WithMany()
+                .HasForeignKey(profile => profile.CurrentCvId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Profile>()
+                .Property(profile => profile.ProfileEnhancementJson)
+                .HasColumnType("jsonb");
+
+            modelBuilder.Entity<Profile>()
+                .Property(profile => profile.PreferencesJson)
+                .HasColumnType("jsonb");
 
             //makes sure theres only one consent pr file            
             modelBuilder.Entity<Consent>()
@@ -32,6 +56,10 @@ namespace Backend.api.Database
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Term> Term { get; set; }
         public DbSet<Consent> Consents { get; set; }
+        public DbSet<ApplyAiPipelineJob> ApplyAiPipelineJobs { get; set; }
+        public DbSet<ApplyAiPipelinePhaseState> ApplyAiPipelinePhaseStates { get; set; }
+        public DbSet<ApplyAiPipelineArtifact> ApplyAiPipelineArtifacts { get; set; }
+        public DbSet<ApplyAiPipelineEvent> ApplyAiPipelineEvents { get; set; }
 
     }
 }

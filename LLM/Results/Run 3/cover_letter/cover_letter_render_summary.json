@@ -1,0 +1,21 @@
+{
+  "Status": "rendered_with_warnings",
+  "HtmlArtifactPath": "LLM/Results/Run 3/cover_letter/cover_letter.html",
+  "CssArtifactPath": "LLM/Results/Run 3/cover_letter/cover_letter.css",
+  "PdfArtifactPath": "LLM/Results/Run 3/cover_letter/cover_letter.pdf",
+  "PdfPageCount": 1,
+  "WithinSinglePageLimit": true,
+  "MainContentCharacterCount": 1179,
+  "MainContentBudgetUsage": 1610,
+  "MaxMainContentCharacters": 1550,
+  "ExplicitLineBreakCount": 1,
+  "ParagraphBreakCount": 5,
+  "EstimatedCharactersPerLine": 72,
+  "WithinMainContentLimit": false,
+  "MissingFields": [],
+  "Warnings": [
+    "Den synlige hovedtekst er 1179 rå tegn, men 5 paragrafskift og 1 interne linjeskift løfter det effektive template-forbrug til 1610 mod maksimum 1550. PDF-layoutet kan blive klippet i højden."
+  ],
+  "PdfErrorMessage": null,
+  "ErrorMessage": null
+}

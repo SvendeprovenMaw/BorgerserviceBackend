@@ -1,0 +1,390 @@
+{
+  "name": "job_application_generation_verification_v1",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "_meta",
+      "verification_summary",
+      "claim_reviews",
+      "section_reviews",
+      "overall_application_review"
+    ],
+    "properties": {
+      "_meta": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "application_document_id",
+          "requirements_document_id",
+          "candidate_evidence_document_id",
+          "matching_document_id",
+          "verification_policy_version"
+        ],
+        "properties": {
+          "application_document_id": {
+            "type": "string"
+          },
+          "requirements_document_id": {
+            "type": "string"
+          },
+          "candidate_evidence_document_id": {
+            "type": "string"
+          },
+          "matching_document_id": {
+            "type": "string"
+          },
+          "verification_policy_version": {
+            "type": "string"
+          }
+        }
+      },
+      "verification_summary": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status",
+          "approved_count",
+          "warning_count",
+          "rejected_count",
+          "manual_review_count"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "pass",
+              "pass_with_warnings",
+              "fail"
+            ]
+          },
+          "approved_count": {
+            "type": "integer"
+          },
+          "warning_count": {
+            "type": "integer"
+          },
+          "rejected_count": {
+            "type": "integer"
+          },
+          "manual_review_count": {
+            "type": "integer"
+          }
+        }
+      },
+      "claim_reviews": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "claim_id",
+            "claim_support_verdict",
+            "evidence_reference_check",
+            "requirement_reference_check",
+            "source_alignment",
+            "tone_fit",
+            "overstatement_risk",
+            "approved_evidence_ids",
+            "rejected_evidence_ids",
+            "problems",
+            "approved_for_downstream",
+            "needs_human_review",
+            "reviewer_reason_da",
+            "suggested_fix_da"
+          ],
+          "properties": {
+            "claim_id": {
+              "type": "string"
+            },
+            "claim_support_verdict": {
+              "type": "string",
+              "enum": [
+                "supported",
+                "weakly_supported",
+                "unsupported",
+                "unclear"
+              ]
+            },
+            "evidence_reference_check": {
+              "type": "string",
+              "enum": [
+                "all_exist",
+                "some_missing",
+                "all_missing",
+                "unclear"
+              ]
+            },
+            "requirement_reference_check": {
+              "type": "string",
+              "enum": [
+                "all_exist",
+                "some_missing",
+                "all_missing",
+                "not_applicable",
+                "unclear"
+              ]
+            },
+            "source_alignment": {
+              "type": "string",
+              "enum": [
+                "exact",
+                "fair_paraphrase",
+                "overstated",
+                "not_supported",
+                "unclear"
+              ]
+            },
+            "tone_fit": {
+              "type": "string",
+              "enum": [
+                "appropriate",
+                "slightly_too_strong",
+                "too_strong",
+                "unclear"
+              ]
+            },
+            "overstatement_risk": {
+              "type": "string",
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            },
+            "approved_evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "rejected_evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "problems": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "missing_evidence_reference",
+                  "missing_requirement_reference",
+                  "claim_not_in_verified_evidence",
+                  "claim_overstates_evidence",
+                  "claim_overstates_match",
+                  "unsupported_company_statement",
+                  "speculative_motivation",
+                  "too_generic_to_verify",
+                  "other"
+                ]
+              }
+            },
+            "approved_for_downstream": {
+              "type": "boolean"
+            },
+            "needs_human_review": {
+              "type": "boolean"
+            },
+            "reviewer_reason_da": {
+              "type": "string"
+            },
+            "suggested_fix_da": {
+              "type": ["string", "null"]
+            }
+          }
+        }
+      },
+      "section_reviews": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "section_id",
+            "factual_integrity_verdict",
+            "relevance_fit",
+            "tone_fit",
+            "unsupported_content_risk",
+            "approved_claim_ids",
+            "rejected_claim_ids",
+            "problems",
+            "approved_for_downstream",
+            "needs_human_review",
+            "reviewer_reason_da",
+            "suggested_fix_da"
+          ],
+          "properties": {
+            "section_id": {
+              "type": "string"
+            },
+            "factual_integrity_verdict": {
+              "type": "string",
+              "enum": [
+                "supported",
+                "weakly_supported",
+                "unsupported",
+                "unclear"
+              ]
+            },
+            "relevance_fit": {
+              "type": "string",
+              "enum": [
+                "strong",
+                "adequate",
+                "weak",
+                "unclear"
+              ]
+            },
+            "tone_fit": {
+              "type": "string",
+              "enum": [
+                "appropriate",
+                "slightly_too_generic",
+                "too_generic",
+                "too_strong",
+                "unclear"
+              ]
+            },
+            "unsupported_content_risk": {
+              "type": "string",
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            },
+            "approved_claim_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "rejected_claim_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "problems": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "empty_section",
+                  "unsupported_section_content",
+                  "weak_relevance",
+                  "repetitive_content",
+                  "tone_mismatch",
+                  "other"
+                ]
+              }
+            },
+            "approved_for_downstream": {
+              "type": "boolean"
+            },
+            "needs_human_review": {
+              "type": "boolean"
+            },
+            "reviewer_reason_da": {
+              "type": "string"
+            },
+            "suggested_fix_da": {
+              "type": ["string", "null"]
+            }
+          }
+        }
+      },
+      "overall_application_review": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "overall_factual_verdict",
+          "persuasion_fit",
+          "relevance_fit",
+          "traceability_completeness",
+          "tone_consistency",
+          "problems",
+          "approved_for_downstream",
+          "needs_human_review",
+          "reviewer_reason_da",
+          "suggested_fix_da"
+        ],
+        "properties": {
+          "overall_factual_verdict": {
+            "type": "string",
+            "enum": [
+              "supported",
+              "weakly_supported",
+              "unsupported",
+              "unclear"
+            ]
+          },
+          "persuasion_fit": {
+            "type": "string",
+            "enum": [
+              "strong",
+              "adequate",
+              "weak",
+              "unclear"
+            ]
+          },
+          "relevance_fit": {
+            "type": "string",
+            "enum": [
+              "strong",
+              "adequate",
+              "weak",
+              "unclear"
+            ]
+          },
+          "traceability_completeness": {
+            "type": "string",
+            "enum": [
+              "complete",
+              "partial",
+              "insufficient",
+              "unclear"
+            ]
+          },
+          "tone_consistency": {
+            "type": "string",
+            "enum": [
+              "consistent",
+              "inconsistent",
+              "unclear"
+            ]
+          },
+          "problems": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "summary_overstates_candidate",
+                "ignores_key_requirement",
+                "unsupported_core_claim",
+                "too_generic",
+                "traceability_gaps",
+                "other"
+              ]
+            }
+          },
+          "approved_for_downstream": {
+            "type": "boolean"
+          },
+          "needs_human_review": {
+            "type": "boolean"
+          },
+          "reviewer_reason_da": {
+            "type": "string"
+          },
+          "suggested_fix_da": {
+            "type": ["string", "null"]
+          }
+        }
+      }
+    }
+  }
+}

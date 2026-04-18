@@ -52,5 +52,12 @@
     "closing_style": "formal",
     "include_interview_interest": true,
     "include_thanks_for_consideration": true
+  },
+  "fit_strategy": {
+    "guidance_mode": "conservative",
+    "include_fit_advisory": true,
+    "allow_application_on_weak_match": false,
+    "prefer_transferable_strengths_when_direct_match_is_weak": true,
+    "allow_stretch_positioning": false
   }
 }

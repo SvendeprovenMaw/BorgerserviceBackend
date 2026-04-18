@@ -1,0 +1,165 @@
+{
+  "name": "job_requirements_verification_v1",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "_meta",
+      "verification_summary",
+      "requirement_reviews"
+    ],
+    "properties": {
+      "_meta": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "requirements_document_id",
+          "job_posting_id",
+          "verification_policy_version"
+        ],
+        "properties": {
+          "requirements_document_id": {
+            "type": "string"
+          },
+          "job_posting_id": {
+            "type": ["string", "null"]
+          },
+          "verification_policy_version": {
+            "type": "string"
+          }
+        }
+      },
+      "verification_summary": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status",
+          "approved_count",
+          "warning_count",
+          "rejected_count",
+          "manual_review_count"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "pass",
+              "pass_with_warnings",
+              "fail"
+            ]
+          },
+          "approved_count": {
+            "type": "integer"
+          },
+          "warning_count": {
+            "type": "integer"
+          },
+          "rejected_count": {
+            "type": "integer"
+          },
+          "manual_review_count": {
+            "type": "integer"
+          }
+        }
+      },
+      "requirement_reviews": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "requirement_id",
+            "support_verdict",
+            "citation_quality",
+            "source_alignment",
+            "normalized_label_consistency",
+            "importance_assignment_verdict",
+            "problems",
+            "approved_for_downstream",
+            "needs_human_review",
+            "reviewer_reason_da",
+            "suggested_fix_da"
+          ],
+          "properties": {
+            "requirement_id": {
+              "type": "string"
+            },
+            "support_verdict": {
+              "type": "string",
+              "enum": [
+                "supported",
+                "weakly_supported",
+                "unsupported",
+                "unclear"
+              ]
+            },
+            "citation_quality": {
+              "type": "string",
+              "enum": [
+                "sufficient",
+                "insufficient",
+                "unclear"
+              ]
+            },
+            "source_alignment": {
+              "type": "string",
+              "enum": [
+                "exact",
+                "fair_paraphrase",
+                "overstated",
+                "not_supported",
+                "unclear"
+              ]
+            },
+            "normalized_label_consistency": {
+              "type": "string",
+              "enum": [
+                "consistent",
+                "inconsistent",
+                "unclear"
+              ]
+            },
+            "importance_assignment_verdict": {
+              "type": "string",
+              "enum": [
+                "reasonable",
+                "possibly_too_high",
+                "possibly_too_low",
+                "unclear"
+              ]
+            },
+            "problems": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "missing_citation",
+                  "citation_too_vague",
+                  "not_in_job_posting",
+                  "overstated_requirement",
+                  "duplicate_requirement",
+                  "category_mismatch",
+                  "importance_overreach",
+                  "other"
+                ]
+              }
+            },
+            "approved_for_downstream": {
+              "type": "boolean"
+            },
+            "needs_human_review": {
+              "type": "boolean"
+            },
+            "reviewer_reason_da": {
+              "type": "string"
+            },
+            "suggested_fix_da": {
+              "type": ["string", "null"]
+            }
+          }
+        }
+      }
+    }
+  }
+}

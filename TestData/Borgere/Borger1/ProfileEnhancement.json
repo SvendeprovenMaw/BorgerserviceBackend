@@ -1,0 +1,40 @@
+{
+  "headline": "Junior softwareudvikler med fokus på .NET, API'er og React",
+  "current_focus": "Udviklerroller hvor stabile integrationer, webmoduler og brugervenlige løsninger går hånd i hånd med læring og stærk faglig sparring.",
+  "preferred_roles": [
+    "Junior softwareudvikler",
+    "Full-stack udvikler",
+    "Applikationssupportudvikler"
+  ],
+  "core_competencies": [
+    "C# og .NET",
+    "ASP.NET Core og web-API'er",
+    "React, HTML og CSS",
+    "SQL og datamodellering",
+    "Git, test og versionsstyring",
+    "Systemintegration"
+  ],
+  "key_strengths": [
+    "Nysgerrig og løsningsorienteret tilgang",
+    "Struktureret opgaveløsning og dokumentation",
+    "God til at sætte sig ind i eksisterende kode",
+    "Stærkt samarbejde mellem brugere og udviklere"
+  ],
+  "notable_results": [
+    "Udviklede og vedligeholdt interne .NET-baserede webmoduler til registrering og rapportering",
+    "Byggede REST API-endpoints og deltog i integrationer mellem front-end, database og tredjepartssystemer",
+    "Ydede teknisk support og dokumenterede løsninger på tilbagevendende problemer",
+    "Leverede mindre automatiseringer og driftssikre freelance webprojekter"
+  ],
+  "education_highlights": [
+    "Datamatiker ved Zealand Erhvervsakademi i Roskilde (2024-2026)",
+    "Fokus på softwareudvikling, databaser, systemintegration og projektarbejde",
+    "STX med studieretning matematik og IT"
+  ],
+  "language_highlights": [
+    "Dansk - modersmål",
+    "Engelsk - professionelt niveau",
+    "Tysk - samtaleniveau"
+  ],
+  "mobility_and_work_preferences": "Bor i Roskilde, arbejder gerne hybridt og er åben for både pendling og flytning ved det rigtige faglige match."
+}
