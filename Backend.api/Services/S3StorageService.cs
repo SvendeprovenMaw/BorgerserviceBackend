@@ -1,8 +1,10 @@
 using Amazon.S3;
 using Amazon.S3.Model;
+using Backend.api.Configuration;
 using Backend.api.Entities;
 using Backend.api.Entities.Dto;
 using Backend.api.Enums;
+using Microsoft.Extensions.Options;
 
 namespace Backend.api.Services
 {
@@ -17,41 +19,37 @@ namespace Backend.api.Services
 
     public class S3StorageService : IS3StorageService
     {
-        private readonly IConfiguration _conf;
         private readonly IFileService _files;
         private readonly IConsentService _consent;
         private readonly IAmazonS3 s3Uploader;
         private readonly IAmazonS3 s3Downloader;
         private readonly string _bucketName;
 
-        public S3StorageService(IConfiguration conf, IFileService files, IConsentService consent)
+        public S3StorageService(IOptions<BackBlazeSettings> backBlazeOptions, IFileService files, IConsentService consent)
         {
             this._consent = consent;
-            this._conf = conf;
             this._files = files;
+            var settings = backBlazeOptions.Value;
 
-            var downloaderConfig = new AmazonS3Config 
-            { 
-                ServiceURL = "https://s3.eu-central-003.backblazeb2.com",
-                AuthenticationRegion = "eu-central-1", 
-                RegionEndpoint = Amazon.RegionEndpoint.EUCentral1,
-                ForcePathStyle = true,
-                
+            var downloaderConfig = new AmazonS3Config
+            {
+                ServiceURL = settings.ServiceUrl,
+                AuthenticationRegion = settings.DownloaderAuthenticationRegion,
+                RegionEndpoint = Amazon.RegionEndpoint.GetBySystemName(settings.DownloaderRegionSystemName),
+                ForcePathStyle = settings.ForcePathStyle,
             };
 
-            var uploaderConfig = new AmazonS3Config 
-            { 
-                ServiceURL = "https://s3.eu-central-003.backblazeb2.com",
-                ForcePathStyle = true,
-                AuthenticationRegion = "eu-central-003", // important!
-                UseHttp = false
-                
+            var uploaderConfig = new AmazonS3Config
+            {
+                ServiceURL = settings.ServiceUrl,
+                ForcePathStyle = settings.ForcePathStyle,
+                AuthenticationRegion = settings.UploaderAuthenticationRegion,
+                UseHttp = settings.UploaderUseHttp
             };
-            var keyId = GetRequiredConfigurationValue("BackBlaze:Keyid");
-            var applicationKey = GetRequiredConfigurationValue("BackBlaze:ApplicationKey");
-            _bucketName = GetRequiredConfigurationValue("BackBlaze:Bucket");
 
-            var credentials = new Amazon.Runtime.BasicAWSCredentials(keyId, applicationKey);
+            _bucketName = settings.Bucket;
+
+            var credentials = new Amazon.Runtime.BasicAWSCredentials(settings.Keyid, settings.ApplicationKey);
             s3Downloader = new AmazonS3Client(
                 credentials,
                 downloaderConfig
@@ -60,18 +58,6 @@ namespace Backend.api.Services
                 credentials,
                 uploaderConfig
             );
-        }
-
-        private string GetRequiredConfigurationValue(string key)
-        {
-            var value = _conf[key];
-
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                throw new InvalidOperationException($"Missing configuration value: {key}.");
-            }
-
-            return value;
         }
 
         public async Task<S3File[]> GetFileStructure(Guid userId)

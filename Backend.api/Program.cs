@@ -42,6 +42,19 @@ builder.Services.Configure<JwtSettings>(options =>
     options.DurationInMinutes = jwtSettings.DurationInMinutes;
 });
 
+builder.Services
+    .AddOptions<BackBlazeSettings>()
+    .Bind(builder.Configuration.GetSection("BackBlaze"))
+    .Validate(settings => !string.IsNullOrWhiteSpace(settings.Keyid), "BackBlaze:Keyid is required.")
+    .Validate(settings => !string.IsNullOrWhiteSpace(settings.Bucket), "BackBlaze:Bucket is required.")
+    .Validate(settings => !string.IsNullOrWhiteSpace(settings.ApplicationKey), "BackBlaze:ApplicationKey is required.")
+    .Validate(settings => !string.IsNullOrWhiteSpace(settings.ServiceUrl), "BackBlaze:ServiceUrl is required.")
+    .Validate(settings => Uri.TryCreate(settings.ServiceUrl, UriKind.Absolute, out _), "BackBlaze:ServiceUrl must be an absolute URL.")
+    .Validate(settings => !string.IsNullOrWhiteSpace(settings.DownloaderAuthenticationRegion), "BackBlaze:DownloaderAuthenticationRegion is required.")
+    .Validate(settings => !string.IsNullOrWhiteSpace(settings.DownloaderRegionSystemName), "BackBlaze:DownloaderRegionSystemName is required.")
+    .Validate(settings => !string.IsNullOrWhiteSpace(settings.UploaderAuthenticationRegion), "BackBlaze:UploaderAuthenticationRegion is required.")
+    .ValidateOnStart();
+
 var connectionString = builder.Configuration.GetConnectionString("Default");
 
 if (string.IsNullOrWhiteSpace(connectionString))
