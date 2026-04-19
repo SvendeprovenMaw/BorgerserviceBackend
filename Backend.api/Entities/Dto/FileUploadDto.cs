@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Backend.api.Enums;
 
 namespace Backend.api.Entities.Dto
 {
@@ -24,6 +25,11 @@ namespace Backend.api.Entities.Dto
         /// Binary file content to upload.
         /// </summary>
         public IFormFile File { get; set; } = null!;
+
+        /// <summary>
+        /// Storage category used to place the uploaded file under the user's career-document tree.
+        /// </summary>
+        public FileCategory Category { get; set; } = FileCategory.Cv;
         
     }
 }

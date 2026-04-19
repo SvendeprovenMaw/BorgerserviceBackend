@@ -4,12 +4,22 @@ using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Backend.api.Configuration;
+using Backend.api.Services;
 using Microsoft.Extensions.Options;
 
 namespace Backend.api.Services.ApplyAIService;
 
 public interface IApplyAiArtifactStorageService
 {
+    Task<ApplyAiStoredArtifact> StoreArtifactAsync(
+        Guid artifactId,
+        string runStoragePrefix,
+        string relativePath,
+        byte[] content,
+        string fileName,
+        string contentType,
+        CancellationToken cancellationToken = default);
+
     Task<ApplyAiStoredArtifact> StoreJobPostingAsync(
         Guid jobId,
         string runStoragePrefix,
@@ -33,19 +43,15 @@ public sealed class ApplyAiArtifactStorageService : IApplyAiArtifactStorageServi
     private readonly string _bucketName;
 
     public ApplyAiArtifactStorageService(IOptions<BackBlazeSettings> backBlazeOptions)
+        : this(backBlazeOptions, CreateS3Client(backBlazeOptions.Value))
+    {
+    }
+
+    public ApplyAiArtifactStorageService(IOptions<BackBlazeSettings> backBlazeOptions, IAmazonS3 s3)
     {
         var settings = backBlazeOptions.Value;
 
-        var config = new AmazonS3Config
-        {
-            ServiceURL = settings.ServiceUrl,
-            ForcePathStyle = settings.ForcePathStyle,
-            AuthenticationRegion = settings.UploaderAuthenticationRegion,
-            UseHttp = settings.UploaderUseHttp
-        };
-
-        var credentials = new BasicAWSCredentials(settings.Keyid, settings.ApplicationKey);
-        _s3 = new AmazonS3Client(credentials, config);
+        _s3 = s3;
         _bucketName = settings.Bucket;
     }
 
@@ -61,23 +67,45 @@ public sealed class ApplyAiArtifactStorageService : IApplyAiArtifactStorageServi
 
         var artifactId = Guid.NewGuid();
         var safeFileName = BuildSafeFileName(fileName, "job-posting.pdf");
-        var relativePath = $"inputs/job-listing/{artifactId:N}__{safeFileName}";
-        var storageKey = $"{TrimSlashes(runStoragePrefix)}/{relativePath}";
 
         await using var buffer = new MemoryStream();
         await content.CopyToAsync(buffer, cancellationToken);
-        var bytes = buffer.ToArray();
-        buffer.Position = 0;
+        return await StoreArtifactAsync(
+            artifactId,
+            runStoragePrefix,
+            StoragePathBuilder.BuildStoredJobPostingRelativePath(artifactId, safeFileName),
+            buffer.ToArray(),
+            safeFileName,
+            string.IsNullOrWhiteSpace(contentType) ? "application/pdf" : contentType,
+            cancellationToken);
+    }
 
-        var checksum = Convert.ToHexString(SHA256.HashData(bytes));
+    public async Task<ApplyAiStoredArtifact> StoreArtifactAsync(
+        Guid artifactId,
+        string runStoragePrefix,
+        string relativePath,
+        byte[] content,
+        string fileName,
+        string contentType,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(content);
+
+        var normalizedRelativePath = NormalizeRelativePath(relativePath, fileName);
+        var resolvedFileName = string.IsNullOrWhiteSpace(fileName)
+            ? Path.GetFileName(normalizedRelativePath)
+            : BuildSafeFileName(fileName, Path.GetFileName(normalizedRelativePath));
+        var resolvedContentType = string.IsNullOrWhiteSpace(contentType) ? "application/octet-stream" : contentType;
+        var storageKey = StoragePathBuilder.BuildRunArtifactStorageKey(runStoragePrefix, normalizedRelativePath);
+        var checksum = Convert.ToHexString(SHA256.HashData(content));
 
         var request = new PutObjectRequest
         {
             BucketName = _bucketName,
             Key = storageKey,
-            InputStream = new MemoryStream(bytes),
+            InputStream = new MemoryStream(content, writable: false),
             AutoCloseStream = true,
-            ContentType = string.IsNullOrWhiteSpace(contentType) ? "application/pdf" : contentType,
+            ContentType = resolvedContentType,
             ChecksumAlgorithm = ChecksumAlgorithm.SHA256
         };
 
@@ -86,9 +114,9 @@ public sealed class ApplyAiArtifactStorageService : IApplyAiArtifactStorageServi
         return new ApplyAiStoredArtifact(
             artifactId,
             storageKey,
-            relativePath,
-            safeFileName,
-            request.ContentType,
+            normalizedRelativePath,
+            resolvedFileName,
+            resolvedContentType,
             checksum);
     }
 
@@ -114,6 +142,43 @@ public sealed class ApplyAiArtifactStorageService : IApplyAiArtifactStorageServi
         var trimmed = string.IsNullOrWhiteSpace(fileName) ? fallback : fileName.Trim();
         var safe = InvalidFileNameCharacters.Replace(trimmed, "-");
         return string.IsNullOrWhiteSpace(safe) ? fallback : safe;
+    }
+
+    private static string NormalizeRelativePath(string relativePath, string fallbackFileName)
+    {
+        var candidate = string.IsNullOrWhiteSpace(relativePath)
+            ? BuildSafeFileName(fallbackFileName, "artifact.bin")
+            : relativePath.Replace('\\', '/').Trim('/');
+
+        var rawSegments = candidate.Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        if (rawSegments.Length == 0)
+        {
+            return BuildSafeFileName(fallbackFileName, "artifact.bin");
+        }
+
+        var normalizedSegments = rawSegments
+            .Select((segment, index) => StoragePathBuilder.BuildSafePathSegment(
+                segment,
+                index == rawSegments.Length - 1
+                    ? BuildSafeFileName(fallbackFileName, "artifact.bin")
+                    : "segment"))
+            .ToArray();
+
+        return string.Join('/', normalizedSegments);
+    }
+
+    private static IAmazonS3 CreateS3Client(BackBlazeSettings settings)
+    {
+        var config = new AmazonS3Config
+        {
+            ServiceURL = settings.ServiceUrl,
+            ForcePathStyle = settings.ForcePathStyle,
+            AuthenticationRegion = settings.UploaderAuthenticationRegion,
+            UseHttp = settings.UploaderUseHttp
+        };
+
+        var credentials = new BasicAWSCredentials(settings.Keyid, settings.ApplicationKey);
+        return new AmazonS3Client(credentials, config);
     }
 
     private static string TrimSlashes(string value) => value.Trim('/');

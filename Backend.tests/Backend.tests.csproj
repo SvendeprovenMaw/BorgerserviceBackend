@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-  <ProjectReference Include="..\backend.api\Backend.api.csproj" />
+  <ProjectReference Include="..\Backend.api\Backend.api.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +30,7 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
     <PackageReference Include="xunit.v3" Version="3.2.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">

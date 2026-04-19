@@ -7,6 +7,7 @@ using ApplyAI.LlmPipeline;
 using ApplyAI.Playwright;
 using Backend.api.Database;
 using Backend.api.Entities;
+using Backend.api.Services;
 using Backend.api.Services.ApplyAIService.LlmRuntime.Helpers;
 using Backend.api.Services.ApplyAIService.LlmRuntime.Models;
 using Backend.api.Services.ApplyAIService.LlmRuntime.Services;
@@ -136,12 +137,12 @@ namespace Backend.api.Services.ApplyAIService
             return await SubmitJobInternalAsync(
                 claimsPrincipal,
                 pipelineRequest,
-                async (jobId, createdAtUtc, token) =>
+                async (currentUser, jobId, createdAtUtc, token) =>
                 {
                     await using var stream = request.JobPostingFile.OpenReadStream();
                     return await _artifactStorage.StoreJobPostingAsync(
                         jobId,
-                        BuildRunStoragePrefix(createdAtUtc, jobId),
+                        BuildRunStoragePrefix(currentUser.Id, createdAtUtc, jobId),
                         stream,
                         request.JobPostingFile.FileName,
                         request.JobPostingFile.ContentType ?? "application/pdf",
@@ -304,6 +305,9 @@ namespace Backend.api.Services.ApplyAIService
                 : $"{PipelinePhaseCatalog.Get(phase).DisplayName}: updated. Retry the downstream phase to apply the reviewed document.";
 
             job.UpdatedAtUtc = now;
+            phaseState.DocumentId ??= BuildDocumentId(job, phase, Math.Max(phaseState.AttemptCount, 1));
+            RebuildPhaseArtifacts(job, phase, phaseState.DocumentId);
+            await PersistPhaseArtifactsAsync(job, phase, cancellationToken);
             AppendEvent(
                 job,
                 PipelineEventType.JobProgressUpdated,
@@ -344,6 +348,8 @@ namespace Backend.api.Services.ApplyAIService
             phaseState.StatusMessage = string.IsNullOrWhiteSpace(request?.Comment)
                 ? "Approved for downstream execution."
                 : $"Approved for downstream execution. Comment: {request!.Comment}";
+
+            await PersistPhaseArtifactsAsync(job, phase, cancellationToken);
 
             var nextPhase = PipelinePhaseCatalog.GetNext(phase);
             if (nextPhase is null)
@@ -405,7 +411,7 @@ namespace Backend.api.Services.ApplyAIService
         private async Task<PipelineJobAcceptedResponse> SubmitJobInternalAsync(
             ClaimsPrincipal claimsPrincipal,
             ApplyAiJobRequest request,
-            Func<Guid, DateTimeOffset, CancellationToken, Task<ApplyAiStoredArtifact>>? prepareStoredJobPostingAsync,
+            Func<User, Guid, DateTimeOffset, CancellationToken, Task<ApplyAiStoredArtifact>>? prepareStoredJobPostingAsync,
             CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(claimsPrincipal);
@@ -422,7 +428,7 @@ namespace Backend.api.Services.ApplyAIService
 
             if (prepareStoredJobPostingAsync is not null)
             {
-                storedJobPosting = await prepareStoredJobPostingAsync(jobId, createdAtUtc, cancellationToken);
+                storedJobPosting = await prepareStoredJobPostingAsync(currentUser, jobId, createdAtUtc, cancellationToken);
             }
 
             var job = CreateJob(currentUser, request, resolvedUserContext, createdAtUtc, jobId, storedJobPosting);
@@ -499,7 +505,7 @@ namespace Backend.api.Services.ApplyAIService
             ApplyAiStoredArtifact? storedJobPosting)
         {
             PipelineSubmissionValidator.EnsureValid(BuildSubmissionRequest(currentUser, request));
-            var runStoragePrefix = BuildRunStoragePrefix(createdAtUtc, jobId);
+            var runStoragePrefix = StoragePathBuilder.BuildRunStoragePrefix(currentUser.Id, createdAtUtc, jobId);
 
             var job = new ApplyAiPipelineJob
             {
@@ -823,11 +829,7 @@ namespace Backend.api.Services.ApplyAIService
             var nextPhase = PipelinePhaseCatalog.GetNext(phase);
             var requiresApproval = job.WorkflowMode == PipelineWorkflowMode.Manual && nextPhase.HasValue;
 
-            RemovePhaseArtifacts(job, phase);
-            foreach (var artifact in BuildArtifacts(job, phase, phaseState.DocumentId))
-            {
-                AddArtifact(job, artifact);
-            }
+            RebuildPhaseArtifacts(job, phase, phaseState.DocumentId);
 
             if (!outcome.ApprovedForDownstream)
             {
@@ -845,6 +847,7 @@ namespace Backend.api.Services.ApplyAIService
                 job.ProgressPercent = CalculateProgressPercent(job);
 
                 AppendEvent(job, PipelineEventType.JobFailed, phase, PipelineActivity.Failed, job.StatusMessage, completedAtUtc);
+                await PersistPhaseArtifactsAsync(job, phase, cancellationToken);
                 await _jobStore.SaveChangesAsync(cancellationToken);
                 return;
             }
@@ -867,6 +870,7 @@ namespace Backend.api.Services.ApplyAIService
                 job.ProgressPercent = CalculateProgressPercent(job);
 
                 AppendEvent(job, PipelineEventType.ApprovalRequired, phase, job.CurrentActivity, job.StatusMessage, completedAtUtc);
+                await PersistPhaseArtifactsAsync(job, phase, cancellationToken);
                 await _jobStore.SaveChangesAsync(cancellationToken);
                 return;
             }
@@ -880,6 +884,7 @@ namespace Backend.api.Services.ApplyAIService
             {
                 MarkJobCompleted(job, completedAtUtc, "Pipeline completed.");
                 AppendEvent(job, PipelineEventType.JobCompleted, phase, PipelineActivity.Completed, job.StatusMessage, completedAtUtc);
+                await PersistPhaseArtifactsAsync(job, phase, cancellationToken);
                 await _jobStore.SaveChangesAsync(cancellationToken);
                 return;
             }
@@ -892,6 +897,7 @@ namespace Backend.api.Services.ApplyAIService
             job.ProgressPercent = CalculateProgressPercent(job);
 
             AppendEvent(job, PipelineEventType.PhaseCompleted, phase, PipelineActivity.Completed, phaseState.StatusMessage, completedAtUtc);
+            await PersistPhaseArtifactsAsync(job, phase, cancellationToken);
             await _jobStore.SaveChangesAsync(cancellationToken);
         }
 
@@ -1339,6 +1345,47 @@ namespace Backend.api.Services.ApplyAIService
             }
         }
 
+        private void RebuildPhaseArtifacts(ApplyAiPipelineJob job, PipelinePhase phase, string? documentId)
+        {
+            var phaseState = GetPhaseState(job, phase);
+            var resolvedDocumentId = string.IsNullOrWhiteSpace(documentId)
+                ? BuildDocumentId(job, phase, Math.Max(phaseState.AttemptCount, 1))
+                : documentId;
+
+            RemovePhaseArtifacts(job, phase);
+            foreach (var artifact in BuildArtifacts(job, phase, resolvedDocumentId))
+            {
+                AddArtifact(job, artifact);
+            }
+        }
+
+        private async Task PersistPhaseArtifactsAsync(ApplyAiPipelineJob job, PipelinePhase phase, CancellationToken cancellationToken)
+        {
+            var runStoragePrefix = EnsureRunStoragePrefix(job);
+            var artifacts = job.Artifacts
+                .Where(item => item.Phase == phase)
+                .OrderBy(item => item.RelativePath, StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+
+            foreach (var artifact in artifacts)
+            {
+                var artifactContent = await BuildComputedArtifactContentAsync(job, artifact, cancellationToken);
+                var storedArtifact = await _artifactStorage.StoreArtifactAsync(
+                    artifact.Id,
+                    runStoragePrefix,
+                    artifact.RelativePath,
+                    artifactContent.Content,
+                    artifact.DisplayName,
+                    artifactContent.MediaType,
+                    cancellationToken);
+
+                artifact.StorageKey = storedArtifact.StorageKey;
+                artifact.RelativePath = storedArtifact.RelativePath;
+                artifact.DisplayName = storedArtifact.DisplayName;
+                artifact.MediaType = storedArtifact.MediaType;
+            }
+        }
+
         private void AddArtifact(ApplyAiPipelineJob job, ApplyAiPipelineArtifact artifact)
         {
             job.Artifacts.Add(artifact);
@@ -1478,8 +1525,7 @@ namespace Backend.api.Services.ApplyAIService
 
             await UpdateQueuedJobProgressAsync(job, PipelineActivity.PersistingArtifacts, "Storing rendered job posting", cancellationToken);
 
-            var runStoragePrefix = job.RunStoragePrefix
-                ?? throw new InvalidOperationException("Queued pipeline job is missing its run storage prefix.");
+            var runStoragePrefix = EnsureRunStoragePrefix(job);
 
             await using var stream = new MemoryStream(renderedPdf.Content, writable: false);
             var storedJobPosting = await _artifactStorage.StoreJobPostingAsync(
@@ -2031,8 +2077,8 @@ namespace Backend.api.Services.ApplyAIService
                     Job = job,
                     Phase = phase,
                     ArtifactKind = PipelineArtifactKind.JsonDocument,
-                    RelativePath = $"db/jobs/{job.Id:N}/{routeSegment}/document.json",
-                    DisplayName = $"{routeSegment}.json",
+                    RelativePath = StoragePathBuilder.BuildPhaseDocumentRelativePath(phase),
+                    DisplayName = Path.GetFileName(StoragePathBuilder.BuildPhaseDocumentRelativePath(phase)),
                     MediaType = "application/json",
                     IsPrimary = true
                 },
@@ -2043,8 +2089,8 @@ namespace Backend.api.Services.ApplyAIService
                     Job = job,
                     Phase = phase,
                     ArtifactKind = PipelineArtifactKind.VerificationReport,
-                    RelativePath = $"db/jobs/{job.Id:N}/{routeSegment}/verification.json",
-                    DisplayName = $"{routeSegment}.verification.json",
+                    RelativePath = StoragePathBuilder.BuildPhaseVerificationRelativePath(phase),
+                    DisplayName = Path.GetFileName(StoragePathBuilder.BuildPhaseVerificationRelativePath(phase)),
                     MediaType = "application/json"
                 },
                 new()
@@ -2054,8 +2100,8 @@ namespace Backend.api.Services.ApplyAIService
                     Job = job,
                     Phase = phase,
                     ArtifactKind = PipelineArtifactKind.GateReport,
-                    RelativePath = $"db/jobs/{job.Id:N}/{routeSegment}/gate.json",
-                    DisplayName = $"{routeSegment}.gate.json",
+                    RelativePath = StoragePathBuilder.BuildPhaseGateRelativePath(phase),
+                    DisplayName = Path.GetFileName(StoragePathBuilder.BuildPhaseGateRelativePath(phase)),
                     MediaType = "application/json"
                 }
             };
@@ -2069,8 +2115,8 @@ namespace Backend.api.Services.ApplyAIService
                     Job = job,
                     Phase = phase,
                     ArtifactKind = PipelineArtifactKind.HtmlDocument,
-                    RelativePath = $"db/jobs/{job.Id:N}/{routeSegment}/cover-letter.html",
-                    DisplayName = "cover-letter.html",
+                    RelativePath = StoragePathBuilder.BuildCoverLetterHtmlRelativePath(),
+                    DisplayName = Path.GetFileName(StoragePathBuilder.BuildCoverLetterHtmlRelativePath()),
                     MediaType = "text/html"
                 });
                 artifacts.Add(new ApplyAiPipelineArtifact
@@ -2080,8 +2126,8 @@ namespace Backend.api.Services.ApplyAIService
                     Job = job,
                     Phase = phase,
                     ArtifactKind = PipelineArtifactKind.CssStylesheet,
-                    RelativePath = $"db/jobs/{job.Id:N}/{routeSegment}/cover-letter.css",
-                    DisplayName = "cover-letter.css",
+                    RelativePath = StoragePathBuilder.BuildCoverLetterCssRelativePath(),
+                    DisplayName = Path.GetFileName(StoragePathBuilder.BuildCoverLetterCssRelativePath()),
                     MediaType = "text/css"
                 });
                 artifacts.Add(new ApplyAiPipelineArtifact
@@ -2091,8 +2137,8 @@ namespace Backend.api.Services.ApplyAIService
                     Job = job,
                     Phase = phase,
                     ArtifactKind = PipelineArtifactKind.PdfDocument,
-                    RelativePath = $"db/jobs/{job.Id:N}/{routeSegment}/cover-letter.pdf",
-                    DisplayName = "cover-letter.pdf",
+                    RelativePath = StoragePathBuilder.BuildCoverLetterPdfRelativePath(),
+                    DisplayName = Path.GetFileName(StoragePathBuilder.BuildCoverLetterPdfRelativePath()),
                     MediaType = "application/pdf"
                 });
             }
@@ -2106,8 +2152,8 @@ namespace Backend.api.Services.ApplyAIService
                     Job = job,
                     Phase = phase,
                     ArtifactKind = PipelineArtifactKind.Advisory,
-                    RelativePath = $"db/jobs/{job.Id:N}/{routeSegment}/fit-advisory.json",
-                    DisplayName = "fit-advisory.json",
+                    RelativePath = StoragePathBuilder.BuildFitAdvisoryRelativePath(),
+                    DisplayName = Path.GetFileName(StoragePathBuilder.BuildFitAdvisoryRelativePath()),
                     MediaType = "application/json"
                 });
             }
@@ -2119,8 +2165,12 @@ namespace Backend.api.Services.ApplyAIService
                 Job = job,
                 Phase = phase,
                 ArtifactKind = PipelineArtifactKind.Other,
-                RelativePath = $"db/jobs/{job.Id:N}/{routeSegment}/{documentId}.meta.json",
-                DisplayName = $"{routeSegment}.meta.json",
+                RelativePath = phase == PipelinePhase.ApplicationGeneration
+                    ? StoragePathBuilder.BuildCoverLetterSummaryRelativePath()
+                    : StoragePathBuilder.BuildPhaseMetadataRelativePath(phase),
+                DisplayName = phase == PipelinePhase.ApplicationGeneration
+                    ? Path.GetFileName(StoragePathBuilder.BuildCoverLetterSummaryRelativePath())
+                    : Path.GetFileName(StoragePathBuilder.BuildPhaseMetadataRelativePath(phase)),
                 MediaType = "application/json"
             });
 
@@ -2448,7 +2498,7 @@ namespace Backend.api.Services.ApplyAIService
   <head>
     <meta charset=\"utf-8\" />
     <title>{artifact.DisplayName}</title>
-    <link rel=\"stylesheet\" href=\"cover-letter.css\" />
+        <link rel=\"stylesheet\" href=\"cover_letter.css\" />
   </head>
   <body>
     <main>
@@ -2481,9 +2531,20 @@ namespace Backend.api.Services.ApplyAIService
             return json.ToJsonString(new JsonSerializerOptions { WriteIndented = true });
         }
 
-        private static string BuildRunStoragePrefix(DateTimeOffset createdAtUtc, Guid jobId)
+        private static string EnsureRunStoragePrefix(ApplyAiPipelineJob job)
         {
-            return $"applyai/{createdAtUtc:yyyy/MM/dd}/{jobId:N}";
+            var canonicalPrefix = StoragePathBuilder.BuildRunStoragePrefix(job.UserId, job.CreatedAtUtc, job.Id);
+            if (!string.Equals(job.RunStoragePrefix, canonicalPrefix, StringComparison.Ordinal))
+            {
+                job.RunStoragePrefix = canonicalPrefix;
+            }
+
+            return canonicalPrefix;
+        }
+
+        private static string BuildRunStoragePrefix(Guid userId, DateTimeOffset createdAtUtc, Guid jobId)
+        {
+            return StoragePathBuilder.BuildRunStoragePrefix(userId, createdAtUtc, jobId);
         }
 
         private static ApplyAiRequestedArtifacts ParseRequestedArtifacts(string? json)

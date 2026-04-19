@@ -12,33 +12,23 @@ namespace Backend.api.Database;
 
 public static class DatabaseInitializer
 {
-    private const string FixtureSeedPassword = "ApplyAITest123!";
-    private static readonly Guid ConfiguredSeedUserId = Guid.Parse("33333333-3333-3333-3333-333333333003");
+    private const string SeededProfileDocumentFileName = "profile.pdf";
+    private const string ConfiguredSeedFixtureDirectoryName = "Borger1";
+    private const string ConfiguredSeedCvFileName = "emma_sorensen_cv_da.pdf";
+    private static readonly Guid ConfiguredSeedUserId = Guid.Parse("11111111-1111-1111-1111-111111111111");
     private static readonly Guid ConfiguredSeedCurrentCvFileId = Guid.Parse("33333333-3333-3333-3333-333333333103");
-
-    private static readonly SeededCitizen[] FixtureCitizens =
+    private static readonly Guid[] LegacyFixtureUserIds =
     [
-        new(
-            DirectoryName: "Borger1",
-            UserId: Guid.Parse("11111111-1111-1111-1111-111111111001"),
-            ApplicantId: "fictional_citizen_01",
-            CurrentCvFileId: Guid.Parse("11111111-1111-1111-1111-111111111101"),
-            Email: "emma.sorensen@example.com",
-            FullName: "Emma Sørensen",
-            Phone: "+45 28 54 71 63",
-            Municipality: "Roskilde",
-            ShortBio: "Nysgerrig og løsningsorienteret junior softwareudvikler med fokus på moderne webudvikling, API-design og stabile løsninger i produktion."),
-        new(
-            DirectoryName: "Borger2",
-            UserId: Guid.Parse("22222222-2222-2222-2222-222222222002"),
-            ApplicantId: "fictional_citizen_02",
-            CurrentCvFileId: Guid.Parse("22222222-2222-2222-2222-222222222202"),
-            Email: "camilla.norgaard@example.com",
-            FullName: "Camilla Nørgaard",
-            Phone: "+45 31 77 40 92",
-            Municipality: "Næstved",
-            ShortBio: "Serviceminded og struktureret administrativ koordinator med erfaring inden for planlægning, sagsunderstøttelse og borgerkontakt."),
+        Guid.Parse("11111111-1111-1111-1111-111111111001"),
+        Guid.Parse("22222222-2222-2222-2222-222222222002"),
     ];
+    private static readonly SeededProfileTemplate ConfiguredSeedTemplate = new(
+        DirectoryName: ConfiguredSeedFixtureDirectoryName,
+        CvFileName: ConfiguredSeedCvFileName,
+        FullName: "Emma Sørensen",
+        Phone: "+45 28 54 71 63",
+        Municipality: "Roskilde",
+        ShortBio: "Nysgerrig og løsningsorienteret junior softwareudvikler med fokus på moderne webudvikling, API-design og stabile løsninger i produktion.");
 
     public static async Task InitializeAsync(IServiceProvider services, IConfiguration configuration, CancellationToken cancellationToken = default)
     {
@@ -80,12 +70,15 @@ public static class DatabaseInitializer
 
     private static async Task SeedUsersAsync(ApplyAIDbContext context, IS3StorageService storageService, IConfiguration configuration, ILogger logger, CancellationToken cancellationToken)
     {
+        await RemoveLegacyFixtureUsersAsync(context, cancellationToken);
         await SeedConfiguredUserAsync(context, storageService, configuration, logger, cancellationToken);
+    }
 
-        foreach (var citizen in FixtureCitizens)
-        {
-            await SeedFixtureCitizenAsync(context, storageService, citizen, logger, cancellationToken);
-        }
+    private static async Task RemoveLegacyFixtureUsersAsync(ApplyAIDbContext context, CancellationToken cancellationToken)
+    {
+        await context.Users
+            .Where(user => LegacyFixtureUserIds.Contains(user.Id))
+            .ExecuteDeleteAsync(cancellationToken);
     }
 
     private static async Task SeedConfiguredUserAsync(
@@ -110,7 +103,6 @@ public static class DatabaseInitializer
             ? configuredRole
             : JwtRoles.User;
 
-        var configuredSeedTemplate = FixtureCitizens[0];
         var seededUser = await GetOrCreateUserAsync(
             context,
             username,
@@ -123,12 +115,12 @@ public static class DatabaseInitializer
         seededUser.UpdateIdentity(email, username, role);
         seededUser.UpdatePassword(PasswordHasher.Hash(password, string.Empty));
 
-        var fixtureDirectory = ResolveFixtureDirectory(configuredSeedTemplate.DirectoryName);
+        var fixtureDirectory = ResolveFixtureDirectory(ConfiguredSeedTemplate.DirectoryName);
         if (fixtureDirectory is null)
         {
             logger.LogWarning(
                 "Configured seed user sample data could not be resolved from TestData/Borgere/{DirectoryName}. Falling back to default empty profile data.",
-                configuredSeedTemplate.DirectoryName);
+            ConfiguredSeedTemplate.DirectoryName);
 
             await EnsureProfileAsync(
                 context,
@@ -147,10 +139,8 @@ public static class DatabaseInitializer
 
         var preferencesPath = Path.Combine(fixtureDirectory, "Preferences.json");
         var enhancementPath = Path.Combine(fixtureDirectory, "ProfileEnhancement.json");
-        var cvPath = Directory.GetFiles(fixtureDirectory, "*_cv_*.pdf", SearchOption.TopDirectoryOnly).FirstOrDefault();
-        var profileDocumentPath = Path.Combine(fixtureDirectory, "profile.pdf");
-
-        if (!File.Exists(preferencesPath) || !File.Exists(enhancementPath) || string.IsNullOrWhiteSpace(cvPath) || !File.Exists(profileDocumentPath))
+        var cvPath = Path.Combine(fixtureDirectory, ConfiguredSeedTemplate.CvFileName);
+        if (!File.Exists(preferencesPath) || !File.Exists(enhancementPath) || !File.Exists(cvPath))
         {
             logger.LogWarning(
                 "Configured seed user sample files are incomplete under {FixtureDirectory}. Falling back to default empty profile data.",
@@ -178,10 +168,10 @@ public static class DatabaseInitializer
             context,
             seededUser,
             applicantId: username,
-            fullName: configuredSeedTemplate.FullName,
-            phone: configuredSeedTemplate.Phone,
-            municipality: configuredSeedTemplate.Municipality,
-            shortBio: configuredSeedTemplate.ShortBio,
+            fullName: ConfiguredSeedTemplate.FullName,
+            phone: ConfiguredSeedTemplate.Phone,
+            municipality: ConfiguredSeedTemplate.Municipality,
+            shortBio: ConfiguredSeedTemplate.ShortBio,
             preferencesJson: preferencesJson,
             profileEnhancementJson: enhancementJson,
             cancellationToken);
@@ -199,78 +189,7 @@ public static class DatabaseInitializer
             profile.SetCurrentCv(currentCv);
         }
 
-        var profileDocument = await EnsureUploadedFileAsync(
-            context,
-            storageService,
-            seededUser,
-            profileDocumentPath,
-            FileCategory.CarreerDocument,
-            null,
-            cancellationToken);
-        if (profileDocument is not null)
-        {
-            profile.AddRelevantDocument(profileDocument);
-        }
-
-        await context.SaveChangesAsync(cancellationToken);
-    }
-
-    private static async Task SeedFixtureCitizenAsync(ApplyAIDbContext context, IS3StorageService storageService, SeededCitizen citizen, ILogger logger, CancellationToken cancellationToken)
-    {
-        var testDataRoot = ResolveFixtureDirectory(citizen.DirectoryName);
-
-        if (testDataRoot is null)
-        {
-            logger.LogWarning("Skipping fixture user {ApplicantId} because TestData/Borgere/{DirectoryName} could not be resolved from {BaseDirectory}.", citizen.ApplicantId, citizen.DirectoryName, AppContext.BaseDirectory);
-            return;
-        }
-
-        var preferencesPath = Path.Combine(testDataRoot, "Preferences.json");
-        var enhancementPath = Path.Combine(testDataRoot, "ProfileEnhancement.json");
-        var cvPath = Directory.GetFiles(testDataRoot, "*_cv_*.pdf", SearchOption.TopDirectoryOnly).FirstOrDefault();
-        var profileDocumentPath = Path.Combine(testDataRoot, "profile.pdf");
-
-        if (!File.Exists(preferencesPath) || !File.Exists(enhancementPath) || string.IsNullOrWhiteSpace(cvPath) || !File.Exists(profileDocumentPath))
-        {
-            logger.LogWarning("Skipping fixture user {ApplicantId} because one or more seed files are missing under {SeedPath}.", citizen.ApplicantId, testDataRoot);
-            return;
-        }
-
-        var user = await GetOrCreateUserAsync(
-            context,
-            citizen.ApplicantId,
-            citizen.Email,
-            FixtureSeedPassword,
-            JwtRoles.User,
-            citizen.UserId,
-            cancellationToken);
-
-        var preferencesJson = await File.ReadAllTextAsync(preferencesPath, cancellationToken);
-        var enhancementJson = await File.ReadAllTextAsync(enhancementPath, cancellationToken);
-
-        var profile = await EnsureProfileAsync(
-            context,
-            user,
-            applicantId: citizen.ApplicantId,
-            fullName: citizen.FullName,
-            phone: citizen.Phone,
-            municipality: citizen.Municipality,
-            shortBio: citizen.ShortBio,
-            preferencesJson: preferencesJson,
-            profileEnhancementJson: enhancementJson,
-            cancellationToken);
-
-        var currentCv = await EnsureUploadedFileAsync(context, storageService, user, cvPath, FileCategory.Cv, citizen.CurrentCvFileId, cancellationToken);
-        if (currentCv is not null)
-        {
-            profile.SetCurrentCv(currentCv);
-        }
-
-        var profileDocument = await EnsureUploadedFileAsync(context, storageService, user, profileDocumentPath, FileCategory.CarreerDocument, null, cancellationToken);
-        if (profileDocument is not null)
-        {
-            profile.AddRelevantDocument(profileDocument);
-        }
+        await RemoveSeededFileIfPresentAsync(context, seededUser, SeededProfileDocumentFileName, cancellationToken);
 
         await context.SaveChangesAsync(cancellationToken);
     }
@@ -296,16 +215,36 @@ public static class DatabaseInitializer
         Guid? userIdOverride,
         CancellationToken cancellationToken)
     {
+        var normalizedEmail = email.Trim().ToLowerInvariant();
+
+        if (userIdOverride.HasValue)
+        {
+            var existingById = await context.Users.FirstOrDefaultAsync(
+                user => user.Id == userIdOverride.Value,
+                cancellationToken);
+
+            if (existingById is not null)
+            {
+                return existingById;
+            }
+        }
+
         var existingUser = await context.Users.FirstOrDefaultAsync(
-            user => user.Username == username || user.Email == email,
+            user => user.Username == username || user.Email == normalizedEmail,
             cancellationToken);
 
         if (existingUser is not null)
         {
+            if (userIdOverride.HasValue && existingUser.Id != userIdOverride.Value)
+            {
+                await RealignUserIdAsync(context, existingUser, userIdOverride.Value, cancellationToken);
+                return await context.Users.FirstAsync(user => user.Id == userIdOverride.Value, cancellationToken);
+            }
+
             return existingUser;
         }
 
-        var seededUser = new User(role, email.ToLowerInvariant(), username, PasswordHasher.Hash(password, string.Empty), userIdOverride);
+        var seededUser = new User(role, normalizedEmail, username, PasswordHasher.Hash(password, string.Empty), userIdOverride);
         await context.Users.AddAsync(seededUser, cancellationToken);
         return seededUser;
     }
@@ -349,6 +288,10 @@ public static class DatabaseInitializer
         CancellationToken cancellationToken)
     {
         var filename = Path.GetFileName(filePath);
+        var seededStorageKey = fileCategory == FileCategory.Cv && fileIdOverride.HasValue
+            ? BuildSeededStorageKey(user.Id, fileCategory, fileIdOverride.Value, filename)
+            : null;
+
         if (fileIdOverride.HasValue)
         {
             var existingById = await context.S3Files.FirstOrDefaultAsync(
@@ -357,7 +300,13 @@ public static class DatabaseInitializer
 
             if (existingById is not null)
             {
-                return existingById;
+                if (await IsExistingFileRegistrationValidAsync(storageService, existingById, filename, seededStorageKey, cancellationToken))
+                {
+                    await EnsureFileConsentAsync(context, user, existingById, cancellationToken);
+                    return existingById;
+                }
+
+                await RealignSeededFileAsync(context, existingById, cancellationToken);
             }
         }
 
@@ -367,12 +316,22 @@ public static class DatabaseInitializer
 
         if (existingFile is not null)
         {
-            if (fileIdOverride.HasValue && existingFile.Id != fileIdOverride.Value)
+            var canReuseExistingFile = (!fileIdOverride.HasValue || existingFile.Id == fileIdOverride.Value)
+                && await IsExistingFileRegistrationValidAsync(storageService, existingFile, filename, seededStorageKey, cancellationToken);
+
+            if (canReuseExistingFile)
+            {
+                await EnsureFileConsentAsync(context, user, existingFile, cancellationToken);
+                return existingFile;
+            }
+
+            if (fileIdOverride.HasValue || !await storageService.ObjectExistsAsync(existingFile.S3Key, cancellationToken))
             {
                 await RealignSeededFileAsync(context, existingFile, cancellationToken);
             }
             else
             {
+                await EnsureFileConsentAsync(context, user, existingFile, cancellationToken);
                 return existingFile;
             }
         }
@@ -394,15 +353,23 @@ public static class DatabaseInitializer
 
         if (fileCategory == FileCategory.Cv && fileIdOverride.HasValue)
         {
-            var seededStorageKey = BuildSeededStorageKey(user.Id, fileCategory, fileIdOverride.Value, filename);
-            if (await storageService.HasObjectTagAsync(seededStorageKey, "Seeded", "true", cancellationToken))
+            var checksumHash = await ComputeChecksumSha256Async(filePath, cancellationToken);
+            var existingStorageKey = await ResolveExistingSeededStorageKeyAsync(
+                storageService,
+                user.Id,
+                fileCategory,
+                filename,
+                seededStorageKey!,
+                cancellationToken);
+
+            if (!string.IsNullOrWhiteSpace(existingStorageKey))
             {
                 await storageService.RegisterExistingFileAsync(
-                    seededStorageKey,
+                    existingStorageKey,
                     consentDto,
                     filename,
                     user,
-                    await ComputeChecksumSha256Async(filePath, cancellationToken),
+                    checksumHash,
                     fileIdOverride,
                     DateTime.UtcNow);
             }
@@ -440,6 +407,100 @@ public static class DatabaseInitializer
             cancellationToken);
     }
 
+    private static async Task<string?> ResolveExistingSeededStorageKeyAsync(
+        IS3StorageService storageService,
+        Guid userId,
+        FileCategory fileCategory,
+        string filename,
+        string seededStorageKey,
+        CancellationToken cancellationToken)
+    {
+        var userStoragePrefix = BuildUserStoragePrefix(userId, fileCategory);
+        if (!await storageService.PrefixExistsAsync(userStoragePrefix, cancellationToken))
+        {
+            return null;
+        }
+
+        if (await storageService.ObjectExistsAsync(seededStorageKey, cancellationToken))
+        {
+            return seededStorageKey;
+        }
+
+        return await storageService.FindObjectKeyByFileNameAsync(userStoragePrefix, filename, cancellationToken);
+    }
+
+    private static async Task EnsureFileConsentAsync(
+        ApplyAIDbContext context,
+        User user,
+        S3File file,
+        CancellationToken cancellationToken)
+    {
+        var hasActiveConsent = await context.Consents.AnyAsync(
+            consent => consent.FileId == file.Id && consent.UserId == user.Id && !consent.ConsentRetracted,
+            cancellationToken);
+
+        if (hasActiveConsent)
+        {
+            return;
+        }
+
+        var existingConsent = await context.Consents.FirstOrDefaultAsync(
+            consent => consent.FileId == file.Id && consent.UserId == user.Id,
+            cancellationToken);
+
+        if (existingConsent is not null)
+        {
+            await context.Consents
+                .Where(consent => consent.Id == existingConsent.Id)
+                .ExecuteUpdateAsync(
+                    setters => setters
+                        .SetProperty(consent => consent.ConsentRetracted, false)
+                        .SetProperty(consent => consent.TimeOfConsent, DateTime.UtcNow),
+                    cancellationToken);
+            return;
+        }
+
+        await context.Consents.AddAsync(new Consent(user, file, DateTime.UtcNow), cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    private static async Task<bool> IsExistingFileRegistrationValidAsync(
+        IS3StorageService storageService,
+        S3File existingFile,
+        string expectedFilename,
+        string? expectedStorageKey,
+        CancellationToken cancellationToken)
+    {
+        if (!string.Equals(existingFile.FileName, expectedFilename, StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        if (!string.IsNullOrWhiteSpace(expectedStorageKey)
+            && !string.Equals(existingFile.S3Key, expectedStorageKey, StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        return await storageService.ObjectExistsAsync(existingFile.S3Key, cancellationToken);
+    }
+
+    private static async Task RemoveSeededFileIfPresentAsync(
+        ApplyAIDbContext context,
+        User user,
+        string filename,
+        CancellationToken cancellationToken)
+    {
+        var existingFiles = await context.S3Files
+            .Where(file => file.UserId == user.Id && file.FileName == filename)
+            .ToListAsync(cancellationToken);
+
+        foreach (var existingFile in existingFiles)
+        {
+            await RealignSeededFileAsync(context, existingFile, cancellationToken);
+        }
+    }
+
     private static Guid CreateDeterministicGuid(string seed)
     {
         var hash = SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(seed));
@@ -450,7 +511,59 @@ public static class DatabaseInitializer
 
     private static string BuildSeededStorageKey(Guid userId, FileCategory fileCategory, Guid fileId, string filename)
     {
-        return $"users/{userId}/{fileCategory}/seeded/{fileId:N}_{Path.GetFileName(filename)}";
+        return StoragePathBuilder.BuildUserDocumentStorageKey(userId, fileCategory, filename, fileId);
+    }
+
+    private static string BuildUserStoragePrefix(Guid userId, FileCategory fileCategory)
+    {
+        return StoragePathBuilder.BuildUserDocumentPrefix(userId, fileCategory);
+    }
+
+    private static async Task RealignUserIdAsync(
+        ApplyAIDbContext context,
+        User existingUser,
+        Guid targetUserId,
+        CancellationToken cancellationToken)
+    {
+        if (existingUser.Id == targetUserId)
+        {
+            return;
+        }
+
+        await using var transaction = await context.Database.BeginTransactionAsync(cancellationToken);
+
+        var replacementUser = new User(existingUser.Role, existingUser.Email, existingUser.Username, existingUser.Password, targetUserId)
+        {
+            Salt = existingUser.Salt,
+        };
+
+        await context.Users.AddAsync(replacementUser, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
+
+        await context.Profiles
+            .Where(profile => profile.UserId == existingUser.Id)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(profile => profile.UserId, targetUserId), cancellationToken);
+
+        await context.S3Files
+            .Where(file => file.UserId == existingUser.Id)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(file => file.UserId, targetUserId), cancellationToken);
+
+        await context.Consents
+            .Where(consent => consent.UserId == existingUser.Id)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(consent => consent.UserId, targetUserId), cancellationToken);
+
+        await context.RefreshTokens
+            .Where(refreshToken => refreshToken.UserId == existingUser.Id)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(refreshToken => refreshToken.UserId, targetUserId), cancellationToken);
+
+        await context.ApplyAiPipelineJobs
+            .Where(job => job.UserId == existingUser.Id)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(job => job.UserId, targetUserId), cancellationToken);
+
+        context.Users.Remove(existingUser);
+        await context.SaveChangesAsync(cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
+        context.ChangeTracker.Clear();
     }
 
     private static async Task<string> ComputeChecksumSha256Async(string filePath, CancellationToken cancellationToken)
@@ -493,13 +606,9 @@ public static class DatabaseInitializer
         context.S3Files.Remove(existingFile);
         await context.SaveChangesAsync(cancellationToken);
     }
-
-    private sealed record SeededCitizen(
+    private sealed record SeededProfileTemplate(
         string DirectoryName,
-        Guid UserId,
-        string ApplicantId,
-        Guid CurrentCvFileId,
-        string Email,
+        string CvFileName,
         string FullName,
         string Phone,
         string Municipality,

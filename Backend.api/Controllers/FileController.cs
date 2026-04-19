@@ -38,8 +38,9 @@ namespace Backend.api.Controllers
         /// - **name**: the display name that should be stored for the uploaded file.
         /// - **consent**: the consent payload recorded for this upload, including whether consent was granted and when it was granted.
         /// - **file**: the binary file stream to upload.
+        /// - **category**: the storage category to use for the uploaded file. Defaults to `Cv`.
         ///
-        /// The current implementation stores uploaded files through the S3 storage service and classifies them as CV files.
+        /// The current implementation stores uploaded files through the S3 storage service using the requested document category.
         /// </remarks>
         /// <param name="file">Multipart form payload containing the uploaded file, display name, and consent metadata.</param>
         /// <returns>An OK result when the file upload succeeds.</returns>
@@ -51,7 +52,7 @@ namespace Backend.api.Controllers
             var user = await _userService.GetUser(HttpContext.User);
             using (Stream stream = file.File.OpenReadStream())
             {
-                await _s3.UploadFile(stream, file.Consent, file.Name, user, FileCategory.Cv);
+                await _s3.UploadFile(stream, file.Consent, file.Name, user, file.Category);
             }
             return Ok();
         }

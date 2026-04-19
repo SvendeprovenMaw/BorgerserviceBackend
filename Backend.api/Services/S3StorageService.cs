@@ -13,8 +13,11 @@ namespace Backend.api.Services
     {
         Task DeleteFileAsync(string bucketname, string filename);
         Task<byte[]> DownloadFileContentAsync(string storageKey, CancellationToken cancellationToken = default);
+        Task<string?> FindObjectKeyByFileNameAsync(string prefix, string fileName, CancellationToken cancellationToken = default);
         Task<S3File[]> GetFileStructure(Guid userId);
         Task<bool> HasObjectTagAsync(string storageKey, string tagKey, string expectedValue, CancellationToken cancellationToken = default);
+        Task<bool> ObjectExistsAsync(string storageKey, CancellationToken cancellationToken = default);
+        Task<bool> PrefixExistsAsync(string prefix, CancellationToken cancellationToken = default);
         Task RegisterExistingFileAsync(string storageKey, GiveConsentDto consentDto, string filename, User user, string checksumHash, Guid? fileIdOverride = null, DateTime? uploadTimeOverride = null);
         Task<string> UserDownloadFile(Guid fileId, User user);
         Task PermentlyUserFilesAsync(string bucketname, Guid userId);
@@ -85,6 +88,39 @@ namespace Backend.api.Services
             return output.ToArray();
         }
 
+        public async Task<string?> FindObjectKeyByFileNameAsync(string prefix, string fileName, CancellationToken cancellationToken = default)
+        {
+            string? continuationToken = null;
+
+            do
+            {
+                var response = await s3Uploader.ListObjectsV2Async(
+                    new ListObjectsV2Request
+                    {
+                        BucketName = _bucketName,
+                        Prefix = prefix,
+                        ContinuationToken = continuationToken,
+                        MaxKeys = 1000,
+                    },
+                    cancellationToken);
+
+                var objects = response.S3Objects ?? [];
+
+                var match = objects.FirstOrDefault(objectSummary =>
+                    string.Equals(Path.GetFileName(objectSummary.Key), fileName, StringComparison.OrdinalIgnoreCase));
+
+                if (match is not null)
+                {
+                    return match.Key;
+                }
+
+                continuationToken = response.IsTruncated == true ? response.NextContinuationToken : null;
+            }
+            while (!string.IsNullOrWhiteSpace(continuationToken));
+
+            return null;
+        }
+
         public async Task UploadFile(Stream fileStream, GiveConsentDto consentDto, string filename, User user, FileCategory fileCategory, Guid? fileIdOverride = null, DateTime? uploadTimeOverride = null, string? storageKeyOverride = null, Dictionary<string, string>? objectTags = null, string? contentTypeOverride = null)
         {
             try
@@ -94,7 +130,7 @@ namespace Backend.api.Services
                     throw new ConsentNotGivenException();
                 }
                 var key = string.IsNullOrWhiteSpace(storageKeyOverride)
-                    ? $"users/{user.Id}/{fileCategory}/{Guid.NewGuid()}"
+                    ? BuildDefaultStorageKey(user.Id, fileCategory, filename, fileIdOverride)
                     : storageKeyOverride;
                 var contentType = ResolveContentType(filename, fileCategory, contentTypeOverride);
                 var request = CreatePutObjectRequest(key, fileStream, contentType, objectTags);
@@ -141,6 +177,42 @@ namespace Backend.api.Services
             {
                 return false;
             }
+        }
+
+        public async Task<bool> ObjectExistsAsync(string storageKey, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await s3Uploader.GetObjectMetadataAsync(
+                    new GetObjectMetadataRequest
+                    {
+                        BucketName = _bucketName,
+                        Key = storageKey
+                    },
+                    cancellationToken);
+
+                return true;
+            }
+            catch (AmazonS3Exception exception) when (
+                exception.StatusCode == HttpStatusCode.NotFound
+                || string.Equals(exception.ErrorCode, "NoSuchKey", StringComparison.Ordinal))
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> PrefixExistsAsync(string prefix, CancellationToken cancellationToken = default)
+        {
+            var response = await s3Uploader.ListObjectsV2Async(
+                new ListObjectsV2Request
+                {
+                    BucketName = _bucketName,
+                    Prefix = prefix,
+                    MaxKeys = 1,
+                },
+                cancellationToken);
+
+            return (response.S3Objects?.Count ?? 0) > 0;
         }
 
         public async Task RegisterExistingFileAsync(string storageKey, GiveConsentDto consentDto, string filename, User user, string checksumHash, Guid? fileIdOverride = null, DateTime? uploadTimeOverride = null)
@@ -216,6 +288,16 @@ namespace Backend.api.Services
                 : fileCategory == FileCategory.Cv
                     ? "application/pdf"
                     : "image/jpeg";
+        }
+
+        private static string BuildDefaultStorageKey(Guid userId, FileCategory fileCategory, string filename, Guid? fileIdOverride)
+        {
+            if (StoragePathBuilder.UsesCareerDocumentLayout(fileCategory))
+            {
+                return StoragePathBuilder.BuildUserDocumentStorageKey(userId, fileCategory, filename, fileIdOverride);
+            }
+
+            return $"users/{userId}/{fileCategory}/{Guid.NewGuid():N}_{StoragePathBuilder.BuildSafeFileName(filename, "document.bin")}";
         }
 
         private PutObjectRequest CreatePutObjectRequest(string key, Stream fileStream, string contentType, Dictionary<string, string>? objectTags)

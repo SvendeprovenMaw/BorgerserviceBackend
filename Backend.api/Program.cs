@@ -62,6 +62,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IS3StorageService, S3StorageService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IConsentService, ConsentService>();
+builder.Services.AddScoped<ISentApplicationService, SentApplicationService>();
 builder.Services.AddApplyAiServiceModule(builder.Configuration);
 
 var jwtSettings = new JwtSettings

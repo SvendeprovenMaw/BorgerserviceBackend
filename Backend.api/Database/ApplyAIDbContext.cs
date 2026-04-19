@@ -14,6 +14,38 @@ namespace Backend.api.Database
             modelBuilder.Entity<Term>().ToTable("Terms");
             modelBuilder.AddApplyAiPipelineModel();
 
+            modelBuilder.Entity<SentApplication>()
+                .ToTable("SentApplications");
+
+            modelBuilder.Entity<SentApplication>()
+                .HasIndex(application => application.PipelineJobId)
+                .IsUnique();
+
+            modelBuilder.Entity<SentApplication>()
+                .HasIndex(application => new { application.UserId, application.SentAtUtc });
+
+            modelBuilder.Entity<SentApplication>()
+                .HasOne(application => application.User)
+                .WithMany()
+                .HasForeignKey(application => application.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<SentApplication>()
+                .Property(application => application.TemplateSnapshotJson)
+                .HasColumnType("jsonb");
+
+            modelBuilder.Entity<SentApplication>()
+                .Property(application => application.SectionsJson)
+                .HasColumnType("jsonb");
+
+            modelBuilder.Entity<SentApplication>()
+                .Property(application => application.CompanyContextJson)
+                .HasColumnType("jsonb");
+
+            modelBuilder.Entity<SentApplication>()
+                .Property(application => application.GeneratedArtifactsJson)
+                .HasColumnType("jsonb");
+
             modelBuilder.Entity<Profile>()
                 .HasIndex(profile => profile.UserId)
                 .IsUnique();
@@ -56,6 +88,7 @@ namespace Backend.api.Database
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Term> Term { get; set; }
         public DbSet<Consent> Consents { get; set; }
+        public DbSet<SentApplication> SentApplications { get; set; }
         public DbSet<ApplyAiPipelineJob> ApplyAiPipelineJobs { get; set; }
         public DbSet<ApplyAiPipelinePhaseState> ApplyAiPipelinePhaseStates { get; set; }
         public DbSet<ApplyAiPipelineArtifact> ApplyAiPipelineArtifacts { get; set; }

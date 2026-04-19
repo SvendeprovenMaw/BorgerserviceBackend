@@ -1,4 +1,5 @@
 using Backend.api.Entities.Dto;
+using Backend.api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,29 +13,58 @@ namespace Backend.api.Controllers;
 [Route("api/[controller]")]
 public sealed class ApplicationController : ControllerBase
 {
-    /// <summary>
-    /// Returns the current user's sent applications.
-    /// </summary>
-    /// <remarks>
-    /// The documents page currently uses this route to remove the frontend-side placeholder error state.
-    ///
-    /// No sent-application persistence is wired yet, so the backend returns an empty list until that storage layer exists.
-    /// </remarks>
-    [HttpGet]
-    [ProducesResponseType(typeof(IReadOnlyList<ApplicationSummaryDto>), StatusCodes.Status200OK)]
-    public IActionResult ListApplications()
+    private readonly ISentApplicationService _sentApplicationService;
+
+    public ApplicationController(ISentApplicationService sentApplicationService)
     {
-        return Ok(Array.Empty<ApplicationSummaryDto>());
+        _sentApplicationService = sentApplicationService;
     }
 
     /// <summary>
-    /// Returns one sent application when the backing store exists.
+    /// Returns the current user's sent applications.
+    /// </summary>
+    [HttpGet]
+    [ProducesResponseType(typeof(IReadOnlyList<ApplicationSummaryDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> ListApplications(CancellationToken cancellationToken)
+    {
+        return Ok(await _sentApplicationService.ListAsync(User, cancellationToken));
+    }
+
+    /// <summary>
+    /// Saves the locked sent-application snapshot created by the Finish action in the live workflow.
+    /// </summary>
+    [HttpPost]
+    [ProducesResponseType(typeof(ApplicationDetailDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> SaveFinishedApplication(
+        [FromBody] FinishedApplicationRequestDto request,
+        CancellationToken cancellationToken)
+    {
+        var result = await _sentApplicationService.SaveAsync(User, request, cancellationToken);
+
+        return result.Error switch
+        {
+            SaveFinishedApplicationError.None => Ok(result.Application),
+            SaveFinishedApplicationError.JobNotFound => NotFound(new { message = result.Message }),
+            _ => BadRequest(new { message = result.Message }),
+        };
+    }
+
+    /// <summary>
+    /// Returns one sent application review snapshot for the current user.
     /// </summary>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(ApplicationSummaryDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApplicationDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetApplication(string id)
+    public async Task<IActionResult> GetApplication(Guid id, CancellationToken cancellationToken)
     {
-        return NotFound(new { message = $"Application '{id}' was not found." });
+        var application = await _sentApplicationService.GetAsync(User, id, cancellationToken);
+        if (application is null)
+        {
+            return NotFound(new { message = $"Application '{id}' was not found." });
+        }
+
+        return Ok(application);
     }
 }

@@ -5,6 +5,7 @@ namespace Backend.api.Enums
         AiDraft,
         UserDraft,
         Cv,
+        Bio,
         CarreerDocument
     }
 }
