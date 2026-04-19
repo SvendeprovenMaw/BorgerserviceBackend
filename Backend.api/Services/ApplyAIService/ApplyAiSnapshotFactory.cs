@@ -69,9 +69,13 @@ namespace Backend.api.Services.ApplyAIService
 
         public static ApplyAiPhaseDocumentResponse CreatePhaseDocumentResponse(ApplyAiPipelineJob job, ApplyAiPipelinePhaseState phaseState)
         {
-            var isEditable = job.WorkflowMode == PipelineWorkflowMode.Manual
-                && job.Status == PipelineJobStatus.AwaitingUserAction
-                && job.CurrentPhase == phaseState.Phase;
+            var isEditable =
+                (job.WorkflowMode == PipelineWorkflowMode.Manual
+                    && job.Status == PipelineJobStatus.AwaitingUserAction
+                    && job.CurrentPhase == phaseState.Phase)
+                || ((job.Status == PipelineJobStatus.Completed || job.Status == PipelineJobStatus.Failed)
+                    && !string.IsNullOrWhiteSpace(phaseState.DocumentId)
+                    && !string.IsNullOrWhiteSpace(phaseState.DocumentJson));
 
             return new ApplyAiPhaseDocumentResponse(
                 phaseState.Phase,

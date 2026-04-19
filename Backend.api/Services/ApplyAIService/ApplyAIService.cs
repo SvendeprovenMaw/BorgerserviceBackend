@@ -277,19 +277,40 @@ namespace Backend.api.Services.ApplyAIService
             }
 
             var job = await GetOwnedJobAsync(claimsPrincipal, jobId, cancellationToken);
-            EnsureEditablePhase(job, phase);
-
             var phaseState = GetPhaseState(job, phase);
+            EnsurePhaseDocumentCanBeUpdated(job, phaseState);
+
+            var isManualReviewEdit = job.WorkflowMode == PipelineWorkflowMode.Manual
+                && job.Status == PipelineJobStatus.AwaitingUserAction
+                && job.CurrentPhase == phase;
             var now = DateTimeOffset.UtcNow;
             phaseState.DocumentJson = request.DocumentJson.GetRawText();
             phaseState.VerificationJson = BuildVerificationJson(PipelinePhaseCatalog.Get(phase), now, "pending_revalidation", request.EditorComment);
             phaseState.GateJson = BuildGateJson(now, approvedForDownstream: false, hasPendingEdits: true);
             phaseState.HasUnverifiedEdits = true;
             phaseState.ApprovedForDownstream = false;
-            phaseState.StatusMessage = $"{PipelinePhaseCatalog.Get(phase).DisplayName}: awaiting manual approval after edits.";
+            phaseState.Status = isManualReviewEdit
+                ? PipelinePhaseStatus.AwaitingApproval
+                : PipelinePhaseStatus.Completed;
+            phaseState.CurrentActivity = isManualReviewEdit
+                ? PipelineActivity.AwaitingUserApproval
+                : PipelineActivity.Completed;
+            phaseState.ApprovalRequired = isManualReviewEdit;
+            phaseState.WarningCount = 0;
+            phaseState.ErrorCount = 0;
+            phaseState.CompletedAtUtc ??= now;
+            phaseState.StatusMessage = isManualReviewEdit
+                ? $"{PipelinePhaseCatalog.Get(phase).DisplayName}: awaiting manual approval after edits."
+                : $"{PipelinePhaseCatalog.Get(phase).DisplayName}: updated. Retry the downstream phase to apply the reviewed document.";
 
             job.UpdatedAtUtc = now;
-            AppendEvent(job, PipelineEventType.JobProgressUpdated, phase, PipelineActivity.AwaitingUserApproval, phaseState.StatusMessage, now);
+            AppendEvent(
+                job,
+                PipelineEventType.JobProgressUpdated,
+                phase,
+                phaseState.CurrentActivity ?? PipelineActivity.Completed,
+                phaseState.StatusMessage,
+                now);
             await _jobStore.SaveChangesAsync(cancellationToken);
 
             return ApplyAiSnapshotFactory.CreatePhaseDocumentResponse(job, phaseState);
@@ -355,21 +376,13 @@ namespace Backend.api.Services.ApplyAIService
             CancellationToken cancellationToken = default)
         {
             var job = await GetOwnedJobAsync(claimsPrincipal, jobId, cancellationToken);
-            if (job.CurrentPhase != phase)
-            {
-                throw new InvalidOperationException("Only the current phase can be retried in the test implementation.");
-            }
-
-            if (job.Status is not PipelineJobStatus.AwaitingUserAction and not PipelineJobStatus.Failed)
-            {
-                throw new InvalidOperationException("The current job state does not allow retry.");
-            }
+            EnsurePhaseCanBeRetried(job, phase);
 
             ApplyRetryOverrides(job, phase, request);
 
+            InvalidatePhaseAndDownstream(job, phase);
+
             var phaseState = GetPhaseState(job, phase);
-            RemovePhaseArtifacts(job, phase);
-            ResetPhaseStateForRetry(phaseState);
 
             var now = DateTimeOffset.UtcNow;
             job.Status = PipelineJobStatus.Running;
@@ -1057,7 +1070,8 @@ namespace Backend.api.Services.ApplyAIService
                     phaseState.AttemptCount,
                     completedAtUtc,
                     isRetry,
-                    JsonNode.Parse(outputJson.OutputJson));
+                    JsonNode.Parse(outputJson.OutputJson),
+                    outputJson);
 
                 var completionMessage = verificationResult.ApprovedForDownstream
                     ? $"{definition.DisplayName}: completed through the in-process ApplyAI runtime."
@@ -1134,7 +1148,8 @@ namespace Backend.api.Services.ApplyAIService
                 phaseState.AttemptCount,
                 completedAtUtc,
                 isRetry,
-                JsonNode.Parse(outputJson.OutputJson));
+                JsonNode.Parse(outputJson.OutputJson),
+                outputJson);
 
             var completionMessage = verificationResult.ApprovedForDownstream
                 ? $"{definition.DisplayName}: completed through the in-process ApplyAI runtime."
@@ -1230,7 +1245,8 @@ namespace Backend.api.Services.ApplyAIService
                 phaseState.AttemptCount,
                 completedAtUtc,
                 isRetry,
-                JsonNode.Parse(outputJson.OutputJson));
+                JsonNode.Parse(outputJson.OutputJson),
+                outputJson);
 
             var completionMessage = verificationResult.ApprovedForDownstream
                 ? $"{definition.DisplayName}: completed through the in-process ApplyAI runtime."
@@ -1355,6 +1371,71 @@ namespace Backend.api.Services.ApplyAIService
             if (job.Status != PipelineJobStatus.AwaitingUserAction || job.CurrentPhase != phase)
             {
                 throw new InvalidOperationException("The requested phase is not awaiting manual review.");
+            }
+        }
+
+        private static void EnsurePhaseDocumentCanBeUpdated(
+            ApplyAiPipelineJob job,
+            ApplyAiPipelinePhaseState phaseState)
+        {
+            var isManualCurrentPhase = job.WorkflowMode == PipelineWorkflowMode.Manual
+                && job.Status == PipelineJobStatus.AwaitingUserAction
+                && job.CurrentPhase == phaseState.Phase;
+            if (isManualCurrentPhase)
+            {
+                return;
+            }
+
+            var hasStoredDocument = !string.IsNullOrWhiteSpace(phaseState.DocumentId)
+                && !string.IsNullOrWhiteSpace(phaseState.DocumentJson);
+            if (hasStoredDocument && job.Status is PipelineJobStatus.Completed or PipelineJobStatus.Failed)
+            {
+                return;
+            }
+
+            throw new InvalidOperationException("The requested phase document is not available for editing in the current job state.");
+        }
+
+        private void EnsurePhaseCanBeRetried(ApplyAiPipelineJob job, PipelinePhase phase)
+        {
+            if (job.CurrentPhase == phase && job.Status is PipelineJobStatus.AwaitingUserAction or PipelineJobStatus.Failed)
+            {
+                return;
+            }
+
+            if (job.Status is PipelineJobStatus.Completed or PipelineJobStatus.Failed && CanRetryPersistedPhase(job, phase))
+            {
+                return;
+            }
+
+            throw new InvalidOperationException("The current job state does not allow retry of the selected phase.");
+        }
+
+        private bool CanRetryPersistedPhase(ApplyAiPipelineJob job, PipelinePhase phase)
+        {
+            return phase switch
+            {
+                PipelinePhase.CompanyContext => HasStoredJobPostingArtifact(job),
+                PipelinePhase.Requirements => HasStoredJobPostingArtifact(job),
+                PipelinePhase.CandidateEvidence => HasUsableDocument(job, PipelinePhase.Requirements),
+                PipelinePhase.Matching => HasUsableDocument(job, PipelinePhase.Requirements)
+                    && HasUsableDocument(job, PipelinePhase.CandidateEvidence),
+                PipelinePhase.ApplicationGeneration => HasUsableDocument(job, PipelinePhase.Requirements)
+                    && HasUsableDocument(job, PipelinePhase.CompanyContext)
+                    && HasUsableDocument(job, PipelinePhase.CandidateEvidence)
+                    && HasUsableDocument(job, PipelinePhase.Matching)
+                    && !string.IsNullOrWhiteSpace(job.PreferencesSnapshotJson),
+                _ => false,
+            };
+        }
+
+        private void InvalidatePhaseAndDownstream(ApplyAiPipelineJob job, PipelinePhase phase)
+        {
+            var phaseIndex = PipelinePhaseCatalog.IndexOf(phase);
+            foreach (var definition in PipelinePhaseCatalog.All.Where(definition => PipelinePhaseCatalog.IndexOf(definition.Phase) >= phaseIndex))
+            {
+                RemovePhaseArtifacts(job, definition.Phase);
+                ResetPhaseStateForRetry(GetPhaseState(job, definition.Phase));
             }
         }
 
@@ -1777,7 +1858,8 @@ namespace Backend.api.Services.ApplyAIService
             int attemptCount,
             DateTimeOffset generatedAtUtc,
             bool isRetry,
-            JsonNode? phaseOutput = null)
+            JsonNode? phaseOutput = null,
+            StructuredJsonGenerationResult? llmResult = null)
         {
             var candidateFiles = new JsonArray();
             foreach (var candidateFile in DeserializeCandidateFiles(job))
@@ -1853,12 +1935,32 @@ namespace Backend.api.Services.ApplyAIService
                 phaseJson["preferencesSnapshot"] = JsonNode.Parse(job.PreferencesSnapshotJson);
             }
 
+            if (llmResult is not null)
+            {
+                phaseJson["llmResponse"] = BuildLlmResponseJson(llmResult);
+            }
+
             if (phaseOutput is not null)
             {
                 phaseJson["phaseOutput"] = phaseOutput.DeepClone();
             }
 
             return phaseJson.ToJsonString(new JsonSerializerOptions { WriteIndented = true });
+        }
+
+        private static JsonObject BuildLlmResponseJson(StructuredJsonGenerationResult llmResult)
+        {
+            return new JsonObject
+            {
+                ["model"] = llmResult.Model,
+                ["responseId"] = llmResult.ResponseId,
+                ["requestedDisplayCurrency"] = llmResult.RequestedDisplayCurrency,
+                ["displayCurrency"] = llmResult.DisplayCurrency,
+                ["tokenUsage"] = JsonSerializer.SerializeToNode(llmResult.TokenUsage, RuntimeJsonOptions),
+                ["pricing"] = JsonSerializer.SerializeToNode(llmResult.Pricing, RuntimeJsonOptions),
+                ["estimatedCost"] = JsonSerializer.SerializeToNode(llmResult.EstimatedCost, RuntimeJsonOptions),
+                ["currencyExchange"] = JsonSerializer.SerializeToNode(llmResult.CurrencyExchange, RuntimeJsonOptions)
+            };
         }
 
         private JsonObject BuildPhaseInputsJson(ApplyAiPipelineJob job, PipelinePhase phase)
@@ -1906,6 +2008,13 @@ namespace Backend.api.Services.ApplyAIService
             var phaseState = job.PhaseStates.First(item => item.Phase == phase);
             return !string.IsNullOrWhiteSpace(phaseState.DocumentId)
                 && phaseState.Status is PipelinePhaseStatus.Completed or PipelinePhaseStatus.AwaitingApproval;
+        }
+
+        private static bool HasUsableDocument(ApplyAiPipelineJob job, PipelinePhase phase)
+        {
+            var phaseState = job.PhaseStates.First(item => item.Phase == phase);
+            return !string.IsNullOrWhiteSpace(phaseState.DocumentId)
+                && !string.IsNullOrWhiteSpace(phaseState.DocumentJson);
         }
 
         private IEnumerable<ApplyAiPipelineArtifact> BuildArtifacts(ApplyAiPipelineJob job, PipelinePhase phase, string documentId)
