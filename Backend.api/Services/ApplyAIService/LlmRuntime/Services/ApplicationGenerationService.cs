@@ -40,6 +40,9 @@ public sealed class ApplicationGenerationService : IApplicationGenerationService
             SchemaDescription = asset.SchemaDescription,
             OutputSchema = asset.OutputSchema,
             Model = ResolveModelId(),
+            InputCostPerMillionTokens = _openAiOptions.Phases.ApplicationGeneration.InputCostPerMillionTokens,
+            CachedInputCostPerMillionTokens = _openAiOptions.Phases.ApplicationGeneration.CachedInputCostPerMillionTokens,
+            OutputCostPerMillionTokens = _openAiOptions.Phases.ApplicationGeneration.OutputCostPerMillionTokens,
             InputTexts =
             [
                 new StructuredTextInput

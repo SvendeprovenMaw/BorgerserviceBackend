@@ -37,6 +37,9 @@ public sealed class RequirementsParsingService : IRequirementsParsingService
             SchemaDescription = asset.SchemaDescription,
             OutputSchema = asset.OutputSchema,
             Model = ResolveModelId(),
+            InputCostPerMillionTokens = _openAiOptions.Phases.Requirements.InputCostPerMillionTokens,
+            CachedInputCostPerMillionTokens = _openAiOptions.Phases.Requirements.CachedInputCostPerMillionTokens,
+            OutputCostPerMillionTokens = _openAiOptions.Phases.Requirements.OutputCostPerMillionTokens,
             InputTexts = BuildTextInputs(request),
             InputFiles = BuildFileInputs(request)
         };

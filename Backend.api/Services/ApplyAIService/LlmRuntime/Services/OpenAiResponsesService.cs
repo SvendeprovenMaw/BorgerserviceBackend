@@ -15,15 +15,18 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
 {
     private readonly ResponsesClient _responsesClient;
     private readonly OpenAIOptions _options;
+    private readonly ICurrencyDisplayConversionService _currencyDisplayConversionService;
     private readonly ILogger<OpenAiResponsesService> _logger;
 
     public OpenAiResponsesService(
         ResponsesClient responsesClient,
         IOptions<OpenAIOptions> options,
+        ICurrencyDisplayConversionService currencyDisplayConversionService,
         ILogger<OpenAiResponsesService> logger)
     {
         _responsesClient = responsesClient;
         _options = options.Value;
+        _currencyDisplayConversionService = currencyDisplayConversionService;
         _logger = logger;
     }
 
@@ -42,6 +45,9 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
             Prompt = request.Prompt,
             OutputSchema = request.OutputSchema,
             Model = request.Model,
+            InputCostPerMillionTokens = request.InputCostPerMillionTokens,
+            CachedInputCostPerMillionTokens = request.CachedInputCostPerMillionTokens,
+            OutputCostPerMillionTokens = request.OutputCostPerMillionTokens,
             SchemaName = request.SchemaName,
             SchemaDescription = request.SchemaDescription,
             InputFiles =
@@ -135,13 +141,194 @@ public sealed class OpenAiResponsesService : IOpenAiResponsesService
         }
 
         var actualModel = ReadStringProperty(response.Value, "Model", "ResponseModel") ?? selectedModel;
+        var tokenUsage = ExtractTokenUsage(response.Value);
+        var pricing = BuildPricingSnapshot(actualModel, request);
+        var requestedDisplayCurrency = CurrencyCodeHelper.Normalize(_options.DisplayCurrency, pricing.Currency);
+        var currencyExchange = await _currencyDisplayConversionService.GetDisplayCurrencyQuoteAsync(pricing.Currency, cancellationToken);
+        var estimatedCost = BuildDisplayTokenCostSummary(tokenUsage, pricing, currencyExchange, requestedDisplayCurrency);
+
+        if (!string.Equals(pricing.Currency, requestedDisplayCurrency, StringComparison.OrdinalIgnoreCase))
+        {
+            if (currencyExchange.AppliedRate.HasValue && currencyExchange.UsingStaleRate)
+            {
+                _logger.LogWarning(
+                    "Display-currency conversion from {SourceCurrency} to {DisplayCurrency} is using stale exchange-rate data last refreshed at {LastSuccessfulRefreshUtc}.",
+                    pricing.Currency,
+                    requestedDisplayCurrency,
+                    currencyExchange.LastSuccessfulRefreshUtc);
+            }
+            else if (!currencyExchange.AppliedRate.HasValue)
+            {
+                _logger.LogWarning(
+                    "Display-currency conversion from {SourceCurrency} to {DisplayCurrency} is unavailable. Token cost metadata will remain in {SourceCurrency}.",
+                    pricing.Currency,
+                    requestedDisplayCurrency,
+                    pricing.Currency);
+            }
+        }
+
         return new StructuredJsonGenerationResult
         {
             OutputJson = outputJson,
             Model = actualModel,
             ResponseId = ReadStringProperty(response.Value, "Id", "ResponseId"),
-            TokenUsage = ExtractTokenUsage(response.Value)
+            TokenUsage = tokenUsage,
+            RequestedDisplayCurrency = requestedDisplayCurrency,
+            DisplayCurrency = estimatedCost.Currency,
+            Pricing = pricing,
+            CurrencyExchange = currencyExchange,
+            EstimatedCost = estimatedCost
         };
+    }
+
+    private LlmPricingSnapshot BuildPricingSnapshot(string model, StructuredJsonResponseRequest request)
+    {
+        var configuredModel = _options.Models.Values.FirstOrDefault(entry => string.Equals(entry.Id, model, StringComparison.OrdinalIgnoreCase));
+        var normalizedInputCost = NormalizeNonNegativePrice(request.InputCostPerMillionTokens ?? configuredModel?.InputCostPerMillionTokens ?? _options.InputCostPerMillionTokens);
+        var normalizedCachedInputCost = NormalizeNonNegativePrice(request.CachedInputCostPerMillionTokens ?? configuredModel?.CachedInputCostPerMillionTokens ?? _options.CachedInputCostPerMillionTokens) ?? normalizedInputCost;
+        var normalizedOutputCost = NormalizeNonNegativePrice(request.OutputCostPerMillionTokens ?? configuredModel?.OutputCostPerMillionTokens ?? _options.OutputCostPerMillionTokens);
+
+        return new LlmPricingSnapshot
+        {
+            Model = string.IsNullOrWhiteSpace(model) ? _options.ResolveModelId() : model.Trim(),
+            Currency = CurrencyCodeHelper.Normalize(_options.PricingCurrency),
+            InputCostPerMillionTokens = normalizedInputCost,
+            CachedInputCostPerMillionTokens = normalizedCachedInputCost,
+            OutputCostPerMillionTokens = normalizedOutputCost,
+            PricingConfigured = normalizedInputCost.HasValue && normalizedOutputCost.HasValue
+        };
+    }
+
+    private static decimal? NormalizeNonNegativePrice(decimal? price)
+    {
+        return price.HasValue && price.Value >= 0m ? price : null;
+    }
+
+    private static LlmTokenCostSummary BuildDisplayTokenCostSummary(
+        LlmTokenUsage tokenUsage,
+        LlmPricingSnapshot pricing,
+        CurrencyExchangeRateQuote currencyExchange,
+        string requestedDisplayCurrency)
+    {
+        var rawEstimatedCost = BuildTokenCostSummary(tokenUsage, pricing);
+        if (string.Equals(rawEstimatedCost.Currency, requestedDisplayCurrency, StringComparison.OrdinalIgnoreCase))
+        {
+            return rawEstimatedCost with { Currency = requestedDisplayCurrency };
+        }
+
+        if (!rawEstimatedCost.PricingConfigured || !currencyExchange.AppliedRate.HasValue)
+        {
+            return rawEstimatedCost;
+        }
+
+        return ConvertTokenCostSummary(rawEstimatedCost, currencyExchange);
+    }
+
+    private static LlmTokenCostSummary BuildTokenCostSummary(LlmTokenUsage tokenUsage, LlmPricingSnapshot pricing)
+    {
+        if (!pricing.PricingConfigured || !pricing.InputCostPerMillionTokens.HasValue || !pricing.OutputCostPerMillionTokens.HasValue)
+        {
+            return CreateTokenCostSummary(pricing.Currency, pricingConfigured: false, inputCost: null, outputCost: null, totalCost: null);
+        }
+
+        var cachedInputTokens = Math.Max(0L, Math.Min(tokenUsage.CachedInputTokens, tokenUsage.InputTokens));
+        var uncachedInputTokens = Math.Max(0L, tokenUsage.InputTokens - cachedInputTokens);
+        var cachedInputPrice = pricing.CachedInputCostPerMillionTokens ?? pricing.InputCostPerMillionTokens.Value;
+        var inputCost = RoundCost(
+            uncachedInputTokens / 1_000_000m * pricing.InputCostPerMillionTokens.Value
+            + cachedInputTokens / 1_000_000m * cachedInputPrice);
+        var outputCost = RoundCost(tokenUsage.OutputTokens / 1_000_000m * pricing.OutputCostPerMillionTokens.Value);
+
+        return CreateTokenCostSummary(
+            pricing.Currency,
+            pricingConfigured: true,
+            inputCost,
+            outputCost,
+            RoundCost(inputCost + outputCost));
+    }
+
+    private static LlmTokenCostSummary ConvertTokenCostSummary(LlmTokenCostSummary summary, CurrencyExchangeRateQuote currencyExchange)
+    {
+        var displayCurrency = currencyExchange.TargetCurrency;
+        if (string.Equals(summary.Currency, displayCurrency, StringComparison.OrdinalIgnoreCase))
+        {
+            return summary with { Currency = displayCurrency };
+        }
+
+        if (!summary.PricingConfigured)
+        {
+            return summary with { Currency = displayCurrency };
+        }
+
+        if (!currencyExchange.AppliedRate.HasValue)
+        {
+            return summary;
+        }
+
+        decimal? inputCost = summary.InputCost.HasValue
+            ? ConvertCost(summary.InputCost.Value, currencyExchange.AppliedRate.Value)
+            : null;
+        decimal? outputCost = summary.OutputCost.HasValue
+            ? ConvertCost(summary.OutputCost.Value, currencyExchange.AppliedRate.Value)
+            : null;
+        decimal? totalCost = summary.TotalCost.HasValue
+            ? ConvertCost(summary.TotalCost.Value, currencyExchange.AppliedRate.Value)
+            : null;
+
+        return CreateTokenCostSummary(
+            displayCurrency,
+            pricingConfigured: summary.PricingConfigured,
+            inputCost,
+            outputCost,
+            totalCost);
+    }
+
+    private static LlmTokenCostSummary CreateTokenCostSummary(
+        string currency,
+        bool pricingConfigured,
+        decimal? inputCost,
+        decimal? outputCost,
+        decimal? totalCost)
+    {
+        decimal? roundedUpTotalCostNumeric = totalCost.HasValue
+            ? RoundUpCostToTwoDecimals(totalCost.Value)
+            : null;
+
+        return new LlmTokenCostSummary
+        {
+            Currency = currency,
+            PricingConfigured = pricingConfigured,
+            InputCost = inputCost,
+            OutputCost = outputCost,
+            TotalCost = totalCost,
+            RoundedUpTotalCost = roundedUpTotalCostNumeric.HasValue ? FormatCostToTwoDecimals(roundedUpTotalCostNumeric.Value) : null,
+            RoundedUpTotalCostNumeric = roundedUpTotalCostNumeric
+        };
+    }
+
+    private static decimal RoundCost(decimal value)
+    {
+        return decimal.Round(value, 8, MidpointRounding.AwayFromZero);
+    }
+
+    private static decimal RoundUpCostToTwoDecimals(decimal value)
+    {
+        var scaledValue = value * 100m;
+        var roundedScaledValue = value >= 0m
+            ? decimal.Ceiling(scaledValue)
+            : decimal.Floor(scaledValue);
+
+        return decimal.Round(roundedScaledValue / 100m, 2, MidpointRounding.AwayFromZero);
+    }
+
+    private static string FormatCostToTwoDecimals(decimal value)
+    {
+        return value.ToString("0.00", CultureInfo.InvariantCulture);
+    }
+
+    private static decimal ConvertCost(decimal amount, decimal exchangeRate)
+    {
+        return decimal.Round(amount * exchangeRate, 8, MidpointRounding.AwayFromZero);
     }
 
     private static string BuildInstructionText(string prompt)

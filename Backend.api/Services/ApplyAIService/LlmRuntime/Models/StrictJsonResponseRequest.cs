@@ -20,6 +20,12 @@ public sealed class StrictJsonResponseRequest
 
     public string? Model { get; init; }
 
+    public decimal? InputCostPerMillionTokens { get; init; }
+
+    public decimal? CachedInputCostPerMillionTokens { get; init; }
+
+    public decimal? OutputCostPerMillionTokens { get; init; }
+
     public string SchemaName { get; init; } = "strict_response";
 
     public string? SchemaDescription { get; init; }

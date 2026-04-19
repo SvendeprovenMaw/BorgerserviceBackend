@@ -72,6 +72,9 @@ public sealed class MatchingService : IMatchingService
             SchemaDescription = asset.SchemaDescription,
             OutputSchema = asset.OutputSchema,
             Model = ResolveModelId(),
+            InputCostPerMillionTokens = _openAiOptions.Phases.Matching.InputCostPerMillionTokens,
+            CachedInputCostPerMillionTokens = _openAiOptions.Phases.Matching.CachedInputCostPerMillionTokens,
+            OutputCostPerMillionTokens = _openAiOptions.Phases.Matching.OutputCostPerMillionTokens,
             InputTexts = inputTexts
         };
 

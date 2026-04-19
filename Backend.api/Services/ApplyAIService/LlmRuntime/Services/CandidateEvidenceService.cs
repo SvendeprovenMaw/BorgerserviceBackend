@@ -39,6 +39,9 @@ public sealed class CandidateEvidenceService : ICandidateEvidenceService
             SchemaDescription = asset.SchemaDescription,
             OutputSchema = asset.OutputSchema,
             Model = ResolveModelId(),
+            InputCostPerMillionTokens = _openAiOptions.Phases.CandidateEvidence.InputCostPerMillionTokens,
+            CachedInputCostPerMillionTokens = _openAiOptions.Phases.CandidateEvidence.CachedInputCostPerMillionTokens,
+            OutputCostPerMillionTokens = _openAiOptions.Phases.CandidateEvidence.OutputCostPerMillionTokens,
             InputTexts =
             [
                 new StructuredTextInput

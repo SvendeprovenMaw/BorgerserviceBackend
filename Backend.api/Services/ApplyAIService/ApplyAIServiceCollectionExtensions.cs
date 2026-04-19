@@ -1,4 +1,5 @@
 using ApplyAI.Playwright;
+using Backend.api.Services.ApplyAIService.LlmRuntime.Helpers;
 using Backend.api.Services.ApplyAIService.LlmRuntime.Options;
 using Backend.api.Services.ApplyAIService.LlmRuntime.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -69,6 +70,8 @@ namespace Backend.api.Services.ApplyAIService
                     options.Phases.ApplicationGeneration.Model ??= options.Model;
                 })
                 .Validate(options => !string.IsNullOrWhiteSpace(options.ApiKey), $"{OpenAIOptions.SectionName}:ApiKey or OPENAI_API_KEY must be configured.")
+                .Validate(options => CurrencyCodeHelper.IsIso4217Like(options.PricingCurrency), $"{OpenAIOptions.SectionName}:PricingCurrency must be a three-letter ISO 4217 code.")
+                .Validate(options => CurrencyCodeHelper.IsIso4217Like(options.DisplayCurrency), $"{OpenAIOptions.SectionName}:DisplayCurrency must be a three-letter ISO 4217 code.")
                 .Validate(options => options.Models.Count > 0, $"{OpenAIOptions.SectionName}:Models must contain at least one configured entry.")
                 .Validate(options => IsVisionModelSelectionConfigured(options, options.Model), $"{OpenAIOptions.SectionName}:Model must point to a configured vision-capable model entry.")
                 .Validate(options => !options.Phases.CompanyContext.Model.HasValue || IsVisionModelSelectionConfigured(options, options.Phases.CompanyContext.Model.Value), $"{OpenAIOptions.SectionName}:Phases:CompanyContext:Model must point to a configured vision-capable model entry.")
@@ -82,6 +85,12 @@ namespace Backend.api.Services.ApplyAIService
                 .AddOptions<VerificationOptions>()
                 .Bind(configuration.GetSection(VerificationOptions.SectionName))
                 .ValidateOnStart();
+
+            services.AddHttpClient("exchange-rate-api", client =>
+            {
+                client.BaseAddress = new Uri("https://open.er-api.com/");
+                client.Timeout = TimeSpan.FromSeconds(15);
+            });
 
             services.AddSingleton<ResponsesClient>(serviceProvider =>
             {
@@ -97,10 +106,13 @@ namespace Backend.api.Services.ApplyAIService
             services.AddSingleton<ICompanyContextService, CompanyContextService>();
             services.AddSingleton<ICoverLetterPdfRenderer, CoverLetterPdfRenderer>();
             services.AddSingleton<ICoverLetterTemplateRenderer, CoverLetterTemplateRenderer>();
+            services.AddSingleton<IExchangeRateCacheService, ExchangeRateCacheService>();
+            services.AddSingleton<ICurrencyDisplayConversionService, CurrencyDisplayConversionService>();
             services.AddSingleton<IMatchingService, MatchingService>();
             services.AddSingleton<IRequirementsParsingService, RequirementsParsingService>();
             services.AddSingleton<IVerificationOrchestrator, VerificationOrchestrator>();
             services.AddSingleton<IDownstreamGateEvaluator, DownstreamGateEvaluator>();
+            services.AddHostedService<ExchangeRateRefreshService>();
             services.AddSingleton<ApplyAiExecutionQueue>();
             services.AddSingleton<IApplyAiExecutionQueue>(serviceProvider => serviceProvider.GetRequiredService<ApplyAiExecutionQueue>());
             services.AddSingleton<IHostedService>(serviceProvider => serviceProvider.GetRequiredService<ApplyAiExecutionQueue>());
