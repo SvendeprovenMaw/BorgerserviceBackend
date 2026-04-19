@@ -1,0 +1,19 @@
+{
+  "Status": "rendered",
+  "HtmlArtifactPath": "Backend.api/Services/ApplyAIService/Assets/MockResults/Run36/cover_letter/cover_letter.html",
+  "CssArtifactPath": "Backend.api/Services/ApplyAIService/Assets/MockResults/Run36/cover_letter/cover_letter.css",
+  "PdfArtifactPath": "Backend.api/Services/ApplyAIService/Assets/MockResults/Run36/cover_letter/cover_letter.pdf",
+  "PdfPageCount": 1,
+  "WithinSinglePageLimit": true,
+  "MainContentCharacterCount": 969,
+  "MainContentBudgetUsage": 1400,
+  "MaxMainContentCharacters": 1550,
+  "ExplicitLineBreakCount": 1,
+  "ParagraphBreakCount": 5,
+  "EstimatedCharactersPerLine": 72,
+  "WithinMainContentLimit": true,
+  "MissingFields": [],
+  "Warnings": [],
+  "PdfErrorMessage": null,
+  "ErrorMessage": null
+}

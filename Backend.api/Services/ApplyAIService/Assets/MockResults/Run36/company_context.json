@@ -1,0 +1,81 @@
+{
+  "_meta": {
+    "company_name": "JN Data",
+    "input_summary_da": "Analyse af jobopslag for DevOps-udvikler hos JN Data samt to ansøgerprofiler for Emma Sørensen.",
+    "parsed_files": [
+      "JN DATA - Udvikler med fokus på DevOps https://jndata-career.talent-soft.com/job/job-udvikler-med-fokus-pa-devops_498.aspx",
+      "emma_sorensen_cv_da.pdf",
+      "profile.pdf"
+    ],
+    "errors": [
+      "Ansøgeradressen kan kun fastslås til Roskilde; arbejdspladsen kan fastslås til JN Data i Roskilde på Havsteensvej 4 eller Silkeborg på Frichsvej 18, men jobopslaget angiver begge lokationer uden entydig arbejdsadresse."
+    ]
+  },
+  "company_profile": {
+    "employee_count": {
+      "value": 670,
+      "display_da": "ca. 670 medarbejdere i Danmark"
+    },
+    "industry_da": "IT-drift og finansiel it-infrastruktur",
+    "homepage_values_mission_vision_da": [
+      "Vi gør det usynlige",
+      "Vi gør det seriøst",
+      "Vi gør det sammen",
+      "Som medarbejder i JN Data er du med til at drifte Danmarks økonomi"
+    ],
+    "trustpilot": {
+      "score": null,
+      "display_da": "Ukendt"
+    },
+    "glassdoor": {
+      "score": 3.3,
+      "display_da": "3,3 ud af 5",
+      "pros_themes_da": [
+        "God work-life balance",
+        "Fleksibilitet",
+        "Gode kolleger",
+        "Gode benefits",
+        "Jobstabilitet"
+      ],
+      "cons_themes_da": [
+        "Lav løn",
+        "Overarbejde",
+        "Rigid og ufleksibel kultur",
+        "Gammeldags proceskultur",
+        "Begrænset mulighed for forbedring"
+      ]
+    }
+  },
+  "economics": {
+    "growth_assessment_da": "Stabil til let vækst",
+    "primary_products_da": [
+      "Sikker, compliant og stabil IT-drift",
+      "Drift af mainframe- og z-platform-løsninger",
+      "Developer experience platform og udviklingsværktøjer",
+      "Datacenter-, server-, storage- og virtualiseringstjenester"
+    ],
+    "primary_cashcows_da": [
+      "IT-drift til finanssektoren",
+      "Indkøbsfællesskab og fælles IT-services til kunderne"
+    ],
+    "salary_conditions_da": "Jobopslaget nævner gode ansættelsesvilkår, men ingen konkret løn."
+  },
+  "employee_conditions": {
+    "union_agreement_indication_da": "Ukendt",
+    "skill_development_opportunities_da": "Der nævnes mulighed for udvikling i et professionelt, men uformelt miljø, samt undervisning af kunder og evt. konsulenter."
+  },
+  "media_mentions": {
+    "recent_media_mentions_da": [
+      "JN Data leverede forventet resultat for 2024 med knap 10,3 mio. kr. i overskud og ca. 2,5 mia. kr. i omsætning.",
+      "Finanstilsynet gennemførte en IT-inspektion i vinteren 2024, som ikke gav anledning til tilsynsreaktioner.",
+      "JN Data blev i 2025 omtalt for styrket resiliens, beredskab og sikker, stabil it-drift.",
+      "Netcompany Banking Services trådte ud af ejerkredsen i 2025, mens samarbejdet fortsætter som kunde."
+    ]
+  },
+  "distance": {
+    "commute_distance_da": "ca. 0 km",
+    "applicant_address_da": "Roskilde, Danmark",
+    "workplace_address_da": "Havsteensvej 4, 4000 Roskilde",
+    "calculation_basis_da": "Afstand vurderet ud fra ansøgerens oplyste lokation i Roskilde og JN Datas oplyste Roskilde-adresse på Havsteensvej 4."
+  }
+}

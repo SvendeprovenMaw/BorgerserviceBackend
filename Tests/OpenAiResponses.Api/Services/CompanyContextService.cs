@@ -130,10 +130,9 @@ public sealed class CompanyContextService : ICompanyContextService
 
     private async Task<FlowAsset> LoadAssetAsync(CancellationToken cancellationToken)
     {
-        var repositoryRoot = GetRepositoryRoot();
-        var schemaPath = Path.Combine(repositoryRoot, "LLM", "AI Schemas", "LLM Parsing", "company_context_schema.json");
-        var promptPath = Path.Combine(repositoryRoot, "LLM", "Prompts", "company_context.prompt");
-        var basePromptPath = Path.Combine(repositoryRoot, "LLM", "Prompts", "base.prompt");
+        var schemaPath = RepositoryRootResolver.ResolveApplyAiAssetPath(_configuration, _environment, "Schemas", "LLM Parsing", "company_context_schema.json");
+        var promptPath = RepositoryRootResolver.ResolveApplyAiAssetPath(_configuration, _environment, "Prompts", "company_context.prompt");
+        var basePromptPath = RepositoryRootResolver.ResolveApplyAiAssetPath(_configuration, _environment, "Prompts", "base.prompt");
 
         var schemaContent = await File.ReadAllTextAsync(schemaPath, cancellationToken);
         var basePrompt = await File.ReadAllTextAsync(basePromptPath, cancellationToken);
@@ -161,11 +160,6 @@ public sealed class CompanyContextService : ICompanyContextService
     private string ResolveModelId()
     {
         return _openAiOptions.ResolveModelId(_openAiOptions.Phases.CompanyContext.Model);
-    }
-
-    private string GetRepositoryRoot()
-    {
-        return RepositoryRootResolver.GetRepositoryRoot(_configuration, _environment);
     }
 
     private sealed record FlowAsset(

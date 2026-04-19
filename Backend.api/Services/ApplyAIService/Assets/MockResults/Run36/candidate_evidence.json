@@ -1,0 +1,340 @@
+{
+  "_meta": {
+    "requirements_document_id": "requirements_devops_udvikler_jn_data_roskilde_eller_silkeborg",
+    "parsed_files": [
+      "emma_sorensen_cv_da.pdf",
+      "profile.pdf"
+    ],
+    "errors": []
+  },
+  "evidence_items": [
+    {
+      "evidence_id": "evidence_1",
+      "fact_da": "Kandidaten beskriver sig som junior softwareudvikler med fokus på moderne webudvikling, API-design og brugervenlige grænseflader.",
+      "normalized_label": "junior_softwareudvikler_webudvikling_api",
+      "category": "role_experience",
+      "support_type": "explicit",
+      "strength": "strong",
+      "relevant_requirement_ids": [
+        "req_1",
+        "req_3"
+      ],
+      "requirement_relevance_reason_da": "Relevant for erfaring som udvikler og for udvikling på tværs af hele udviklingsprocessen i en softwareudviklerrolle.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Junior softwareudvikler | .NET, API’er og React",
+          "section_hint": null
+        },
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Nysgerrig og løsningsorienteret junior softwareudvikler med fokus på moderne webudvikling, API-design og brugervenlige grænseflader.",
+          "section_hint": null
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_2",
+      "fact_da": "Kandidaten har arbejdet som studentermedhjælper med softwareudvikling hos Nordic Digital Solutions fra 2024 til 2026.",
+      "normalized_label": "studentermedhjælper_softwareudvikling",
+      "category": "role_experience",
+      "support_type": "explicit",
+      "strength": "strong",
+      "relevant_requirement_ids": [
+        "req_1"
+      ],
+      "requirement_relevance_reason_da": "Viser konkret udviklererfaring i en erhvervskontekst.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Studentermedhjælper, softwareudvikling Nordic Digital Solutions, Roskilde | 2024 - 2026",
+          "section_hint": "Erhvervserfaring"
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_3",
+      "fact_da": "Kandidaten har udviklet og vedligeholdt interne .NET-baserede webmoduler til registrering og rapportering.",
+      "normalized_label": "net_webmoduler_udvikling_vedligeholdelse",
+      "category": "technical_skill",
+      "support_type": "explicit",
+      "strength": "strong",
+      "relevant_requirement_ids": [
+        "req_1",
+        "req_3",
+        "req_11"
+      ],
+      "requirement_relevance_reason_da": "Dokumenterer konkret udviklings- og vedligeholdelsesarbejde samt arbejde i en udviklingsproces med implementering og drift.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Udviklede og vedligeholdt interne .NET-baserede webmoduler til registrering og rapportering.",
+          "section_hint": "Erhvervserfaring"
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_4",
+      "fact_da": "Kandidaten har bygget REST API-endpoints og deltaget i integrationer mellem front-end, database og tredjepartssystemer.",
+      "normalized_label": "api_endpoints_integrationer",
+      "category": "technical_skill",
+      "support_type": "explicit",
+      "strength": "strong",
+      "relevant_requirement_ids": [
+        "req_3",
+        "req_11"
+      ],
+      "requirement_relevance_reason_da": "Understøtter erfaring med flere tekniske led i udviklingsprocessen og integrationer mellem systemkomponenter.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Byggede REST API-endpoints og deltog i integrationer mellem front-end, database og tredjepartssystemer.",
+          "section_hint": "Erhvervserfaring"
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_5",
+      "fact_da": "Kandidaten har arbejdet med fejlretning, kodegennemgang og mindre forbedringer i React-baserede brugerflader.",
+      "normalized_label": "fejlretning_kodegennemgang_react",
+      "category": "technical_skill",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_3",
+        "req_11"
+      ],
+      "requirement_relevance_reason_da": "Viser arbejde med løbende udvikling og forbedring af software gennem flere trin i processen.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Arbejdede med fejlretning, kodegennemgang og mindre forbedringer i React-baserede brugerflader.",
+          "section_hint": "Erhvervserfaring"
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_6",
+      "fact_da": "Kandidaten angiver kompetencer i C#, .NET, ASP.NET Core, udvikling af web-API’er, React, HTML, CSS, SQL, datamodellering, Git, test og versionsstyring.",
+      "normalized_label": "tekniske_kompetencer_csharp_dotnet_react_git_test",
+      "category": "technical_skill",
+      "support_type": "explicit",
+      "strength": "strong",
+      "relevant_requirement_ids": [
+        "req_3",
+        "req_11",
+        "req_13"
+      ],
+      "requirement_relevance_reason_da": "Relevant for bred udviklingserfaring, udviklingsproces og anvendelse af værktøjer som Git samt tekniske udviklingskompetencer.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "C#, .NET, ASP.NET Core og udvikling af web-API’er.",
+          "section_hint": "Kompetencer"
+        },
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "SQL, datamodellering, Git, test og versionsstyring.",
+          "section_hint": "Kompetencer"
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_7",
+      "fact_da": "Kandidaten har en uddannelse som datamatiker med fokus på softwareudvikling, databaser, systemintegration og projektarbejde.",
+      "normalized_label": "datamatiker_fokus_softwareudvikling",
+      "category": "education",
+      "support_type": "explicit",
+      "strength": "strong",
+      "relevant_requirement_ids": [
+        "req_3",
+        "req_11"
+      ],
+      "requirement_relevance_reason_da": "Uddannelsen understøtter erfaring og viden om udviklingsprocesser, integration og projektarbejde.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Datamatiker, erhvervsakademiuddannelse",
+          "section_hint": "Uddannelse"
+        },
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Fokus på softwareudvikling, databaser, systemintegration og projektarbejde.",
+          "section_hint": "Uddannelse"
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_8",
+      "fact_da": "Kandidaten beskriver sig som nysgerrig og løsningsorienteret og angiver interesse for at omsætte teori til stabile løsninger i produktion.",
+      "normalized_label": "nysgerrig_loesningsorienteret_produktion",
+      "category": "personal_trait",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_5",
+        "req_8",
+        "req_15"
+      ],
+      "requirement_relevance_reason_da": "Relevante personlige og arbejdsrelaterede signaler i forhold til interesse for DevOps, nysgerrighed og fokus på udviklingstrends.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Nysgerrig og løsningsorienteret junior softwareudvikler",
+          "section_hint": null
+        },
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "har et stærkt ønske om at omsætte teori til stabile løsninger i produktion.",
+          "section_hint": null
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_9",
+      "fact_da": "Kandidaten trives i samarbejde med både teknikere og forretning og angiver at være vant til hybridt samarbejde og dialog med både brugere og udviklere.",
+      "normalized_label": "samarbejde_med_tech_og_forretning",
+      "category": "collaboration",
+      "support_type": "explicit",
+      "strength": "strong",
+      "relevant_requirement_ids": [
+        "req_6",
+        "req_10"
+      ],
+      "requirement_relevance_reason_da": "Direkte relevant for samarbejde med kolleger, kunder og brugere samt forståelse af behov gennem dialog.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Trives i samarbejde med både teknikere og forretning",
+          "section_hint": null
+        },
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Er vant til hybridt samarbejde og dialog med både brugere og udviklere.",
+          "section_hint": "Arbejdsform"
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_10",
+      "fact_da": "Kandidaten har ydet teknisk support til brugere og dokumenteret løsninger på tilbagevendende problemer.",
+      "normalized_label": "teknisk_support_til_brugere",
+      "category": "customer_focus",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_6",
+        "req_10",
+        "req_16"
+      ],
+      "requirement_relevance_reason_da": "Viser kontakt med brugere og støtte i forbindelse med problemløsning, hvilket er relevant for samarbejde, brugerforståelse og undervisning/læring af andre.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Ydede teknisk support til brugere og dokumenterede løsninger på tilbagevendende problemer.",
+          "section_hint": "Erhvervserfaring"
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_11",
+      "fact_da": "Kandidaten har udført indholdsopdateringer på website og mindre automatiseringer i administrative workflows.",
+      "normalized_label": "indholdsopdateringer_og_automatisering",
+      "category": "technical_skill",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_5",
+        "req_8",
+        "req_13",
+        "req_15"
+      ],
+      "requirement_relevance_reason_da": "Relevante signaler om automatisering og arbejde med digitale værktøjer, selv om der ikke er dokumentation for de specifikke værktøjer i kravet.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Bidrog til indholdsopdateringer på website og mindre automatiseringer i administrative workflows.",
+          "section_hint": "Erhvervserfaring"
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_12",
+      "fact_da": "Kandidaten har gennemført freelance webprojekter for mindre kunder og omsat behov til enkle løsninger med fokus på overskuelig struktur og driftssikkerhed.",
+      "normalized_label": "freelance_webprojekter_for_kunder",
+      "category": "customer_focus",
+      "support_type": "explicit",
+      "strength": "moderate",
+      "relevant_requirement_ids": [
+        "req_6",
+        "req_10"
+      ],
+      "requirement_relevance_reason_da": "Viser arbejde for kunder og omsætning af behov til løsninger, hvilket er relevant for tæt samarbejde med kunder og brugere.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Udarbejdede simple portfolio- og præsentationssider for mindre kunder.",
+          "section_hint": "Freelance webprojekter"
+        },
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Omsatte behov til enkle løsninger med fokus på overskuelig struktur og driftssikkerhed.",
+          "section_hint": "Freelance webprojekter"
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_13",
+      "fact_da": "Kandidaten angiver dansk som modersmål og engelsk på professionelt niveau.",
+      "normalized_label": "dansk_engelsk_sprog",
+      "category": "language",
+      "support_type": "explicit",
+      "strength": "strong",
+      "relevant_requirement_ids": [
+        "req_7"
+      ],
+      "requirement_relevance_reason_da": "Direkte relevant for kravet om dansk og engelsk i skrift og tale, selv om sprogniveauerne ikke præciserer skrift og tale særskilt.",
+      "citations": [
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Dansk - modersmål",
+          "section_hint": "Sprog"
+        },
+        {
+          "filename": "emma_sorensen_cv_da.pdf",
+          "excerpt": "Engelsk - professionelt niveau",
+          "section_hint": "Sprog"
+        }
+      ]
+    },
+    {
+      "evidence_id": "evidence_14",
+      "fact_da": "Kandidaten oplyser at være villig til at flytte, at være bosat i Roskilde og at være tilgængelig fra 2026-07-01.",
+      "normalized_label": "lokation_flytbarhed_tilgængelighed",
+      "category": "logistics",
+      "support_type": "explicit",
+      "strength": "strong",
+      "relevant_requirement_ids": [
+        "req_9"
+      ],
+      "requirement_relevance_reason_da": "Logistisk relevant i forhold til en stilling med lokation i Roskilde eller Silkeborg og oplysning om starttidspunkt.",
+      "citations": [
+        {
+          "filename": "profile.pdf",
+          "excerpt": "By\nRoskilde",
+          "section_hint": "Lokation"
+        },
+        {
+          "filename": "profile.pdf",
+          "excerpt": "Villig til at flytte\nJa",
+          "section_hint": "Praktiske oplysninger"
+        },
+        {
+          "filename": "profile.pdf",
+          "excerpt": "Startdato\n2026-07-01",
+          "section_hint": "Jobpræferencer"
+        }
+      ]
+    }
+  ]
+}

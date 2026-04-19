@@ -37,9 +37,25 @@ public static class RepositoryRootResolver
         return Path.GetFullPath(Path.Combine(GetRepositoryRoot(configuration, environment), configuredPath));
     }
 
+    public static string ResolveApplyAiAssetPath(IConfiguration configuration, IHostEnvironment environment, params string[] pathSegments)
+    {
+        var combinedSegments = new string[4 + pathSegments.Length];
+        combinedSegments[0] = "Backend.api";
+        combinedSegments[1] = "Services";
+        combinedSegments[2] = "ApplyAIService";
+        combinedSegments[3] = "Assets";
+
+        if (pathSegments.Length > 0)
+        {
+            Array.Copy(pathSegments, 0, combinedSegments, 4, pathSegments.Length);
+        }
+
+        return Path.GetFullPath(Path.Combine(GetRepositoryRoot(configuration, environment), Path.Combine(combinedSegments)));
+    }
+
     private static bool LooksLikeRepositoryRoot(string candidateRoot)
     {
-        return Directory.Exists(Path.Combine(candidateRoot, "LLM"))
+        return Directory.Exists(Path.Combine(candidateRoot, "Backend.api", "Services", "ApplyAIService"))
             || Directory.Exists(Path.Combine(candidateRoot, "TestData"))
             || File.Exists(Path.Combine(candidateRoot, "Backend.sln"));
     }

@@ -822,12 +822,13 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
     }
 
     /// <summary>
-    /// Loads the phase prompt and parsing schema from the shared LLM asset folders.
+    /// Loads the phase prompt and parsing schema from the shared ApplyAI service asset folders.
     /// </summary>
     private async Task<FlowAsset> LoadPhaseAssetAsync(string promptFileName, string schemaFileName, CancellationToken cancellationToken)
     {
-        var repositoryRoot = GetRepositoryRoot();
-        var schemaContent = await ReadRequiredTextAsync(Path.Combine(repositoryRoot, "LLM", "AI Schemas", "LLM Parsing", schemaFileName), cancellationToken);
+        var schemaContent = await ReadRequiredTextAsync(
+            RepositoryRootResolver.ResolveApplyAiAssetPath(_configuration, _environment, "Schemas", "LLM Parsing", schemaFileName),
+            cancellationToken);
         var combinedPrompt = await LoadCombinedPromptAsync(promptFileName, cancellationToken);
 
         using var schemaDocument = JsonDocument.Parse(schemaContent);
@@ -854,9 +855,12 @@ public sealed class SampleLlmFlowService : ISampleLlmFlowService
             /// </summary>
     private async Task<string> LoadCombinedPromptAsync(string promptFileName, CancellationToken cancellationToken)
     {
-        var repositoryRoot = GetRepositoryRoot();
-        var basePrompt = await ReadRequiredTextAsync(Path.Combine(repositoryRoot, "LLM", "Prompts", "base.prompt"), cancellationToken);
-        var phasePrompt = await ReadRequiredTextAsync(Path.Combine(repositoryRoot, "LLM", "Prompts", promptFileName), cancellationToken);
+                var basePrompt = await ReadRequiredTextAsync(
+                    RepositoryRootResolver.ResolveApplyAiAssetPath(_configuration, _environment, "Prompts", "base.prompt"),
+                    cancellationToken);
+                var phasePrompt = await ReadRequiredTextAsync(
+                    RepositoryRootResolver.ResolveApplyAiAssetPath(_configuration, _environment, "Prompts", promptFileName),
+                    cancellationToken);
 
         return string.Join(Environment.NewLine + Environment.NewLine, basePrompt.Trim(), phasePrompt.Trim());
     }

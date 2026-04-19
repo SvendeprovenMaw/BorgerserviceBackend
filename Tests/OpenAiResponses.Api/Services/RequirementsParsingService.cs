@@ -92,10 +92,9 @@ public sealed class RequirementsParsingService : IRequirementsParsingService
 
     private async Task<FlowAsset> LoadAssetAsync(CancellationToken cancellationToken)
     {
-        var repositoryRoot = GetRepositoryRoot();
-        var schemaPath = Path.Combine(repositoryRoot, "LLM", "AI Schemas", "LLM Parsing", "requirements_schema.json");
-        var promptPath = Path.Combine(repositoryRoot, "LLM", "Prompts", "requirements.prompt");
-        var basePromptPath = Path.Combine(repositoryRoot, "LLM", "Prompts", "base.prompt");
+        var schemaPath = RepositoryRootResolver.ResolveApplyAiAssetPath(_configuration, _environment, "Schemas", "LLM Parsing", "requirements_schema.json");
+        var promptPath = RepositoryRootResolver.ResolveApplyAiAssetPath(_configuration, _environment, "Prompts", "requirements.prompt");
+        var basePromptPath = RepositoryRootResolver.ResolveApplyAiAssetPath(_configuration, _environment, "Prompts", "base.prompt");
 
         var schemaContent = await File.ReadAllTextAsync(schemaPath, cancellationToken);
         var basePrompt = await File.ReadAllTextAsync(basePromptPath, cancellationToken);
@@ -123,11 +122,6 @@ public sealed class RequirementsParsingService : IRequirementsParsingService
     private string ResolveModelId()
     {
         return _openAiOptions.ResolveModelId(_openAiOptions.Phases.Requirements.Model);
-    }
-
-    private string GetRepositoryRoot()
-    {
-        return RepositoryRootResolver.GetRepositoryRoot(_configuration, _environment);
     }
 
     private sealed record FlowAsset(

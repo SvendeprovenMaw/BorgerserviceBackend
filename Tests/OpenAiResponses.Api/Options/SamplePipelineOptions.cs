@@ -15,9 +15,9 @@ public sealed class SamplePipelineOptions
 
     public string JobListingsPath { get; set; } = Path.Combine("TestData", "Opslag");
 
-    public string ParsingSchemasPath { get; set; } = Path.Combine("LLM", "AI Schemas", "LLM Parsing");
+    public string ParsingSchemasPath { get; set; } = Path.Combine("Backend.api", "Services", "ApplyAIService", "Assets", "Schemas", "LLM Parsing");
 
-    public string ResultsPath { get; set; } = Path.Combine("LLM", "Results");
+    public string ResultsPath { get; set; } = Path.Combine("Backend.api", "Services", "ApplyAIService", "Assets", "MockResults");
 
     public string RunDirectoryPrefix { get; set; } = "Run ";
 
@@ -47,7 +47,7 @@ public sealed class SampleFitStrategyDefaultsOptions
 /// </summary>
 public sealed class CoverLetterTemplateOptions
 {
-    public string TemplatesPath { get; set; } = Path.Combine("Tests", "OpenAiResponses.Api", "Templates");
+    public string TemplatesPath { get; set; } = Path.Combine("Backend.api", "Services", "ApplyAIService", "Assets", "Templates");
 
     public string HtmlTemplateFileName { get; set; } = "cover-letter-template.html";
 

@@ -3,7 +3,6 @@ namespace Backend.api.Services.ApplyAIService.LlmRuntime.Helpers;
 public static class ApplyAiAssetPathResolver
 {
     private const string LocalAssetRoot = "Services/ApplyAIService/Assets";
-    private const string LegacyAssetRoot = "LLM";
     private const string LegacySchemaRoot = "AI Schemas/";
     private const string LocalSchemaRoot = "Schemas/";
 
@@ -17,18 +16,8 @@ public static class ApplyAiAssetPathResolver
             return localPath;
         }
 
-        var legacyRepositoryPath = RepositoryRootResolver.ResolveRepositoryPath(
-            configuration,
-            environment,
-            Path.Combine(LegacyAssetRoot, normalizedCatalogPath.Replace('/', Path.DirectorySeparatorChar)));
-
-        if (File.Exists(legacyRepositoryPath))
-        {
-            return legacyRepositoryPath;
-        }
-
         throw new FileNotFoundException(
-            $"ApplyAI asset was not found in the local service assets or legacy LLM directory: {catalogPath}",
+            $"ApplyAI asset was not found in the local service assets: {catalogPath}",
             localPath);
     }
 
@@ -46,10 +35,7 @@ public static class ApplyAiAssetPathResolver
 
     private static string NormalizeCatalogPath(string catalogPath)
     {
-        var normalizedPath = catalogPath.Replace('\\', '/').Trim().TrimStart('/');
-        return normalizedPath.StartsWith($"{LegacyAssetRoot}/", StringComparison.OrdinalIgnoreCase)
-            ? normalizedPath[(LegacyAssetRoot.Length + 1)..]
-            : normalizedPath;
+        return catalogPath.Replace('\\', '/').Trim().TrimStart('/');
     }
 
     private static string MapCatalogPathToLocalRelative(string normalizedCatalogPath)

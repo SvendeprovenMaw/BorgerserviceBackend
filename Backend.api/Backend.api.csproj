@@ -11,12 +11,13 @@
 
   <ItemGroup>
     <ProjectReference Include="Services\ApplyAIService\ApplyAI.Playwright\ApplyAI.Playwright.csproj" />
-    <ProjectReference Include="..\LLM\ApplyAI.LlmPipeline\ApplyAI.LlmPipeline.csproj" />
+    <ProjectReference Include="Services\ApplyAIService\ApplyAI.LlmPipeline\ApplyAI.LlmPipeline.csproj" />
     <ProjectReference Include="..\JwtLibrary\JwtLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Services\ApplyAIService\ApplyAI.Playwright\**\*.cs" />
+    <Compile Remove="Services\ApplyAIService\ApplyAI.LlmPipeline\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup>

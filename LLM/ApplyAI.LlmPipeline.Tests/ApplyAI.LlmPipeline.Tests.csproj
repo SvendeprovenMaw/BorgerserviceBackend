@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ApplyAI.LlmPipeline\ApplyAI.LlmPipeline.csproj" />
+    <ProjectReference Include="..\..\Backend.api\Services\ApplyAIService\ApplyAI.LlmPipeline\ApplyAI.LlmPipeline.csproj" />
   </ItemGroup>
 
   <ItemGroup>

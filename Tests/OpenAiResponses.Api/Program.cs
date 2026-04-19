@@ -310,7 +310,7 @@ app.MapPost("/api/responses/requirements/upload", async (
 .WithName("GenerateRequirementsFromUpload")
 .WithSummary("Generates structured requirements from an uploaded or inline job posting.")
 .WithDescription(
-    "Use this route when another backend service already has the job posting bytes and needs the real requirements prompt/schema path from the llm-api.\n\n"
+    "Use this route when another backend service already has the job posting bytes and needs the real ApplyAI service prompt/schema path.\n\n"
     + "Input fields:\n"
     + "- **jobPostingFile**: uploaded job posting that should be parsed directly\n"
     + "- **jobPostingText**: optional raw text fallback when the caller already extracted the posting upstream")
@@ -330,10 +330,12 @@ app.MapPost("/api/responses/requirements/verify", async (
     IConfiguration configuration,
     CancellationToken cancellationToken) =>
 {
-    var schemaPath = RepositoryRootResolver.ResolveRepositoryPath(
+    var schemaPath = RepositoryRootResolver.ResolveApplyAiAssetPath(
         configuration,
         environment,
-        Path.Combine("LLM", "AI Schemas", "LLM Parsing", "requirements_schema.json"));
+        "Schemas",
+        "LLM Parsing",
+        "requirements_schema.json");
 
     var verificationRequest = new StageVerificationRequest
     {
