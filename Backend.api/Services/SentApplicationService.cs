@@ -20,6 +20,7 @@ public interface ISentApplicationService
 public enum SaveFinishedApplicationError
 {
     None,
+    InvalidPipelineJobId,
     JobNotFound,
     MissingCompanyContext,
     MissingGeneratedApplication,
@@ -72,6 +73,13 @@ public sealed class SentApplicationService : ISentApplicationService
 
     public async Task<SaveFinishedApplicationResult> SaveAsync(ClaimsPrincipal claimsPrincipal, FinishedApplicationRequestDto request, CancellationToken cancellationToken = default)
     {
+        if (!TryParsePipelineJobId(request.PipelineJobId, out var pipelineJobId))
+        {
+            return SaveFinishedApplicationResult.Failure(
+                SaveFinishedApplicationError.InvalidPipelineJobId,
+                "The finished application could not be saved because the pipeline job id is invalid.");
+        }
+
         var normalizedSections = NormalizeSections(request.Sections);
         if (normalizedSections.Count == 0)
         {
@@ -84,7 +92,7 @@ public sealed class SentApplicationService : ISentApplicationService
         var existing = await _db.SentApplications
             .AsNoTracking()
             .SingleOrDefaultAsync(
-                application => application.UserId == user.Id && application.PipelineJobId == request.PipelineJobId,
+                application => application.UserId == user.Id && application.PipelineJobId == pipelineJobId,
                 cancellationToken);
 
         if (existing is not null)
@@ -95,7 +103,7 @@ public sealed class SentApplicationService : ISentApplicationService
         var job = await _db.ApplyAiPipelineJobs
             .Include(item => item.PhaseStates)
             .Include(item => item.Artifacts)
-            .SingleOrDefaultAsync(item => item.Id == request.PipelineJobId && item.UserId == user.Id, cancellationToken);
+            .SingleOrDefaultAsync(item => item.Id == pipelineJobId && item.UserId == user.Id, cancellationToken);
 
         if (job is null)
         {
@@ -104,26 +112,12 @@ public sealed class SentApplicationService : ISentApplicationService
                 $"Pipeline job '{request.PipelineJobId}' was not found for the current user.");
         }
 
-        var companyContextState = job.PhaseStates.SingleOrDefault(item => item.Phase == PipelinePhase.CompanyContext && !string.IsNullOrWhiteSpace(item.DocumentJson));
-        if (companyContextState is null)
-        {
-            return SaveFinishedApplicationResult.Failure(
-                SaveFinishedApplicationError.MissingCompanyContext,
-                "The finished application could not be saved because the company-context phase document is missing.");
-        }
-
-        var applicationState = job.PhaseStates.SingleOrDefault(item => item.Phase == PipelinePhase.ApplicationGeneration && !string.IsNullOrWhiteSpace(item.DocumentJson));
-        if (applicationState is null)
-        {
-            return SaveFinishedApplicationResult.Failure(
-                SaveFinishedApplicationError.MissingGeneratedApplication,
-                "The finished application could not be saved because the generated application document is missing.");
-        }
-
-        var requirementsState = job.PhaseStates.SingleOrDefault(item => item.Phase == PipelinePhase.Requirements && !string.IsNullOrWhiteSpace(item.DocumentJson));
-        var companyContextDocument = ParseDocument(companyContextState.DocumentJson!);
-        var applicationDocument = ParseDocument(applicationState.DocumentJson!);
-        var requirementsDocument = requirementsState is null ? new JsonObject() : ParseDocument(requirementsState.DocumentJson!);
+        var companyContextState = job.PhaseStates.SingleOrDefault(item => item.Phase == PipelinePhase.CompanyContext);
+        var applicationState = job.PhaseStates.SingleOrDefault(item => item.Phase == PipelinePhase.ApplicationGeneration);
+        var requirementsState = job.PhaseStates.SingleOrDefault(item => item.Phase == PipelinePhase.Requirements);
+        var companyContextDocument = ParseStoredPhaseDocument(companyContextState);
+        var applicationDocument = ParseStoredPhaseDocument(applicationState);
+        var requirementsDocument = ParseStoredPhaseDocument(requirementsState);
 
         var templateSnapshot = NormalizeTemplate(request.TemplateSnapshot);
         var applicantName = DeriveApplicantName(applicationDocument, user);
@@ -261,6 +255,18 @@ public sealed class SentApplicationService : ISentApplicationService
         }
     }
 
+    private static bool TryParsePipelineJobId(string value, out Guid pipelineJobId)
+    {
+        return Guid.TryParse(value?.Trim(), out pipelineJobId);
+    }
+
+    private static JsonObject ParseStoredPhaseDocument(ApplyAiPipelinePhaseState? phaseState)
+    {
+        return phaseState is null || string.IsNullOrWhiteSpace(phaseState.DocumentJson)
+            ? new JsonObject()
+            : ParseDocument(phaseState.DocumentJson);
+    }
+
     private static ApplicationCompanyContextDto BuildCompanyContext(
         ApplyAiPipelineJob job,
         JsonObject companyContextDocument,
@@ -281,6 +287,8 @@ public sealed class SentApplicationService : ISentApplicationService
         var storedArtifact = AsObject(companyContextDocument["storedJobPostingArtifact"]);
         var assetPaths = AsObject(companyContextDocument["llmAssetPaths"]);
         var candidateFiles = ReadStringArray(companyContextDocument["candidateFiles"]);
+        var companyOverride = ReadString(companyContextOverrides["companyName"]) ?? job.CompanyNameOverride;
+        var applicantAddressHint = ReadString(companyContextOverrides["applicantAddressHint"]) ?? job.ApplicantAddressHint;
         var requirements = AsArray(AsObject(requirementsDocument["phaseOutput"])["requirements"]);
         var values = ReadStringArray(companyProfile["homepage_values_mission_vision_da"]);
         if (values.Length == 0)
@@ -294,11 +302,11 @@ public sealed class SentApplicationService : ISentApplicationService
             WorkflowModeLabel = $"{job.WorkflowMode} workflow",
             CandidateFileSummary = FormatCandidateFileSummary(candidateFiles),
             RequirementBreakdownLabel = DescribeRequirementBreakdown(requirements),
-            CompanyOverrideLabel = !string.IsNullOrWhiteSpace(ReadString(companyContextOverrides["companyName"]))
-                ? $"Company override: {ReadString(companyContextOverrides["companyName"])}"
+            CompanyOverrideLabel = !string.IsNullOrWhiteSpace(companyOverride)
+                ? $"Company override: {companyOverride}"
                 : "No company override supplied.",
-            ApplicantAddressHintLabel = !string.IsNullOrWhiteSpace(ReadString(companyContextOverrides["applicantAddressHint"]))
-                ? $"Address hint: {ReadString(companyContextOverrides["applicantAddressHint"])}"
+            ApplicantAddressHintLabel = !string.IsNullOrWhiteSpace(applicantAddressHint)
+                ? $"Address hint: {applicantAddressHint}"
                 : "No applicant address hint supplied.",
             ArtifactStatusLabel = !string.IsNullOrWhiteSpace(ReadString(storedArtifact["displayName"]))
                 ? $"Stored job posting artifact ready: {ReadString(storedArtifact["displayName"])}"

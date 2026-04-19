@@ -33,7 +33,7 @@ public class ApplicationSummaryDto
 public sealed class FinishedApplicationRequestDto
 {
     [Required]
-    public Guid PipelineJobId { get; set; }
+    public string PipelineJobId { get; set; } = string.Empty;
 
     [Required]
     public ApplicationTemplateSnapshotDto TemplateSnapshot { get; set; } = new();

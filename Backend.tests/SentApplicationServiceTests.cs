@@ -126,7 +126,7 @@ public sealed class SentApplicationServiceTests
             ApplyAiTestData.CreatePrincipal(user.Id),
             new FinishedApplicationRequestDto
             {
-                PipelineJobId = job.Id,
+                PipelineJobId = job.Id.ToString("N"),
                 TemplateSnapshot = new ApplicationTemplateSnapshotDto
                 {
                     Id = "applyai-default",
@@ -192,7 +192,7 @@ public sealed class SentApplicationServiceTests
             ApplyAiTestData.CreatePrincipal(user.Id),
             new FinishedApplicationRequestDto
             {
-                PipelineJobId = pipelineJobId,
+                PipelineJobId = pipelineJobId.ToString("N"),
                 TemplateSnapshot = new ApplicationTemplateSnapshotDto { Id = "changed", Name = "Changed" },
                 Sections =
                 [
@@ -203,6 +203,65 @@ public sealed class SentApplicationServiceTests
         result.Error.Should().Be(SaveFinishedApplicationError.None);
         result.Application!.SubjectLine.Should().Be("Original subject");
         result.Application.Final.Should().Be("Original final text");
+        db.SentApplications.Should().ContainSingle();
+    }
+
+    [Fact]
+    public async Task SaveAsync_UsesFallbackMetadataWhenPersistedPhaseDocumentsWereCleared()
+    {
+        await using var db = ApplyAiDbContextFactory.CreateInMemory();
+        var user = ApplyAiTestData.CreateUser(Guid.Parse("11111111-1111-1111-1111-111111111111"), "demo@example.com", "demo-user");
+        db.Users.Add(user);
+
+        var job = new ApplyAiPipelineJobBuilder(user)
+            .WithId(Guid.NewGuid())
+            .WithStatus(PipelineJobStatus.Completed)
+            .Build();
+
+        job.DisplayRunName = "Backend Developer";
+        job.CompanyNameOverride = "ApplyAI Kommune";
+        job.ApplicantAddressHint = "Roskilde";
+
+        var companyContextState = job.PhaseStates.Single(item => item.Phase == PipelinePhase.CompanyContext);
+        companyContextState.Status = PipelinePhaseStatus.Completed;
+        companyContextState.DocumentJson = null;
+
+        var applicationState = job.PhaseStates.Single(item => item.Phase == PipelinePhase.ApplicationGeneration);
+        applicationState.Status = PipelinePhaseStatus.Completed;
+        applicationState.DocumentJson = null;
+
+        db.ApplyAiPipelineJobs.Add(job);
+        await db.SaveChangesAsync();
+
+        var userService = new Mock<IUserService>();
+        userService.Setup(service => service.GetUser(It.IsAny<System.Security.Claims.ClaimsPrincipal>())).ReturnsAsync(user);
+
+        var service = new SentApplicationService(db, userService.Object);
+        var result = await service.SaveAsync(
+            ApplyAiTestData.CreatePrincipal(user.Id),
+            new FinishedApplicationRequestDto
+            {
+                PipelineJobId = job.Id.ToString("N"),
+                TemplateSnapshot = new ApplicationTemplateSnapshotDto
+                {
+                    Id = "applyai-default",
+                    Name = "ApplyAI Default",
+                },
+                Sections =
+                [
+                    new ApplicationSectionDto { Id = "subject_line", Label = "Subject line", Text = "Ansøgning til Backend Developer", Kind = "subject_line" },
+                    new ApplicationSectionDto { Id = "opening", Label = "Opening", Text = "Jeg vil gerne bidrage til jeres backend-team.", Kind = "opening" },
+                ],
+            });
+
+        result.Error.Should().Be(SaveFinishedApplicationError.None);
+        result.Application.Should().NotBeNull();
+        result.Application!.Company.Should().Be("ApplyAI Kommune");
+        result.Application.Position.Should().Be("Backend Developer");
+        result.Application.ApplicantName.Should().Be("demo-user");
+        result.Application.CompanyContext.WorkflowModeLabel.Should().Be("Auto workflow");
+        result.Application.CompanyContext.CompanyOverrideLabel.Should().Be("Company override: ApplyAI Kommune");
+        result.Application.CompanyContext.ApplicantAddressHintLabel.Should().Be("Address hint: Roskilde");
         db.SentApplications.Should().ContainSingle();
     }
 
@@ -259,6 +318,34 @@ public sealed class SentApplicationServiceTests
     }
 
     [Fact]
+    public async Task SaveAsync_ReturnsValidationErrorWhenPipelineJobIdIsInvalid()
+    {
+        await using var db = ApplyAiDbContextFactory.CreateInMemory();
+        var user = ApplyAiTestData.CreateUser(Guid.Parse("11111111-1111-1111-1111-111111111111"), "demo@example.com", "demo-user");
+        db.Users.Add(user);
+        await db.SaveChangesAsync();
+
+        var userService = new Mock<IUserService>();
+        userService.Setup(service => service.GetUser(It.IsAny<System.Security.Claims.ClaimsPrincipal>())).ReturnsAsync(user);
+
+        var service = new SentApplicationService(db, userService.Object);
+        var result = await service.SaveAsync(
+            ApplyAiTestData.CreatePrincipal(user.Id),
+            new FinishedApplicationRequestDto
+            {
+                PipelineJobId = "not-a-guid",
+                TemplateSnapshot = new ApplicationTemplateSnapshotDto { Id = "applyai-default", Name = "ApplyAI Default" },
+                Sections =
+                [
+                    new ApplicationSectionDto { Id = "opening", Label = "Opening", Text = "Gyldig tekst" },
+                ],
+            });
+
+        result.Error.Should().Be(SaveFinishedApplicationError.InvalidPipelineJobId);
+        result.Message.Should().NotBeNullOrWhiteSpace();
+    }
+
+    [Fact]
     public async Task SaveAsync_ReturnsValidationErrorWhenNoNonEmptySectionsAreProvided()
     {
         await using var db = ApplyAiDbContextFactory.CreateInMemory();
@@ -274,7 +361,7 @@ public sealed class SentApplicationServiceTests
             ApplyAiTestData.CreatePrincipal(user.Id),
             new FinishedApplicationRequestDto
             {
-                PipelineJobId = Guid.NewGuid(),
+                PipelineJobId = Guid.NewGuid().ToString("N"),
                 TemplateSnapshot = new ApplicationTemplateSnapshotDto { Id = "applyai-default", Name = "ApplyAI Default" },
                 Sections =
                 [
