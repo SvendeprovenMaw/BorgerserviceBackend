@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Backend.api.Middleware;
 using Openai.Library.Phases;
 using Microsoft.EntityFrameworkCore;
+using Openai.Library.Options;
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -23,11 +24,14 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IS3StorageService, S3StorageService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IConsentService, ConsentService>();
-builder.Services.AddScoped<ICompanyContextPhase, CompanyContextPhase>();
+builder.Services.AddScoped<IRequirementsPhase, RequirementsPhase>();
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+builder.Services.Configure<OpenAiLibraryOptions>(
+    builder.Configuration.GetSection("OpenAi")
+);
 
 if (jwtSettings == null || string.IsNullOrEmpty(jwtSettings.Key))
 {

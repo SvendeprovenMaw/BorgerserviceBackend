@@ -12,6 +12,12 @@ namespace Backend.api.Controllers
     [Route("api/[controller]")]
     public class AiController : ControllerBase
     {
+        private readonly IRequirementsPhase _requirementsPhase;
+
+        public AiController(IRequirementsPhase requirementsPhase)
+        {
+            _requirementsPhase = requirementsPhase;
+        }
         [HttpPost]
         public async Task<IActionResult> AnalyseJobPost([FromForm] FileUploadDto fileUploadDto)
         {
@@ -25,8 +31,7 @@ namespace Backend.api.Controllers
             await file.CopyToAsync(memoryStream);
             var fileData = BinaryData.FromBytes(memoryStream.ToArray(), file.ContentType);
 
-            ICompanyContextPhase companyContextPhase = new CompanyContextPhase();
-            var result = await companyContextPhase.AnalyseJobPost(fileData);
+            var result = await _requirementsPhase.AnalyseJobPost(fileData);
 
             return Ok(result);
         }

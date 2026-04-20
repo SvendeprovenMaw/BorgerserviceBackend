@@ -1,0 +1,52 @@
+@startuml
+skinparam style strictuml
+skinparam sequenceMessageAlign center
+skinparam responseMessageColor #2e7d32
+
+participant "Application Controller" as App
+participant "AI Service Orchestrator" as AI
+participant "LLM & Verification Logic" as Logic
+
+note over AI, Logic: Each phase produces a specific JSON schema output
+
+== Phase 1: Company Context ==
+App -> AI : Start Phase 1 (Job Data, Profile)
+activate AI
+AI -> Logic : Analyze company background
+Logic --> AI : Context Data
+AI --> App : **JSON Response:** { "company_info": { "name", "vibe", "location"... } }
+deactivate AI
+
+== Phase 2: Requirements ==
+App -> AI : Start Phase 2 (Context + Job Post)
+activate AI
+AI -> Logic : Extract & Verify requirements
+Logic --> AI : Validated Requirements
+AI --> App : **JSON Response:** { "requirements": [ { "id", "description", "priority" } ] }
+deactivate AI
+
+== Phase 3: Candidate Evidence ==
+App -> AI : Start Phase 3 (Requirements + Files)
+activate AI
+AI -> Logic : Find evidence & Check citations
+Logic --> AI : Evidence Map
+AI --> App : **JSON Response:** { "evidence": [ { "requirement_id", "proof", "source_file" } ] }
+deactivate AI
+
+== Phase 4: Matching ==
+App -> AI : Start Phase 4 (Requirements + Evidence)
+activate AI
+AI -> Logic : Evaluate match strength
+Logic --> AI : Match Analysis
+AI --> App : **JSON Response:** { "match_score": 0.85, "analysis": { "strengths", "gaps" } }
+deactivate AI
+
+== Phase 5: Application Generation ==
+App -> AI : Start Phase 5 (All Data + Preferences)
+activate AI
+AI -> Logic : Draft text & Verify layout
+Logic --> AI : Final Document
+AI --> App : **JSON Response:** { "application": { "content", "metadata", "layout_status" } }
+deactivate AI
+
+@enduml
