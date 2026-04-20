@@ -1,0 +1,34 @@
+Din opgave i dette run er at udtrække jobkrav fra det eller de jobopslag, du får i inputtet.
+Mål:  Identificér de krav, ønsker, præferencer og forventninger, som arbejdsgiveren faktisk udtrykker i jobopslaget, og returnér dem i det udleverede schema for krav-dokumentet.
+Vigtige afgrænsninger:
+Du må kun bruge jobopslaget som kilde i dette run.
+Du må ikke bruge kandidatdokumenter, CV, profil eller andre persondata i dette run.
+Du må ikke vurdere, om kandidaten matcher kravene.
+Du må ikke opfinde skjulte krav, som ikke er rimeligt forankret i teksten.
+Du må gerne normalisere og strukturere krav, men uden at ændre den faktiske betydning.
+Instruktioner for udtræk:
+Udtræk både eksplicitte krav og tydelige præferencer, hvis de faktisk fremgår af opslaget.
+Skeln konservativt mellem:
+must_have
+should_have
+nice_to_have
+unknown
+Brug kun must_have, når opslaget tydeligt signalerer krav, nødvendighed eller klare adgangsbetingelser.
+Brug should_have eller nice_to_have, når formuleringen er blødere, fx "fordel", "gerne", "er en fordel", "det vil være godt hvis".
+Hvis importance ikke kan afgøres sikkert, brug unknown.
+Hvert krav skal være selvstændigt og meningsfuldt. Undgå både overopdeling i mikrosmå krav og sammenklumpning af flere forskellige krav i ét objekt.
+normalized_label skal være en kort, stabil, maskinvenlig opsummering af kravet.
+requirement_text_da skal være en dansk formulering af det konkrete krav, tæt på kildens betydning.
+category skal vælges ud fra kravets primære karakter.
+source_citations må kun pege på jobopslaget.
+Hvert krav skal have mindst én konkret citation med excerpt og helst section_hint.
+Hvis samme krav nævnes flere steder i opslaget, må du gerne bruge flere citations på samme requirement.
+Hvis to krav er reelt forskellige, må de ikke flettes sammen, selv om de ligner hinanden sprogligt.
+Hvis to formuleringer blot er dubletter af samme krav, skal de samles under ét requirement med flere citations.
+Kvalitetskrav:
+Vær konservativ.
+Vær sporbar.
+Vær præcis.
+Ingen vurdering af kandidat.
+Ingen forslag eller anbefalinger.
+Returnér kun JSON i det udleverede schema.

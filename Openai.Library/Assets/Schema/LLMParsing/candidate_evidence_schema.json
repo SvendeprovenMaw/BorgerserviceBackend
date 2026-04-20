@@ -1,0 +1,114 @@
+{
+  "name": "candidate_requirement_focused_evidence_v1",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["_meta", "evidence_items"],
+    "properties": {
+      "_meta": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "requirements_document_id",
+          "parsed_files",
+          "errors"
+        ],
+        "properties": {
+          "requirements_document_id": {
+            "type": "string"
+          },
+          "parsed_files": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "errors": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "evidence_items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "evidence_id",
+            "fact_da",
+            "normalized_label",
+            "category",
+            "support_type",
+            "strength",
+            "relevant_requirement_ids",
+            "requirement_relevance_reason_da",
+            "citations"
+          ],
+          "properties": {
+            "evidence_id": { "type": "string" },
+            "fact_da": { "type": "string" },
+            "normalized_label": { "type": "string" },
+            "category": {
+              "type": "string",
+              "enum": [
+                "technical_skill",
+                "tool_experience",
+                "role_experience",
+                "industry_experience",
+                "leadership",
+                "communication",
+                "collaboration",
+                "customer_focus",
+                "analytical_skill",
+                "achievement",
+                "education",
+                "certification",
+                "language",
+                "logistics",
+                "reference",
+                "personal_trait",
+                "other"
+              ]
+            },
+            "support_type": {
+              "type": "string",
+              "enum": [
+                "explicit",
+                "strong_inference",
+                "testimonial",
+                "document_metadata"
+              ]
+            },
+            "strength": {
+              "type": "string",
+              "enum": ["strong", "moderate", "weak"]
+            },
+            "relevant_requirement_ids": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "requirement_relevance_reason_da": {
+              "type": "string"
+            },
+            "citations": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/source_citation" }
+            }
+          }
+        }
+      }
+    },
+    "$defs": {
+      "source_citation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["filename", "excerpt", "section_hint"],
+        "properties": {
+          "filename": { "type": "string" },
+          "excerpt": { "type": "string" },
+          "section_hint": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}

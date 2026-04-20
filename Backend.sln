@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.api", "Backend.api\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JwtLibrary", "JwtLibrary\JwtLibrary.csproj", "{96FC8C04-3A4C-4C19-946F-07DA651D467A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "openai.library", "openai.library", "{A07DE51C-90D5-500E-440C-B6C08A5C804F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Openai.Library", "openai.library\Openai.Library.csproj", "{F3A3F10D-B01F-426E-8021-6AE0A77E7637}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,8 +59,23 @@ Global
 		{96FC8C04-3A4C-4C19-946F-07DA651D467A}.Release|x64.Build.0 = Release|Any CPU
 		{96FC8C04-3A4C-4C19-946F-07DA651D467A}.Release|x86.ActiveCfg = Release|Any CPU
 		{96FC8C04-3A4C-4C19-946F-07DA651D467A}.Release|x86.Build.0 = Release|Any CPU
+		{F3A3F10D-B01F-426E-8021-6AE0A77E7637}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3A3F10D-B01F-426E-8021-6AE0A77E7637}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3A3F10D-B01F-426E-8021-6AE0A77E7637}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F3A3F10D-B01F-426E-8021-6AE0A77E7637}.Debug|x64.Build.0 = Debug|Any CPU
+		{F3A3F10D-B01F-426E-8021-6AE0A77E7637}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F3A3F10D-B01F-426E-8021-6AE0A77E7637}.Debug|x86.Build.0 = Debug|Any CPU
+		{F3A3F10D-B01F-426E-8021-6AE0A77E7637}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3A3F10D-B01F-426E-8021-6AE0A77E7637}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3A3F10D-B01F-426E-8021-6AE0A77E7637}.Release|x64.ActiveCfg = Release|Any CPU
+		{F3A3F10D-B01F-426E-8021-6AE0A77E7637}.Release|x64.Build.0 = Release|Any CPU
+		{F3A3F10D-B01F-426E-8021-6AE0A77E7637}.Release|x86.ActiveCfg = Release|Any CPU
+		{F3A3F10D-B01F-426E-8021-6AE0A77E7637}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F3A3F10D-B01F-426E-8021-6AE0A77E7637} = {A07DE51C-90D5-500E-440C-B6C08A5C804F}
 	EndGlobalSection
 EndGlobal

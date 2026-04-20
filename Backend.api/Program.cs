@@ -4,10 +4,11 @@ using Backend.api.Configuration;
 using Backend.api.Database;
 using Backend.api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Backend.api.Middleware;
+using Openai.Library.Phases;
+using Microsoft.EntityFrameworkCore;
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -22,6 +23,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IS3StorageService, S3StorageService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IConsentService, ConsentService>();
+builder.Services.AddScoped<ICompanyContextPhase, CompanyContextPhase>();
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
@@ -35,8 +37,9 @@ if (jwtSettings == null || string.IsNullOrEmpty(jwtSettings.Key))
 Console.WriteLine($"SECRET KEY BOUND: {jwtSettings.Key}");
 
 // Add services to the container.
-builder.Services.AddDbContext<WarehouseDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+//builder.Services.AddDbContext<WarehouseDbContext>(options =>
+//    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddDbContext<WarehouseDbContext>(options => options.UseInMemoryDatabase("WarehouseDb"));
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -97,7 +100,7 @@ var app = builder.Build();
 app.UseMiddleware<CustomExceptionHandlingMiddleware>();
 app.UseRouting();
 app.UseCors("AngularPolicy");
-await DatabaseInitializer.InitializeAsync(app.Services, app.Configuration);
+//await DatabaseInitializer.InitializeAsync(app.Services, app.Configuration);
 
 app.MapSwagger();
 // Configure the HTTP request pipeline.
