@@ -43,23 +43,24 @@ namespace Backend.api.Controllers
                 return BadRequest("No file uploaded.");
             }
 
-            using var memoryStream = new MemoryStream();
-            await file.CopyToAsync(memoryStream);
-            var fileData = BinaryData.FromBytes(memoryStream.ToArray(), file.ContentType);
-
-            var requirements = await _requirementsPhase.AnalyseJobPost(fileData);
+            var requirementFile = await BinaryFileHelper.ToBinaryData(fileUploadDto.JobPosting);
+            var requirements = await _requirementsPhase.AnalyseJobPost(requirementFile);
 
             var binaryDataList = await BinaryFileHelper.ToBinaryDataListAsync(fileUploadDto.relavantDocuments);
-
-            await fileUploadDto.cv.CopyToAsync(memoryStream);
-            var cvData = BinaryData.FromBytes(memoryStream.ToArray(), file.ContentType);
-
+            var cvData = await BinaryFileHelper.ToBinaryData(fileUploadDto.cv);
             var evidence = await _evidencePhase.ExecutePhase(requirements, cvData, binaryDataList);
 
             var matches = await _competenceMatchingPhase.ExecutePhase(requirements, evidence);
-
             var application = await _applicationGenerationPhase.ExecutePhase(requirements, evidence, matches, "", "");
-            return Ok(new {requirements, evidence, matches, application});
+            return Ok(application);
+        }
+
+        [HttpPost("Phase3")]
+        public async Task<IActionResult> AnalyseUserProfile([FromForm] AnalyseJobPostDto dto)
+        {
+            var binaryDataList = await BinaryFileHelper.ToBinaryDataListAsync(dto.OtherRelevantPdfs);
+            var cvData = await BinaryFileHelper.ToBinaryData(fileUploadDto.cv);
+            var evidence = await _evidencePhase.ExecutePhase(requirements, cvData, binaryDataList);
         }
     }
 }
