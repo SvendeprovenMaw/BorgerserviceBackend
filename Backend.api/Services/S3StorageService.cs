@@ -101,7 +101,6 @@ namespace Backend.api.Services
             {
                 throw new FileNotFoundException($"file deleted  fileId:{fileId}, UserId:{user.Id}");
             }
-            Console.WriteLine($"{s3File.FileName}, {fileId}, { user.Id}");
             string urlString = s3Downloader.GetPreSignedURL(new GetPreSignedUrlRequest
             {
                 BucketName = _conf["BackBlaze:KeyName"],
@@ -127,6 +126,12 @@ namespace Backend.api.Services
                 Expires = DateTime.UtcNow.AddMinutes(5)
             });
             return urlString;
+        }
+
+        public async Task<S3File[]> GetRelevantUserFiles(Guid userId)
+        {
+            var response = await _files.GetUserFiles(userId, FileCategory.ReleventDocuments);
+            return response;
         }
 
         public async Task DeleteFileAsync(string bucketname, string filename)

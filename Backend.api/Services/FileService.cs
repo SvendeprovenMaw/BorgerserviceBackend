@@ -1,6 +1,7 @@
 using Backend.api.Database;
 using Backend.api.Entities;
 using Backend.api.Entities.Dto;
+using Backend.api.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.api.Services
@@ -10,6 +11,7 @@ namespace Backend.api.Services
         Task<bool> FileUploaded(User user, string filename, string s3Key, string bucket, string checksumHash, GiveConsentDto consentDto);
         Task<S3File?> GetFile(Guid fileId, Guid userId);
         Task<S3File[]> GetUserFiles(Guid userId);
+        Task<S3File[]> GetUserFiles(Guid userId, FileCategory fileCategory);
     }
 
     public class FileService : IFileService
@@ -45,6 +47,12 @@ namespace Backend.api.Services
         public async Task<S3File[]> GetUserFiles(Guid userId)
         {
             var files = await _db.S3Files.Where(i=>i.UserId == userId).ToArrayAsync();
+            return files;
+        }
+        public async Task<S3File[]> GetUserFiles(Guid userId, FileCategory fileCategory)
+        {
+            string categoryFolder = $"users/{userId}/{fileCategory}/";
+            var files = await _db.S3Files.Where(i=>i.UserId == userId && i.S3Key.StartsWith(categoryFolder)).ToArrayAsync();
             return files;
         }
 
