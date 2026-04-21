@@ -27,6 +27,7 @@ builder.Services.AddScoped<IRequirementsPhase, RequirementsPhase>();
 builder.Services.AddScoped<ICandidateEvidencePhase, CandidateEvidencePhase>();
 builder.Services.AddScoped<ICompetenceMatchingPhase, CompetenceMatchingPhase>();
 builder.Services.AddScoped<IApplicationGenerationPhase, ApplicationGenerationPhase>();
+builder.Services.AddScoped<IAiJobService, AiJobService>();
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 

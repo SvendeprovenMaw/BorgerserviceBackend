@@ -32,8 +32,8 @@ namespace Openai.Library.Phases
         {
             // Vi kalder den statiske klasse direkte!
             string baseUserPrompt = AiResourceConfiguration.GetResourceContent(AiResourceConfiguration.BasePromptFileName);
-            string systemPrompt = AiResourceConfiguration.GetResourceContent("candidate_evidence.prompt");
-            string schemaJson = AiResourceConfiguration.GetResourceContent("candidate_evidence_schema.json");
+            string systemPrompt = AiResourceConfiguration.GetResourceContent(AiResourceConfiguration.CandidateEvidencePromptFileName);
+            string schemaJson = AiResourceConfiguration.GetResourceContent(AiResourceConfiguration.CandidateEvidenceSchemaFileName);
 
             var contentParts = new List<ChatMessageContentPart>();
 
@@ -45,7 +45,7 @@ namespace Openai.Library.Phases
 
 
             var uploadedFileNames = new List<string>();
-            // 2. Fodr PDF'erne direkte til gpt-4o som BinaryData
+            // 2. Fodr PDF'erne direkte til gpt som BinaryData
             for (int i = 0; i < s3Files.Count; i++)
             {
                 // Vi giver filen et meget tydeligt ID/navn
