@@ -8,12 +8,16 @@ namespace Openai.Library.Configuration
     public static class AiResourceConfiguration
     {
         // Navnene på de indlejrede filer (uden stier, da vi leder efter dem i DLL'en)
-        public static string CompanyContextFileName { get; } = "company_context.prompt";
-        public static string RequirementsFileName { get; } = "requirements.prompt";
-        public static string CandidateEvidenceFileName { get; } = "candidate_evidence.prompt";
+        public static string CompanyContextPromptFileName { get; } = "company_context.prompt";
+        public static string RequirementsPromptFileName { get; } = "requirements.prompt";
+        public static string CandidateEvidencePromptFileName { get; } = "candidate_evidence.prompt";
+        public static string CompetencePromptFileName { get; } = "matching.prompt";
+        public static string ApplicationGenrationPromptFileName { get; } = "application_generation.prompt";
         public static string BasePromptFileName { get; } = "base.prompt";
         public static string RequirementsSchemaFileName { get; } = "requirements_schema.json";
         public static string CandidateEvidenceSchemaFileName { get; } = "candidate_evidence_schema.json";
+        public static string CompetenceMatchingSchemaFileName { get; } = "matching_schema.json";
+        public static string ApplicationGenerationSchemaFileName { get; } = "application_generation_schema.json";
 
         // En hjælper til at læse indholdet direkte fra denne konfiguration
         public static string GetResourceContent(string fileName)

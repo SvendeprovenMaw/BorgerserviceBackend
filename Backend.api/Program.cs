@@ -1,4 +1,3 @@
-
 using System.Text;
 using Backend.api.Configuration;
 using Backend.api.Database;
@@ -25,6 +24,9 @@ builder.Services.AddScoped<IS3StorageService, S3StorageService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IConsentService, ConsentService>();
 builder.Services.AddScoped<IRequirementsPhase, RequirementsPhase>();
+builder.Services.AddScoped<ICandidateEvidencePhase, CandidateEvidencePhase>();
+builder.Services.AddScoped<ICompetenceMatchingPhase, CompetenceMatchingPhase>();
+builder.Services.AddScoped<IApplicationGenerationPhase, ApplicationGenerationPhase>();
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
@@ -132,4 +134,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-

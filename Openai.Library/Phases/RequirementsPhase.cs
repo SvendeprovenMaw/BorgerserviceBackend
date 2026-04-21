@@ -26,7 +26,7 @@ namespace Openai.Library.Phases
         {
             ChatClient chatClient = new(model: "gpt-5.4-nano", this._options.SecretKey);
 
-            string systemPrompt = AiResourceConfiguration.GetResourceContent(AiResourceConfiguration.RequirementsFileName);
+            string systemPrompt = AiResourceConfiguration.GetResourceContent(AiResourceConfiguration.RequirementsPromptFileName);
             string baseUserPrompt = AiResourceConfiguration.GetResourceContent(AiResourceConfiguration.BasePromptFileName);
             string jsonSchemaContent = AiResourceConfiguration.GetResourceContent(AiResourceConfiguration.RequirementsSchemaFileName);
 

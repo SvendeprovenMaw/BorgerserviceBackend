@@ -6,28 +6,6 @@
     "additionalProperties": false,
     "required": ["_meta", "evidence_items"],
     "properties": {
-      "_meta": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "requirements_document_id",
-          "parsed_files",
-          "errors"
-        ],
-        "properties": {
-          "requirements_document_id": {
-            "type": "string"
-          },
-          "parsed_files": {
-            "type": "array",
-            "items": { "type": "string" }
-          },
-          "errors": {
-            "type": "array",
-            "items": { "type": "string" }
-          }
-        }
-      },
       "evidence_items": {
         "type": "array",
         "items": {
