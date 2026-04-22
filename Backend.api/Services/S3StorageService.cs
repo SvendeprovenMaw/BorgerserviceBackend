@@ -23,43 +23,13 @@ namespace Backend.api.Services
         private readonly IConsentService _consent;
         IAmazonS3 s3Uploader;
         IAmazonS3 s3Downloader;
-        public S3StorageService(IConfiguration conf, IFileService files, IConsentService consent)
+        public S3StorageService(IConfiguration conf, IFileService files, IConsentService consent, [FromKeyedServices("S3Uploader")] IAmazonS3 s3Uploader, [FromKeyedServices("S3Downloader")] IAmazonS3 s3Downloader)
         {
             this._consent = consent;
             this._conf = conf;
             this._files = files;
-
-            var downloaderConfig = new AmazonS3Config 
-            { 
-                ServiceURL = "https://s3.eu-central-003.backblazeb2.com",
-                AuthenticationRegion = "eu-central-1", 
-                RegionEndpoint = Amazon.RegionEndpoint.EUCentral1,
-                ForcePathStyle = true,
-                
-            };
-
-             var uploaderconfig = new AmazonS3Config 
-            { 
-                ServiceURL = "https://s3.eu-central-003.backblazeb2.com",
-                ForcePathStyle = true,
-                AuthenticationRegion = "eu-central-003", // important!
-                UseHttp = false
-                
-            };
-            
-
-            var keyId = conf["BackBlaze:Keyid"];
-            var appKey = conf["BackBlaze:ApplicationKey"];
-
-            var credentials = new Amazon.Runtime.BasicAWSCredentials(keyId, appKey);
-            this.s3Downloader = new AmazonS3Client(
-                credentials,
-                downloaderConfig
-            );
-            this.s3Uploader = new AmazonS3Client(
-                credentials,
-                uploaderconfig
-            );
+            this.s3Uploader = s3Uploader;
+            this.s3Downloader = s3Downloader;
         }
 
         public async Task<S3File[]> GetFileStructure(Guid userId)
@@ -76,17 +46,18 @@ namespace Backend.api.Services
                 {
                     throw new ConsentNotGivenException();
                 }
-                var key = $"users/{user.Id}/{fileCategory}/{Guid.NewGuid()}";
+                Guid id = Guid.NewGuid();
+                var key = $"users/{user.Id}/{fileCategory}/{id}";
                 var request = new PutObjectRequest
                 {
                     BucketName = _conf["BackBlaze:KeyName"],
                     Key = key,
                     InputStream = fileStream,
-                    ContentType = fileCategory == FileCategory.Cv ? "application/pdf" : "image/jpeg",
+                    ContentType = "application/pdf",
                     ChecksumAlgorithm = ChecksumAlgorithm.SHA256
                 };
                 var result = await this.s3Uploader.PutObjectAsync(request);
-                await this._files.FileUploaded(user, filename, key, _conf["BackBlaze:KeyName"], result.ChecksumSHA256, consentDto);
+                await this._files.FileUploaded(user, filename, key, fileCategory, _conf["BackBlaze:KeyName"]!, result.ChecksumSHA256, consentDto, id);
             }
             catch (System.Exception)
             {
@@ -109,6 +80,34 @@ namespace Backend.api.Services
                 Verb = HttpVerb.GET
             });
             return urlString;
+        }
+
+        public async Task<ICollection<BinaryData>> GetFilesAsBinaryDataAsync(S3File[] s3Files)
+        {
+            var filesData = new List<BinaryData>();
+            string[] keys = s3Files.Select(f => f.S3Key).ToArray();
+            foreach (var file in s3Files)
+            {
+                try
+                {
+                    var request = new GetObjectRequest
+                    {
+                        BucketName = _conf["BackBlaze:KeyName"],
+                        Key = file.S3Key
+                    };
+
+                    using GetObjectResponse response = await s3Downloader.GetObjectAsync(request);
+
+                    BinaryData fileData = await BinaryData.FromStreamAsync(response.ResponseStream);
+                    
+                    filesData.Add(fileData);
+                }
+                catch (Amazon.S3.AmazonS3Exception ex)
+                {
+                    throw new Exception($"Kunne ikke hente filen {file.S3Key} fra S3: {ex.Message}", ex);
+                }
+            }
+            return filesData;
         }
 
         public async Task<S3File[]> GetRelevantUserFiles(Guid userId)

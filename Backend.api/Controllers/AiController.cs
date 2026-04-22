@@ -109,10 +109,11 @@ namespace Backend.api.Controllers
             {
                 return NotFound("User not found");
             }
-            var binaryDataList = await BinaryFileHelper.ToBinaryDataListAsync(dto.OtherRelevantPdfs);
+            var relevantBinaryFiles = await BinaryFileHelper.ToBinaryDataListAsync(dto.OtherRelevantPdfs);
+            
             var cvData = await BinaryFileHelper.ToBinaryData(dto.cv.File);
             var aiprossjob = await this._aiJobService.GetAiJobByIdAsync(dto.AiJob, user.Id);
-            var evidence = await _evidencePhase.ExecutePhase(aiprossjob.JobRequirements, cvData, binaryDataList);
+            var evidence = await _evidencePhase.ExecutePhase(aiprossjob.JobRequirements, cvData, relevantBinaryFiles);
             aiprossjob.InsertUserCompetences(evidence);
             await _aiJobService.UpdateAiJobAsync(aiprossjob);
             return Ok(aiprossjob);

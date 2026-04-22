@@ -9,6 +9,7 @@ using Backend.api.Middleware;
 using Openai.Library.Phases;
 using Microsoft.EntityFrameworkCore;
 using Openai.Library.Options;
+using Amazon.S3;
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -28,6 +29,32 @@ builder.Services.AddScoped<ICandidateEvidencePhase, CandidateEvidencePhase>();
 builder.Services.AddScoped<ICompetenceMatchingPhase, CompetenceMatchingPhase>();
 builder.Services.AddScoped<IApplicationGenerationPhase, ApplicationGenerationPhase>();
 builder.Services.AddScoped<IAiJobService, AiJobService>();
+
+builder.Services.AddKeyedScoped<IAmazonS3>("S3Uploader", (sp, key) => {
+    var conf = sp.GetRequiredService<IConfiguration>();
+    var credentials = new Amazon.Runtime.BasicAWSCredentials(conf["BackBlaze:Keyid"], conf["BackBlaze:ApplicationKey"]);
+    var config = new AmazonS3Config 
+    { 
+        ServiceURL = "https://s3.eu-central-003.backblazeb2.com",
+        ForcePathStyle = true,
+        AuthenticationRegion = "eu-central-003",
+        UseHttp = false
+    };
+    return new AmazonS3Client(credentials, config);
+});
+
+builder.Services.AddKeyedScoped<IAmazonS3>("S3Downloader", (sp, key) => {
+    var conf = sp.GetRequiredService<IConfiguration>();
+    var credentials = new Amazon.Runtime.BasicAWSCredentials(conf["BackBlaze:Keyid"], conf["BackBlaze:ApplicationKey"]);
+    var config = new AmazonS3Config 
+    { 
+        ServiceURL = "https://s3.eu-central-003.backblazeb2.com",
+        AuthenticationRegion = "eu-central-1", 
+        RegionEndpoint = Amazon.RegionEndpoint.EUCentral1,
+        ForcePathStyle = true
+    };
+    return new AmazonS3Client(credentials, config);
+});
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 

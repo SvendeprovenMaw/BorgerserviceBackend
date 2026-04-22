@@ -17,6 +17,16 @@ namespace Backend.api.Entities
             this.ChecksumHash = checksumHash;
             this.FileName = filename;
         }
+        public S3File(User user, string filename, string s3Key, string checksumHash, Guid fileId)
+        {
+            this.Id = fileId;
+            this.UploadTime = DateTime.UtcNow;
+            this.UserId = user.Id;
+            this.S3Key = s3Key;
+            this.ChecksumHash = checksumHash;
+            this.FileName = filename;
+            
+        }
         public Guid Id { get; private set; }
         public Guid UserId { get; private set; }
         public User User { get; private set; }

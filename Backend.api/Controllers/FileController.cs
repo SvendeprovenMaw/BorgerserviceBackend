@@ -35,7 +35,7 @@ namespace Backend.api.Controllers
             var user = await _userService.GetUser(HttpContext.User);
             using (Stream stream = file.File.OpenReadStream())
             {
-                await _s3.UploadFile(stream, file.Consent, file.Name, user, FileCategory.Cv);
+                await _s3.UploadFile(stream, file.Consent, file.Name, user, file.FileCategory);
             }
             return Ok();
         }

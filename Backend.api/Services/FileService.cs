@@ -8,7 +8,7 @@ namespace Backend.api.Services
 {
     public interface IFileService
     {
-        Task<bool> FileUploaded(User user, string filename, string s3Key, string bucket, string checksumHash, GiveConsentDto consentDto);
+        Task<bool> FileUploaded(User user, string filename, string s3Key, FileCategory fileCategory, string bucket, string checksumHash, GiveConsentDto consentDto, Guid fileId);
         Task<S3File?> GetFile(Guid fileId, Guid userId);
         Task<S3File[]> GetUserFiles(Guid userId);
         Task<S3File[]> GetUserFiles(Guid userId, FileCategory fileCategory);
@@ -25,9 +25,10 @@ namespace Backend.api.Services
             this._consent = consent;
         }
 
-        public async Task<bool> FileUploaded(User user, string filename, string s3Key, string bucket, string checksumHash, GiveConsentDto consentDto)
+        public async Task<bool> FileUploaded(User user, string filename, string s3Key, FileCategory fileCategory, string bucket, string checksumHash, GiveConsentDto consentDto, Guid fileId)
         {
-            S3File newFile = new(user, filename, s3Key, checksumHash);
+            S3File newFile = new(user, filename, s3Key, checksumHash, fileId);
+            //cv has to be switched out with new cv when uploaded - if there is an old one it has to be moved to relative folder and be renamed to old cv - keyname has to be switched in s3 and db
             await _db.AddAsync(newFile);
             await _consent.GiveConsent(user, newFile, consentDto);
             await _db.SaveChangesAsync();
@@ -50,6 +51,7 @@ namespace Backend.api.Services
             var files = await _db.S3Files.Where(i=>i.UserId == userId).ToArrayAsync();
             return files;
         }
+
         public async Task<S3File[]> GetUserFiles(Guid userId, FileCategory fileCategory)
         {
             string categoryFolder = $"users/{userId}/{fileCategory}/";

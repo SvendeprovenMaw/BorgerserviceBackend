@@ -22,10 +22,24 @@ namespace Backend.api.Database
                 .HasIndex(t => t.Active)
                 .IsUnique()
                 .HasFilter("\"Active\" = TRUE");
+
+            modelBuilder.Entity<AiProcessingJob>()
+                .HasMany(j => j.ProcessedFiles)
+                .WithMany() // No navigation property on S3File back to AiProcessingJob
+                .UsingEntity<Dictionary<string, object>>(
+                    "AiJobProcessedFiles", // Name of the bridge table
+                    j => j.HasOne<S3File>().WithMany().HasForeignKey("S3FileId"),
+                    j => j.HasOne<AiProcessingJob>().WithMany().HasForeignKey("AiJobId")
+                );
+
+            // If ResultFile is a one-to-one or one-to-many reference
+            modelBuilder.Entity<AiProcessingJob>()
+                .HasOne(j => j.ResultFile)
+                .WithMany() // S3File can be a result for multiple jobs, or just leave empty
+                .HasForeignKey("ResultFileId");
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Profile> Profiles { get; set; }
         public DbSet<AiProcessingJob> AiJobs { get; set; }
         public DbSet<AiDraft> AiDrafts { get; set; }
         public DbSet<S3File> S3Files { get; set; }

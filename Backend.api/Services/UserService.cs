@@ -44,9 +44,7 @@ namespace Backend.api.Services
             var result = await _db.Users.Where(i => i.Username == createUserDto.Username || i.Email == createUserDto.Email).AnyAsync();
             if (result) { return false; }
             User user = new(JwtRoles.User, createUserDto.Email, createUserDto.Username, PasswordHasher.Hash(createUserDto.Password, ""));
-            Profile profile = new(user);
             await _db.AddAsync(user);
-            await _db.AddAsync(profile);
             await _db.SaveChangesAsync();
             return true;
         }
