@@ -24,7 +24,7 @@ namespace Openai.Library.Phases
         //2
         public async Task<string> AnalyseJobPost(BinaryData fileData)
         {
-            ChatClient chatClient = new(model: "gpt-5.4-nano", this._options.SecretKey);
+            ChatClient chatClient = new ChatClient(_options.Model, _options.SecretKey);
 
             string systemPrompt = AiResourceConfiguration.GetResourceContent(AiResourceConfiguration.RequirementsPromptFileName);
             string baseUserPrompt = AiResourceConfiguration.GetResourceContent(AiResourceConfiguration.BasePromptFileName);
@@ -38,14 +38,12 @@ namespace Openai.Library.Phases
                 _options.SecretKey
             );
 
-            // 4. Konfigurer Structured Output formatet
             ChatResponseFormat jsonFormat = ChatResponseFormat.CreateJsonSchemaFormat(
                 jsonSchemaFormatName: "job_analysis",
                 jsonSchema: BinaryData.FromString(actualSchemaJson),
                 jsonSchemaIsStrict: true
             );
 
-            // 2. Opret dine beskeder
             List<ChatMessage> messages = new()
             {
                 new SystemChatMessage(systemPrompt),
@@ -55,7 +53,6 @@ namespace Openai.Library.Phases
                 )
             };
 
-            // 3. Tilføj formatet til ChatCompletionOptions
             ChatCompletionOptions options = new()
             {
                 ResponseFormat = jsonFormat // I ChatClient hedder den ResponseFormat!

@@ -9,7 +9,7 @@ namespace Backend.api.Services
     {
         Task AccecptTerms(User user, Term activeTerms, GiveConsentDto dto);
         Task GiveConsent(User user, S3File s3File, GiveConsentDto dto);
-        Task RetractAccountConsent();
+        Task<bool> RetractAccountConsent(User user);
         Task<bool> RetractFileConsent(S3File file, User user);
         Task<Consent> VerifyConsent(S3File s3File);
     }
@@ -44,9 +44,12 @@ namespace Backend.api.Services
             await _db.SaveChangesAsync();
         }
 
-        public async Task RetractAccountConsent()
+        public async Task<bool> RetractAccountConsent(User user)
         {
-            // will set all consent linked to the user as retracted
+            int rows = await _db.Consents.Where(i => i.UserId == user.Id).
+            ExecuteUpdateAsync(s => s.SetProperty(c => c.ConsentRetracted, true));
+            //every users consent wil be retracted
+            return rows > 0;
         }
 
         public async Task<Consent> VerifyConsent(S3File s3File)

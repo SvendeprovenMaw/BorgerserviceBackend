@@ -8,5 +8,6 @@ namespace Openai.Library.Options
     public class OpenAiLibraryOptions
     {
         public string SecretKey { get; set; }
+        public string Model { get; set; }
     }
 }

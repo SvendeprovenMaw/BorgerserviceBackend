@@ -25,5 +25,15 @@ namespace Backend.api.Entities
         public string Username { get; set; } = "";
         public string Password { get; set; } = "";
         public string Salt { get; set; } = string.Empty;
+
+        public void AnonymizeUser()
+        {
+            this.Role = JwtRoles.NonApprovedGuest;
+            this.Email = "anonymized ";
+            this.Username = "anonymized ";
+            this.Password = "anonymized ";
+            this.Salt = "anonymized ";
+        }
+        
     }
 }

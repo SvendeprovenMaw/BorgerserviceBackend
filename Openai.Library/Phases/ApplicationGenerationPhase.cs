@@ -25,9 +25,6 @@ namespace Openai.Library.Phases
             _client = new ChatClient("gpt-5.4-nano", options.Value.SecretKey);
         }
 
-        /// <summary>
-        /// Phase 5: Genererer det endelige output (f.eks. ansøgning) baseret på alle verificerede data.
-        /// </summary>
         public async Task<string> ExecutePhase(
             string requirementsJson,
             string evidenceJson,
@@ -35,7 +32,6 @@ namespace Openai.Library.Phases
             string companyContextJson,
             string preferencesText)
         {
-            // Henter system prompt og schema specifikt til Phase 5
             string basePrompt = AiResourceConfiguration.GetResourceContent(AiResourceConfiguration.BasePromptFileName);
             string systemPrompt = AiResourceConfiguration.GetResourceContent(AiResourceConfiguration.ApplicationGenrationPromptFileName);
             string schemaJson = AiResourceConfiguration.GetResourceContent(AiResourceConfiguration.ApplicationGenerationSchemaFileName);
@@ -46,7 +42,6 @@ namespace Openai.Library.Phases
 
             var contentParts = new List<ChatMessageContentPart>();
 
-            // Samler de 5 verificerede dokumenter til AI'en
             contentParts.Add(ChatMessageContentPart.CreateTextPart(
                 "Her er de 5 kildedokumenter til din opgave:\n\n" +
                 "--- 1. KRAV-DOKUMENT ---\n" + requirementsJson + "\n\n" +
@@ -63,7 +58,6 @@ namespace Openai.Library.Phases
                 new UserChatMessage(contentParts)
             };
 
-            // Tvinger igen AI'en til at overholde Strict JSON-format
             ChatCompletionOptions options = new()
             {
                 ResponseFormat = ChatResponseFormat.CreateJsonSchemaFormat(
@@ -71,8 +65,6 @@ namespace Openai.Library.Phases
                     BinaryData.FromString(actualSchemaJson),
                     jsonSchemaIsStrict: true
                 ),
-                // Vi giver den lidt mere kreativ frihed (Temperature = 0.5-0.7) her i Phase 5, 
-                // hvis den skal skrive en overbevisende og naturlig tekst.
                 Temperature = 0.6f
             };
 

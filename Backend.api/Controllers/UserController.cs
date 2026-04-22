@@ -16,6 +16,7 @@ namespace Backend.api.Controllers
         private readonly JwtSettings jwtSettings;
         private readonly IUserService _UserService;
         private readonly IAuthService _authService;
+
         public UserController(IUserService userService, IOptions<JwtSettings> options, IAuthService authService)
         {
             this._UserService = userService;
@@ -83,9 +84,21 @@ namespace Backend.api.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AcceptTerms()
+        {
+            return NotFound();
+        }
+
         [HttpDelete]
         public async Task<IActionResult> DeleteUser()
         {
+            var user = await this._UserService.GetUser(HttpContext.User);
+            if(user == null)
+            {
+                return NotFound("User not found");
+            }
+            await _UserService.HardDeleteAccount(user);
             return NotFound();
         }
 
@@ -147,5 +160,7 @@ namespace Backend.api.Controllers
 
             return Ok(new { message = "Token refreshed" });
         }
+
+
     }
 }

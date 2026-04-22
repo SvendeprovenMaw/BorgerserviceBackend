@@ -20,7 +20,7 @@ namespace Backend.api.Services
         Task<User> GetUser(Guid id);
         Task<User> GetUser(ClaimsPrincipal claims);
         Task GetUserProfile();
-        Task HardDeleteAccount();
+        Task HardDeleteAccount(User user);
         Task<User?> Login(LoginDto loginDto);
         Task RequestPasswordReset();
     }
@@ -28,9 +28,15 @@ namespace Backend.api.Services
     public class UserService : IUserService
     {
         private WarehouseDbContext _db;
-        public UserService(WarehouseDbContext db)
+        private readonly IS3StorageService _s3;
+        private readonly IConsentService _consent;
+        private readonly IFileService _file;
+        public UserService(WarehouseDbContext db, IUserService userService, IS3StorageService s3StorageService, IConsentService consentService, IFileService fileService)
         {
             this._db = db;
+            this._s3 = s3StorageService;
+            this._consent = consentService;
+            this._file = fileService;
         }
 
         public async Task<bool> CreateUser(CreateUserDto createUserDto)
@@ -63,7 +69,7 @@ namespace Backend.api.Services
 
         public async Task ChangePassword()
         {
-
+            
         }
 
         public async Task RequestPasswordReset()
@@ -71,14 +77,19 @@ namespace Backend.api.Services
 
         }
 
-        public async Task HardDeleteAccount()
+        public async Task HardDeleteAccount(User user)//this will anonamize user files
         {
-
+            await _s3.DeleteFilesAsync(user);
+            await _consent.RetractAccountConsent(user);
+            await _file.AnonamizeS3Records(user);
+            user.AnonymizeUser();
+            _db.Users.Update(user);
+            await _db.SaveChangesAsync();
         }
 
         public async Task GetUserProfile()
         {
-
+            
         }
     }
 }

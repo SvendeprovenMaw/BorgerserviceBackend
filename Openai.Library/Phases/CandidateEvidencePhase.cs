@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using Microsoft.VisualBasic;
 using Openai.Library.Configuration;
 using Openai.Library.Options;
 using OpenAI.Chat;
@@ -22,22 +23,20 @@ namespace Openai.Library.Phases
     {
         private readonly ChatClient _client;
 
-        // Væk med resourceConfig fra constructoren!
         public CandidateEvidencePhase(IOptions<OpenAiLibraryOptions> options)
         {
-            _client = new ChatClient("gpt-5.4-nano", options.Value.SecretKey); // Eller ApiKey
+            _client = new ChatClient(options.Value.Model, options.Value.SecretKey); // Eller ApiKey
         }
 
         public async Task<string> ExecutePhase(string jobRequirementsJson, BinaryData cv, List<BinaryData> s3Files)
         {
-            // Vi kalder den statiske klasse direkte!
             string baseUserPrompt = AiResourceConfiguration.GetResourceContent(AiResourceConfiguration.BasePromptFileName);
             string systemPrompt = AiResourceConfiguration.GetResourceContent(AiResourceConfiguration.CandidateEvidencePromptFileName);
             string schemaJson = AiResourceConfiguration.GetResourceContent(AiResourceConfiguration.CandidateEvidenceSchemaFileName);
 
             var contentParts = new List<ChatMessageContentPart>();
 
-            // 1. Instruktion og jobkrav
+//hvad gpt skal gøre
             contentParts.Add(ChatMessageContentPart.CreateTextPart(
                 "Her er de udtrukne krav fra jobopslaget i JSON format:\n" +
                 jobRequirementsJson +
@@ -45,14 +44,11 @@ namespace Openai.Library.Phases
 
 
             var uploadedFileNames = new List<string>();
-            // 2. Fodr PDF'erne direkte til gpt som BinaryData
             for (int i = 0; i < s3Files.Count; i++)
             {
-                // Vi giver filen et meget tydeligt ID/navn
                 string fileName = $"candidate_doc_{i + 1}.pdf";
                 uploadedFileNames.Add(fileName);
 
-                // CreateFilePart sender bytes direkte til OpenAI
                 contentParts.Add(ChatMessageContentPart.CreateFilePart(
                     s3Files[i],
                     "application/pdf",
@@ -77,9 +73,9 @@ namespace Openai.Library.Phases
             JsonElement schemaElement = doc.RootElement.GetProperty("schema");
             string actualSchemaJson = schemaElement.GetRawText();
 
-            // 3. Konfigurer JSON-schemaet
             ChatCompletionOptions options = new()
             {
+                //Json schema til gpt
                 ResponseFormat = ChatResponseFormat.CreateJsonSchemaFormat(
                     "candidate_analysis",
                     BinaryData.FromString(actualSchemaJson),

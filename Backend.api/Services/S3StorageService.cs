@@ -9,10 +9,10 @@ namespace Backend.api.Services
 {
     public interface IS3StorageService
     {
-        Task DeleteFileAsync(string bucketname, string filename);
+        Task DeleteFileAsync(Guid fileId, User user);
+        Task DeleteFilesAsync(User user);
         Task<S3File[]> GetFileStructure(Guid userId);
         Task<string> UserDownloadFile(Guid fileId, User user);
-        Task PermentlyUserFilesAsync(string bucketname, Guid userId);
         Task UploadFile(Stream fileStream, GiveConsentDto consentDto, string filename, User user, FileCategory fileCategory);
     }
 
@@ -111,37 +111,63 @@ namespace Backend.api.Services
             return urlString;
         }
 
-        public async Task<string> AiDownloadUserFile(Guid fileId, User user)
-        {
-            var s3File = await _files.GetFile(fileId, user.Id);
-            var consent = await _consent.VerifyConsent(s3File);
-            if(consent.ConsentRetracted)
-            {
-                throw new FileNotFoundException("Consent Retracted or file deleted");
-            }
-            string urlString = s3Downloader.GetPreSignedURL(new GetPreSignedUrlRequest
-            {
-                BucketName = _conf["BackBlaze:KeyName"],
-                Key = s3File.S3Key,
-                Expires = DateTime.UtcNow.AddMinutes(5)
-            });
-            return urlString;
-        }
-
         public async Task<S3File[]> GetRelevantUserFiles(Guid userId)
         {
             var response = await _files.GetUserFiles(userId, FileCategory.ReleventDocuments);
             return response;
         }
 
-        public async Task DeleteFileAsync(string bucketname, string filename)
+        public async Task DeleteFileAsync(Guid fileId, User user)
         {
-
+            S3File s3file = await _files.GetFile(fileId, user.Id);
+            DeleteObjectRequest request = new()
+            {
+                BucketName = _conf["BackBlaze:KeyName"],
+                Key = s3file.S3Key
+            };
+            await this.s3Uploader.DeleteObjectAsync(request);
         }
 
-        public async Task PermentlyUserFilesAsync(string bucketname, Guid userId)
+        public async Task DeleteFilesAsync(User user)
         {
+            string prefix = $"users/{user.Id}/";
 
+            try
+            {
+                var listRequest = new ListObjectsV2Request
+                {
+                    BucketName = _conf["BackBlaze:KeyName"],
+                    Prefix = prefix
+                };
+
+                ListObjectsV2Response listResponse;
+                int maxRuns = 3;
+                int runs = 0;
+                do
+                {
+                    listResponse = await s3Uploader.ListObjectsV2Async(listRequest);
+
+                    if (listResponse.S3Objects.Count > 0)
+                    {
+                        var deleteRequest = new DeleteObjectsRequest
+                        {
+                            BucketName = _conf["BackBlaze:KeyName"],
+                            Objects = listResponse.S3Objects
+                                .Select(o => new KeyVersion { Key = o.Key })
+                                .ToList()
+                        };
+
+                        await s3Uploader.DeleteObjectsAsync(deleteRequest);
+                    }
+
+                    listRequest.ContinuationToken = listResponse.NextContinuationToken;
+                    runs++;
+                } while (listResponse.IsTruncated ?? false && runs >= maxRuns);//checks if there are more files in the s3 storage and runs again if there are can only run 3 times max
+            }
+            catch (AmazonS3Exception e)
+            {
+                throw new Exception($"Kunne ikke slette brugerens filer: {e.Message}");
+            }
         }
     }
 }

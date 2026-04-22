@@ -22,7 +22,7 @@ namespace Openai.Library.Phases
 
         public CompetenceMatchingPhase(IOptions<OpenAiLibraryOptions> options)
         {
-            _client = new ChatClient("gpt-5.4-nano", options.Value.SecretKey);
+            _client = new ChatClient(options.Value.Model, options.Value.SecretKey);
         }
 
         /// <summary>
