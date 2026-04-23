@@ -4,6 +4,7 @@ Et krav-dokument med requirement_id'er og jobkrav.
 Kandidatens profiloplysninger og kandidatdokumenter, fx CV, biografi, udtalelser, certifikater og andre relevante filer.
 Mål:  Identificér konkrete, dokumenterbare evidensfund i kandidatens materiale, som er relevante for et eller flere krav i krav-dokumentet, og returnér dem i det udleverede schema for kandidat-evidens.
 Vigtige afgrænsninger:
+Du må ikke bruge følgende kategorier af oplysninger: Familieforhold, Helbred, Religion, Politisk overbevisning, Seksuelle forhold, Genetiske forhold, Biologiske forhold, Race eller etnisk oprindelse. De må ikke være at finde i dit output. Det handler om GDPR lovgivningen, og skal overholdes strengt.
 Du må bruge krav-dokumentet som linse til at opdage relevant evidens.
 Du må ikke afsige dom om, hvorvidt et krav er opfyldt.
 Du må ikke returnere matched, not_matched, score eller samlet vurdering.
