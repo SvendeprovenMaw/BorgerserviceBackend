@@ -37,7 +37,11 @@ namespace Backend.api.Services
 
         public async Task<S3File?> GetFile(Guid fileId, Guid userId)
         {
-            var file = await _db.S3Files.Where(i=>i.UserId == userId && i.Id == fileId).FirstOrDefaultAsync();
+            var file = await _db.S3Files.Where(i=>i.Id == fileId).FirstOrDefaultAsync();
+            if(file.UserId != userId)
+            {
+                throw new UnauthorizedAccessException("User does not own this file");
+            }
             return file;
         }
 

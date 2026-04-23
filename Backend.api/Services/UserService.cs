@@ -31,7 +31,7 @@ namespace Backend.api.Services
         private readonly IS3StorageService _s3;
         private readonly IConsentService _consent;
         private readonly IFileService _file;
-        public UserService(WarehouseDbContext db, IUserService userService, IS3StorageService s3StorageService, IConsentService consentService, IFileService fileService)
+        public UserService(WarehouseDbContext db, IS3StorageService s3StorageService, IConsentService consentService, IFileService fileService)
         {
             this._db = db;
             this._s3 = s3StorageService;

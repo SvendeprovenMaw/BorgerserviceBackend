@@ -33,7 +33,10 @@ namespace Backend.api.Services
         {
             int rows = await _db.Consents.Where(i => i.FileId == file.Id && i.UserId == user.Id).
             ExecuteUpdateAsync(s => s.SetProperty(c => c.ConsentRetracted, true));
-
+            if(rows == 0)
+            {
+                throw new Exception("Row not found");
+            }
             return rows > 0;
         }
 
@@ -49,6 +52,10 @@ namespace Backend.api.Services
             int rows = await _db.Consents.Where(i => i.UserId == user.Id).
             ExecuteUpdateAsync(s => s.SetProperty(c => c.ConsentRetracted, true));
             //every users consent wil be retracted
+            if(rows == 0)
+            {
+                throw new Exception("Row not found");
+            }
             return rows > 0;
         }
 

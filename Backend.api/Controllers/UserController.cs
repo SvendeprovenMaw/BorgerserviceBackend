@@ -84,7 +84,7 @@ namespace Backend.api.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("acceptterms")]
         public async Task<IActionResult> AcceptTerms()
         {
             return NotFound();

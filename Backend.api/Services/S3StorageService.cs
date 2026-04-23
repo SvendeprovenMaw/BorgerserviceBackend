@@ -119,6 +119,7 @@ namespace Backend.api.Services
         public async Task DeleteFileAsync(Guid fileId, User user)
         {
             S3File s3file = await _files.GetFile(fileId, user.Id);
+            await this._consent.RetractFileConsent(s3file, user);
             DeleteObjectRequest request = new()
             {
                 BucketName = _conf["BackBlaze:KeyName"],
