@@ -3,10 +3,12 @@ WORKDIR /src
 
 COPY Backend.api/Backend.api.csproj Backend.api/
 COPY JwtLibrary/JwtLibrary.csproj JwtLibrary/
+COPY Openai.Library/Openai.Library.csproj Openai.Library/
 RUN dotnet restore Backend.api/Backend.api.csproj
 
 COPY Backend.api/ Backend.api/
 COPY JwtLibrary/ JwtLibrary/
+COPY Openai.Library/ Openai.Library/
 
 WORKDIR /src/Backend.api
 RUN dotnet publish Backend.api.csproj -c Release -o /app/publish /p:UseAppHost=false
