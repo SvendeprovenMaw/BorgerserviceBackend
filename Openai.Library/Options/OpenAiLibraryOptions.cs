@@ -1,0 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Openai.Library.Options
+{
+    public class OpenAiLibraryOptions
+    {
+        public string SecretKey { get; set; }
+        public string Model { get; set; }
+    }
+}

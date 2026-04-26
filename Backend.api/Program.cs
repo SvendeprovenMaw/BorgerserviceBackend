@@ -1,13 +1,15 @@
-
 using System.Text;
 using Backend.api.Configuration;
 using Backend.api.Database;
 using Backend.api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Backend.api.Middleware;
+using Openai.Library.Phases;
+using Microsoft.EntityFrameworkCore;
+using Openai.Library.Options;
+using Amazon.S3;
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -22,10 +24,44 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IS3StorageService, S3StorageService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IConsentService, ConsentService>();
+builder.Services.AddScoped<IRequirementsPhase, RequirementsPhase>();
+builder.Services.AddScoped<ICandidateEvidencePhase, CandidateEvidencePhase>();
+builder.Services.AddScoped<ICompetenceMatchingPhase, CompetenceMatchingPhase>();
+builder.Services.AddScoped<IApplicationGenerationPhase, ApplicationGenerationPhase>();
+builder.Services.AddScoped<IAiJobService, AiJobService>();
+
+builder.Services.AddKeyedScoped<IAmazonS3>("S3Uploader", (sp, key) => {
+    var conf = sp.GetRequiredService<IConfiguration>();
+    var credentials = new Amazon.Runtime.BasicAWSCredentials(conf["BackBlaze:Keyid"], conf["BackBlaze:ApplicationKey"]);
+    var config = new AmazonS3Config 
+    { 
+        ServiceURL = "https://s3.eu-central-003.backblazeb2.com",
+        ForcePathStyle = true,
+        AuthenticationRegion = "eu-central-003",
+        UseHttp = false
+    };
+    return new AmazonS3Client(credentials, config);
+});
+
+builder.Services.AddKeyedScoped<IAmazonS3>("S3Downloader", (sp, key) => {
+    var conf = sp.GetRequiredService<IConfiguration>();
+    var credentials = new Amazon.Runtime.BasicAWSCredentials(conf["BackBlaze:Keyid"], conf["BackBlaze:ApplicationKey"]);
+    var config = new AmazonS3Config 
+    { 
+        ServiceURL = "https://s3.eu-central-003.backblazeb2.com",
+        AuthenticationRegion = "eu-central-1", 
+        RegionEndpoint = Amazon.RegionEndpoint.EUCentral1,
+        ForcePathStyle = true
+    };
+    return new AmazonS3Client(credentials, config);
+});
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+builder.Services.Configure<OpenAiLibraryOptions>(
+    builder.Configuration.GetSection("OpenAi")
+);
 
 if (jwtSettings == null || string.IsNullOrEmpty(jwtSettings.Key))
 {
@@ -35,8 +71,9 @@ if (jwtSettings == null || string.IsNullOrEmpty(jwtSettings.Key))
 Console.WriteLine($"SECRET KEY BOUND: {jwtSettings.Key}");
 
 // Add services to the container.
-builder.Services.AddDbContext<WarehouseDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+//builder.Services.AddDbContext<WarehouseDbContext>(options =>
+//    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddDbContext<WarehouseDbContext>(options => options.UseInMemoryDatabase("WarehouseDb"));
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -97,7 +134,7 @@ var app = builder.Build();
 app.UseMiddleware<CustomExceptionHandlingMiddleware>();
 app.UseRouting();
 app.UseCors("AngularPolicy");
-await DatabaseInitializer.InitializeAsync(app.Services, app.Configuration);
+//await DatabaseInitializer.InitializeAsync(app.Services, app.Configuration);
 
 app.MapSwagger();
 // Configure the HTTP request pipeline.
@@ -125,4 +162,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-

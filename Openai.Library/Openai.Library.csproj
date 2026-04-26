@@ -10,4 +10,9 @@
     <PackageReference Include="OpenAI" Version="2.10.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\**\*.prompt" />
+    <EmbeddedResource Include="Assets\**\*.json" />
+  </ItemGroup>
+
 </Project>

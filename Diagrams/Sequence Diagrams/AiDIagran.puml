@@ -1,0 +1,56 @@
+@startuml
+skinparam style strictuml
+skinparam sequenceMessageAlign center
+
+actor User
+participant "Application Controller" as App
+participant "Consent Service" as Consent
+participant "S3 Service" as S3
+database "S3 Bucket" as Storage
+participant "Web Scraper / Parser" as Scraper
+participant "AI Service" as AI
+
+User -> App : Generate Application (new files, job link/PDF)
+activate App
+
+== Step 1: Handle Job Description ==
+
+alt User provides Job Link
+    App -> Scraper : Fetch Content from URL
+    activate Scraper
+    Scraper --> App : Job Description Text
+    deactivate Scraper
+else User uploads Job PDF
+    App -> App : Extract Text from PDF
+end
+
+== Step 2: Retrieve Consented S3 Files ==
+
+App -> Consent : Get Consented File IDs(userId)
+activate Consent
+Consent --> App : List<FileID>
+deactivate Consent
+
+loop for each FileID
+    App -> S3 : Fetch File Content(FileID)
+    activate S3
+    S3 -> Storage : GET Object
+    activate Storage
+    Storage --> S3 : Data Stream
+    deactivate Storage
+    S3 --> App : File Content
+    deactivate S3
+end
+
+== Step 3: Process All Data ==
+
+App -> AI : Generate Job Application \n(Consented Files + New Uploads + Job Description)
+activate AI
+note right of AI: Matches user profile \nagainst specific job requirements
+AI --> App : Generated Job Application
+deactivate AI
+
+App --> User : Return Job Application
+deactivate App
+
+@enduml

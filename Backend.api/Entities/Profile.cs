@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Backend.api.Entities
 {
-    public class Profile
+    /*public class Profile
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         private Profile(){}
@@ -21,6 +21,21 @@ namespace Backend.api.Entities
         public Guid UserId { get; private set; }
         public User User { get; private set; }
         public S3File? CurrentCv { get; private set; }
-        public Collection<S3File>? RelevantDocuments { get; private set; }
-    }
+        private readonly List<S3File> _relevantDocuments = new List<S3File>();
+        public IReadOnlyCollection<S3File> RelevantDocuments => _relevantDocuments.AsReadOnly();
+
+        public void ExchangeCv(S3File newCv)
+        {
+            this.CurrentCv = newCv;
+        }
+
+        public void AddRelevantDocument(S3File document)
+        {
+            _relevantDocuments.Add(document);
+        }
+        public void AddRelevantDocumentsRange(IEnumerable<S3File> documents)
+        {
+                _relevantDocuments.AddRange(documents);
+        }
+    }*/
 }

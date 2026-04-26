@@ -1,0 +1,66 @@
+{
+  "name": "user_profile_enhancement_v1",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "headline",
+      "current_focus",
+      "preferred_roles",
+      "core_competencies",
+      "key_strengths",
+      "notable_results",
+      "education_highlights",
+      "language_highlights",
+      "mobility_and_work_preferences"
+    ],
+    "properties": {
+      "headline": {
+        "type": "string"
+      },
+      "current_focus": {
+        "type": "string"
+      },
+      "preferred_roles": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "core_competencies": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "key_strengths": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "notable_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "education_highlights": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "language_highlights": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "mobility_and_work_preferences": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -35,7 +35,7 @@ namespace Backend.api.Controllers
             var user = await _userService.GetUser(HttpContext.User);
             using (Stream stream = file.File.OpenReadStream())
             {
-                await _s3.UploadFile(stream, file.Consent, file.Name, user, FileCategory.Cv);
+                await _s3.UploadFile(stream, file.Consent, file.Name, user, file.FileCategory);
             }
             return Ok();
         }
@@ -60,6 +60,15 @@ namespace Backend.api.Controllers
             return Ok(fileStructure); 
         }
         [HttpDelete]
-        public async Task<IActionResult> DeleteFile(){ return NotFound(); }
+        public async Task<IActionResult> DeleteFile(Guid fileId)
+        { 
+            var user = await _userService.GetUser(HttpContext.User);
+            if(user == null)
+            {
+                return NotFound("User not found");
+            }
+            await _s3.DeleteFileAsync(fileId, user);
+            return NoContent();
+        }
     }
 }

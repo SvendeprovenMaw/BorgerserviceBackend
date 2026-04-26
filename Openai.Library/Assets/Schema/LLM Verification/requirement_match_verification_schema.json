@@ -1,0 +1,243 @@
+{
+  "name": "requirement_matching_verification_v1",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "_meta",
+      "verification_summary",
+      "match_reviews",
+      "overall_assessment_review"
+    ],
+    "properties": {
+      "_meta": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "matching_document_id",
+          "requirements_document_id",
+          "candidate_evidence_document_id",
+          "verification_policy_version"
+        ],
+        "properties": {
+          "matching_document_id": {
+            "type": "string"
+          },
+          "requirements_document_id": {
+            "type": "string"
+          },
+          "candidate_evidence_document_id": {
+            "type": "string"
+          },
+          "verification_policy_version": {
+            "type": "string"
+          }
+        }
+      },
+      "verification_summary": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status",
+          "approved_count",
+          "warning_count",
+          "rejected_count",
+          "manual_review_count"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "pass",
+              "pass_with_warnings",
+              "fail"
+            ]
+          },
+          "approved_count": {
+            "type": "integer"
+          },
+          "warning_count": {
+            "type": "integer"
+          },
+          "rejected_count": {
+            "type": "integer"
+          },
+          "manual_review_count": {
+            "type": "integer"
+          }
+        }
+      },
+      "match_reviews": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "requirement_id",
+            "requirement_reference_check",
+            "evidence_reference_check",
+            "verdict_support_verdict",
+            "rationale_alignment",
+            "confidence_fit",
+            "approved_evidence_ids",
+            "rejected_evidence_ids",
+            "problems",
+            "approved_for_downstream",
+            "needs_human_review",
+            "reviewer_reason_da",
+            "suggested_fix_da"
+          ],
+          "properties": {
+            "requirement_id": {
+              "type": "string"
+            },
+            "requirement_reference_check": {
+              "type": "string",
+              "enum": [
+                "exists",
+                "missing",
+                "unclear"
+              ]
+            },
+            "evidence_reference_check": {
+              "type": "string",
+              "enum": [
+                "all_exist",
+                "some_missing",
+                "all_missing",
+                "unclear"
+              ]
+            },
+            "verdict_support_verdict": {
+              "type": "string",
+              "enum": [
+                "supported",
+                "weakly_supported",
+                "unsupported",
+                "unclear"
+              ]
+            },
+            "rationale_alignment": {
+              "type": "string",
+              "enum": [
+                "aligned",
+                "partially_aligned",
+                "misaligned",
+                "unclear"
+              ]
+            },
+            "confidence_fit": {
+              "type": "string",
+              "enum": [
+                "reasonable",
+                "too_high",
+                "too_low",
+                "unclear"
+              ]
+            },
+            "approved_evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "rejected_evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "problems": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "unknown_requirement_id",
+                  "unknown_evidence_id",
+                  "verdict_overstates_evidence",
+                  "rationale_not_supported",
+                  "missing_core_evidence",
+                  "contradicts_verified_evidence",
+                  "confidence_too_high",
+                  "other"
+                ]
+              }
+            },
+            "approved_for_downstream": {
+              "type": "boolean"
+            },
+            "needs_human_review": {
+              "type": "boolean"
+            },
+            "reviewer_reason_da": {
+              "type": "string"
+            },
+            "suggested_fix_da": {
+              "type": ["string", "null"]
+            }
+          }
+        }
+      },
+      "overall_assessment_review": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "overall_summary_verdict",
+          "overall_match_level_fit",
+          "problems",
+          "approved_for_downstream",
+          "needs_human_review",
+          "reviewer_reason_da",
+          "suggested_fix_da"
+        ],
+        "properties": {
+          "overall_summary_verdict": {
+            "type": "string",
+            "enum": [
+              "supported",
+              "weakly_supported",
+              "unsupported",
+              "unclear"
+            ]
+          },
+          "overall_match_level_fit": {
+            "type": "string",
+            "enum": [
+              "reasonable",
+              "too_high",
+              "too_low",
+              "unclear"
+            ]
+          },
+          "problems": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "summary_overstates_matches",
+                "summary_ignores_major_gaps",
+                "overall_level_too_high",
+                "overall_level_too_low",
+                "not_supported_by_match_reviews",
+                "other"
+              ]
+            }
+          },
+          "approved_for_downstream": {
+            "type": "boolean"
+          },
+          "needs_human_review": {
+            "type": "boolean"
+          },
+          "reviewer_reason_da": {
+            "type": "string"
+          },
+          "suggested_fix_da": {
+            "type": ["string", "null"]
+          }
+        }
+      }
+    }
+  }
+}

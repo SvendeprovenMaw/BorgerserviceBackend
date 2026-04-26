@@ -1,30 +1,43 @@
 {
-  "name": "candidate_requirement_focused_evidence_v1",
+  "name": "job_requirements_extraction_v1",
   "strict": true,
   "schema": {
     "type": "object",
     "additionalProperties": false,
-    "required": ["_meta", "evidence_items"],
+    "required": ["_meta", "requirements"],
     "properties": {
-      "evidence_items": {
+      "_meta": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["job_posting_title", "parsed_files", "errors"],
+        "properties": {
+          "job_posting_title": { "type": ["string", "null"] },
+          "parsed_files": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "errors": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "requirements": {
         "type": "array",
         "items": {
           "type": "object",
           "additionalProperties": false,
           "required": [
-            "evidence_id",
-            "fact_da",
+            "requirement_id",
+            "requirement_text_da",
             "normalized_label",
             "category",
-            "support_type",
-            "strength",
-            "relevant_requirement_ids",
-            "requirement_relevance_reason_da",
-            "citations"
+            "importance",
+            "source_citations"
           ],
           "properties": {
-            "evidence_id": { "type": "string" },
-            "fact_da": { "type": "string" },
+            "requirement_id": { "type": "string" },
+            "requirement_text_da": { "type": "string" },
             "normalized_label": { "type": "string" },
             "category": {
               "type": "string",
@@ -43,32 +56,15 @@
                 "certification",
                 "language",
                 "logistics",
-                "reference",
                 "personal_trait",
                 "other"
               ]
             },
-            "support_type": {
+            "importance": {
               "type": "string",
-              "enum": [
-                "explicit",
-                "strong_inference",
-                "testimonial",
-                "document_metadata"
-              ]
+              "enum": ["must_have", "should_have", "nice_to_have", "unknown"]
             },
-            "strength": {
-              "type": "string",
-              "enum": ["strong", "moderate", "weak"]
-            },
-            "relevant_requirement_ids": {
-              "type": "array",
-              "items": { "type": "string" }
-            },
-            "requirement_relevance_reason_da": {
-              "type": "string"
-            },
-            "citations": {
+            "source_citations": {
               "type": "array",
               "items": { "$ref": "#/$defs/source_citation" }
             }

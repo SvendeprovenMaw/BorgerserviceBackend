@@ -1,0 +1,283 @@
+{
+  "name": "application_generation_preferences_v1",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "applicant_id",
+      "target_language",
+      "tone",
+      "length_target",
+      "formality_level",
+      "motivation_style",
+      "self_presentation_style",
+      "emphasis_preferences",
+      "content_constraints",
+      "structural_preferences",
+      "closing_preferences",
+      "fit_strategy"
+    ],
+    "properties": {
+      "applicant_display_name": {
+        "type": "string"
+      },
+      "applicant_id": {
+        "type": "string"
+      },
+      "target_language": {
+        "type": "string",
+        "enum": ["da", "en"]
+      },
+      "tone": {
+        "type": "string",
+        "enum": [
+          "professional",
+          "warm_professional",
+          "formal",
+          "confident",
+          "humble"
+        ]
+      },
+      "length_target": {
+        "type": "string",
+        "enum": [
+          "short",
+          "medium",
+          "long"
+        ]
+      },
+      "formality_level": {
+        "type": "string",
+        "enum": [
+          "low",
+          "medium",
+          "high"
+        ]
+      },
+      "motivation_style": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "allow_general_interest_language",
+          "allow_grounded_motivation_claims",
+          "allow_passion_language",
+          "allow_company_praise"
+        ],
+        "properties": {
+          "allow_general_interest_language": {
+            "type": "boolean"
+          },
+          "allow_grounded_motivation_claims": {
+            "type": "boolean"
+          },
+          "allow_passion_language": {
+            "type": "boolean"
+          },
+          "allow_company_praise": {
+            "type": "boolean"
+          }
+        }
+      },
+      "self_presentation_style": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "confidence_level",
+          "prefer_modest_wording",
+          "allow_result_forward_language",
+          "allow_leadership_emphasis"
+        ],
+        "properties": {
+          "confidence_level": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "prefer_modest_wording": {
+            "type": "boolean"
+          },
+          "allow_result_forward_language": {
+            "type": "boolean"
+          },
+          "allow_leadership_emphasis": {
+            "type": "boolean"
+          }
+        }
+      },
+      "emphasis_preferences": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "prioritize_requirements_with_strong_match",
+          "prioritize_practical_experience",
+          "prioritize_personal_traits",
+          "prioritize_formal_education",
+          "prioritize_certifications",
+          "prioritize_collaboration",
+          "prioritize_stability_and_reliability",
+          "preferred_top_strength_count"
+        ],
+        "properties": {
+          "prioritize_requirements_with_strong_match": {
+            "type": "boolean"
+          },
+          "prioritize_practical_experience": {
+            "type": "boolean"
+          },
+          "prioritize_personal_traits": {
+            "type": "boolean"
+          },
+          "prioritize_formal_education": {
+            "type": "boolean"
+          },
+          "prioritize_certifications": {
+            "type": "boolean"
+          },
+          "prioritize_collaboration": {
+            "type": "boolean"
+          },
+          "prioritize_stability_and_reliability": {
+            "type": "boolean"
+          },
+          "preferred_top_strength_count": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 6
+          }
+        }
+      },
+      "content_constraints": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "avoid_unverified_superlatives",
+          "avoid_repeating_cv_facts_verbatim",
+          "avoid_mentioning_missing_requirements",
+          "avoid_salary_discussion",
+          "avoid_private_life_details",
+          "max_main_content_characters",
+          "disallowed_phrases_da"
+        ],
+        "properties": {
+          "avoid_unverified_superlatives": {
+            "type": "boolean"
+          },
+          "avoid_repeating_cv_facts_verbatim": {
+            "type": "boolean"
+          },
+          "avoid_mentioning_missing_requirements": {
+            "type": "boolean"
+          },
+          "avoid_salary_discussion": {
+            "type": "boolean"
+          },
+          "avoid_private_life_details": {
+            "type": "boolean"
+          },
+          "max_main_content_characters": {
+            "type": "integer",
+            "minimum": 800,
+            "maximum": 2600
+          },
+          "disallowed_phrases_da": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "structural_preferences": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "include_explicit_opening_reference_to_position",
+          "include_explicit_match_paragraph",
+          "include_explicit_motivation_paragraph",
+          "include_short_future_contribution_paragraph",
+          "prefer_short_paragraphs"
+        ],
+        "properties": {
+          "include_explicit_opening_reference_to_position": {
+            "type": "boolean"
+          },
+          "include_explicit_match_paragraph": {
+            "type": "boolean"
+          },
+          "include_explicit_motivation_paragraph": {
+            "type": "boolean"
+          },
+          "include_short_future_contribution_paragraph": {
+            "type": "boolean"
+          },
+          "prefer_short_paragraphs": {
+            "type": "boolean"
+          }
+        }
+      },
+      "closing_preferences": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "closing_style",
+          "include_interview_interest",
+          "include_thanks_for_consideration"
+        ],
+        "properties": {
+          "closing_style": {
+            "type": "string",
+            "enum": [
+              "formal",
+              "warm",
+              "confident",
+              "simple"
+            ]
+          },
+          "include_interview_interest": {
+            "type": "boolean"
+          },
+          "include_thanks_for_consideration": {
+            "type": "boolean"
+          }
+        }
+      },
+      "fit_strategy": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "guidance_mode",
+          "include_fit_advisory",
+          "allow_application_on_weak_match",
+          "prefer_transferable_strengths_when_direct_match_is_weak",
+          "allow_stretch_positioning"
+        ],
+        "properties": {
+          "guidance_mode": {
+            "type": "string",
+            "enum": [
+              "optimistic",
+              "balanced",
+              "conservative"
+            ]
+          },
+          "include_fit_advisory": {
+            "type": "boolean"
+          },
+          "allow_application_on_weak_match": {
+            "type": "boolean"
+          },
+          "prefer_transferable_strengths_when_direct_match_is_weak": {
+            "type": "boolean"
+          },
+          "allow_stretch_positioning": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}
