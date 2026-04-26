@@ -71,9 +71,9 @@ if (jwtSettings == null || string.IsNullOrEmpty(jwtSettings.Key))
 Console.WriteLine($"SECRET KEY BOUND: {jwtSettings.Key}");
 
 // Add services to the container.
-//builder.Services.AddDbContext<WarehouseDbContext>(options =>
-//    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
-builder.Services.AddDbContext<WarehouseDbContext>(options => options.UseInMemoryDatabase("WarehouseDb"));
+builder.Services.AddDbContext<WarehouseDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+//builder.Services.AddDbContext<WarehouseDbContext>(options => options.UseInMemoryDatabase("WarehouseDb"));
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

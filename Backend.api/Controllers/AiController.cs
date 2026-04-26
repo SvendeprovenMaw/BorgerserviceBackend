@@ -96,7 +96,7 @@ namespace Backend.api.Controllers
 
             var requirementFile = await BinaryFileHelper.ToBinaryData(file);
             var requirements = await _requirementsPhase.AnalyseJobPost(requirementFile);
-            var aiJob = new AiProcessingJob(user.Id, requirements);
+            var aiJob = new AiProcessingJob(user, requirements);
             await _aiJobService.SaveAiJobAsync(aiJob);
             return Ok(aiJob);
         }

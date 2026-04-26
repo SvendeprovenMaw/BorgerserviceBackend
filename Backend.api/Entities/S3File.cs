@@ -34,5 +34,13 @@ namespace Backend.api.Entities
         public string S3Key { get; private set; } = "";
         public string ChecksumHash { get; private set; } = "";
         public DateTime UploadTime { get; set; }
+
+
+        public void Anonymize()
+        {
+            this.FileName = "Anonymiseret";
+            this.S3Key = "Anonymiseret";
+            this.ChecksumHash = "Anonymiseret";
+        }
     }
 }

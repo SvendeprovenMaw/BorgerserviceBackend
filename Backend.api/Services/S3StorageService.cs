@@ -125,6 +125,7 @@ namespace Backend.api.Services
                 BucketName = _conf["BackBlaze:KeyName"],
                 Key = s3file.S3Key
             };
+            await _files.AnonamizeS3Record(fileId, user);
             await this.s3Uploader.DeleteObjectAsync(request);
         }
 

@@ -38,12 +38,19 @@ namespace Openai.Library.Phases
 
 //hvad gpt skal gøre
             contentParts.Add(ChatMessageContentPart.CreateTextPart(
-                "Her er de udtrukne krav fra jobopslaget i JSON format:\n" +
-                jobRequirementsJson +
-                "\n\nAnalyser nu de vedhæftede dokumenter for at finde beviser for disse krav."));
-
+            "Her er de udtrukne krav fra jobopslaget i JSON format:\n" +
+            jobRequirementsJson +
+            "\n\nDin opgave er at analysere kandidatens CV og øvrige dokumenter for at finde beviser for disse krav. " +
+            "VIGTIGT: Begynd altid din analyse med at kigge grundigt i 'candidate_cv.pdf'."));
 
             var uploadedFileNames = new List<string>();
+            string cvFileName = "candidate_cv.pdf";
+            uploadedFileNames.Add(cvFileName);
+            contentParts.Add(ChatMessageContentPart.CreateFilePart(
+                cv,
+                "application/pdf",
+                cvFileName));
+
             for (int i = 0; i < s3Files.Count; i++)
             {
                 string fileName = $"candidate_doc_{i + 1}.pdf";

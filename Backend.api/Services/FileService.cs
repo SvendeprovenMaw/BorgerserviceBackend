@@ -12,7 +12,8 @@ namespace Backend.api.Services
         Task<S3File?> GetFile(Guid fileId, Guid userId);
         Task<S3File[]> GetUserFiles(Guid userId);
         Task<S3File[]> GetUserFiles(Guid userId, FileCategory fileCategory);
-        Task AnonamizeS3Records(User user);
+        Task AnonamizeS3Record(Guid fileId, User user);
+        Task AnonamizeUserS3Records(User user);
     }
 
     public class FileService : IFileService
@@ -77,10 +78,16 @@ namespace Backend.api.Services
                     .ToArrayAsync();
         }
 
-        public async Task AnonamizeS3Records(User user)
+        public async Task AnonamizeUserS3Records(User user)
         {
             await _db.S3Files.Where(i=>i.UserId == user.Id).ExecuteUpdateAsync(i=>i.SetProperty(c=>c.FileName, string.Empty));
         }
 
+        public async Task AnonamizeS3Record(Guid fileId, User user)
+        {
+            var file = await this.GetFile(fileId, user.Id);
+            file.Anonymize();
+            await _db.SaveChangesAsync();
+        }
     }
 }

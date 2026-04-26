@@ -12,13 +12,13 @@ namespace Backend.api.Entities
         {
             
         }
-        public AiProcessingJob(Guid userId)
+        public AiProcessingJob(User user)
         {
             Id = Guid.NewGuid();
-            UserId = userId;
+            User = user;
         }
 
-        public AiProcessingJob(Guid userId, string jobRequirements) : this(userId)
+        public AiProcessingJob(User user, string jobRequirements) : this(user)
         {
             this.JobRequirements = jobRequirements;
         }
