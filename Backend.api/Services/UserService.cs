@@ -42,7 +42,10 @@ namespace Backend.api.Services
         public async Task<bool> CreateUser(CreateUserDto createUserDto)
         {
             var result = await _db.Users.Where(i => i.Username == createUserDto.Username || i.Email == createUserDto.Email).AnyAsync();
-            if (result) { return false; }
+            if (result)
+            {
+                throw new Exception("Username or email already in use");
+            }
             User user = new(JwtRoles.User, createUserDto.Email, createUserDto.Username, PasswordHasher.Hash(createUserDto.Password, ""));
             await _db.AddAsync(user);
             await _db.SaveChangesAsync();

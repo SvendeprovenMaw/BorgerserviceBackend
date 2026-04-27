@@ -75,7 +75,7 @@ namespace Backend.api.Controllers
                     return Ok(new { message = "login successful" });
                 }
 
-                return NoContent();
+                return NotFound();
             }
             catch (System.Exception)
             {
