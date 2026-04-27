@@ -112,7 +112,15 @@ namespace Backend.api.Controllers
             var relevantBinaryFiles = await BinaryFileHelper.ToBinaryDataListAsync(dto.OtherRelevantPdfs);
             
             var cvData = await BinaryFileHelper.ToBinaryData(dto.cv.File);
-            var aiprossjob = await this._aiJobService.GetAiJobByIdAsync(dto.AiJob, user.Id);
+            AiProcessingJob aiprossjob;
+            if(dto.aiProcessingJobOverwrite == null)
+            {
+                aiprossjob = await this._aiJobService.GetAiJobByIdAsync(dto.AiJob, user.Id);
+            }
+            else
+            {
+                aiprossjob = dto.aiProcessingJobOverwrite;
+            }
             var evidence = await _evidencePhase.ExecutePhase(aiprossjob.JobRequirements, cvData, relevantBinaryFiles);
             aiprossjob.InsertUserCompetences(evidence);
             await _aiJobService.UpdateAiJobAsync(aiprossjob);
