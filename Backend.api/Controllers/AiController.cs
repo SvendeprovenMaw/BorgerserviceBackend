@@ -109,6 +109,21 @@ namespace Backend.api.Controllers
             {
                 return NotFound("User not found");
             }
+
+            if (dto.cv?.File == null || dto.cv.File.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+
+            EnsureConsent(dto.cv);
+            if (dto.OtherRelevantPdfs != null)
+            {
+                foreach (var relevantPdf in dto.OtherRelevantPdfs.Where(file => file?.File != null))
+                {
+                    EnsureConsent(relevantPdf);
+                }
+            }
+
             var relevantBinaryFiles = await BinaryFileHelper.ToBinaryDataListAsync(dto.OtherRelevantPdfs);
             
             var cvData = await BinaryFileHelper.ToBinaryData(dto.cv.File);
@@ -170,6 +185,14 @@ namespace Backend.api.Controllers
             aiprossjob.InsertApplication(application);
             await _aiJobService.UpdateAiJobAsync(aiprossjob);
             return Ok(application);
+        }
+
+        private static void EnsureConsent(FileUploadDto fileUploadDto)
+        {
+            if (fileUploadDto?.Consent == null || !fileUploadDto.Consent.ConsentGiven)
+            {
+                throw new ConsentNotGivenException();
+            }
         }
     }
 }
