@@ -18,16 +18,16 @@ public class S3StorageIntegrationTests
     {
         this._output = output;
     }
-    private WarehouseDbContext GetDatabaseContext()
+    private ApplyAiDbContext GetDatabaseContext()
     {
         var connection = new Microsoft.Data.Sqlite.SqliteConnection("Filename=:memory:");
         connection.Open();
 
-        var options = new DbContextOptionsBuilder<WarehouseDbContext>()
+        var options = new DbContextOptionsBuilder<ApplyAiDbContext>()
             .UseSqlite(connection)
             .Options;
 
-        var context = new WarehouseDbContext(options);
+        var context = new ApplyAiDbContext(options);
         context.Database.EnsureCreated(); // Creates the tables
         return context;
     }

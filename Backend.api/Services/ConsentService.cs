@@ -16,8 +16,8 @@ namespace Backend.api.Services
 
     public class ConsentService : IConsentService
     {
-        private readonly WarehouseDbContext _db;
-        public ConsentService(WarehouseDbContext db)
+        private readonly ApplyAiDbContext _db;
+        public ConsentService(ApplyAiDbContext db)
         {
             this._db = db;
         }

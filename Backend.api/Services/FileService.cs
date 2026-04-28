@@ -18,9 +18,9 @@ namespace Backend.api.Services
 
     public class FileService : IFileService
     {
-        private WarehouseDbContext _db;
+        private ApplyAiDbContext _db;
         private readonly IConsentService _consent;
-        public FileService(WarehouseDbContext db, IConsentService consent)
+        public FileService(ApplyAiDbContext db, IConsentService consent)
         {
             this._db = db;
             this._consent = consent;

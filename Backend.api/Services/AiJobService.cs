@@ -17,8 +17,8 @@ namespace Backend.api.Services
     public class AiJobService : IAiJobService
     {
         IConfiguration _conf;
-        WarehouseDbContext _warehouseDbContext;
-        public AiJobService(IConfiguration conf, WarehouseDbContext warehouseDbContext)
+        ApplyAiDbContext _warehouseDbContext;
+        public AiJobService(IConfiguration conf, ApplyAiDbContext warehouseDbContext)
         {
             this._conf = conf;
             this._warehouseDbContext = warehouseDbContext;

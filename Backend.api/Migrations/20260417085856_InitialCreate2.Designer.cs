@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Backend.api.Migrations
 {
-    [DbContext(typeof(WarehouseDbContext))]
+    [DbContext(typeof(ApplyAiDbContext))]
     [Migration("20260417085856_InitialCreate2")]
     partial class InitialCreate2
     {
