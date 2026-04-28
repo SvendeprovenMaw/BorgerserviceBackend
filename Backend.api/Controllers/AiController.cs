@@ -13,7 +13,7 @@ namespace Backend.api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AiController : ControllerBase
+    public partial class AiController : ControllerBase
     {
         private readonly IRequirementsPhase _requirementsPhase;
         private readonly ICandidateEvidencePhase _evidencePhase;
@@ -35,13 +35,6 @@ namespace Backend.api.Controllers
             this._applicationGenerationPhase = applicationGenerationPhase;
             this._aiJobService = aiJobService;
             this._userService = userService;
-        }
-
-        public class GenerationDto
-        {
-            public IFormFile JobPosting { get; set; }
-            public IFormFile cv { get; set; }
-            public IFormFile[] relavantDocuments { get; set; }
         }
         
         /// <summary>

@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.api.Database
 {
-    public class WarehouseDbContext : DbContext
+    public class ApplyAiDbContext : DbContext
     {
-        public WarehouseDbContext(DbContextOptions<WarehouseDbContext> options) : base(options) { }
+        public ApplyAiDbContext(DbContextOptions<ApplyAiDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +37,7 @@ namespace Backend.api.Database
                 .HasOne(j => j.ResultFile)
                 .WithMany() // S3File can be a result for multiple jobs, or just leave empty
                 .HasForeignKey("ResultFileId");
+
         }
 
         public DbSet<User> Users { get; set; }

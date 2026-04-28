@@ -17,8 +17,8 @@ namespace Backend.api.Services
 
     public class AuthService : IAuthService
     {
-        private readonly WarehouseDbContext _db;
-        public AuthService(WarehouseDbContext db)
+        private readonly ApplyAiDbContext _db;
+        public AuthService(ApplyAiDbContext db)
         {
             this._db = db;
         }
