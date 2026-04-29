@@ -29,10 +29,10 @@ namespace Backend.api.Entities
         public void AnonymizeUser()
         {
             this.Role = JwtRoles.NonApprovedGuest;
-            this.Email = "anonymized ";
-            this.Username = "anonymized ";
-            this.Password = "anonymized ";
-            this.Salt = "anonymized ";
+            this.Email = "anonymized";
+            this.Username = "anonymized";
+            this.Password = "anonymized";
+            this.Salt = "anonymized";
         }
         
     }

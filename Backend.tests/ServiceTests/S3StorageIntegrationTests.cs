@@ -364,6 +364,85 @@ public class S3StorageIntegrationTests
         Assert.True(string.IsNullOrEmpty(dbFile.FileName) || dbFile.FileName == "Anonymiseret");
     }
 
+    [Fact]
+    public async Task UserService_HardDelete_ShouldAnonymizeUserAndClearS3AndRetractAllConsents() //ikke funktionelle krav 4
+    {
+        // --- Arrange ---
+        var db = GetDatabaseContext();
+        var virtualBucket = new Dictionary<string, byte[]>();
+        var mockUploader = new Mock<IAmazonS3>();
+        
+        // Mock S3 ListObjects til at finde filer under brugerens prefix
+        mockUploader.Setup(x => x.ListObjectsV2Async(It.IsAny<ListObjectsV2Request>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((ListObjectsV2Request req, CancellationToken t) => {
+                var response = new ListObjectsV2Response();
+                var matches = virtualBucket.Keys
+                    .Where(k => k.StartsWith(req.Prefix))
+                    .Select(k => new S3Object { Key = k }).ToList();
+                
+                // Vi simulerer fundne objekter i responsen
+                typeof(ListObjectsV2Response).GetProperty("S3Objects")?.SetValue(response, matches);
+                return response; 
+            });
+
+        // Mock S3 DeleteObjects til bulk-sletning
+        mockUploader.Setup(x => x.DeleteObjectsAsync(It.IsAny<DeleteObjectsRequest>(), It.IsAny<CancellationToken>()))
+            .Callback<DeleteObjectsRequest, CancellationToken>((req, t) => {
+                foreach (var obj in req.Objects) {
+                    virtualBucket.Remove(obj.Key);
+                }
+            })
+            .ReturnsAsync(new DeleteObjectsResponse { HttpStatusCode = System.Net.HttpStatusCode.OK });
+
+        var mockConf = new Mock<IConfiguration>();
+        mockConf.Setup(c => c["BackBlaze:KeyName"]).Returns("test-bucket");
+
+        var consentService = new ConsentService(db);
+        var fileService = new FileService(db, consentService);
+        var s3Service = new S3StorageService(mockConf.Object, fileService, consentService, mockUploader.Object, new Mock<IAmazonS3>().Object);
+        var userService = new UserService(db, s3Service, consentService, fileService);
+
+        // Opret bruger
+        var user = new User(JwtLibrary.JwtRoles.User, "borger@danmark.dk", "Søren Sørensen", "kode123");
+        await db.Users.AddAsync(user);
+        
+        // Simuler filer i S3 og DB tilknyttet brugeren
+        var fileId = Guid.NewGuid();
+        var s3Key = $"users/{user.Id}/Cv/{fileId}";
+        virtualBucket[s3Key] = new byte[100]; 
+        
+        var s3File = new S3File(user, "min_profil.pdf", s3Key, "hash", fileId);
+        await db.S3Files.AddAsync(s3File);
+
+        // Giv samtykke
+        await consentService.GiveConsent(user, s3File, new GiveConsentDto { ConsentGiven = true, TimeOfConsent = DateTime.UtcNow });
+        await db.SaveChangesAsync();
+
+        // --- Act ---
+        // Her kaldes HardDeleteAccount som orkestrerer anonymisering og sletning
+        await userService.HardDeleteAccount(user);
+    
+        // --- Assert ---
+
+        // 1. Verificer S3: Alle filer under brugerens prefix skal være væk
+        var userPrefix = $"users/{user.Id}/";
+        Assert.False(virtualBucket.Keys.Any(k => k.StartsWith(userPrefix)), "Brugerens filer blev ikke slettet fra S3.");
+
+        // 2. Verificer Bruger-anonymisering: Navn og email skal være overskrevet
+        var updatedUser = await db.Users.AsNoTracking().FirstAsync(u => u.Id == user.Id);
+        _output.WriteLine($"dbfile: {updatedUser.Username}");
+        Assert.Equal("anonymized", updatedUser.Username);
+        Assert.Equal("anonymized", updatedUser.Email);
+
+        // 3. Verificer Samtykke: Alle brugerens samtykker skal være trukket tilbage
+        var consent = await db.Consents.AsNoTracking().FirstAsync(c => c.UserId == user.Id);
+        Assert.True(consent.ConsentRetracted, "Samtykket blev ikke markeret som tilbagetrukket.");
+
+        // 4. Verificer Fil-anonymisering: Filnavne i DB skal være anonymiserede
+        var dbFile = await db.S3Files.AsNoTracking().FirstAsync(i => i.Id == fileId);
+        Assert.True(string.IsNullOrEmpty(dbFile.FileName) || dbFile.FileName == "Anonymiseret", "Filnavnet blev ikke anonymiseret i databasen.");
+    }
+
 
 
 }
