@@ -147,8 +147,11 @@ namespace Backend.api.Services
                 do
                 {
                     listResponse = await s3Uploader.ListObjectsV2Async(listRequest);
-
-                    if (listResponse.S3Objects.Count > 0)
+                    if(listResponse == null || listResponse.S3Objects == null)
+                    {
+                        return;
+                    }
+                    if (listResponse?.S3Objects?.Count > 0)
                     {
                         var deleteRequest = new DeleteObjectsRequest
                         {
