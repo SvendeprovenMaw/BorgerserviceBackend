@@ -75,7 +75,7 @@ namespace Backend.api.Controllers
                     return Ok(new { message = "login successful" });
                 }
 
-                return NotFound();
+                return NotFound("Email or password not correct");
             }
             catch (System.Exception)
             {
@@ -100,7 +100,9 @@ namespace Backend.api.Controllers
                 return NotFound("User not found");
             }
             await _UserService.HardDeleteAccount(user);
-            return NotFound();
+            this.HttpContext.Response.Cookies.Delete("AccessToken");
+            this.HttpContext.Response.Cookies.Delete("RefreshToken");
+            return NoContent();
         }
 
         [HttpPost("refresh")]
