@@ -50,7 +50,7 @@ namespace Backend.api.Controllers
                     var cookieOptions = new CookieOptions
                     {
                         HttpOnly = true,
-                        Secure = false, // Only sends over HTTPS
+                        Secure = false, // Only sends over HTTPS if true
                         SameSite = SameSiteMode.Strict,
                         Expires = DateTime.UtcNow.AddMinutes(jwtSettings.DurationInMinutes)
                     };
@@ -70,7 +70,7 @@ namespace Backend.api.Controllers
                     Response.Cookies.Append("RefreshToken", refreshTokenString, new CookieOptions {
                         HttpOnly = true, Secure = false, SameSite = SameSiteMode.Strict,
                         Expires = refreshToken.ExpiryDate,
-                        Path = "/api/user/refresh"
+                        Path = "/api/User/refresh"
                     });
                     return Ok(new { message = "login successful" });
                 }
@@ -80,6 +80,7 @@ namespace Backend.api.Controllers
             catch (System.Exception)
             {
                 
+                return StatusCode(500);
                 throw;
             }
         }
