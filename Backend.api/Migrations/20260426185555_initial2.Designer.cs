@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.api.Migrations
 {
     [DbContext(typeof(ApplyAiDbContext))]
-    [Migration("20260417085856_InitialCreate2")]
-    partial class InitialCreate2
+    [Migration("20260426185555_initial2")]
+    partial class initial2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace Backend.api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("AiJobProcessedFiles", b =>
+                {
+                    b.Property<Guid>("AiJobId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("S3FileId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("AiJobId", "S3FileId");
+
+                    b.HasIndex("S3FileId");
+
+                    b.ToTable("AiJobProcessedFiles");
+                });
 
             modelBuilder.Entity("Backend.api.Entities.AiDraft", b =>
                 {
@@ -52,12 +67,33 @@ namespace Backend.api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Application")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("JobRequirements")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Matches")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<Guid?>("ResultFileId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("UserCompetences")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ResultFileId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("AiJobs");
                 });
@@ -88,27 +124,6 @@ namespace Backend.api.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Consents");
-                });
-
-            modelBuilder.Entity("Backend.api.Entities.Profile", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("CurrentCvId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CurrentCvId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Profiles");
                 });
 
             modelBuilder.Entity("Backend.api.Entities.RefreshToken", b =>
@@ -150,9 +165,6 @@ namespace Backend.api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("AiProcessingJobId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("ChecksumHash")
                         .IsRequired()
                         .HasColumnType("text");
@@ -160,9 +172,6 @@ namespace Backend.api.Migrations
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<Guid?>("ProfileId")
-                        .HasColumnType("uuid");
 
                     b.Property<string>("S3Key")
                         .IsRequired()
@@ -176,9 +185,7 @@ namespace Backend.api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AiProcessingJobId");
-
-                    b.HasIndex("ProfileId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("S3File", (string)null);
 
@@ -233,6 +240,21 @@ namespace Backend.api.Migrations
                     b.ToTable("Terms", (string)null);
                 });
 
+            modelBuilder.Entity("AiJobProcessedFiles", b =>
+                {
+                    b.HasOne("Backend.api.Entities.AiProcessingJob", null)
+                        .WithMany()
+                        .HasForeignKey("AiJobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.api.Entities.S3File", null)
+                        .WithMany()
+                        .HasForeignKey("S3FileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Backend.api.Entities.AiDraft", b =>
                 {
                     b.HasOne("Backend.api.Entities.AiProcessingJob", "AiProcessingJob")
@@ -258,7 +280,15 @@ namespace Backend.api.Migrations
                         .WithMany()
                         .HasForeignKey("ResultFileId");
 
+                    b.HasOne("Backend.api.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("ResultFile");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Backend.api.Entities.Consent", b =>
@@ -280,23 +310,6 @@ namespace Backend.api.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Backend.api.Entities.Profile", b =>
-                {
-                    b.HasOne("Backend.api.Entities.S3File", "CurrentCv")
-                        .WithMany()
-                        .HasForeignKey("CurrentCvId");
-
-                    b.HasOne("Backend.api.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CurrentCv");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Backend.api.Entities.RefreshToken", b =>
                 {
                     b.HasOne("Backend.api.Entities.User", "User")
@@ -310,13 +323,13 @@ namespace Backend.api.Migrations
 
             modelBuilder.Entity("Backend.api.Entities.S3File", b =>
                 {
-                    b.HasOne("Backend.api.Entities.AiProcessingJob", null)
-                        .WithMany("ProcessedFiles")
-                        .HasForeignKey("AiProcessingJobId");
+                    b.HasOne("Backend.api.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Backend.api.Entities.Profile", null)
-                        .WithMany("RelevantDocuments")
-                        .HasForeignKey("ProfileId");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Backend.api.Entities.Term", b =>
@@ -326,16 +339,6 @@ namespace Backend.api.Migrations
                         .HasForeignKey("Backend.api.Entities.Term", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Backend.api.Entities.AiProcessingJob", b =>
-                {
-                    b.Navigation("ProcessedFiles");
-                });
-
-            modelBuilder.Entity("Backend.api.Entities.Profile", b =>
-                {
-                    b.Navigation("RelevantDocuments");
                 });
 #pragma warning restore 612, 618
         }

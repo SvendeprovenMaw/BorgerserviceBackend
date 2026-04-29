@@ -15,7 +15,7 @@ namespace Backend.api.Services
 {
     public interface IUserService
     {
-        Task ChangePassword();
+        Task ChangePassword(Guid userId, string newPassword);
         Task<bool> CreateUser(CreateUserDto createUserDto);
         Task<User> GetUser(Guid id);
         Task<User> GetUser(ClaimsPrincipal claims);
@@ -27,11 +27,11 @@ namespace Backend.api.Services
 
     public class UserService : IUserService
     {
-        private WarehouseDbContext _db;
+        private ApplyAiDbContext _db;
         private readonly IS3StorageService _s3;
         private readonly IConsentService _consent;
         private readonly IFileService _file;
-        public UserService(WarehouseDbContext db, IS3StorageService s3StorageService, IConsentService consentService, IFileService fileService)
+        public UserService(ApplyAiDbContext db, IS3StorageService s3StorageService, IConsentService consentService, IFileService fileService)
         {
             this._db = db;
             this._s3 = s3StorageService;
@@ -42,7 +42,10 @@ namespace Backend.api.Services
         public async Task<bool> CreateUser(CreateUserDto createUserDto)
         {
             var result = await _db.Users.Where(i => i.Username == createUserDto.Username || i.Email == createUserDto.Email).AnyAsync();
-            if (result) { return false; }
+            if (result)
+            {
+                throw new Exception("Username or email already in use");
+            }
             User user = new(JwtRoles.User, createUserDto.Email, createUserDto.Username, PasswordHasher.Hash(createUserDto.Password, ""));
             await _db.AddAsync(user);
             await _db.SaveChangesAsync();
@@ -65,21 +68,25 @@ namespace Backend.api.Services
             return await _db.Users.Where(i => i.Username == loginDto.Username || i.Email == loginDto.Username).FirstOrDefaultAsync();
         }
 
-        public async Task ChangePassword()
+        public async Task ChangePassword(Guid userId, string newPassword)
         {
-            
+            var user = await _db.Users.Where(i => i.Id == userId).FirstOrDefaultAsync();
+            if (user == null) { throw new Exception("User not found"); }
+            user.Password = PasswordHasher.Hash(newPassword, "");
+            _db.Users.Update(user);
+            await _db.SaveChangesAsync();
         }
 
         public async Task RequestPasswordReset()
         {
-
+            //seems unnecessary to implement as we are not doing email confirmation or password resets via email in this project
         }
 
         public async Task HardDeleteAccount(User user)//this will anonamize user files
         {
             await _s3.DeleteFilesAsync(user);
             await _consent.RetractAccountConsent(user);
-            await _file.AnonamizeS3Records(user);
+            await _file.AnonamizeUserS3Records(user);
             user.AnonymizeUser();
             _db.Users.Update(user);
             await _db.SaveChangesAsync();

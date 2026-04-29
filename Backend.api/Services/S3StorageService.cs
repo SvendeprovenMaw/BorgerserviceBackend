@@ -125,6 +125,7 @@ namespace Backend.api.Services
                 BucketName = _conf["BackBlaze:KeyName"],
                 Key = s3file.S3Key
             };
+            await _files.AnonamizeS3Record(fileId, user);
             await this.s3Uploader.DeleteObjectAsync(request);
         }
 
@@ -146,8 +147,11 @@ namespace Backend.api.Services
                 do
                 {
                     listResponse = await s3Uploader.ListObjectsV2Async(listRequest);
-
-                    if (listResponse.S3Objects.Count > 0)
+                    if(listResponse == null || listResponse.S3Objects == null)
+                    {
+                        return;
+                    }
+                    if (listResponse?.S3Objects?.Count > 0)
                     {
                         var deleteRequest = new DeleteObjectsRequest
                         {

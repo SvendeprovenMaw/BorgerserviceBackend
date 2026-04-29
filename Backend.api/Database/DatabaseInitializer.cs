@@ -11,7 +11,7 @@ public static class DatabaseInitializer
     public static async Task InitializeAsync(IServiceProvider services, IConfiguration configuration, CancellationToken cancellationToken = default)
     {
         using var scope = services.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<WarehouseDbContext>();
+        var context = scope.ServiceProvider.GetRequiredService<ApplyAiDbContext>();
         var logger = scope.ServiceProvider
             .GetRequiredService<ILoggerFactory>()
             .CreateLogger("DatabaseInitializer");
@@ -45,7 +45,7 @@ public static class DatabaseInitializer
         return exception.InnerException is not null && IsNonCriticalMigrationException(exception.InnerException);
     }
 
-    private static async Task SeedUserAsync(WarehouseDbContext context, IConfiguration configuration, CancellationToken cancellationToken)
+    private static async Task SeedUserAsync(ApplyAiDbContext context, IConfiguration configuration, CancellationToken cancellationToken)
     {
         var username = configuration["SeedUser:Username"];
         var email = configuration["SeedUser:Email"];

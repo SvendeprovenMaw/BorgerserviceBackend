@@ -13,7 +13,7 @@ namespace Backend.api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AiController : ControllerBase
+    public partial class AiController : ControllerBase
     {
         private readonly IRequirementsPhase _requirementsPhase;
         private readonly ICandidateEvidencePhase _evidencePhase;
@@ -35,13 +35,6 @@ namespace Backend.api.Controllers
             this._applicationGenerationPhase = applicationGenerationPhase;
             this._aiJobService = aiJobService;
             this._userService = userService;
-        }
-
-        public class GenerationDto
-        {
-            public IFormFile JobPosting { get; set; }
-            public IFormFile cv { get; set; }
-            public IFormFile[] relavantDocuments { get; set; }
         }
         
         /// <summary>
@@ -96,7 +89,7 @@ namespace Backend.api.Controllers
 
             var requirementFile = await BinaryFileHelper.ToBinaryData(file);
             var requirements = await _requirementsPhase.AnalyseJobPost(requirementFile);
-            var aiJob = new AiProcessingJob(user.Id, requirements);
+            var aiJob = new AiProcessingJob(user, requirements);
             await _aiJobService.SaveAiJobAsync(aiJob);
             return Ok(aiJob);
         }
@@ -109,10 +102,33 @@ namespace Backend.api.Controllers
             {
                 return NotFound("User not found");
             }
+
+            if (dto.cv?.File == null || dto.cv.File.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+
+            EnsureConsent(dto.cv);
+            if (dto.OtherRelevantPdfs != null)
+            {
+                foreach (var relevantPdf in dto.OtherRelevantPdfs.Where(file => file?.File != null))
+                {
+                    EnsureConsent(relevantPdf);
+                }
+            }
+
             var relevantBinaryFiles = await BinaryFileHelper.ToBinaryDataListAsync(dto.OtherRelevantPdfs);
             
             var cvData = await BinaryFileHelper.ToBinaryData(dto.cv.File);
-            var aiprossjob = await this._aiJobService.GetAiJobByIdAsync(dto.AiJob, user.Id);
+            AiProcessingJob aiprossjob;
+            if(dto.aiProcessingJobOverwrite == null)
+            {
+                aiprossjob = await this._aiJobService.GetAiJobByIdAsync(dto.AiJob, user.Id);
+            }
+            else
+            {
+                aiprossjob = dto.aiProcessingJobOverwrite;
+            }
             var evidence = await _evidencePhase.ExecutePhase(aiprossjob.JobRequirements, cvData, relevantBinaryFiles);
             aiprossjob.InsertUserCompetences(evidence);
             await _aiJobService.UpdateAiJobAsync(aiprossjob);
@@ -162,6 +178,14 @@ namespace Backend.api.Controllers
             aiprossjob.InsertApplication(application);
             await _aiJobService.UpdateAiJobAsync(aiprossjob);
             return Ok(application);
+        }
+
+        private static void EnsureConsent(FileUploadDto fileUploadDto)
+        {
+            if (fileUploadDto?.Consent == null || !fileUploadDto.Consent.ConsentGiven)
+            {
+                throw new ConsentNotGivenException();
+            }
         }
     }
 }

@@ -13,22 +13,27 @@ using Xunit;
 
 public class S3StorageIntegrationTests
 {
-    private WarehouseDbContext GetDatabaseContext()
+    private readonly ITestOutputHelper _output;
+    public S3StorageIntegrationTests(ITestOutputHelper output)
+    {
+        this._output = output;
+    }
+    private ApplyAiDbContext GetDatabaseContext()
     {
         var connection = new Microsoft.Data.Sqlite.SqliteConnection("Filename=:memory:");
         connection.Open();
 
-        var options = new DbContextOptionsBuilder<WarehouseDbContext>()
+        var options = new DbContextOptionsBuilder<ApplyAiDbContext>()
             .UseSqlite(connection)
             .Options;
 
-        var context = new WarehouseDbContext(options);
+        var context = new ApplyAiDbContext(options);
         context.Database.EnsureCreated(); // Creates the tables
         return context;
     }
 
     [Fact]
-    public async Task UploadAndDownload_ShouldUseRespectiveMockClients()
+    public async Task UploadAndDownload_mock()
     {
         var db = GetDatabaseContext();
 
@@ -73,7 +78,7 @@ public class S3StorageIntegrationTests
     }
 
     [Fact]
-    public async Task S3Service_UnhappyPath_ShouldThrowUnAthorizedAccessException()
+    public async Task S3Service_UnhappyPath_ShouldThrowUnAthorizedAccessException_WhenUnauthorizedUserRequestsFile() // ikke funktionelle krav 3
     {
         var db = GetDatabaseContext(); //creates in memory database
 
@@ -116,7 +121,7 @@ public class S3StorageIntegrationTests
 #endregion
 
         var UploadUser = new User(JwtLibrary.JwtRoles.User, "email@example.com", "Test User", "password");
-        var UnauthorizedUser = new User(JwtLibrary.JwtRoles.User, "email@example.com", "Test User2", "password");
+        var UnauthorizedUser = new User(JwtLibrary.JwtRoles.User, "email@example.com", "Unauthorized User", "password");
         var fileId = Guid.NewGuid();
         var consentDto = new GiveConsentDto { ConsentGiven = true, TimeOfConsent = DateTime.UtcNow };
 
@@ -135,7 +140,7 @@ public class S3StorageIntegrationTests
     }
 
     [Fact]
-    public async Task S3Storage_UploadTests_ShouldVerifyCorrectPathStructure()
+    public async Task S3Storage_UploadTests_ShouldVerifyCorrectPathStructure() //funktionelle krav 07
     {
         var db = GetDatabaseContext();
         var virtualBucket = new Dictionary<string, byte[]>();
@@ -202,7 +207,7 @@ public class S3StorageIntegrationTests
     }
 
     [Fact]
-    public async Task S3Service_ValidationTest_ShouldSaveAndLogWithConsent()
+    public async Task S3Service_ValidationTest_ShouldSaveAndLogWithConsent() //funktionelle krav 11
     {
         var db = GetDatabaseContext();
         var virtualBucket = new Dictionary<string, byte[]>();
@@ -300,7 +305,7 @@ public class S3StorageIntegrationTests
     }
 
     [Fact]
-    public async Task UserService_RetractConsent_ShouldDeleteFileAndMarkConsentAsRetracted()
+    public async Task UserService_RetractConsent_ShouldDeleteFileAndMarkConsentAsRetracted() //funktionelle krav 12
     {
         // --- Arrange ---
         var db = GetDatabaseContext();
@@ -349,13 +354,16 @@ public class S3StorageIntegrationTests
 
         Assert.False(virtualBucket.ContainsKey(s3Key), "Filen blev ikke fjernet fra S3.");
 
-        var consent = await db.Consents.FirstOrDefaultAsync(c => c.FileId == fileId && c.UserId == user.Id);
+        var consent = await db.Consents.AsNoTracking().FirstAsync(c => c.FileId == fileId && c.UserId == user.Id);
         Assert.True(consent.ConsentRetracted, "Samtykket blev ikke trukket tilbage ved sletning.");
 
-        var dbFile = await db.S3Files.FindAsync(fileId);
+        var dbFile = await db.S3Files.AsNoTracking().FirstAsync(i=>i.Id == fileId);
+        _output.WriteLine($"dbfile: {dbFile.FileName}");
         Assert.NotNull(dbFile);
 
         Assert.True(string.IsNullOrEmpty(dbFile.FileName) || dbFile.FileName == "Anonymiseret");
     }
+
+
 
 }

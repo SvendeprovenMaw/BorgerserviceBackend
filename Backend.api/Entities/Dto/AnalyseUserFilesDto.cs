@@ -10,5 +10,6 @@ namespace Backend.api.Entities.Dto
         public FileUploadDto cv { get; set; }
         public FileUploadDto[] OtherRelevantPdfs { get; set; }
         public Guid AiJob { get; set; }
+        public AiProcessingJob? aiProcessingJobOverwrite { get; set; }
     }
 }
