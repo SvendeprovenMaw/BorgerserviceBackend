@@ -46,7 +46,7 @@ namespace Backend.api.Services
             {
                 throw new Exception("Username or email already in use");
             }
-            User user = new(JwtRoles.User, createUserDto.Email, createUserDto.Username, PasswordHasher.Hash(createUserDto.Password, ""));
+            User user = new(JwtRoles.User, createUserDto.Email, createUserDto.Username, PasswordHasher.Hash(createUserDto.Password, ""), createUserDto.TermsAccepted);
             await _db.AddAsync(user);
             await _db.SaveChangesAsync();
             return true;

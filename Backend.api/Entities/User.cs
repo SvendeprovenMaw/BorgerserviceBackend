@@ -17,13 +17,17 @@ namespace Backend.api.Entities
             this.Password = Password;
             this.Username = Username;
             this.Email = Email;
-            
+        }
+        public User(JwtRoles role, string Email, string Username, string Password, bool terms) : this(role, Email, Username, Password)
+        {
+            this.TermsAccepted = terms;
         }
         public Guid Id { get; private set; }
         public JwtRoles Role { get; private set; }
         public string Email { get; set; } = "";
         public string Username { get; set; } = "";
         public string Password { get; set; } = "";
+        public bool TermsAccepted { get; set; } = false;
         public string Salt { get; set; } = string.Empty;
 
         public void AnonymizeUser()

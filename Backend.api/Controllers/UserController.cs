@@ -85,12 +85,6 @@ namespace Backend.api.Controllers
             }
         }
 
-        [HttpPost("acceptterms")]
-        public async Task<IActionResult> AcceptTerms()
-        {
-            return NotFound();
-        }
-
         [HttpDelete]
         public async Task<IActionResult> DeleteUser()
         {
