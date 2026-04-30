@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace Backend.api
 {
     public static class PasswordHasher
     {
+        //quick class for hashing passwords
         public static string Hash(string password, string salt)
         {
             string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(

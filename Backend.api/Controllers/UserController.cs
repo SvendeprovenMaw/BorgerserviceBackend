@@ -23,9 +23,14 @@ namespace Backend.api.Controllers
             this.jwtSettings = options.Value;
             this._authService = authService;
         }
+
         [HttpPost]
         public async Task<IActionResult> RegisterUser(CreateUserDto createUserDto)
         {
+            if(createUserDto.Username == "anonymized" || createUserDto.Email == "anonymized")
+            {
+                return UnprocessableEntity("Cant create account with username or email 'anonymized'");
+            }
             if(await _UserService.CreateUser(createUserDto))
             {
                 return Created();
@@ -94,6 +99,7 @@ namespace Backend.api.Controllers
                 return NotFound("User not found");
             }
             await _UserService.HardDeleteAccount(user);
+            //removes cookies
             this.HttpContext.Response.Cookies.Delete("AccessToken");
             this.HttpContext.Response.Cookies.Delete("RefreshToken");
             return NoContent();
@@ -114,7 +120,7 @@ namespace Backend.api.Controllers
             if (tokenEntity == null || !tokenEntity.IsActive)
                 return Unauthorized("Token is invalid or expired.");
 
-            // 3. (Optional but recommended) Rotate the token
+            // 3. Rotate the token
             // Revoke the old one
             await _authService.RevokeToken(tokenEntity);
 

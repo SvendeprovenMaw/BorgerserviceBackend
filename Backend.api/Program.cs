@@ -30,6 +30,7 @@ builder.Services.AddScoped<ICompetenceMatchingPhase, CompetenceMatchingPhase>();
 builder.Services.AddScoped<IApplicationGenerationPhase, ApplicationGenerationPhase>();
 builder.Services.AddScoped<IAiJobService, AiJobService>();
 
+//lets me inject 2 different s3 clients so we can use aws's s3 library to interact with backblaze without running into issues with the library trying to validate against aws endpoints which causes issues when downloading files from backblaze, using a seperate client without validation for downloading files solves this issue
 builder.Services.AddKeyedScoped<IAmazonS3>("S3Uploader", (sp, key) => {
     var conf = sp.GetRequiredService<IConfiguration>();
     var credentials = new Amazon.Runtime.BasicAWSCredentials(conf["BackBlaze:Keyid"], conf["BackBlaze:ApplicationKey"]);
@@ -42,7 +43,6 @@ builder.Services.AddKeyedScoped<IAmazonS3>("S3Uploader", (sp, key) => {
     };
     return new AmazonS3Client(credentials, config);
 });
-
 builder.Services.AddKeyedScoped<IAmazonS3>("S3Downloader", (sp, key) => {
     var conf = sp.GetRequiredService<IConfiguration>();
     var credentials = new Amazon.Runtime.BasicAWSCredentials(conf["BackBlaze:Keyid"], conf["BackBlaze:ApplicationKey"]);
@@ -56,8 +56,8 @@ builder.Services.AddKeyedScoped<IAmazonS3>("S3Downloader", (sp, key) => {
     return new AmazonS3Client(credentials, config);
 });
 
+//gets appsettings for jwt and binds it to JwtSettings class, also makes it available for injection via IOptions<JwtSettings>
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
-
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
 builder.Services.Configure<OpenAiLibraryOptions>(
     builder.Configuration.GetSection("OpenAi")
@@ -68,17 +68,15 @@ if (jwtSettings == null || string.IsNullOrEmpty(jwtSettings.Key))
     throw new Exception("JWT Settings failed to bind! check section name.");
 }
 
-Console.WriteLine($"SECRET KEY BOUND: {jwtSettings.Key}");
-
 // Add services to the container.
 builder.Services.AddDbContext<ApplyAiDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
-//builder.Services.AddDbContext<WarehouseDbContext>(options => options.UseInMemoryDatabase("WarehouseDb"));
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+//get jwt token from cookie for easy use in controllers and also ensure "sub" claim is used as NameIdentifier claim type so we can get it easily in controllers via User.Identity.Name
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -118,6 +116,7 @@ builder.Services.AddAuthentication(options =>
         RoleClaimType = "role"
     };
 });
+
 
 builder.Services.AddCors(options =>
 {

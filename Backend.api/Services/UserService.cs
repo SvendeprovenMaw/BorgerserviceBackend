@@ -39,6 +39,7 @@ namespace Backend.api.Services
             this._file = fileService;
         }
 
+
         public async Task<bool> CreateUser(CreateUserDto createUserDto)
         {
             var result = await _db.Users.Where(i => i.Username == createUserDto.Username || i.Email == createUserDto.Email).AnyAsync();
@@ -52,11 +53,22 @@ namespace Backend.api.Services
             return true;
         }
 
+/// <summary>
+/// Gets a user by id
+/// </summary>
+/// <param name="id"></param>
+/// <returns></returns>
         public async Task<User> GetUser(Guid id)
         {
             return await _db.Users.Where(i=>i.Id == id).FirstAsync();
         }
         
+
+/// <summary>
+/// gets user by claims prinicipal from jwt token
+/// </summary>
+/// <param name="claims"></param>
+/// <returns></returns>
         public async Task<User> GetUser(ClaimsPrincipal claims)
         {
             var userid = Guid.Parse(claims.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
@@ -82,6 +94,11 @@ namespace Backend.api.Services
             //seems unnecessary to implement as we are not doing email confirmation or password resets via email in this project
         }
 
+/// <summary>
+/// Completely anonamizes a user account, deletes all files from s3 and retracts all consents. This is irreversible and should only be used when a user wants to delete their account. The user will no longer be able to log in after this action.
+/// </summary>
+/// <param name="user"></param>
+/// <returns></returns>
         public async Task HardDeleteAccount(User user)//this will anonamize user files
         {
             await _s3.DeleteFilesAsync(user);

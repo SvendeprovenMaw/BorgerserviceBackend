@@ -8,7 +8,11 @@ namespace Backend.api.Extensions
 {
     public static class BinaryFileHelper
     {
-
+        /// <summary>
+        /// helps convert IFormFile to BinaryData
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
         public static async Task<BinaryData> ToBinaryData(IFormFile file)
         {
             using var stream = file.OpenReadStream();
@@ -26,6 +30,11 @@ namespace Backend.api.Extensions
 
             return binaryDataList;
         }
+        /// <summary>
+        /// helps quickly convert FileUploadDto to binary data for use in ai processing
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         public static async Task<List<BinaryData>> ToBinaryDataListAsync(this IEnumerable<FileUploadDto> dto)
         {
             var binaryDataList = new List<BinaryData>();
